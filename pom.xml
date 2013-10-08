@@ -6,7 +6,7 @@
 	<artifactId>bedmanagement</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>bed-management Module</name>
+	<name>Bed Management Module</name>
 	<description>Helps in alloting beds.</description>
 	<url>https://wiki.openmrs.org/display/docs/bed-management+Module+Module</url>
 	

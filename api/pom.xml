@@ -10,7 +10,7 @@
 
 	<artifactId>bedmanagement-api</artifactId>
 	<packaging>jar</packaging>
-	<name>bed-management Module API</name>
+	<name>Bed Management Module API</name>
 	<description>API project for bed-management</description>
 
 	<dependencies>

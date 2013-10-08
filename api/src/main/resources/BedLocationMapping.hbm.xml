@@ -4,9 +4,9 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="org.openmrs.module.bedmanagement.BedLocationMapping" table="emrapi_bed_location_mapping">
+    <class name="org.openmrs.module.bedmanagement.BedLocationMapping" table="bed_location_map">
 
-        <id name="id" type="int" column="bed_location_mapping_id" unsaved-value="0">
+        <id name="id" type="int" column="bed_location_map_id" unsaved-value="0">
             <generator class="native"/>
         </id>
 

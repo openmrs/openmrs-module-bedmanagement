@@ -3,7 +3,7 @@ package org.openmrs.module.bedmanagement;
 import org.openmrs.Location;
 
 /**
- * Maps to emrapi_bed_location_mapping table in openmrs database
+ * Maps to bed_location_mapping table in openmrs database
  */
 public class BedLocationMapping {
     private int id;

@@ -10,7 +10,7 @@
 
 	<artifactId>bedmanagement-omod</artifactId>
 	<packaging>jar</packaging>
-	<name>bed-management Module OMOD</name>
+	<name>Bed Management Module OMOD</name>
 	<description>OMOD project for bed-management</description>
 
 	<dependencies>
