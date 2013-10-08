@@ -7,7 +7,7 @@
 	<name>${project.parent.name}</name>
 	<version>${project.parent.version}</version>
 	<package>${project.parent.groupId}.${project.parent.artifactId}</package>
-	<author>arathyja</author>
+	<author>Thoughtworks</author>
 	<description>
 		${project.parent.description}
 	</description>
@@ -15,16 +15,23 @@
 	<require_version>${openMRSVersion}</require_version>
 	<!-- / Module Properties -->
 
-	
-	<!-- Module Activator -->
-	<activator>${project.parent.groupId}.${project.parent.artifactId}.bed-managementActivator</activator>
+
+
+    <!-- Required Modules -->
+    <require_modules>
+        <require_module version="${webservicesRestModuleVersion}">org.openmrs.module.webservices.rest</require_module>
+    </require_modules>
+    <!-- / Required Modules -->
+
+    <!-- Module Activator -->
+	<activator>${project.parent.groupId}.${project.parent.artifactId}.BedManagementActivator</activator>
 	
 	
 	<!-- Maps hibernate file's, if present -->
 	<mappingFiles>
-				
-		bed-management.hbm.xml
-				
+        Bed.hbm.xml
+        BedLocationMapping.hbm.xml
+        BedPatientAssignment.hbm.xml
 	</mappingFiles>
 
 	<!-- Internationalization -->

@@ -11,29 +11,20 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.bed-management;
+package org.openmrs.module.bedmanagement;
 
-import java.io.Serializable;
-import org.openmrs.BaseOpenmrsObject;
-import org.openmrs.BaseOpenmrsMetadata;
 
-/**
- * It is a model class. It should extend either {@link BaseOpenmrsObject} or {@link BaseOpenmrsMetadata}.
- */
-public class bed-management extends BaseOpenmrsObject implements Serializable {
+import org.openmrs.Location;
+import org.openmrs.Patient;
 
-	private static final long serialVersionUID = 1L;
-	
-	private Integer id;
-	
-	@Override
-	public Integer getId() {
-		return id;
-	}
-	
-	@Override
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	
+import java.util.List;
+
+public interface BedManagementDAO {
+    List<AdmissionLocation> getAdmissionLocationsBy(String locationTagName);
+
+    AdmissionLocation getLayoutForWard(Location location);
+
+    Bed assignPatientToBed(Patient patient, Bed bed);
+
+    Bed getBedById(int id);
 }

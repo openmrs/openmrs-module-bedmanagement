@@ -11,7 +11,9 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.bed-management;
+package org.openmrs.module.bedmanagement;
+
+import org.openmrs.module.ModuleActivator;
 
 
 import org.apache.commons.logging.Log; 
@@ -21,7 +23,7 @@ import org.openmrs.module.ModuleActivator;
 /**
  * This class contains the logic that is run every time this module is either started or stopped.
  */
-public class bed-managementActivator implements ModuleActivator {
+public class BedManagementActivator implements ModuleActivator {
 	
 	protected Log log = LogFactory.getLog(getClass());
 		
@@ -29,42 +31,42 @@ public class bed-managementActivator implements ModuleActivator {
 	 * @see ModuleActivator#willRefreshContext()
 	 */
 	public void willRefreshContext() {
-		log.info("Refreshing bed-management Module");
+		log.info("Refreshing bedmanagement Module");
 	}
 	
 	/**
 	 * @see ModuleActivator#contextRefreshed()
 	 */
 	public void contextRefreshed() {
-		log.info("bed-management Module refreshed");
+		log.info("bedmanagement Module refreshed");
 	}
 	
 	/**
 	 * @see ModuleActivator#willStart()
 	 */
 	public void willStart() {
-		log.info("Starting bed-management Module");
+		log.info("Starting bedmanagement Module");
 	}
 	
 	/**
 	 * @see ModuleActivator#started()
 	 */
 	public void started() {
-		log.info("bed-management Module started");
+		log.info("bedmanagement Module started");
 	}
 	
 	/**
 	 * @see ModuleActivator#willStop()
 	 */
 	public void willStop() {
-		log.info("Stopping bed-management Module");
+		log.info("Stopping bedmanagement Module");
 	}
 	
 	/**
 	 * @see ModuleActivator#stopped()
 	 */
 	public void stopped() {
-		log.info("bed-management Module stopped");
+		log.info("bedmanagement Module stopped");
 	}
 		
 }

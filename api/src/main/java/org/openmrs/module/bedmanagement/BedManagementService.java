@@ -11,26 +11,21 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.bed-management.api;
+package org.openmrs.module.bedmanagement;
 
+
+import org.openmrs.Location;
+import org.openmrs.Patient;
 import org.openmrs.api.OpenmrsService;
-import org.springframework.transaction.annotation.Transactional;
 
-/**
- * This service exposes module's core functionality. It is a Spring managed bean which is configured in moduleApplicationContext.xml.
- * <p>
- * It can be accessed only via Context:<br>
- * <code>
- * Context.getService(bed-managementService.class).someMethod();
- * </code>
- * 
- * @see org.openmrs.api.context.Context
- */
-@Transactional
-public interface bed-managementService extends OpenmrsService {
-     
-	/*
-	 * Add service methods here
-	 * 
-	 */
+import java.util.List;
+
+public interface BedManagementService extends OpenmrsService {
+    List<AdmissionLocation> getAllAdmissionLocations();
+
+    AdmissionLocation getLayoutForWard(Location location);
+
+    Bed assignPatientToBed(Patient patient, Bed bed);
+
+    Bed getBedById(int id);
 }
