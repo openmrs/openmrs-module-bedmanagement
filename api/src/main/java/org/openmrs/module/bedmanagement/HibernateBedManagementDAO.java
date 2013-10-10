@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.bedmanagement;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
@@ -23,7 +22,9 @@ import org.openmrs.Patient;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class HibernateBedManagementDAO implements BedManagementDAO {
     SessionFactory sessionFactory;
@@ -33,43 +34,61 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
     }
 
     @Override
+    @Transactional
     public List<AdmissionLocation> getAdmissionLocationsBy(String locationTagName) {
+        Session session = sessionFactory.getCurrentSession();
 
-        String hql = "select ward as ward, count(layout.bed) as totalBeds , count(assignment.id) as occupiedBeds" +
-                " from Location ward, BedLocationMapping layout" +
-                " left outer join ward.childLocations physicalSpace " +
-                "left outer join layout.bed.bedPatientAssignment as assignment" +
-                " where exists (from ward.tags tag where tag.name = :locationTag) " +
-                "and layout.location.locationId = physicalSpace.locationId" +
-                " group by ward.name";
+        List<Location> physicalLocations = getPhysicalLocationsByLocationTag(locationTagName, session);
 
-        Query query = sessionFactory.getCurrentSession().createQuery(hql)
-                .setParameter("locationTag", locationTagName).setResultTransformer(Transformers.aliasToBean(AdmissionLocation.class));
+        String hql = "select  blm.location.parentLocation as ward ,count(blm.bed) as totalBeds ," +
+                " sum(CASE WHEN blm.bed.status = :occupied THEN 1 ELSE 0 END) as occupiedBeds" +
+                " from BedLocationMapping blm where blm.location in (:physicalLocationList) " +
+                " group by blm.location.parentLocation";
 
-        return query.list();
+        List<AdmissionLocation> admissionLocations = session.createQuery(hql)
+                .setParameterList("physicalLocationList", physicalLocations)
+                .setParameter("occupied", BedStatus.OCCUPIED.toString())
+                .setResultTransformer(Transformers.aliasToBean(AdmissionLocation.class))
+                .list();
+
+        return admissionLocations;
+    }
+
+    private List<Location> getPhysicalLocationsByLocationTag(String locationTagName, Session session) {
+        return session.createQuery("select ward.childLocations from Location ward where exists (from ward.tags tag where tag.name = :locationTag)")
+                    .setParameter("locationTag", locationTagName).list();
+    }
+
+    public Bed getL(int id) {
+        Bed bed = (Bed) sessionFactory.getCurrentSession().createQuery("from Bed b where b.id = :id").setInteger("id", id).uniqueResult();
+        return bed;
     }
 
     @Override
+    @Transactional
     public AdmissionLocation getLayoutForWard(Location location) {
-        String hql = "select bed.id as bedId, bed.number as bedNumber, layout.row as rowNumber, layout.column as columnNumber, assignment.id as bedPatientAssignmentId" +
-                " from Location ward, BedLocationMapping layout" +
-                " left outer join ward.childLocations physicalSpace " +
-                " left outer join layout.bed bed" +
-                " left outer join bed.bedPatientAssignment as assignment with assignment.endDatetime IS null" +
-                " where exists (from ward.tags tag where tag.name = :tagName) " +
-                " and layout.location.locationId = physicalSpace.locationId" +
-                " and ward.uuid = :wardUuid";
+        Session session = sessionFactory.getCurrentSession();
+        List<Location> physicalLocations = getPhysicalLocationsByLocationTagAndParentLocation(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION, location, session);
 
-        Query query = sessionFactory.getCurrentSession().createQuery(hql)
-                .setParameter("tagName", BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION)
-                .setParameter("wardUuid", location.getUuid())
-                .setResultTransformer(Transformers.aliasToBean(BedLayout.class));
+        String hql = "select blm.row as rowNumber, blm.column as columnNumber, bed.id as bedId, bed.number as bedNumber, bed.status as status from BedLocationMapping blm " +
+                "left outer join blm.bed  bed " +
+                "where blm.location in (:physicalLocations)";
 
-        List<BedLayout> bedLayouts = query.list();
+        List<BedLayout> bedLayouts = sessionFactory.getCurrentSession().createQuery(hql)
+                .setParameterList("physicalLocations", physicalLocations)
+                .setResultTransformer(Transformers.aliasToBean(BedLayout.class))
+                .list();
 
         AdmissionLocation admissionLocation = new AdmissionLocation();
         admissionLocation.setBedLayouts(bedLayouts);
         return admissionLocation;
+    }
+
+    private List<Location> getPhysicalLocationsByLocationTagAndParentLocation(String locationTagName, Location location, Session session) {
+        return session.createQuery("from Location physicalLocation where exists (from physicalLocation.tags tag where tag.name = :locationTag) " +
+                "and physicalLocation.parentLocation = :ward")
+                .setParameter("locationTag", locationTagName)
+                .setParameter("ward", location).list();
     }
 
     @Override
@@ -83,7 +102,13 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         bedPatientAssignment.setBed(bed);
         bedPatientAssignment.setStartDatetime(Calendar.getInstance().getTime());
 
-        session.saveOrUpdate(bedPatientAssignment);
+        Set<BedPatientAssignment> bedPatientAssignments = new HashSet<BedPatientAssignment>();
+        bedPatientAssignments.add(bedPatientAssignment);
+
+        bed.setBedPatientAssignment(bedPatientAssignments);
+        bed.setStatus(BedStatus.OCCUPIED.toString());
+
+        session.saveOrUpdate(bed);
         return bed;
     }
 

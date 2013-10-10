@@ -11,7 +11,9 @@
 
         <property name="number" type="java.lang.String" column="bed_number" length="10"/>
 
-        <set name="bedPatientAssignment" cascade="none" inverse="true">
+        <property name="status" type="java.lang.String" column="status" length="20"/>
+
+        <set name="bedPatientAssignment" cascade="save-update" inverse="true">
             <key column="bed_id"/>
             <one-to-many class="org.openmrs.module.bedmanagement.BedPatientAssignment"/>
         </set>

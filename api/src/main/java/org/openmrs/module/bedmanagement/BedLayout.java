@@ -3,17 +3,43 @@ package org.openmrs.module.bedmanagement;
 public class BedLayout {
     private Integer rowNumber;
     private Integer columnNumber;
-    private Integer bedId;
-    private Integer bedPatientAssignmentId;
+//    private Bed bedDetails;
     private String bedNumber;
 
-    public Integer getBedPatientAssignmentId() {
-        return bedPatientAssignmentId;
+    public String getBedNumber() {
+        return bedNumber;
     }
 
-    public void setBedPatientAssignmentId(Integer bedPatientAssignmentId) {
-        this.bedPatientAssignmentId = bedPatientAssignmentId;
+    public void setBedNumber(String bedNumber) {
+        this.bedNumber = bedNumber;
     }
+
+    public Integer getBedId() {
+        return bedId;
+    }
+
+    public void setBedId(Integer bedId) {
+        this.bedId = bedId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    private Integer bedId;
+    private String status;
+//
+//    public Bed getBedDetails() {
+//        return bedDetails;
+//    }
+//
+//    public void setBedDetails(Bed bedDetails) {
+//        this.bedDetails = bedDetails;
+//    }
 
     public Integer getRowNumber() {
         return rowNumber;
@@ -31,34 +57,14 @@ public class BedLayout {
         this.columnNumber = columnNumber;
     }
 
-    public Integer getBedId() {
-        return bedId;
-    }
-
-    public void setBedId(Integer bedId) {
-        this.bedId = bedId;
-    }
-
-    public Boolean isAvailable() {
-        return this.bedId != null && this.bedPatientAssignmentId == null ;
-    }
-
-    public String getBedNumber() {
-        return bedNumber;
-    }
-
-    public void setBedNumber(String bedNumber) {
-        this.bedNumber = bedNumber;
-    }
-
     @Override
     public String toString() {
         return "BedLayout{" +
                 "rowNumber=" + rowNumber +
                 ", columnNumber=" + columnNumber +
-                ", bedId=" + bedId +
-                ", bedPatientAssignmentId=" + bedPatientAssignmentId +
                 ", bedNumber='" + bedNumber + '\'' +
+                ", bedId=" + bedId +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

@@ -104,8 +104,21 @@
                                  referencedTableName="location" referencedColumnNames="location_id"/>
     </changeSet>
 
-    <!--<addForeignKeyConstraint constraintName="bed_id_fk"-->
-    <!--baseTableName="bed_location_map" baseColumnNames="bed_id"-->
-    <!--referencedTableName="bed" referencedColumnNames="bed_id"/>-->
+    <changeSet author="arathy" id="08102013_7">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists columnName="status" tableName="bed"/></not>
+        </preConditions>
+            <addColumn tableName="bed">
+                <column name="status" type="varchar(255)"/>
+            </addColumn>
+    </changeSet>
+
+    <changeSet author="arathy" id="08102013_8">
+        <addDefaultValue
+                         columnDataType="varchar(255)"
+                         columnName="status"
+                         defaultValue="AVAILABLE"
+                         tableName="bed"/>
+    </changeSet>
 
 </databaseChangeLog>
