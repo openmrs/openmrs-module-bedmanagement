@@ -4,15 +4,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Location;
+import org.openmrs.Patient;
 import org.openmrs.api.LocationService;
+import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.bedmanagement.AdmissionLocation;
-import org.openmrs.module.bedmanagement.BedManagementService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -57,4 +58,23 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
         }
         return null;
     }
+
+    @Test
+    public void shouldReturnBedAssignmentDetailsByPatient() {
+        PatientService patientService = Context.getPatientService();
+        Patient patient = patientService.getPatient(3);
+
+        LocationService locationService = Context.getLocationService();
+        Location ward = locationService.getLocation(123452);
+        int bedIdFromDataSetup = 11;
+        String bedNumFromDataSetup = "307-a";
+
+        BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatients(patient);
+        assertEquals(ward.getId(), bedDetails.getPhysicalLocation().getId());
+        assertEquals(bedIdFromDataSetup, bedDetails.getBedId());
+        assertEquals(bedNumFromDataSetup, bedDetails.getBedNumber());
+
+    }
+
+
 }

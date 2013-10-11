@@ -56,7 +56,7 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
 
     private List<Location> getPhysicalLocationsByLocationTag(String locationTagName, Session session) {
         return session.createQuery("select ward.childLocations from Location ward where exists (from ward.tags tag where tag.name = :locationTag)")
-                    .setParameter("locationTag", locationTagName).list();
+                .setParameter("locationTag", locationTagName).list();
     }
 
     public Bed getL(int id) {
@@ -70,7 +70,7 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         Session session = sessionFactory.getCurrentSession();
         List<Location> physicalLocations = getPhysicalLocationsByLocationTagAndParentLocation(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION, location, session);
 
-        String hql = "select blm.row as rowNumber, blm.column as columnNumber, bed.id as bedId, bed.number as bedNumber, bed.status as status from BedLocationMapping blm " +
+        String hql = "select blm.row as rowNumber, blm.column as columnNumber, bed.id as bedId, bed.bedNumber as bedNumber, bed.status as status from BedLocationMapping blm " +
                 "left outer join blm.bed  bed " +
                 "where blm.location in (:physicalLocations)";
 
@@ -93,7 +93,7 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
 
     @Override
     @Transactional
-    public Bed assignPatientToBed(Patient patient, Bed bed) {
+    public BedDetails assignPatientToBed(Patient patient, Bed bed) {
 
         Session session = sessionFactory.getCurrentSession();
 
@@ -109,7 +109,11 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         bed.setStatus(BedStatus.OCCUPIED.toString());
 
         session.saveOrUpdate(bed);
-        return bed;
+
+        BedDetails bedDetails = new BedDetails();
+        bedDetails.setBedId(bed.getId());
+        bedDetails.setBedNumber(bed.getBedNumber());
+        return bedDetails;
     }
 
     @Override
@@ -117,5 +121,28 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         Bed bed = null;
         bed = (Bed) sessionFactory.getCurrentSession().createQuery("from Bed b where b.id = :id").setInteger("id", id).uniqueResult();
         return bed;
+    }
+
+    @Override
+    @Transactional
+    public Bed getBedByPatient(Patient patient) {
+        Session session = sessionFactory.getCurrentSession();
+        Bed bed = (Bed) session.createQuery("select bpa.bed.bedNumber as bedNumber,bpa.bed.id as id from BedPatientAssignment bpa " +
+                "where bpa.patient = :patient and bpa.endDatetime is null")
+                .setParameter("patient", patient)
+                .setResultTransformer(Transformers.aliasToBean(Bed.class))
+                .uniqueResult();
+        return bed;
+    }
+
+    @Override
+    @Transactional
+    public Location getWardsForBed(Bed bed) {
+        Session session = sessionFactory.getCurrentSession();
+        BedLocationMapping bedLocationMapping = (BedLocationMapping) session.createQuery("select blm.location as location from BedLocationMapping blm where blm.bed = :bed")
+                .setParameter("bed", bed)
+                .setResultTransformer(Transformers.aliasToBean(BedLocationMapping.class))
+                .uniqueResult();
+        return bedLocationMapping.getLocation();
     }
 }

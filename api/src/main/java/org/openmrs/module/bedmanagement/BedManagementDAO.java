@@ -24,7 +24,11 @@ public interface BedManagementDAO {
 
     AdmissionLocation getLayoutForWard(Location location);
 
-    Bed assignPatientToBed(Patient patient, Bed bed);
+    BedDetails assignPatientToBed(Patient patient, Bed bed);
 
     Bed getBedById(int id);
+
+    Bed getBedByPatient(Patient patient);
+
+    Location getWardsForBed(Bed bed);
 }

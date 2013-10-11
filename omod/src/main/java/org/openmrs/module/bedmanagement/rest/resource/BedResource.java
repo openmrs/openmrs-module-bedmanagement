@@ -16,6 +16,7 @@ package org.openmrs.module.bedmanagement.rest.resource;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.Bed;
+import org.openmrs.module.bedmanagement.BedDetails;
 import org.openmrs.module.bedmanagement.BedManagementService;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
@@ -26,35 +27,39 @@ import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentat
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
+import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
+import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-@Resource(name = RestConstants.VERSION_1 + "/beds", supportedClass = Bed.class, supportedOpenmrsVersions = "1.9.*")
-public class BedResource extends DelegatingCrudResource<Bed> {
+import java.util.Arrays;
+
+@Resource(name = RestConstants.VERSION_1 + "/beds", supportedClass = BedDetails.class, supportedOpenmrsVersions = "1.9.*")
+public class BedResource extends DelegatingCrudResource<BedDetails> {
     @Override
-    public Bed getByUniqueId(String id) {
+    public BedDetails getByUniqueId(String id) {
         throw new ResourceDoesNotSupportOperationException("getByUniqueId of bed not supported");
     }
 
     @Override
-    protected void delete(Bed bed, String s, RequestContext requestContext) throws ResponseException {
+    protected void delete(BedDetails bedDetails, String s, RequestContext requestContext) throws ResponseException {
         throw new ResourceDoesNotSupportOperationException("delete of bed not supported");
     }
 
     @Override
-    public Bed newDelegate() {
-        return new Bed();
+    public BedDetails newDelegate() {
+        return new BedDetails();
     }
 
     @Override
-    public Bed save(Bed bed) {
+    public BedDetails save(BedDetails bedDetails) {
         throw new ResourceDoesNotSupportOperationException("save of bed not supported");
     }
 
     @Override
-    public void purge(Bed bed, RequestContext requestContext) throws ResponseException {
+    public void purge(BedDetails bedDetails, RequestContext requestContext) throws ResponseException {
         throw new ResourceDoesNotSupportOperationException("purge of bed not supported");
     }
 
@@ -62,14 +67,15 @@ public class BedResource extends DelegatingCrudResource<Bed> {
     public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
         if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
-            description.addProperty("bedId", "id");
-            description.addProperty("bedNumber", "number");
+            description.addProperty("bedId", "bedId");
+            description.addProperty("bedNumber", "bedNumber");
             return description;
         }
         if ((rep instanceof FullRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
-            description.addProperty("bedId", "id");
-            description.addProperty("bedNumber", "number");
+            description.addProperty("bedId", "bedId");
+            description.addProperty("bedNumber", "bedNumber");
+            description.addProperty("physicalLocation","physicalLocation");
             return description;
         }
         return null;
@@ -81,8 +87,18 @@ public class BedResource extends DelegatingCrudResource<Bed> {
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
         Patient patient = Context.getPatientService().getPatientByUuid((String) propertiesToUpdate.get("patientUuid"));
         Bed bed = bedManagementService.getBedById( Integer.parseInt(uuid));
-        Bed bedRes = bedManagementService.assignPatientToBed(patient,bed);
+        BedDetails bedRes = bedManagementService.assignPatientToBed(patient, bed);
         SimpleObject ret = (SimpleObject) ConversionUtil.convertToRepresentation(bedRes, Representation.DEFAULT);
         return ret;
+    }
+
+    @Override
+    protected PageableResult doSearch(RequestContext context) {
+        BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
+        String patientUuid = context.getRequest().getParameter("patientUuid");
+        Patient patient = Context.getPatientService().getPatientByUuid(patientUuid);
+        BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatients(patient);
+        AlreadyPaged<BedDetails> alreadyPaged = new AlreadyPaged<BedDetails>(context, Arrays.asList(bedDetails) ,false);
+        return bedDetails.getBedId() == 0 ? super.doSearch(context) : alreadyPaged;
     }
 }

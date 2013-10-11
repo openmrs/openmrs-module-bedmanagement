@@ -5,6 +5,8 @@ public class BedLayout {
     private Integer columnNumber;
 //    private Bed bedDetails;
     private String bedNumber;
+    private Integer bedId;
+    private String status;
 
     public String getBedNumber() {
         return bedNumber;
@@ -30,8 +32,7 @@ public class BedLayout {
         this.status = status;
     }
 
-    private Integer bedId;
-    private String status;
+
 //
 //    public Bed getBedDetails() {
 //        return bedDetails;

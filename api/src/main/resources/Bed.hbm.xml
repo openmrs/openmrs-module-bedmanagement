@@ -9,7 +9,7 @@
             <generator class="native"/>
         </id>
 
-        <property name="number" type="java.lang.String" column="bed_number" length="10"/>
+        <property name="bedNumber" type="java.lang.String" column="bed_number" length="10"/>
 
         <property name="status" type="java.lang.String" column="status" length="20"/>
 

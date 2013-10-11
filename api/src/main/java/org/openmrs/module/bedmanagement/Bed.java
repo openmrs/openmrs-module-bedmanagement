@@ -4,7 +4,7 @@ import java.util.Set;
 
 public class Bed {
     private int id;
-    private String number;
+    private String bedNumber;
     private Set<BedPatientAssignment> bedPatientAssignment;
     private String status;
 
@@ -16,12 +16,12 @@ public class Bed {
         this.id = id;
     }
 
-    public String getNumber() {
-        return number;
+    public String getBedNumber() {
+        return bedNumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setBedNumber(String number) {
+        this.bedNumber = number;
     }
 
     public Set<BedPatientAssignment> getBedPatientAssignment() {

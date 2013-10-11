@@ -25,7 +25,9 @@ public interface BedManagementService extends OpenmrsService {
 
     AdmissionLocation getLayoutForWard(Location location);
 
-    Bed assignPatientToBed(Patient patient, Bed bed);
+    BedDetails assignPatientToBed(Patient patient, Bed bed);
 
     Bed getBedById(int id);
+
+    BedDetails getBedAssignmentDetailsByPatients(Patient patient);
 }
