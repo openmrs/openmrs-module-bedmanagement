@@ -76,5 +76,19 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
 
     }
 
+    @Test
+    public void shouldReturnEmptyBedAssignmentDetailsForNewPatient() {
+        PatientService patientService = Context.getPatientService();
+        Patient patient = patientService.getPatient(5);
+
+        LocationService locationService = Context.getLocationService();
+        Location ward = locationService.getLocation(123452);
+        int bedIdFromDataSetup = 11;
+        String bedNumFromDataSetup = "307-a";
+
+        BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatients(patient);
+        assertEquals(null,bedDetails);
+
+    }
 
 }

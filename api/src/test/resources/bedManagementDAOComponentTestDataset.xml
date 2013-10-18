@@ -64,9 +64,11 @@
 
     <patient patient_id="3" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <patient patient_id="4" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <patient patient_id="5" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
 
     <person person_id="3" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128762"/>
     <person person_id="4" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128823"/>
+    <person person_id="5" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128824"/>
 
     <bed_patient_assignment_map bed_patient_assignment_map_id="2" patient_id="3" bed_id="11" date_started="2008-08-18 14:09:05.0"/>
     <bed_patient_assignment_map bed_patient_assignment_map_id="3" patient_id="4" bed_id="12" date_started="2008-08-18 14:09:05.0"/>

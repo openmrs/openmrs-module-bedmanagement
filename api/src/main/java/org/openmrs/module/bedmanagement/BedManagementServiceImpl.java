@@ -50,11 +50,14 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     @Override
     public BedDetails getBedAssignmentDetailsByPatients(Patient patient) {
         Bed bed = dao.getBedByPatient(patient);
-        Location physicalLocation = dao.getWardsForBed(bed);
-        BedDetails bedDetails = new BedDetails();
-        bedDetails.setBedId(bed.getId());
-        bedDetails.setBedNumber(bed.getBedNumber());
-        bedDetails.setPhysicalLocation(physicalLocation);
-        return bedDetails;
+        if(bed != null){
+            Location physicalLocation = dao.getWardsForBed(bed);
+            BedDetails bedDetails = new BedDetails();
+            bedDetails.setBedId(bed.getId());
+            bedDetails.setBedNumber(bed.getBedNumber());
+            bedDetails.setPhysicalLocation(physicalLocation);
+            return bedDetails;
+        }
+        return null;
     }
 }

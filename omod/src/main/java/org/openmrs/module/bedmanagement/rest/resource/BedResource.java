@@ -99,6 +99,6 @@ public class BedResource extends DelegatingCrudResource<BedDetails> {
         Patient patient = Context.getPatientService().getPatientByUuid(patientUuid);
         BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatients(patient);
         AlreadyPaged<BedDetails> alreadyPaged = new AlreadyPaged<BedDetails>(context, Arrays.asList(bedDetails) ,false);
-        return bedDetails.getBedId() == 0 ? super.doSearch(context) : alreadyPaged;
+        return bedDetails == null || bedDetails.getBedId() == 0 ? super.doSearch(context) : alreadyPaged;
     }
 }

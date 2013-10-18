@@ -143,6 +143,9 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
                 .setParameter("bed", bed)
                 .setResultTransformer(Transformers.aliasToBean(BedLocationMapping.class))
                 .uniqueResult();
-        return bedLocationMapping.getLocation();
+        if(bedLocationMapping != null){
+           return bedLocationMapping.getLocation();
+        }
+        return null;
     }
 }
