@@ -16,6 +16,7 @@ package org.openmrs.module.bedmanagement;
 
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,4 +32,7 @@ public interface BedManagementDAO {
     Bed getBedByPatient(Patient patient);
 
     Location getWardsForBed(Bed bed);
+
+    @Transactional
+    BedDetails unassignPatient(Patient patient, Bed bed);
 }

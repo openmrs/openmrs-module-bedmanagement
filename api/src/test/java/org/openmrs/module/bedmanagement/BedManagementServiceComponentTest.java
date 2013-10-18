@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -90,5 +91,23 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
         assertEquals(null,bedDetails);
 
     }
+
+
+    @Test
+        public void shouldUnassignExistingPatientFromBed() throws Exception {
+            PatientService patientService = Context.getPatientService();
+            Patient patient = patientService.getPatient(3);
+
+            BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatients(patient);
+            assertNotNull(bedDetails);
+
+            Assert.assertEquals(11, bedDetails.getBedId());
+            Bed bed = bedManagementService.getBedById(9);
+
+            bedManagementService.assignPatientToBed(patient,bed);
+
+            bedDetails =  bedManagementService.getBedAssignmentDetailsByPatients(patient);
+            assertEquals(9, bedDetails.getBedId());
+        }
 
 }

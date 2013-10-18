@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.bedmanagement;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
 import org.hibernate.transform.Transformers;
@@ -25,6 +24,8 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Date;
+
 
 public class HibernateBedManagementDAO implements BedManagementDAO {
     SessionFactory sessionFactory;
@@ -147,5 +148,35 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
            return bedLocationMapping.getLocation();
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public BedDetails unassignPatient(Patient patient, Bed bed) {
+
+        Session session = sessionFactory.getCurrentSession();
+
+        BedPatientAssignment bedPatientAssignment = (BedPatientAssignment) session.createQuery(
+                "From BedPatientAssignment as bpa " +
+                        "where bpa.bed.id = :bedId and bpa.endDatetime is null")
+                .setInteger("bedId", bed.getId())
+                .uniqueResult();
+
+        if(bedPatientAssignment != null){
+            bedPatientAssignment.setEndDatetime(new Date());
+        }
+
+        Set<BedPatientAssignment> bedPatientAssignments = new HashSet<BedPatientAssignment>();
+        bedPatientAssignments.add(bedPatientAssignment);
+
+        bed.setBedPatientAssignment(bedPatientAssignments);
+        bed.setStatus(BedStatus.AVAILABLE.toString());
+        session.saveOrUpdate(bed);
+        session.flush();
+
+        BedDetails bedDetails = new BedDetails();
+        bedDetails.setBedId(bed.getId());
+        bedDetails.setBedNumber(bed.getBedNumber());
+        return bedDetails;
     }
 }
