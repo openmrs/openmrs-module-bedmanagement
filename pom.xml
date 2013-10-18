@@ -22,9 +22,9 @@
 	</organization>
 
 	<scm>
-		<connection>scm:svn:https://svn.openmrs.org/openmrs-modules/bed-management/trunk/</connection>
-		<developerConnection>scm:svn:https://svn.openmrs.org/openmrs-modules/bed-management/trunk/</developerConnection>
-		<url>https://svn.openmrs.org/openmrs-modules/bed-management/trunk/</url>
+		<connection>scm:git:git@github.com:openmrs/openmrs-module-bedmanagement.git</connection>
+		<developerConnection>scm:git@github.com:openmrs/openmrs-module-bedmanagement.git</developerConnection>
+		<url>git@github.com:openmrs/openmrs-module-bedmanagement.git</url>
 	</scm>
 
 	<modules>
