@@ -29,5 +29,5 @@ public interface BedManagementService extends OpenmrsService {
 
     Bed getBedById(int id);
 
-    BedDetails getBedAssignmentDetailsByPatients(Patient patient);
+    BedDetails getBedAssignmentDetailsByPatient(Patient patient);
 }

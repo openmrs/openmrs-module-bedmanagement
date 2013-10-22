@@ -15,7 +15,6 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -49,7 +48,7 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
         Location ward = locationService.getLocationByUuid("19e023e8-20ee-4237-ade6-9e68f897b7a9");
         AdmissionLocation admissionLocation = bedManagementService.getLayoutForWard(ward);
 
-        assertTrue(admissionLocation.getBedLayouts().size() == 6);
+        assertEquals(6, admissionLocation.getBedLayouts().size());
     }
 
     private AdmissionLocation getWard(List<AdmissionLocation> admissionLocationList, String wardName) {
@@ -70,7 +69,7 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
         int bedIdFromDataSetup = 11;
         String bedNumFromDataSetup = "307-a";
 
-        BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatients(patient);
+        BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
         assertEquals(ward.getId(), bedDetails.getPhysicalLocation().getId());
         assertEquals(bedIdFromDataSetup, bedDetails.getBedId());
         assertEquals(bedNumFromDataSetup, bedDetails.getBedNumber());
@@ -87,7 +86,7 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
         int bedIdFromDataSetup = 11;
         String bedNumFromDataSetup = "307-a";
 
-        BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatients(patient);
+        BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
         assertEquals(null,bedDetails);
 
     }
@@ -98,7 +97,7 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
             PatientService patientService = Context.getPatientService();
             Patient patient = patientService.getPatient(3);
 
-            BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatients(patient);
+            BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
             assertNotNull(bedDetails);
 
             Assert.assertEquals(11, bedDetails.getBedId());
@@ -106,7 +105,7 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
 
             bedManagementService.assignPatientToBed(patient,bed);
 
-            bedDetails =  bedManagementService.getBedAssignmentDetailsByPatients(patient);
+            bedDetails =  bedManagementService.getBedAssignmentDetailsByPatient(patient);
             assertEquals(9, bedDetails.getBedId());
         }
 

@@ -71,9 +71,14 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         Session session = sessionFactory.getCurrentSession();
         List<Location> physicalLocations = getPhysicalLocationsByLocationTagAndParentLocation(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION, location, session);
 
-        String hql = "select blm.row as rowNumber, blm.column as columnNumber, bed.id as bedId, bed.bedNumber as bedNumber, bed.status as status from BedLocationMapping blm " +
-                "left outer join blm.bed  bed " +
-                "where blm.location in (:physicalLocations)";
+        String hql = "select blm.row as rowNumber, blm.column as columnNumber, " +
+                "bed.id as bedId, bed.bedNumber as bedNumber, " +
+                "bed.status as status, pat as patient " +
+                "from BedLocationMapping blm " +
+                "left outer join blm.bed bed " +
+                "left outer join bed.bedPatientAssignment bpa with bpa.endDatetime is null " +
+                "left outer join bpa.patient as pat " +
+                "where blm.location in (:physicalLocations) ";
 
         List<BedLayout> bedLayouts = sessionFactory.getCurrentSession().createQuery(hql)
                 .setParameterList("physicalLocations", physicalLocations)

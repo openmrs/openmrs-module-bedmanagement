@@ -70,6 +70,13 @@
     <person person_id="4" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128823"/>
     <person person_id="5" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128824"/>
 
+    <patient_identifier_type patient_identifier_type_id="1" name="Test Identifier Type" description="Test description" check_digit="false" creator="1" date_created="2005-01-01 00:00:00.0" required="false" retired="false" uuid="0cbecb62-7249-4f91-8edf-d0206ecceb63"/>
+    <patient_identifier patient_identifier_id="1" patient_id="3" identifier="1234" identifier_type="1" preferred="1" location_id="12348" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="1ac98ec8-e9d9-4626-998c-c795c2f0aa9f"/>
+    <patient_identifier patient_identifier_id="2" patient_id="4" identifier="1235" identifier_type="1" preferred="1" location_id="12348" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="1ac98ec8-e9d9-4626-998c-c795c2f0aa9e"/>
+
+    <person_name person_name_id="1" preferred="true" person_id="3" given_name="John" middle_name=" " family_name="Doe" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f1f7d08-076b-4fc6-acac-4bb91515141e"/>
+    <person_name person_name_id="2" preferred="true" person_id="4" given_name="Jane" middle_name=" " family_name="Doe" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f1f7d08-076b-4fc6-acac-4bb91515141f"/>
+
     <bed_patient_assignment_map bed_patient_assignment_map_id="2" patient_id="3" bed_id="11" date_started="2008-08-18 14:09:05.0"/>
     <bed_patient_assignment_map bed_patient_assignment_map_id="3" patient_id="4" bed_id="12" date_started="2008-08-18 14:09:05.0"/>
 
