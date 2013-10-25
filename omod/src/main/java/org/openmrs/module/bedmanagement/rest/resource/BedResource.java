@@ -15,7 +15,6 @@ package org.openmrs.module.bedmanagement.rest.resource;
 
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.bedmanagement.Bed;
 import org.openmrs.module.bedmanagement.BedDetails;
 import org.openmrs.module.bedmanagement.BedManagementService;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -40,7 +39,8 @@ import java.util.Arrays;
 public class BedResource extends DelegatingCrudResource<BedDetails> {
     @Override
     public BedDetails getByUniqueId(String id) {
-        throw new ResourceDoesNotSupportOperationException("getByUniqueId of bed not supported");
+        BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
+        return bedManagementService.getBedDetailsById(id);
     }
 
     @Override
@@ -69,25 +69,26 @@ public class BedResource extends DelegatingCrudResource<BedDetails> {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("bedId", "bedId");
             description.addProperty("bedNumber", "bedNumber");
+            description.addProperty("physicalLocation",Representation.DEFAULT);
+            description.addProperty("patient",Representation.DEFAULT);
             return description;
         }
         if ((rep instanceof FullRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
-            description.addProperty("bedId", "bedId");
-            description.addProperty("bedNumber", "bedNumber");
-            description.addProperty("physicalLocation","physicalLocation");
+            description.addProperty("bedId", Representation.FULL);
+            description.addProperty("bedNumber", Representation.FULL);
+            description.addProperty("physicalLocation",Representation.FULL);
+            description.addProperty("patient",Representation.FULL);
             return description;
         }
         return null;
     }
 
-
     @Override
     public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
         Patient patient = Context.getPatientService().getPatientByUuid((String) propertiesToUpdate.get("patientUuid"));
-        Bed bed = bedManagementService.getBedById( Integer.parseInt(uuid));
-        BedDetails bedRes = bedManagementService.assignPatientToBed(patient, bed);
+        BedDetails bedRes = bedManagementService.assignPatientToBed(patient, uuid);
         SimpleObject ret = (SimpleObject) ConversionUtil.convertToRepresentation(bedRes, Representation.DEFAULT);
         return ret;
     }

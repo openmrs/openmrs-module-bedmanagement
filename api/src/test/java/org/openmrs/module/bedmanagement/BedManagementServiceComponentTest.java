@@ -21,6 +21,7 @@ import static org.junit.Assert.assertThat;
 public class BedManagementServiceComponentTest extends BaseModuleContextSensitiveTest {
     @Autowired
     private BedManagementService bedManagementService;
+    private int bedIdFromDataSetup = 11;
 
     @Before
     public void beforeAllTests() throws Exception {
@@ -53,7 +54,7 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
 
     private AdmissionLocation getWard(List<AdmissionLocation> admissionLocationList, String wardName) {
         for (AdmissionLocation admissionLocation : admissionLocationList) {
-            if(admissionLocation.getWard().getName().equals(wardName))
+            if (admissionLocation.getWard().getName().equals(wardName))
                 return admissionLocation;
         }
         return null;
@@ -66,7 +67,6 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
 
         LocationService locationService = Context.getLocationService();
         Location ward = locationService.getLocation(123452);
-        int bedIdFromDataSetup = 11;
         String bedNumFromDataSetup = "307-a";
 
         BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
@@ -80,33 +80,30 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
     public void shouldReturnEmptyBedAssignmentDetailsForNewPatient() {
         PatientService patientService = Context.getPatientService();
         Patient patient = patientService.getPatient(5);
-
-        LocationService locationService = Context.getLocationService();
-        Location ward = locationService.getLocation(123452);
-        int bedIdFromDataSetup = 11;
-        String bedNumFromDataSetup = "307-a";
-
         BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
-        assertEquals(null,bedDetails);
+        assertEquals(null, bedDetails);
+    }
+
+    @Test
+    public void shouldGetBedDetailsById() {
+        BedDetails details = bedManagementService.getBedDetailsById(String.valueOf(bedIdFromDataSetup));
+        assertNotNull(details);
 
     }
 
-
     @Test
-        public void shouldUnassignExistingPatientFromBed() throws Exception {
-            PatientService patientService = Context.getPatientService();
-            Patient patient = patientService.getPatient(3);
+    public void shouldUnassignExistingPatientFromBed() throws Exception {
+        int bedId = 9;
+        PatientService patientService = Context.getPatientService();
+        Patient patient = patientService.getPatient(3);
 
-            BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
-            assertNotNull(bedDetails);
+        BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
+        assertNotNull(bedDetails);
+        Assert.assertEquals(11, bedDetails.getBedId());
 
-            Assert.assertEquals(11, bedDetails.getBedId());
-            Bed bed = bedManagementService.getBedById(9);
+        bedManagementService.assignPatientToBed(patient, String.valueOf(bedId));
 
-            bedManagementService.assignPatientToBed(patient,bed);
-
-            bedDetails =  bedManagementService.getBedAssignmentDetailsByPatient(patient);
-            assertEquals(9, bedDetails.getBedId());
-        }
-
+        bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
+        assertEquals(bedId, bedDetails.getBedId());
+    }
 }

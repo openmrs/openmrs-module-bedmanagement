@@ -73,11 +73,9 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
 
         String hql = "select blm.row as rowNumber, blm.column as columnNumber, " +
                 "bed.id as bedId, bed.bedNumber as bedNumber, " +
-                "bed.status as status, pat as patient " +
+                "bed.status as status " +
                 "from BedLocationMapping blm " +
                 "left outer join blm.bed bed " +
-                "left outer join bed.bedPatientAssignment bpa with bpa.endDatetime is null " +
-                "left outer join bpa.patient as pat " +
                 "where blm.location in (:physicalLocations) ";
 
         List<BedLayout> bedLayouts = sessionFactory.getCurrentSession().createQuery(hql)
@@ -143,7 +141,7 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
 
     @Override
     @Transactional
-    public Location getWardsForBed(Bed bed) {
+    public Location getWardForBed(Bed bed) {
         Session session = sessionFactory.getCurrentSession();
         BedLocationMapping bedLocationMapping = (BedLocationMapping) session.createQuery("select blm.location as location from BedLocationMapping blm where blm.bed = :bed")
                 .setParameter("bed", bed)

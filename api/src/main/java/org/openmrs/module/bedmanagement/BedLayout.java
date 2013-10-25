@@ -1,7 +1,6 @@
 package org.openmrs.module.bedmanagement;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.openmrs.Patient;
 @JsonIgnoreProperties({"patient"})
 public class BedLayout {
     private Integer rowNumber;
@@ -9,48 +8,6 @@ public class BedLayout {
     private String bedNumber;
     private Integer bedId;
     private String status;
-    private String patientGender;
-    private String patientIdentifier;
-    private String patientName;
-    private Patient patient;
-
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        if(patient == null){
-            return;
-        }
-        this.patient = patient;
-        setPatientGender(patient.getGender());
-        setPatientIdentifier(patient.getPatientIdentifier().getIdentifier());
-        setPatientName(patient.getPersonName().getFullName());
-    }
-
-    public String getPatientName() {
-        return patientName;
-    }
-
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
-    }
-
-    public String getPatientIdentifier() {
-        return patientIdentifier;
-    }
-
-    public void setPatientIdentifier(String patientIdentifier) {
-        this.patientIdentifier = patientIdentifier;
-    }
-
-    public String getPatientGender() {
-        return patientGender;
-    }
-
-    public void setPatientGender(String patientGender) {
-        this.patientGender = patientGender;
-    }
 
     public String getBedNumber() {
         return bedNumber;

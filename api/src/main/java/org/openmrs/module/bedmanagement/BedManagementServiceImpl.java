@@ -17,6 +17,7 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.api.impl.BaseOpenmrsService;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class BedManagementServiceImpl extends BaseOpenmrsService implements BedManagementService {
@@ -38,11 +39,12 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     }
 
     @Override
-    public BedDetails assignPatientToBed(Patient patient, Bed bed) {
+    public BedDetails assignPatientToBed(Patient patient, String bedId) {
         Bed currentBed = dao.getBedByPatient(patient);
-        if(currentBed != null){
-                dao.unassignPatient(patient,currentBed);
-            }
+        if (currentBed != null) {
+            dao.unassignPatient(patient, currentBed);
+        }
+        Bed bed = dao.getBedById(Integer.parseInt(bedId));
         return dao.assignPatientToBed(patient, bed);
     }
 
@@ -51,16 +53,46 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
         return dao.getBedById(id);
     }
 
+
     @Override
     public BedDetails getBedAssignmentDetailsByPatient(Patient patient) {
         Bed bed = dao.getBedByPatient(patient);
-        if(bed != null){
-            Location physicalLocation = dao.getWardsForBed(bed);
-            BedDetails bedDetails = new BedDetails();
-            bedDetails.setBedId(bed.getId());
-            bedDetails.setBedNumber(bed.getBedNumber());
-            bedDetails.setPhysicalLocation(physicalLocation);
+        if (bed != null) {
+            Location physicalLocation = dao.getWardForBed(bed);
+            BedDetails bedDetails = constructBedDetails(bed, patient, physicalLocation);
             return bedDetails;
+        }
+        return null;
+    }
+
+    @Override
+    public BedDetails getBedDetailsById(String id) {
+        Bed bed = dao.getBedById(Integer.parseInt(id));
+        if(bed !=null){
+            Patient assignedPatient = getAssignedPatient(bed);
+            Location location = dao.getWardForBed(bed);
+            BedDetails bedDetails = constructBedDetails(bed, assignedPatient, location);
+            return bedDetails;
+        }
+        return null;
+    }
+
+    private BedDetails constructBedDetails(Bed bed, Patient patient, Location location) {
+        BedDetails bedDetails = new BedDetails();
+        bedDetails.setBedId(bed.getId());
+        bedDetails.setBedNumber(bed.getBedNumber());
+        bedDetails.setPatient(patient);
+        bedDetails.setPhysicalLocation(location);
+        return bedDetails;
+    }
+
+    private Patient getAssignedPatient(Bed bed) {
+        Iterator<BedPatientAssignment> iterator = bed.getBedPatientAssignment().iterator();
+        while (iterator.hasNext()) {
+            BedPatientAssignment bedPatientAssignment = iterator.next();
+            if (bedPatientAssignment.getEndDatetime() == null) {
+                return bedPatientAssignment.getPatient();
+            }
         }
         return null;
     }

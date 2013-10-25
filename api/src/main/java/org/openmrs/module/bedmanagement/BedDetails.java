@@ -1,11 +1,14 @@
 package org.openmrs.module.bedmanagement;
 
 import org.openmrs.Location;
+import org.openmrs.Patient;
 
 public class BedDetails {
     private Location physicalLocation;
     private int bedId;
     private String bedNumber;
+    private Patient patient;
+
 
     public Location getPhysicalLocation() {
         return physicalLocation;
@@ -38,5 +41,13 @@ public class BedDetails {
                 ", bedNumber='" + bedNumber + '\'' +
                 ", bedId=" + bedId +
                 '}';
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 }

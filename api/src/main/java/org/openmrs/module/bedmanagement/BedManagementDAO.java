@@ -31,7 +31,7 @@ public interface BedManagementDAO {
 
     Bed getBedByPatient(Patient patient);
 
-    Location getWardsForBed(Bed bed);
+    Location getWardForBed(Bed bed);
 
     @Transactional
     BedDetails unassignPatient(Patient patient, Bed bed);

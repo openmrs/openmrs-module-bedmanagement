@@ -8,6 +8,7 @@ public class Bed {
     private Set<BedPatientAssignment> bedPatientAssignment;
     private String status;
 
+
     public int getId() {
         return id;
     }
