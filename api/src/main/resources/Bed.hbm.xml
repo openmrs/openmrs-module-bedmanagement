@@ -4,14 +4,14 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
     <class name="org.openmrs.module.bedmanagement.Bed" table="bed">
-
         <id name="id" type="int" column="bed_id" unsaved-value="0">
             <generator class="native"/>
         </id>
 
         <property name="bedNumber" type="java.lang.String" column="bed_number" length="10"/>
-
         <property name="status" type="java.lang.String" column="status" length="20"/>
+
+        <many-to-one name="bedType" class="org.openmrs.module.bedmanagement.BedType" column="bed_type_id" lazy="false"/>
 
         <set name="bedPatientAssignment" cascade="save-update" inverse="true">
             <key column="bed_id"/>

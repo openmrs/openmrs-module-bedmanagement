@@ -8,7 +8,7 @@ public class BedDetails {
     private int bedId;
     private String bedNumber;
     private Patient patient;
-
+    private BedType bedType;
 
     public Location getPhysicalLocation() {
         return physicalLocation;
@@ -34,13 +34,12 @@ public class BedDetails {
         this.bedId = bedId;
     }
 
-    @Override
-    public String toString() {
-        return "BedDetails{" +
-                "physicalLocation=" + physicalLocation +
-                ", bedNumber='" + bedNumber + '\'' +
-                ", bedId=" + bedId +
-                '}';
+    public BedType getBedType() {
+        return bedType;
+    }
+
+    public void setBedType(BedType bedType) {
+        this.bedType = bedType;
     }
 
     public Patient getPatient() {
@@ -50,4 +49,16 @@ public class BedDetails {
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
+
+    @Override
+    public String toString() {
+        return "BedDetails{" +
+                "physicalLocation=" + physicalLocation +
+                ", bedId=" + bedId +
+                ", bedNumber='" + bedNumber + '\'' +
+                ", patient=" + patient +
+                ", bedType='" + bedType + '\'' +
+                '}';
+    }
+
 }

@@ -12,16 +12,20 @@
     <location_tag_map location_id="123451" location_tag_id="12" />
     <!--<location_tag_map location_id="123451" location_tag_id="12" />-->
 
-    <bed bed_id="1" bed_number="304-a" status="OCCUPIED"/>
-    <bed bed_id="2" bed_number="304-b" status="AVAILABLE"/>
-    <bed bed_id="3" bed_number="304-c" status="AVAILABLE"/>
-    <bed bed_id="4" bed_number="304-d" status="AVAILABLE"/>
-    <bed bed_id="5" bed_number="305-a" status="AVAILABLE"/>
-    <bed bed_id="6" bed_number="305-b" status="AVAILABLE"/>
-    <bed bed_id="7" bed_number="305-c" status="AVAILABLE"/>
-    <bed bed_id="8" bed_number="305-d" status="AVAILABLE"/>
-    <bed bed_id="9" bed_number="306-a" status="AVAILABLE"/>
-    <bed bed_id="10" bed_number="306-b" status="AVAILABLE"/>
+    <bed_type bed_type_id="1" name="deluxe" description="deluxe bed" display_name="DLX"/>
+    <bed_type bed_type_id="2" name="luxury" description="luxury bed" display_name="LXY"/>
+    <bed_type bed_type_id="3" name="normal" description="normal bed" display_name="NRM"/>
+
+    <bed bed_id="1" bed_number="304-a" status="OCCUPIED" bed_type_id="1"/>
+    <bed bed_id="2" bed_number="304-b" status="AVAILABLE" bed_type_id="2"/>
+    <bed bed_id="3" bed_number="304-c" status="AVAILABLE" bed_type_id="2"/>
+    <bed bed_id="4" bed_number="304-d" status="AVAILABLE" bed_type_id="1"/>
+    <bed bed_id="5" bed_number="305-a" status="AVAILABLE" bed_type_id="3"/>
+    <bed bed_id="6" bed_number="305-b" status="AVAILABLE" bed_type_id="3"/>
+    <bed bed_id="7" bed_number="305-c" status="AVAILABLE" bed_type_id="3"/>
+    <bed bed_id="8" bed_number="305-d" status="AVAILABLE" bed_type_id="3"/>
+    <bed bed_id="9" bed_number="306-a" status="AVAILABLE" bed_type_id="3"/>
+    <bed bed_id="10" bed_number="306-b" status="AVAILABLE" bed_type_id="3"/>
 
     <bed_location_map bed_location_map_id="1" location_id="123451" row_number="1" column_number="1" bed_id="1"/>
     <bed_location_map bed_location_map_id="2" location_id="123451" row_number="1" column_number="2" bed_id="2"/>
@@ -50,10 +54,10 @@
     <location location_id="12347" name="Orthopaedic ward" description="This ward houses orthopaedic patients." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="19e023e8-20ee-4237-ade6-9e68f897b7a9"/>
     <location location_id="123452" name="Physical Location for Orthopaedic ward" description="This ward houses Orthopaedic ward." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="98bc9b32-9d1a-11e2-8137-0800271c1b56" parent_location="12347" />
 
-    <bed bed_id="11" bed_number="307-a" status= "OCCUPIED"/>
-    <bed bed_id="12" bed_number="307-b" status= "OCCUPIED"/>
-    <bed bed_id="13" bed_number="307-c" status="AVAILABLE"/>
-    <bed bed_id="14" bed_number="307-d" status="AVAILABLE"/>
+    <bed bed_id="11" bed_number="307-a" status= "OCCUPIED" bed_type_id="1"/>
+    <bed bed_id="12" bed_number="307-b" status= "OCCUPIED" bed_type_id="2"/>
+    <bed bed_id="13" bed_number="307-c" status="AVAILABLE" bed_type_id="3"/>
+    <bed bed_id="14" bed_number="307-d" status="AVAILABLE" bed_type_id="3"/>
 
     <bed_location_map bed_location_map_id="19" location_id="123452" row_number="1" column_number="1" bed_id="11"/>
     <bed_location_map bed_location_map_id="20" location_id="123452" row_number="1" column_number="2" bed_id="12"/>

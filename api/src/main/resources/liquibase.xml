@@ -121,4 +121,45 @@
                          tableName="bed"/>
     </changeSet>
 
+    <changeSet author="Arathy,Banka" id="bed_management_module_18112013_1">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="bed_type"/></not>
+        </preConditions>
+        <comment>
+            Create bed_type table
+        </comment>
+        <createTable tableName="bed_type">
+            <column autoIncrement="true" name="bed_type_id" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="display_name" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(255)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Arathy,Banka" id="bed_management_module_18112013_2">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="bed" columnName="bed_type_id"/></not>
+        </preConditions>
+        <addColumn tableName="bed">
+            <column name="bed_type_id" type="int"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="Arathy,Banka" id="bed_management_module_18112013_3">
+        <preConditions onFail="MARK_RAN">
+            <not><foreignKeyConstraintExists foreignKeyName="bed_bed_type_fk"/></not>
+        </preConditions>
+        <comment>
+            Added foreign key reference on bed_type_id in bed table
+        </comment>
+        <addForeignKeyConstraint constraintName="bed_bed_type_fk"
+                                 baseTableName="bed" baseColumnNames="bed_type_id"
+                                 referencedTableName="bed_type" referencedColumnNames="bed_type_id"/>
+    </changeSet>
 </databaseChangeLog>

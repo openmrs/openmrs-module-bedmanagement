@@ -69,6 +69,7 @@ public class BedResource extends DelegatingCrudResource<BedDetails> {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("bedId", "bedId");
             description.addProperty("bedNumber", "bedNumber");
+            description.addProperty("bedType");
             description.addProperty("physicalLocation",Representation.DEFAULT);
             description.addProperty("patient",Representation.DEFAULT);
             return description;
@@ -77,6 +78,7 @@ public class BedResource extends DelegatingCrudResource<BedDetails> {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("bedId", Representation.FULL);
             description.addProperty("bedNumber", Representation.FULL);
+            description.addProperty("bedType");
             description.addProperty("physicalLocation",Representation.FULL);
             description.addProperty("patient",Representation.FULL);
             return description;

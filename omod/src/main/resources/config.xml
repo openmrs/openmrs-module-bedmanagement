@@ -32,6 +32,7 @@
         Bed.hbm.xml
         BedLocationMapping.hbm.xml
         BedPatientAssignment.hbm.xml
+        BedType.hbm.xml
 	</mappingFiles>
 
 	<!-- Internationalization -->

@@ -7,7 +7,7 @@ public class Bed {
     private String bedNumber;
     private Set<BedPatientAssignment> bedPatientAssignment;
     private String status;
-
+    private BedType bedType;
 
     public int getId() {
         return id;
@@ -39,5 +39,13 @@ public class Bed {
 
     public void setStatus(String status) {
         this.status = status.toString();
+    }
+
+    public BedType getBedType() {
+        return bedType;
+    }
+
+    public void setBedType(BedType bedType) {
+        this.bedType = bedType;
     }
 }

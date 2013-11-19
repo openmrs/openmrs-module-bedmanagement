@@ -86,9 +86,10 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
 
     @Test
     public void shouldGetBedDetailsById() {
-        BedDetails details = bedManagementService.getBedDetailsById(String.valueOf(bedIdFromDataSetup));
+        int deluxeBedId = 1;
+        BedDetails details = bedManagementService.getBedDetailsById(String.valueOf(deluxeBedId));
         assertNotNull(details);
-
+        assertEquals("deluxe", details.getBedType().getName());
     }
 
     @Test

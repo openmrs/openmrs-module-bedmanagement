@@ -8,6 +8,7 @@ public class BedLayout {
     private String bedNumber;
     private Integer bedId;
     private String status;
+    private BedType bedType;
 
     public String getBedNumber() {
         return bedNumber;
@@ -49,6 +50,14 @@ public class BedLayout {
         this.columnNumber = columnNumber;
     }
 
+    public BedType getBedType() {
+        return bedType;
+    }
+
+    public void setBedType(BedType bedType) {
+        this.bedType = bedType;
+    }
+
     @Override
     public String toString() {
         return "BedLayout{" +
@@ -57,6 +66,7 @@ public class BedLayout {
                 ", bedNumber='" + bedNumber + '\'' +
                 ", bedId=" + bedId +
                 ", status='" + status + '\'' +
+                ", bedType=" + bedType +
                 '}';
     }
 }
