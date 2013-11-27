@@ -44,8 +44,9 @@ public class BedResource extends DelegatingCrudResource<BedDetails> {
     }
 
     @Override
-    protected void delete(BedDetails bedDetails, String s, RequestContext requestContext) throws ResponseException {
-        throw new ResourceDoesNotSupportOperationException("delete of bed not supported");
+    protected void delete(BedDetails bedDetails, String reason, RequestContext requestContext) throws ResponseException {
+        BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
+        bedManagementService.freeBed(bedDetails.getPatient());
     }
 
     @Override
@@ -70,8 +71,8 @@ public class BedResource extends DelegatingCrudResource<BedDetails> {
             description.addProperty("bedId", "bedId");
             description.addProperty("bedNumber", "bedNumber");
             description.addProperty("bedType");
-            description.addProperty("physicalLocation",Representation.DEFAULT);
-            description.addProperty("patient",Representation.DEFAULT);
+            description.addProperty("physicalLocation", Representation.DEFAULT);
+            description.addProperty("patient", Representation.DEFAULT);
             return description;
         }
         if ((rep instanceof FullRepresentation)) {
@@ -79,8 +80,8 @@ public class BedResource extends DelegatingCrudResource<BedDetails> {
             description.addProperty("bedId", Representation.FULL);
             description.addProperty("bedNumber", Representation.FULL);
             description.addProperty("bedType");
-            description.addProperty("physicalLocation",Representation.FULL);
-            description.addProperty("patient",Representation.FULL);
+            description.addProperty("physicalLocation", Representation.FULL);
+            description.addProperty("patient", Representation.FULL);
             return description;
         }
         return null;
@@ -101,7 +102,7 @@ public class BedResource extends DelegatingCrudResource<BedDetails> {
         String patientUuid = context.getRequest().getParameter("patientUuid");
         Patient patient = Context.getPatientService().getPatientByUuid(patientUuid);
         BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
-        AlreadyPaged<BedDetails> alreadyPaged = new AlreadyPaged<BedDetails>(context, Arrays.asList(bedDetails) ,false);
+        AlreadyPaged<BedDetails> alreadyPaged = new AlreadyPaged<BedDetails>(context, Arrays.asList(bedDetails), false);
         return bedDetails == null || bedDetails.getBedId() == 0 ? super.doSearch(context) : alreadyPaged;
     }
 }

@@ -49,6 +49,14 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     }
 
     @Override
+    public void freeBed(Patient patient) {
+        Bed currentBed = dao.getBedByPatient(patient);
+        if (currentBed != null) {
+            dao.unassignPatient(patient, currentBed);
+        }
+    }
+
+    @Override
     public Bed getBedById(int id) {
         return dao.getBedById(id);
     }

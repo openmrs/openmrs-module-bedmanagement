@@ -160,20 +160,16 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
 
         Session session = sessionFactory.getCurrentSession();
 
-        BedPatientAssignment bedPatientAssignment = (BedPatientAssignment) session.createQuery(
-                "From BedPatientAssignment as bpa " +
-                        "where bpa.bed.id = :bedId and bpa.endDatetime is null")
-                .setInteger("bedId", bed.getId())
-                .uniqueResult();
+        bed = (Bed) session.get(Bed.class, bed.getId());
 
-        if(bedPatientAssignment != null){
-            bedPatientAssignment.setEndDatetime(new Date());
+        Set<BedPatientAssignment> bedPatientAssignment = bed.getBedPatientAssignment();
+        for (BedPatientAssignment patientAssignment : bedPatientAssignment) {
+
+            if (patientAssignment.getEndDatetime() == null) {
+                patientAssignment.setEndDatetime(new Date());
+            }
         }
 
-        Set<BedPatientAssignment> bedPatientAssignments = new HashSet<BedPatientAssignment>();
-        bedPatientAssignments.add(bedPatientAssignment);
-
-        bed.setBedPatientAssignment(bedPatientAssignments);
         bed.setStatus(BedStatus.AVAILABLE.toString());
         session.saveOrUpdate(bed);
         session.flush();
