@@ -13,17 +13,18 @@
  */
 package org.openmrs.module.bedmanagement;
 
+import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.api.impl.BaseOpenmrsService;
 
 import java.util.Iterator;
 import java.util.List;
-
+    
 public class BedManagementServiceImpl extends BaseOpenmrsService implements BedManagementService {
 
     BedManagementDAO dao;
-
+    
     public void setDao(BedManagementDAO dao) {
         this.dao = dao;
     }
@@ -39,13 +40,13 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     }
 
     @Override
-    public BedDetails assignPatientToBed(Patient patient, String bedId) {
+    public BedDetails assignPatientToBed(Patient patient, Encounter encounter, String bedId) {
         Bed currentBed = dao.getBedByPatient(patient);
         if (currentBed != null) {
             dao.unassignPatient(patient, currentBed);
         }
         Bed bed = dao.getBedById(Integer.parseInt(bedId));
-        return dao.assignPatientToBed(patient, bed);
+        return dao.assignPatientToBed(patient, encounter, bed);
     }
 
     @Override
@@ -67,8 +68,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
         Bed bed = dao.getBedByPatient(patient);
         if (bed != null) {
             Location physicalLocation = dao.getWardForBed(bed);
-            BedDetails bedDetails = constructBedDetails(bed, patient, physicalLocation);
-            return bedDetails;
+            return constructBedDetails(bed, patient, physicalLocation);
         }
         return null;
     }
@@ -85,9 +85,26 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
         return null;
     }
 
+    @Override
+    public BedDetails getBedDetailsByUuid(String uuid) {
+        Bed bed = dao.getBedByUuid(uuid);
+        if (bed != null) {
+            Patient assignedPatient = getAssignedPatient(bed);
+            Location location = dao.getWardForBed(bed);
+            BedDetails bedDetails = constructBedDetails(bed, assignedPatient, location);
+            return bedDetails;
+        }
+        return null;
+    }
+
+    @Override
+    public BedPatientAssignment getBedPatientAssignmentByUuid(String uuid) {
+        return dao.getBedPatientAssignmentByUuid(uuid);
+    }
+
     private BedDetails constructBedDetails(Bed bed, Patient patient, Location location) {
         BedDetails bedDetails = new BedDetails();
-        bedDetails.setBedId(bed.getId());
+        bedDetails.setBed(bed);
         bedDetails.setBedNumber(bed.getBedNumber());
         bedDetails.setPatient(patient);
         bedDetails.setPhysicalLocation(location);

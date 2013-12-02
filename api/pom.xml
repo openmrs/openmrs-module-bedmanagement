@@ -62,8 +62,15 @@
 		</dependency>
 				
 		<!-- End OpenMRS core -->
-		
-	</dependencies>
+
+        <dependency>
+            <groupId>org.ict4h</groupId>
+            <artifactId>atomfeed-server</artifactId>
+            <version>${atomfeed.version}</version>
+        </dependency>
+
+
+    </dependencies>
 	
 	<build>
 		<resources>

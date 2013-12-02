@@ -14,6 +14,7 @@
 package org.openmrs.module.bedmanagement;
 
 
+import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.api.OpenmrsService;
@@ -21,11 +22,12 @@ import org.openmrs.api.OpenmrsService;
 import java.util.List;
 
 public interface BedManagementService extends OpenmrsService {
+    
     List<AdmissionLocation> getAllAdmissionLocations();
 
     AdmissionLocation getLayoutForWard(Location location);
 
-    BedDetails assignPatientToBed(Patient patient, String bedId);
+    BedDetails assignPatientToBed(Patient patient, Encounter encounter, String bedId);
 
     void freeBed(Patient patient);
 
@@ -34,4 +36,9 @@ public interface BedManagementService extends OpenmrsService {
     BedDetails getBedAssignmentDetailsByPatient(Patient patient);
 
     BedDetails getBedDetailsById(String id);
+
+    BedDetails getBedDetailsByUuid(String uuid);
+
+    BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
+    
 }

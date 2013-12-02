@@ -5,7 +5,9 @@
 
     <changeSet author="arathy" id="08102013_1">
         <preConditions onFail="MARK_RAN">
-            <not><tableExists tableName="bed"/></not>
+            <not>
+                <tableExists tableName="bed"/>
+            </not>
         </preConditions>
         <comment>
             Create bed table
@@ -22,7 +24,9 @@
 
     <changeSet author="arathy" id="08102013_2">
         <preConditions onFail="MARK_RAN">
-            <not><tableExists tableName="bed_patient_assignment_map"/></not>
+            <not>
+                <tableExists tableName="bed_patient_assignment_map"/>
+            </not>
         </preConditions>
         <comment>
             Create bed_patient_assignment_map table
@@ -46,7 +50,9 @@
 
     <changeSet author="arathy" id="08102013_3">
         <preConditions onFail="MARK_RAN">
-            <not><foreignKeyConstraintExists foreignKeyName="bed_id_fk"/></not>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="bed_id_fk"/>
+            </not>
         </preConditions>
         <comment>
             Added foreign key reference on bed_id in bed_patient_assignment_map table
@@ -58,7 +64,9 @@
 
     <changeSet author="arathy" id="08102013_4">
         <preConditions onFail="MARK_RAN">
-            <not><foreignKeyConstraintExists foreignKeyName="bed_patient_assignment_map_patient_fk"/></not>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="bed_patient_assignment_map_patient_fk"/>
+            </not>
         </preConditions>
         <comment>
             Added foreign key reference on patient_id in bed_patient_assignment_map table
@@ -70,7 +78,9 @@
 
     <changeSet author="arathy" id="08102013_5">
         <preConditions onFail="MARK_RAN">
-            <not><tableExists tableName="bed_location_map"/></not>
+            <not>
+                <tableExists tableName="bed_location_map"/>
+            </not>
         </preConditions>
         <comment>
             Create bed_location_map table
@@ -94,7 +104,9 @@
 
     <changeSet author="arathy" id="08102013_6">
         <preConditions onFail="MARK_RAN">
-            <not><foreignKeyConstraintExists foreignKeyName="bed_location_map_location_fk"/></not>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="bed_location_map_location_fk"/>
+            </not>
         </preConditions>
         <comment>
             Added foreign key reference on location_id in bed_location_map table
@@ -106,24 +118,28 @@
 
     <changeSet author="arathy" id="08102013_7">
         <preConditions onFail="MARK_RAN">
-            <not><columnExists columnName="status" tableName="bed"/></not>
+            <not>
+                <columnExists columnName="status" tableName="bed"/>
+            </not>
         </preConditions>
-            <addColumn tableName="bed">
-                <column name="status" type="varchar(255)"/>
-            </addColumn>
+        <addColumn tableName="bed">
+            <column name="status" type="varchar(255)"/>
+        </addColumn>
     </changeSet>
 
     <changeSet author="arathy" id="08102013_8">
         <addDefaultValue
-                         columnDataType="varchar(255)"
-                         columnName="status"
-                         defaultValue="AVAILABLE"
-                         tableName="bed"/>
+                columnDataType="varchar(255)"
+                columnName="status"
+                defaultValue="AVAILABLE"
+                tableName="bed"/>
     </changeSet>
 
     <changeSet author="Arathy,Banka" id="bed_management_module_18112013_1">
         <preConditions onFail="MARK_RAN">
-            <not><tableExists tableName="bed_type"/></not>
+            <not>
+                <tableExists tableName="bed_type"/>
+            </not>
         </preConditions>
         <comment>
             Create bed_type table
@@ -138,13 +154,15 @@
             <column name="display_name" type="varchar(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="varchar(255)" />
+            <column name="description" type="varchar(255)"/>
         </createTable>
     </changeSet>
 
     <changeSet author="Arathy,Banka" id="bed_management_module_18112013_2">
         <preConditions onFail="MARK_RAN">
-            <not><columnExists tableName="bed" columnName="bed_type_id"/></not>
+            <not>
+                <columnExists tableName="bed" columnName="bed_type_id"/>
+            </not>
         </preConditions>
         <addColumn tableName="bed">
             <column name="bed_type_id" type="int"></column>
@@ -153,7 +171,9 @@
 
     <changeSet author="Arathy,Banka" id="bed_management_module_18112013_3">
         <preConditions onFail="MARK_RAN">
-            <not><foreignKeyConstraintExists foreignKeyName="bed_bed_type_fk"/></not>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="bed_bed_type_fk"/>
+            </not>
         </preConditions>
         <comment>
             Added foreign key reference on bed_type_id in bed table
@@ -162,4 +182,159 @@
                                  baseTableName="bed" baseColumnNames="bed_type_id"
                                  referencedTableName="bed_type" referencedColumnNames="bed_type_id"/>
     </changeSet>
+
+    <changeSet author="tw" id="27112013_1">
+        <addColumn tableName="bed_patient_assignment_map">
+            <column name="encounter_id" type="int">
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="bed_patient_assignment_map_encounter_fk"
+                                 baseTableName="bed_patient_assignment_map" baseColumnNames="encounter_id"
+                                 referencedTableName="encounter" referencedColumnNames="encounter_id"/>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_1">
+        <addColumn tableName="bed">
+            <column name="uuid" type="char(38)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_2">
+        <addColumn tableName="bed">
+            <column name="creator" type="int" valueNumeric="1"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_3">
+        <addColumn tableName="bed">
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_4">
+        <addColumn tableName="bed">
+            <column name="changed_by" type="int"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_5">
+        <addColumn tableName="bed">
+            <column name="date_changed" type="datetime"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_6">
+        <addColumn tableName="bed">
+            <column name="voided" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="tw" id="28112013_7">
+        <addColumn tableName="bed">
+            <column name="voided_by" type="int"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_8">
+        <addColumn tableName="bed">
+            <column name="date_voided" type="datetime"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_9">
+        <addColumn tableName="bed">
+            <column name="void_reason" type="varchar(255)" defaultValue="null"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_10">
+        <addUniqueConstraint tableName="bed"
+                             columnNames="uuid" constraintName="bed_unique_uuid"/>
+        <addForeignKeyConstraint constraintName="bed_creator"
+                                 baseTableName="bed" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="bed_changed_by_fk"
+                                 baseTableName="bed" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="bed_voided_by_fk"
+                                 baseTableName="bed" baseColumnNames="voided_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+    </changeSet>
+
+
+    <changeSet author="tw" id="28112013_11">
+        <addColumn tableName="bed_patient_assignment_map">
+            <column name="uuid" type="char(38)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_12">
+        <addColumn tableName="bed_patient_assignment_map">
+            <column name="creator" type="int" valueNumeric="1"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_13">
+        <addColumn tableName="bed_patient_assignment_map">
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="tw" id="28112013_14">
+        <addColumn tableName="bed_patient_assignment_map">
+            <column name="changed_by" type="int"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_15">
+        <addColumn tableName="bed_patient_assignment_map">
+            <column name="date_changed" type="datetime"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_16">
+        <addColumn tableName="bed_patient_assignment_map">
+            <column name="voided" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_17">
+        <addColumn tableName="bed_patient_assignment_map">
+            <column name="voided_by" type="int"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_18">
+        <addColumn tableName="bed_patient_assignment_map">
+            <column name="date_voided" type="datetime"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_19">
+        <addColumn tableName="bed_patient_assignment_map">
+            <column name="void_reason" type="varchar(255)" defaultValue="null"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tw" id="28112013_20">
+        <addUniqueConstraint tableName="bed_patient_assignment_map"
+                             columnNames="uuid" constraintName="bed_unique_uuid"/>
+        <addForeignKeyConstraint constraintName="bed_patient_assignment_map_creator"
+                                 baseTableName="bed_patient_assignment_map" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="bed_patient_assignment_map_changed_by_fk"
+                                 baseTableName="bed_patient_assignment_map" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="bed_patient_assignment_map_voided_by_fk"
+                                 baseTableName="bed_patient_assignment_map" baseColumnNames="voided_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+    </changeSet>
+
+
 </databaseChangeLog>

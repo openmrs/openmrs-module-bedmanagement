@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.bedmanagement.rest.resource;
 
+import org.openmrs.Encounter;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.BedDetails;
@@ -40,7 +41,10 @@ public class BedResource extends DelegatingCrudResource<BedDetails> {
     @Override
     public BedDetails getByUniqueId(String id) {
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        return bedManagementService.getBedDetailsById(id);
+        BedDetails bedDetails = bedManagementService.getBedDetailsById(id);
+        if (bedDetails == null)
+            bedDetails = bedManagementService.getBedDetailsByUuid(id);
+        return bedDetails;
     }
 
     @Override
@@ -91,9 +95,13 @@ public class BedResource extends DelegatingCrudResource<BedDetails> {
     public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
         Patient patient = Context.getPatientService().getPatientByUuid((String) propertiesToUpdate.get("patientUuid"));
-        BedDetails bedRes = bedManagementService.assignPatientToBed(patient, uuid);
-        SimpleObject ret = (SimpleObject) ConversionUtil.convertToRepresentation(bedRes, Representation.DEFAULT);
-        return ret;
+        Object encounterUuid = propertiesToUpdate.get("encounterUuid");
+        Encounter encounter = null;
+        if (encounterUuid != null) {
+            encounter = Context.getEncounterService().getEncounterByUuid((String) encounterUuid);
+        }
+        BedDetails bedRes = bedManagementService.assignPatientToBed(patient, encounter, uuid);
+        return ConversionUtil.convertToRepresentation(bedRes, Representation.DEFAULT);
     }
 
     @Override

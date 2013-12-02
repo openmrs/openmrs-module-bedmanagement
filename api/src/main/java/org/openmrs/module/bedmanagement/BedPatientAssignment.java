@@ -1,22 +1,25 @@
 package org.openmrs.module.bedmanagement;
 
+import org.openmrs.BaseOpenmrsData;
+import org.openmrs.Encounter;
 import org.openmrs.Patient;
 
 import java.util.Date;
 
-public class BedPatientAssignment {
+public class BedPatientAssignment extends BaseOpenmrsData {
 
-    private int id;
+    private Integer id;
     private Bed bed;
     private Patient patient;
     private Date startDatetime;
     private Date endDatetime;
+    private Encounter encounter;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -50,5 +53,13 @@ public class BedPatientAssignment {
 
     public void setEndDatetime(Date endDatetime) {
         this.endDatetime = endDatetime;
+    }
+
+    public Encounter getEncounter() {
+        return encounter;
+    }
+
+    public void setEncounter(Encounter encounter) {
+        this.encounter = encounter;
     }
 }

@@ -5,7 +5,7 @@ import org.openmrs.Patient;
 
 public class BedDetails {
     private Location physicalLocation;
-    private int bedId;
+    private Bed bed;
     private String bedNumber;
     private Patient patient;
     private BedType bedType;
@@ -27,11 +27,11 @@ public class BedDetails {
     }
 
     public int getBedId() {
-        return bedId;
+        return bed.getId();
     }
 
-    public void setBedId(int bedId) {
-        this.bedId = bedId;
+    public String getBedUuid() {
+        return bed.getUuid();
     }
 
     public BedType getBedType() {
@@ -54,11 +54,18 @@ public class BedDetails {
     public String toString() {
         return "BedDetails{" +
                 "physicalLocation=" + physicalLocation +
-                ", bedId=" + bedId +
+                ", bedId=" + getBedId() +
                 ", bedNumber='" + bedNumber + '\'' +
                 ", patient=" + patient +
                 ", bedType='" + bedType + '\'' +
                 '}';
     }
 
+    public Bed getBed() {
+        return bed;
+    }
+
+    public void setBed(Bed bed) {
+        this.bed = bed;
+    }
 }

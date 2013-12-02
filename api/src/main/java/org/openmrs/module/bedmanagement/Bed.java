@@ -1,19 +1,21 @@
 package org.openmrs.module.bedmanagement;
 
+import org.openmrs.BaseOpenmrsData;
+
 import java.util.Set;
 
-public class Bed {
-    private int id;
+public class Bed extends BaseOpenmrsData {
+    private Integer id;
     private String bedNumber;
     private Set<BedPatientAssignment> bedPatientAssignment;
     private String status;
     private BedType bedType;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -38,7 +40,7 @@ public class Bed {
     }
 
     public void setStatus(String status) {
-        this.status = status.toString();
+        this.status = status;
     }
 
     public BedType getBedType() {

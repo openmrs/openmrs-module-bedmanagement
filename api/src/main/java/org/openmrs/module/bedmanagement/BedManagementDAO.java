@@ -14,6 +14,7 @@
 package org.openmrs.module.bedmanagement;
 
 
+import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +22,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface BedManagementDAO {
+    
     List<AdmissionLocation> getAdmissionLocationsBy(String locationTagName);
 
     AdmissionLocation getLayoutForWard(Location location);
 
-    BedDetails assignPatientToBed(Patient patient, Bed bed);
+    BedDetails assignPatientToBed(Patient patient, Encounter encounter, Bed bed);
 
     Bed getBedById(int id);
+
+    Bed getBedByUuid(String uuid);
 
     Bed getBedByPatient(Patient patient);
 
@@ -35,4 +39,7 @@ public interface BedManagementDAO {
 
     @Transactional
     BedDetails unassignPatient(Patient patient, Bed bed);
+    
+    BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
+
 }

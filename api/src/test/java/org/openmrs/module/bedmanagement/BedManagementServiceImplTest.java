@@ -45,18 +45,6 @@ public class BedManagementServiceImplTest {
     }
 
     @Test
-    public void should_be_able_to_assign_patient_to_bed() {
-        Patient patient = new Patient();
-        Bed bed = new Bed();
-        int bedId = 9;
-        when(bedManagementDAO.getBedById(bedId)).thenReturn(bed);
-
-        bedManagementService.assignPatientToBed(patient, String.valueOf(bedId));
-
-        verify(bedManagementDAO).assignPatientToBed(patient, bed);
-    }
-
-    @Test
     public void shouldGetBedDetailsWithPatientInformationById() {
         int bedId = 5;
         Location ward = new Location();

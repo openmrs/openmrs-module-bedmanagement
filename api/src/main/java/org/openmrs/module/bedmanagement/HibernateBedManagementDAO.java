@@ -16,6 +16,7 @@ package org.openmrs.module.bedmanagement;
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
 import org.hibernate.transform.Transformers;
+import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,12 +99,13 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
 
     @Override
     @Transactional
-    public BedDetails assignPatientToBed(Patient patient, Bed bed) {
+    public BedDetails assignPatientToBed(Patient patient, Encounter encounter, Bed bed) {
 
         Session session = sessionFactory.getCurrentSession();
 
         BedPatientAssignment bedPatientAssignment = new BedPatientAssignment();
         bedPatientAssignment.setPatient(patient);
+        bedPatientAssignment.setEncounter(encounter);
         bedPatientAssignment.setBed(bed);
         bedPatientAssignment.setStartDatetime(Calendar.getInstance().getTime());
 
@@ -116,7 +118,7 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         session.saveOrUpdate(bed);
 
         BedDetails bedDetails = new BedDetails();
-        bedDetails.setBedId(bed.getId());
+        bedDetails.setBed(bed);
         bedDetails.setBedNumber(bed.getBedNumber());
         return bedDetails;
     }
@@ -126,6 +128,11 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         Bed bed = null;
         bed = (Bed) sessionFactory.getCurrentSession().createQuery("from Bed b where b.id = :id").setInteger("id", id).uniqueResult();
         return bed;
+    }
+
+    @Override
+    public Bed getBedByUuid(String uuid) {
+        return (Bed) sessionFactory.getCurrentSession().createQuery("from Bed b where b.uuid = :uuid").setString("uuid", uuid).uniqueResult();
     }
 
     @Override
@@ -148,8 +155,8 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
                 .setParameter("bed", bed)
                 .setResultTransformer(Transformers.aliasToBean(BedLocationMapping.class))
                 .uniqueResult();
-        if(bedLocationMapping != null){
-           return bedLocationMapping.getLocation();
+        if (bedLocationMapping != null) {
+            return bedLocationMapping.getLocation();
         }
         return null;
     }
@@ -175,8 +182,18 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         session.flush();
 
         BedDetails bedDetails = new BedDetails();
-        bedDetails.setBedId(bed.getId());
+        bedDetails.setBed(bed);
         bedDetails.setBedNumber(bed.getBedNumber());
         return bedDetails;
     }
+
+    @Override
+    public BedPatientAssignment getBedPatientAssignmentByUuid(String uuid) {
+        Session session = sessionFactory.getCurrentSession();
+        return  (BedPatientAssignment) session.createQuery("from BedPatientAssignment bpa " +
+                "where bpa.uuid = :uuid")
+                .setParameter("uuid", uuid)
+                .uniqueResult();
+    }
+    
 }

@@ -3,8 +3,10 @@ package org.openmrs.module.bedmanagement;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.api.EncounterService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
@@ -18,7 +20,8 @@ import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class BedManagementServiceComponentTest extends BaseModuleContextSensitiveTest {
+public class BedManagementServiceITTest extends BaseModuleContextSensitiveTest {
+    
     @Autowired
     private BedManagementService bedManagementService;
     private int bedIdFromDataSetup = 11;
@@ -93,16 +96,19 @@ public class BedManagementServiceComponentTest extends BaseModuleContextSensitiv
     }
 
     @Test
-    public void shouldUnassignExistingPatientFromBed() throws Exception {
+    public void shouldAssignUnassignExistingPatientFromBed() throws Exception {
         int bedId = 9;
         PatientService patientService = Context.getPatientService();
         Patient patient = patientService.getPatient(3);
+
+        EncounterService encounterService = Context.getEncounterService();
+        List<Encounter> encountersByPatient = encounterService.getEncountersByPatient(patient);
 
         BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
         assertNotNull(bedDetails);
         Assert.assertEquals(11, bedDetails.getBedId());
 
-        bedManagementService.assignPatientToBed(patient, String.valueOf(bedId));
+        bedManagementService.assignPatientToBed(patient, encountersByPatient.get(0), String.valueOf(bedId));
 
         bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
         assertEquals(bedId, bedDetails.getBedId());

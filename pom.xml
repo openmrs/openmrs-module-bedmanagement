@@ -30,13 +30,14 @@
 	<modules>
 		<module>api</module>
 		<module>omod</module>
-	</modules>
+    </modules>
 	
 	<properties>
 		<openMRSVersion>1.9.4</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <webservicesRestModuleVersion>2.4-SNAPSHOT</webservicesRestModuleVersion>
-	</properties>
+        <atomfeed.version>0.9.3-SNAPSHOT</atomfeed.version>
+    </properties>
 
 	<dependencyManagement>
 		<dependencies>
