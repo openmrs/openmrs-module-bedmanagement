@@ -67,6 +67,7 @@
             <groupId>org.ict4h</groupId>
             <artifactId>atomfeed-server</artifactId>
             <version>${atomfeed.version}</version>
+            <scope>provided</scope>
         </dependency>
 
 

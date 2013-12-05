@@ -28,6 +28,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.ict4h.openmrs</groupId>
+            <artifactId>openmrs-atomfeed-omod</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- Begin OpenMRS modules -->
 		
