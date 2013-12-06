@@ -7,9 +7,9 @@ import java.util.Set;
 public class Bed extends BaseOpenmrsData {
     private Integer id;
     private String bedNumber;
+    private BedType bedType;
     private Set<BedPatientAssignment> bedPatientAssignment;
     private String status;
-    private BedType bedType;
 
     public Integer getId() {
         return id;

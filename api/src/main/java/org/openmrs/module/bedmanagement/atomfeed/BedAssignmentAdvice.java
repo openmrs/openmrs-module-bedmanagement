@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class BedAssignmentAdvice implements AfterReturningAdvice {
 
-    private static final String TEMPLATE = "/openmrs/ws/rest/v1/bedPatientAssignment/%s?v=full";
+    private static final String TEMPLATE = "/openmrs/ws/rest/v1/bedPatientAssignment/%s?v=custom:(bed,patient,encounter:(uuid,visit:(uuid,startDatetime,visitType)))";
     public static final String CATEGORY = "encounter";
     public static final String TITLE = "Bed-Assignment";
     private static final String ASSIGN_BED_METHOD = "assignPatientToBed";

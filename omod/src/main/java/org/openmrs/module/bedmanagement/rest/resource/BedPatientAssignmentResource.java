@@ -19,6 +19,9 @@ import org.openmrs.module.bedmanagement.BedPatientAssignment;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
+import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
+import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
+import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
@@ -38,11 +41,22 @@ public class BedPatientAssignmentResource extends DelegatingCrudResource<BedPati
 
     @Override
     public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
-        DelegatingResourceDescription description = new DelegatingResourceDescription();
-        description.addProperty("bed", Representation.FULL);
-        description.addProperty("patient", Representation.FULL);
-        description.addProperty("encounter", Representation.FULL);
-        return description;
+        if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
+            DelegatingResourceDescription description = new DelegatingResourceDescription();
+            description.addProperty("bed", Representation.DEFAULT);
+            description.addProperty("patient", Representation.REF);
+            description.addProperty("encounter", Representation.REF);
+            return description;
+        }
+
+        if ((rep instanceof FullRepresentation)) {
+            DelegatingResourceDescription description = new DelegatingResourceDescription();
+            description.addProperty("bed", Representation.DEFAULT);
+            description.addProperty("patient", Representation.REF);
+            description.addProperty("encounter", Representation.FULL);
+            return description;
+        }
+        return null;
 
     }
 
