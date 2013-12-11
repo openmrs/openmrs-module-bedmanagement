@@ -37,9 +37,10 @@ public interface BedManagementDAO {
 
     Location getWardForBed(Bed bed);
 
-    @Transactional
     BedDetails unassignPatient(Patient patient, Bed bed);
     
     BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
+
+    BedPatientAssignment getCurrentAssignmentByBed(Bed bed);
 
 }

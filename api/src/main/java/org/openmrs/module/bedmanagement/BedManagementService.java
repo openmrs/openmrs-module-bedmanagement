@@ -29,8 +29,6 @@ public interface BedManagementService extends OpenmrsService {
 
     BedDetails assignPatientToBed(Patient patient, Encounter encounter, String bedId);
 
-    void freeBed(Patient patient);
-
     Bed getBedById(int id);
 
     BedDetails getBedAssignmentDetailsByPatient(Patient patient);
@@ -40,5 +38,7 @@ public interface BedManagementService extends OpenmrsService {
     BedDetails getBedDetailsByUuid(String uuid);
 
     BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
+
+    BedDetails unAssignPatientFromBed(Patient patient);
     
 }

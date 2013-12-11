@@ -15,10 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class BedManagementServiceITTest extends BaseModuleContextSensitiveTest {
     
@@ -92,6 +90,8 @@ public class BedManagementServiceITTest extends BaseModuleContextSensitiveTest {
         int deluxeBedId = 1;
         BedDetails details = bedManagementService.getBedDetailsById(String.valueOf(deluxeBedId));
         assertNotNull(details);
+        assertNotNull(details.getPatient());
+        assertNotNull(details.getCurrentAssignment());
         assertEquals("deluxe", details.getBedType().getName());
     }
 
@@ -112,5 +112,32 @@ public class BedManagementServiceITTest extends BaseModuleContextSensitiveTest {
 
         bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
         assertEquals(bedId, bedDetails.getBedId());
+    }
+
+    @Test
+    public void shouldUnAssingPatientFromBed() throws Exception {
+        PatientService patientService = Context.getPatientService();
+        Patient patient = patientService.getPatient(4);
+        BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
+        assertEquals(Integer.valueOf(12), bedDetails.getBed().getId());
+        BedDetails unAssignedBed = bedManagementService.unAssignPatientFromBed(patient);
+        assertEquals(Integer.valueOf(12), unAssignedBed.getBed().getId());
+        bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
+        assertNull(bedDetails);
+    }
+
+    @Test
+    public void shouldAssignPatientToBed() throws Exception {
+        PatientService patientService = Context.getPatientService();
+        Patient patient = patientService.getPatient(5);
+        BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
+        assertNull(bedDetails);
+        EncounterService encounterService = Context.getEncounterService();
+        List<Encounter> encountersByPatient = encounterService.getEncountersByPatient(patient);
+        bedManagementService.assignPatientToBed(patient, encountersByPatient.get(0), "10");
+        BedDetails assigned = bedManagementService.getBedAssignmentDetailsByPatient(patient);
+        assertNotNull(assigned);
+        assertNotNull(assigned.getCurrentAssignment());
+        assertNull(assigned.getLastAssignment());
     }
 }

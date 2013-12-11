@@ -36,7 +36,6 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
     }
 
     @Override
-    @Transactional
     public List<AdmissionLocation> getAdmissionLocationsBy(String locationTagName) {
         Session session = sessionFactory.getCurrentSession();
 
@@ -67,7 +66,6 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
     }
 
     @Override
-    @Transactional
     public AdmissionLocation getLayoutForWard(Location location) {
         Session session = sessionFactory.getCurrentSession();
         List<Location> physicalLocations = getPhysicalLocationsByLocationTagAndParentLocation(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION, location, session);
@@ -98,7 +96,6 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
     }
 
     @Override
-    @Transactional
     public BedDetails assignPatientToBed(Patient patient, Encounter encounter, Bed bed) {
 
         Session session = sessionFactory.getCurrentSession();
@@ -120,6 +117,7 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         BedDetails bedDetails = new BedDetails();
         bedDetails.setBed(bed);
         bedDetails.setBedNumber(bed.getBedNumber());
+        bedDetails.setCurrentAssignment(bedPatientAssignment);
         return bedDetails;
     }
 
@@ -136,7 +134,6 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
     }
 
     @Override
-    @Transactional
     public Bed getBedByPatient(Patient patient) {
         Session session = sessionFactory.getCurrentSession();
         Bed bed = (Bed) session.createQuery("select bpa.bed.bedNumber as bedNumber,bpa.bed.id as id from BedPatientAssignment bpa " +
@@ -148,7 +145,6 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
     }
 
     @Override
-    @Transactional
     public Location getWardForBed(Bed bed) {
         Session session = sessionFactory.getCurrentSession();
         BedLocationMapping bedLocationMapping = (BedLocationMapping) session.createQuery("select blm.location as location from BedLocationMapping blm where blm.bed = :bed")
@@ -162,28 +158,25 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
     }
 
     @Override
-    @Transactional
     public BedDetails unassignPatient(Patient patient, Bed bed) {
-
         Session session = sessionFactory.getCurrentSession();
+        BedPatientAssignment currentBedPatientAssignment = (BedPatientAssignment) session.createQuery("from BedPatientAssignment where bed=:bed and patient=:patient and endDatetime is null")
+                .setParameter("bed", bed)
+                .setParameter("patient", patient)
+                .uniqueResult();
+        currentBedPatientAssignment.setEndDatetime(new Date());
+        session.saveOrUpdate(currentBedPatientAssignment);
 
-        bed = (Bed) session.get(Bed.class, bed.getId());
+        Bed bedFromSession = (Bed) session.get(Bed.class, bed.getId());
+        bedFromSession.setStatus(BedStatus.AVAILABLE.toString());
+        session.saveOrUpdate(bedFromSession);
 
-        Set<BedPatientAssignment> bedPatientAssignment = bed.getBedPatientAssignment();
-        for (BedPatientAssignment patientAssignment : bedPatientAssignment) {
-
-            if (patientAssignment.getEndDatetime() == null) {
-                patientAssignment.setEndDatetime(new Date());
-            }
-        }
-
-        bed.setStatus(BedStatus.AVAILABLE.toString());
-        session.saveOrUpdate(bed);
         session.flush();
 
         BedDetails bedDetails = new BedDetails();
-        bedDetails.setBed(bed);
-        bedDetails.setBedNumber(bed.getBedNumber());
+        bedDetails.setBed(bedFromSession);
+        bedDetails.setBedNumber(bedFromSession.getBedNumber());
+        bedDetails.setLastAssignment(currentBedPatientAssignment);
         return bedDetails;
     }
 
@@ -194,6 +187,18 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
                 "where bpa.uuid = :uuid")
                 .setParameter("uuid", uuid)
                 .uniqueResult();
+    }
+
+    @Override
+    public BedPatientAssignment getCurrentAssignmentByBed(Bed bed) {
+        Session session = sessionFactory.getCurrentSession();
+        List<BedPatientAssignment> assignments = session.createQuery("from BedPatientAssignment where bed=:bed and endDatetime is null")
+                .setParameter("bed", bed)
+                .list();
+        if (assignments.size() > 0) {
+            return assignments.get(0);
+        }
+        return null;
     }
     
 }

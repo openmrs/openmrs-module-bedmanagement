@@ -77,6 +77,7 @@ public class BedManagementServiceImplTest {
 
         when(bedManagementDAO.getBedById(bedId)).thenReturn(bed);
         when(bedManagementDAO.getWardForBed(bed)).thenReturn(ward);
+        when(bedManagementDAO.getCurrentAssignmentByBed(bed)).thenReturn(currentAssignment);
 
         BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bedId));
 

@@ -50,7 +50,7 @@ public class BedDetailsResource extends DelegatingCrudResource<BedDetails> {
     @Override
     protected void delete(BedDetails bedDetails, String reason, RequestContext requestContext) throws ResponseException {
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        bedManagementService.freeBed(bedDetails.getPatient());
+        bedManagementService.unAssignPatientFromBed(bedDetails.getPatient());
     }
 
     @Override

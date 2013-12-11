@@ -9,6 +9,8 @@ public class BedDetails {
     private String bedNumber;
     private Patient patient;
     private BedType bedType;
+    private BedPatientAssignment currentAssignment;
+    private BedPatientAssignment lastAssignment;
 
     public Location getPhysicalLocation() {
         return physicalLocation;
@@ -67,5 +69,21 @@ public class BedDetails {
 
     public void setBed(Bed bed) {
         this.bed = bed;
+    }
+
+    public BedPatientAssignment getCurrentAssignment() {
+        return currentAssignment;
+    }
+
+    public void setCurrentAssignment(BedPatientAssignment currentAssignment) {
+        this.currentAssignment = currentAssignment;
+    }
+
+    public void setLastAssignment(BedPatientAssignment lastAssignment) {
+        this.lastAssignment = lastAssignment;
+    }
+
+    public BedPatientAssignment getLastAssignment() {
+        return lastAssignment;
     }
 }
