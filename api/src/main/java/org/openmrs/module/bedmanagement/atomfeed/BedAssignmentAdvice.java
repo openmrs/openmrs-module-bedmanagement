@@ -36,7 +36,6 @@ public class BedAssignmentAdvice implements AfterReturningAdvice {
     @Override
     public void afterReturning(Object returnValue, Method method, Object[] args, Object target) throws Throwable {
         String execMethodName = method.getName();
-        System.out.println("In Advice, method caleld " + execMethodName);
         if (execMethodName.equals(ASSIGN_BED_METHOD)) {
             BedDetails bedDetails = (BedDetails) returnValue;
             publishBedAssignment(bedDetails.getLastAssignment());
