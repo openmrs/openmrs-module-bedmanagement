@@ -336,5 +336,15 @@
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
 
+    <changeSet id="bedmanagement-201401171410" author="banka-tw">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from privilege where privilege = 'app:adt'</sqlCheck>
+        </preConditions>
+        <insert tableName="privilege">
+            <column name="privilege" value="app:adt"/>
+            <column name="description" value="Admission Discharge Transfer app access privilege"/>
+            <column name="uuid" valueComputed="uuid()"/>
+        </insert>
+    </changeSet>
 
 </databaseChangeLog>
