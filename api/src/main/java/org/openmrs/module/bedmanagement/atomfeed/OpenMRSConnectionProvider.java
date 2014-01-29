@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -22,8 +23,6 @@ public class OpenMRSConnectionProvider implements JdbcConnectionProvider {
     public OpenMRSConnectionProvider(PlatformTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
-    //TODO: Remove this and inject transaction manager?
-    public OpenMRSConnectionProvider(){}
 
     @Override
     public Connection getConnection() throws SQLException {
@@ -45,33 +44,19 @@ public class OpenMRSConnectionProvider implements JdbcConnectionProvider {
     public void closeConnection(Connection connection) throws SQLException {
         connection.close();
     }
-    //TODO : fix using transaction manager
     @Override
     public void startTransaction() {
-        try {
-            if(connection == null || connection.isClosed())
-                getConnection();
-            connection.setAutoCommit(false);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
     }
 
     @Override
     public void commit() {
-        try {
-            connection.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        transactionManager.commit(transactionStatus);
     }
 
     @Override
     public void rollback() {
-        try {
-            connection.rollback();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        transactionManager.rollback(transactionStatus);
     }
+
 }
