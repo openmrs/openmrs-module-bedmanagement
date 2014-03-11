@@ -4,8 +4,10 @@ import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
 import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventService;
 import org.ict4h.atomfeed.server.service.EventServiceImpl;
+import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
 import org.joda.time.DateTime;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.openmrs.module.bedmanagement.BedDetails;
 import org.openmrs.module.bedmanagement.BedPatientAssignment;
 import org.springframework.aop.AfterReturningAdvice;
@@ -14,7 +16,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.UUID;
 
 public class BedAssignmentAdvice implements AfterReturningAdvice {
@@ -25,16 +26,14 @@ public class BedAssignmentAdvice implements AfterReturningAdvice {
     private static final String ASSIGN_BED_METHOD = "assignPatientToBed";
     private static final String UNASSIGN_BED_METHOD = "unAssignPatientFromBed";
 
+    private AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
+
     private EventService eventService;
 
     public BedAssignmentAdvice() throws SQLException {
-        List<PlatformTransactionManager> platformTransactionManagers = Context.getRegisteredComponents(PlatformTransactionManager.class);
-        AllEventRecordsJdbcImpl records = new AllEventRecordsJdbcImpl(new OpenMRSConnectionProvider(platformTransactionManagers.get(0)));
+        atomFeedSpringTransactionManager = new AtomFeedSpringTransactionManager(getSpringPlatformTransactionManager());
+        AllEventRecordsJdbcImpl records = new AllEventRecordsJdbcImpl(atomFeedSpringTransactionManager);
         this.eventService = new EventServiceImpl(records);
-    }
-
-    public BedAssignmentAdvice(EventService eventService) {
-        this.eventService = eventService;
     }
 
     @Override
@@ -42,19 +41,38 @@ public class BedAssignmentAdvice implements AfterReturningAdvice {
         String execMethodName = method.getName();
         if (execMethodName.equals(ASSIGN_BED_METHOD)) {
             BedDetails bedDetails = (BedDetails) returnValue;
-            publishBedAssignment(bedDetails.getLastAssignment());
-            publishBedAssignment(bedDetails.getCurrentAssignment());
+            publishEvent(bedDetails.getLastAssignment());
+            publishEvent(bedDetails.getCurrentAssignment());
         } else if (execMethodName.equals(UNASSIGN_BED_METHOD)) {
             BedDetails bedDetails = (BedDetails) returnValue;
-            publishBedAssignment(bedDetails.getLastAssignment());
+            publishEvent(bedDetails.getLastAssignment());
         }
     }
 
-    private void publishBedAssignment(BedPatientAssignment assignment) {
+    private Object publishEvent(final BedPatientAssignment assignment) {
+        return atomFeedSpringTransactionManager.executeWithTransaction(
+                new AFTransactionWorkWithoutResult() {
+                    @Override
+                    protected void doInTransaction() {
+                        eventService.notify(getBedAssignmentEvent(assignment));
+                    }
+                    @Override
+                    public PropagationDefinition getTxPropagationDefinition() {
+                        return PropagationDefinition.PROPAGATION_REQUIRED;
+                    }
+                }
+        );
+    }
+
+    private Event getBedAssignmentEvent(BedPatientAssignment assignment) {
         if (assignment != null) {
             String contents = String.format(TEMPLATE, assignment.getUuid());
-            Event event = new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, contents, CATEGORY);
-            eventService.notify(event);
+            return new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, contents, CATEGORY);
         }
+        return null;
+    }
+
+    private PlatformTransactionManager getSpringPlatformTransactionManager() {
+        return Context.getRegisteredComponents(PlatformTransactionManager.class).get(0);
     }
 }

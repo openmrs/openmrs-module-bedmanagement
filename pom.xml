@@ -38,7 +38,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <webservicesRestModuleVersion>2.5-SNAPSHOT</webservicesRestModuleVersion>
         <openmrsAtomfeedVersion>1.0-SNAPSHOT</openmrsAtomfeedVersion>
-        <atomfeed.version>0.9.3-SNAPSHOT</atomfeed.version>
+        <atomfeed.version>1.0-SNAPSHOT</atomfeed.version>
     </properties>
 
 	<dependencyManagement>
@@ -98,7 +98,14 @@
                 <scope>provided</scope>
             </dependency>
 
-			<!-- End OpenMRS core -->
+            <dependency>
+                <groupId>org.ict4h.openmrs</groupId>
+                <artifactId>openmrs-atomfeed-common</artifactId>
+                <version>${openmrsAtomfeedVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- End OpenMRS core -->
 
 		</dependencies>
 	</dependencyManagement>

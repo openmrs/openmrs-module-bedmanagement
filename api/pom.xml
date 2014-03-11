@@ -70,6 +70,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.ict4h.openmrs</groupId>
+            <artifactId>openmrs-atomfeed-common</artifactId>
+        </dependency>
+
 
     </dependencies>
 	
