@@ -18,9 +18,11 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.api.OpenmrsService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 public interface BedManagementService extends OpenmrsService {
     
     List<AdmissionLocation> getAllAdmissionLocations();
