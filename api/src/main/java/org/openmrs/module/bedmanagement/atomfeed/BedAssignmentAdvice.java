@@ -41,7 +41,9 @@ public class BedAssignmentAdvice implements AfterReturningAdvice {
         String execMethodName = method.getName();
         if (execMethodName.equals(ASSIGN_BED_METHOD)) {
             BedDetails bedDetails = (BedDetails) returnValue;
-            publishEvent(bedDetails.getLastAssignment());
+            final BedPatientAssignment lastAssignment = bedDetails.getLastAssignment();
+            if (lastAssignment != null)
+                publishEvent(lastAssignment);
             publishEvent(bedDetails.getCurrentAssignment());
         } else if (execMethodName.equals(UNASSIGN_BED_METHOD)) {
             BedDetails bedDetails = (BedDetails) returnValue;
