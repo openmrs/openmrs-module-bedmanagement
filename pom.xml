@@ -22,9 +22,10 @@
 	</organization>
 
 	<scm>
-		<connection>scm:git:git@github.com:openmrs/openmrs-module-bedmanagement.git</connection>
-		<developerConnection>scm:git@github.com:openmrs/openmrs-module-bedmanagement.git</developerConnection>
-		<url>git@github.com:openmrs/openmrs-module-bedmanagement.git</url>
+        <url>git@github.com:openmrs/openmrs-module-bedmanagement.git</url>
+        <connection>scm:git@github.com:openmrs/openmrs-module-bedmanagement.git</connection>
+        <developerConnection>scm:git@github.com:openmrs/openmrs-module-bedmanagement.git</developerConnection>
+        <tag>HEAD</tag>
 	</scm>
 
 	<modules>
