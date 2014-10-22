@@ -191,16 +191,16 @@
 
     <!--RT : needed only till we keep it in bahmni organisation-->
     <distributionManagement>
+        <repository>
+            <id>bahmni-artifactory</id>
+            <name>bahmni-artifactory-releases</name>
+            <url>http://bahmnirepo.thoughtworks.com/artifactory/libs-release-local</url>
+        </repository>
         <snapshotRepository>
             <id>bahmni-artifactory</id>
             <name>bahmni-artifactory-snapshots</name>
             <url>http://bahmnirepo.thoughtworks.com/artifactory/libs-snapshot-local</url>
         </snapshotRepository>
-        <repository>
-            <id>bahmnirepo.thoughtworks.com</id>
-            <name>bahmnirepo.thoughtworks.com-releases</name>
-            <url>http://bahmnirepo.thoughtworks.com/artifactory/libs-release-local</url>
-        </repository>
     </distributionManagement>
 
 </project>
