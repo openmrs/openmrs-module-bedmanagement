@@ -72,7 +72,7 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
 
         String hql = "select blm.row as rowNumber, blm.column as columnNumber, " +
                 "bed.id as bedId, bed.bedNumber as bedNumber, " +
-                "bed.status as status, bedType as bedType " +
+                "bed.status as status, bedType as bedType, blm.location.name as location " +
                 "from BedLocationMapping blm " +
                 "left outer join blm.bed bed " +
                 "left outer join bed.bedType bedType " +

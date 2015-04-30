@@ -9,6 +9,7 @@ public class BedLayout {
     private Integer bedId;
     private String status;
     private BedType bedType;
+    private String location;
 
     public String getBedNumber() {
         return bedNumber;
@@ -58,6 +59,14 @@ public class BedLayout {
         this.bedType = bedType;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     @Override
     public String toString() {
         return "BedLayout{" +
@@ -67,6 +76,7 @@ public class BedLayout {
                 ", bedId=" + bedId +
                 ", status='" + status + '\'' +
                 ", bedType=" + bedType +
+                ", location='" + location + '\'' +
                 '}';
     }
 }

@@ -51,6 +51,7 @@ public class BedManagementServiceITTest extends BaseModuleContextSensitiveTest {
         AdmissionLocation admissionLocation = bedManagementService.getLayoutForWard(ward);
 
         assertEquals(6, admissionLocation.getBedLayouts().size());
+        assertEquals("Physical Location for Orthopaedic ward", admissionLocation.getBedLayouts().get(0).getLocation());
     }
 
     private AdmissionLocation getWard(List<AdmissionLocation> admissionLocationList, String wardName) {
