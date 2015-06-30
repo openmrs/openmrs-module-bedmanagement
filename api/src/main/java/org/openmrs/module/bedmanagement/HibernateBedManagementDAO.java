@@ -19,11 +19,11 @@ import org.hibernate.transform.Transformers;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.Date;
 
@@ -117,7 +117,7 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         BedDetails bedDetails = new BedDetails();
         bedDetails.setBed(bed);
         bedDetails.setBedNumber(bed.getBedNumber());
-        bedDetails.setCurrentAssignment(bedPatientAssignment);
+        bedDetails.addCurrentAssignment(bedPatientAssignment);
         return bedDetails;
     }
 
@@ -168,7 +168,10 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         session.saveOrUpdate(currentBedPatientAssignment);
 
         Bed bedFromSession = (Bed) session.get(Bed.class, bed.getId());
-        bedFromSession.setStatus(BedStatus.AVAILABLE.toString());
+        List<BedPatientAssignment> activeBedPatientAssignment = filterActiveBedPatientAssignments(bedFromSession);
+        if(activeBedPatientAssignment.size() == 0) {
+            bedFromSession.setStatus(BedStatus.AVAILABLE.toString());
+        }
         session.saveOrUpdate(bedFromSession);
 
         session.flush();
@@ -178,6 +181,16 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         bedDetails.setBedNumber(bedFromSession.getBedNumber());
         bedDetails.setLastAssignment(currentBedPatientAssignment);
         return bedDetails;
+    }
+
+    private List<BedPatientAssignment> filterActiveBedPatientAssignments(Bed bedFromSession) {
+        List<BedPatientAssignment> activeBedPatientAssignment = new ArrayList<BedPatientAssignment>();
+        for(BedPatientAssignment bedPatientAssignment: bedFromSession.getBedPatientAssignment()){
+            if(bedPatientAssignment.getEndDatetime() == null){
+                activeBedPatientAssignment.add(bedPatientAssignment);
+            }
+        }
+        return activeBedPatientAssignment;
     }
 
     @Override
@@ -190,15 +203,12 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
     }
 
     @Override
-    public BedPatientAssignment getCurrentAssignmentByBed(Bed bed) {
+    public List<BedPatientAssignment> getCurrentAssignmentsByBed(Bed bed) {
         Session session = sessionFactory.getCurrentSession();
         List<BedPatientAssignment> assignments = session.createQuery("from BedPatientAssignment where bed=:bed and endDatetime is null")
                 .setParameter("bed", bed)
                 .list();
-        if (assignments.size() > 0) {
-            return assignments.get(0);
-        }
-        return null;
+        return assignments;
     }
     
 }

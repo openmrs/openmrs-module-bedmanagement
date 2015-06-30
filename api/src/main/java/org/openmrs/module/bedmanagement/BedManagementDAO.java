@@ -41,6 +41,6 @@ public interface BedManagementDAO {
     
     BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
 
-    BedPatientAssignment getCurrentAssignmentByBed(Bed bed);
+    List<BedPatientAssignment> getCurrentAssignmentsByBed(Bed bed);
 
 }
