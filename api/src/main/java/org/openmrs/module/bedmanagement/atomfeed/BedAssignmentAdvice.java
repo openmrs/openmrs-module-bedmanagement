@@ -16,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 public class BedAssignmentAdvice implements AfterReturningAdvice {
@@ -44,7 +45,8 @@ public class BedAssignmentAdvice implements AfterReturningAdvice {
             final BedPatientAssignment lastAssignment = bedDetails.getLastAssignment();
             if (lastAssignment != null)
                 publishEvent(lastAssignment);
-            publishEvent(bedDetails.getCurrentAssignment());
+            List<BedPatientAssignment> currentAssignments = bedDetails.getCurrentAssignments();
+            publishEvent(currentAssignments.get(currentAssignments.size() - 1));
         } else if (execMethodName.equals(UNASSIGN_BED_METHOD)) {
             BedDetails bedDetails = (BedDetails) returnValue;
             publishEvent(bedDetails.getLastAssignment());

@@ -19,6 +19,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
     
 public class BedManagementServiceImpl extends BaseOpenmrsService implements BedManagementService {
@@ -60,9 +61,9 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     public BedDetails getBedAssignmentDetailsByPatient(Patient patient) {
         Bed bed = dao.getBedByPatient(patient);
         if (bed != null) {
-            BedPatientAssignment currentAssignment = dao.getCurrentAssignmentByBed(bed);
+            List<BedPatientAssignment> currentAssignments = dao.getCurrentAssignmentsByBed(bed);
             Location physicalLocation = dao.getWardForBed(bed);
-            return constructBedDetails(bed, physicalLocation, currentAssignment);
+            return constructBedDetails(bed, physicalLocation, currentAssignments);
         }
         return null;
     }
@@ -71,9 +72,9 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     public BedDetails getBedDetailsById(String id) {
         Bed bed = dao.getBedById(Integer.parseInt(id));
         if (bed != null) {
-            BedPatientAssignment currentAssignment = dao.getCurrentAssignmentByBed(bed);
+            List<BedPatientAssignment> currentAssignments = dao.getCurrentAssignmentsByBed(bed);
             Location location = dao.getWardForBed(bed);
-            BedDetails bedDetails = constructBedDetails(bed, location, currentAssignment);
+            BedDetails bedDetails = constructBedDetails(bed, location, currentAssignments);
             return bedDetails;
         }
         return null;
@@ -83,7 +84,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     public BedDetails getBedDetailsByUuid(String uuid) {
         Bed bed = dao.getBedByUuid(uuid);
         if (bed != null) {
-            BedPatientAssignment currentAssignment = dao.getCurrentAssignmentByBed(bed);
+            List<BedPatientAssignment> currentAssignment = dao.getCurrentAssignmentsByBed(bed);
             Location location = dao.getWardForBed(bed);
             BedDetails bedDetails = constructBedDetails(bed, location, currentAssignment);
             return bedDetails;
@@ -106,14 +107,16 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
         return null;
     }
 
-    private BedDetails constructBedDetails(Bed bed, Location location, BedPatientAssignment currentAssignment) {
+    private BedDetails constructBedDetails(Bed bed, Location location, List<BedPatientAssignment> currentAssignments) {
         BedDetails bedDetails = new BedDetails();
         bedDetails.setBed(bed);
         bedDetails.setBedNumber(bed.getBedNumber());
-        if (currentAssignment != null) {
-            bedDetails.setPatient(currentAssignment.getPatient());
-            bedDetails.setCurrentAssignment(currentAssignment);
+        List<Patient> patients = new ArrayList<Patient>();
+        for (BedPatientAssignment assignment : currentAssignments) {
+            patients.add(assignment.getPatient());
         }
+        bedDetails.setPatients(patients);
+        bedDetails.setCurrentAssignments(currentAssignments);
         bedDetails.setPhysicalLocation(location);
         bedDetails.setBedType(bed.getBedType());
         return bedDetails;

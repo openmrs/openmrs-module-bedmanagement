@@ -3,13 +3,16 @@ package org.openmrs.module.bedmanagement;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BedDetails {
     private Location physicalLocation;
     private Bed bed;
     private String bedNumber;
-    private Patient patient;
+    private List<Patient> patients;
     private BedType bedType;
-    private BedPatientAssignment currentAssignment;
+    private List<BedPatientAssignment> currentAssignments;
     private BedPatientAssignment lastAssignment;
 
     public Location getPhysicalLocation() {
@@ -44,12 +47,12 @@ public class BedDetails {
         this.bedType = bedType;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public List<Patient> getPatients() {
+        return patients;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setPatients(List<Patient> patients) {
+        this.patients = patients;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class BedDetails {
                 "physicalLocation=" + physicalLocation +
                 ", bedId=" + getBedId() +
                 ", bedNumber='" + bedNumber + '\'' +
-                ", patient=" + patient +
+                ", patients=" + patients +
                 ", bedType='" + bedType + '\'' +
                 '}';
     }
@@ -71,12 +74,12 @@ public class BedDetails {
         this.bed = bed;
     }
 
-    public BedPatientAssignment getCurrentAssignment() {
-        return currentAssignment;
+    public List<BedPatientAssignment> getCurrentAssignments() {
+        return currentAssignments;
     }
 
-    public void setCurrentAssignment(BedPatientAssignment currentAssignment) {
-        this.currentAssignment = currentAssignment;
+    public void setCurrentAssignments(List<BedPatientAssignment> currentAssignments) {
+        this.currentAssignments = currentAssignments;
     }
 
     public void setLastAssignment(BedPatientAssignment lastAssignment) {
@@ -85,5 +88,12 @@ public class BedDetails {
 
     public BedPatientAssignment getLastAssignment() {
         return lastAssignment;
+    }
+
+    public void addCurrentAssignment(BedPatientAssignment bedPatientAssignment){
+        if(this.currentAssignments == null){
+            this.currentAssignments = new ArrayList<BedPatientAssignment>();
+        }
+        this.currentAssignments.add(bedPatientAssignment);
     }
 }

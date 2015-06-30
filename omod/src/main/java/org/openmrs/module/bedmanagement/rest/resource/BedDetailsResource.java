@@ -49,8 +49,9 @@ public class BedDetailsResource extends DelegatingCrudResource<BedDetails> {
 
     @Override
     protected void delete(BedDetails bedDetails, String reason, RequestContext requestContext) throws ResponseException {
+        String patientUuid = requestContext.getParameter("patientUuid");
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        bedManagementService.unAssignPatientFromBed(bedDetails.getPatient());
+        bedManagementService.unAssignPatientFromBed(Context.getPatientService().getPatientByUuid(patientUuid));
     }
 
     @Override
@@ -76,7 +77,7 @@ public class BedDetailsResource extends DelegatingCrudResource<BedDetails> {
             description.addProperty("bedNumber", "bedNumber");
             description.addProperty("bedType");
             description.addProperty("physicalLocation", Representation.DEFAULT);
-            description.addProperty("patient", Representation.DEFAULT);
+            description.addProperty("patients", Representation.DEFAULT);
             return description;
         }
         if ((rep instanceof FullRepresentation)) {
@@ -85,7 +86,7 @@ public class BedDetailsResource extends DelegatingCrudResource<BedDetails> {
             description.addProperty("bedNumber", Representation.FULL);
             description.addProperty("bedType");
             description.addProperty("physicalLocation", Representation.FULL);
-            description.addProperty("patient", Representation.FULL);
+            description.addProperty("patients", Representation.FULL);
             return description;
         }
         return null;

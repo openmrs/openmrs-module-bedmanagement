@@ -91,8 +91,8 @@ public class BedManagementServiceITTest extends BaseModuleContextSensitiveTest {
         int deluxeBedId = 1;
         BedDetails details = bedManagementService.getBedDetailsById(String.valueOf(deluxeBedId));
         assertNotNull(details);
-        assertNotNull(details.getPatient());
-        assertNotNull(details.getCurrentAssignment());
+        assertNotNull(details.getPatients());
+        assertNotNull(details.getCurrentAssignments());
         assertEquals("deluxe", details.getBedType().getName());
     }
 
@@ -138,7 +138,7 @@ public class BedManagementServiceITTest extends BaseModuleContextSensitiveTest {
         bedManagementService.assignPatientToBed(patient, encountersByPatient.get(0), "10");
         BedDetails assigned = bedManagementService.getBedAssignmentDetailsByPatient(patient);
         assertNotNull(assigned);
-        assertNotNull(assigned.getCurrentAssignment());
+        assertNotNull(assigned.getCurrentAssignments());
         assertNull(assigned.getLastAssignment());
     }
 }
