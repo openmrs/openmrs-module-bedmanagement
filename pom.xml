@@ -38,8 +38,8 @@
         <openMRSRuntimeVersion>1.9.3</openMRSRuntimeVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <webservicesRestModuleVersion>2.6</webservicesRestModuleVersion>
-        <openmrsAtomfeedVersion>2.4</openmrsAtomfeedVersion>
-        <atomfeed.version>1.7</atomfeed.version>
+        <openmrsAtomfeedVersion>2.4-SNAPSHOT</openmrsAtomfeedVersion>
+        <atomfeed.version>1.8</atomfeed.version>
     </properties>
 
 	<dependencyManagement>
