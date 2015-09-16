@@ -1,7 +1,6 @@
 package org.openmrs.module.bedmanagement.atomfeed;
 
-import org.ict4h.atomfeed.server.repository.AllEventRecordsQueue;
-import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsQueueJdbcImpl;
+import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
 import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventService;
 import org.ict4h.atomfeed.server.service.EventServiceImpl;
@@ -34,8 +33,8 @@ public class BedAssignmentAdvice implements AfterReturningAdvice {
 
     public BedAssignmentAdvice() throws SQLException {
         atomFeedSpringTransactionManager = new AtomFeedSpringTransactionManager(getSpringPlatformTransactionManager());
-        AllEventRecordsQueue allEventRecordsQueue = new AllEventRecordsQueueJdbcImpl(atomFeedSpringTransactionManager);
-        this.eventService = new EventServiceImpl(allEventRecordsQueue);
+        AllEventRecordsJdbcImpl records = new AllEventRecordsJdbcImpl(atomFeedSpringTransactionManager);
+        this.eventService = new EventServiceImpl(records);
     }
 
     @Override
@@ -61,7 +60,6 @@ public class BedAssignmentAdvice implements AfterReturningAdvice {
                     protected void doInTransaction() {
                         eventService.notify(getBedAssignmentEvent(assignment));
                     }
-
                     @Override
                     public PropagationDefinition getTxPropagationDefinition() {
                         return PropagationDefinition.PROPAGATION_REQUIRED;
