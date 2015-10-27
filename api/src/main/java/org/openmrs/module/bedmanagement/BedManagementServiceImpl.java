@@ -21,11 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-    
+
 public class BedManagementServiceImpl extends BaseOpenmrsService implements BedManagementService {
 
     BedManagementDAO dao;
-    
+
     public void setDao(BedManagementDAO dao) {
         this.dao = dao;
     }
@@ -103,6 +103,17 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
         Bed currentBed = dao.getBedByPatient(patient);
         if (currentBed != null) {
             return dao.unassignPatient(patient, currentBed);
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public BedDetails getLatestBedDetailsByVisit(String visitUuid) {
+        Bed bed = dao.getLatestBedByVisit(visitUuid);
+        if (bed != null) {
+            Location physicalLocation = dao.getWardForBed(bed);
+            return constructBedDetails(bed, physicalLocation, new ArrayList<BedPatientAssignment>());
         }
         return null;
     }

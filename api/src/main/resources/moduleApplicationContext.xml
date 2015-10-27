@@ -4,10 +4,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
   		    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<!-- Add here beans related to the API context -->
+    <!-- Add here beans related to the API context -->
 
-	
-	<!-- Services accessible via Context.getService() -->
+
+    <!-- Services accessible via Context.getService() -->
 
     <bean parent="serviceContext">
         <property name="moduleService">
@@ -40,5 +40,24 @@
             <ref bean="transactionAttributeSource"/>
         </property>
     </bean>
-	
+
+    <bean id="bedManagementDao"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.bedmanagement.HibernateBedManagementDAO">
+                <property name="sessionFactory">
+                    <ref bean="sessionFactory"/>
+                </property>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
 </beans>
