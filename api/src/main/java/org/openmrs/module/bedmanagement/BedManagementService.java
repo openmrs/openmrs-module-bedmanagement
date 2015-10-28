@@ -17,6 +17,7 @@ package org.openmrs.module.bedmanagement;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.annotation.Authorized;
 import org.openmrs.api.OpenmrsService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,23 +25,31 @@ import java.util.List;
 
 @Transactional
 public interface BedManagementService extends OpenmrsService {
-    
+
+    @Authorized({"Get Admission Locations"})
     List<AdmissionLocation> getAllAdmissionLocations();
 
+    @Authorized({"Get Admission Locations"})
     AdmissionLocation getLayoutForWard(Location location);
 
+    @Authorized({"Assign Beds", "Edit Admission Locations"})
     BedDetails assignPatientToBed(Patient patient, Encounter encounter, String bedId);
 
     Bed getBedById(int id);
 
+    @Authorized({"Get Admission Locations"})
     BedDetails getBedAssignmentDetailsByPatient(Patient patient);
 
+    @Authorized({"Get Admission Locations"})
     BedDetails getBedDetailsById(String id);
 
+    @Authorized({"Get Admission Locations"})
     BedDetails getBedDetailsByUuid(String uuid);
 
+    @Authorized({"Get Admission Locations"})
     BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
 
+    @Authorized({"Assign Beds", "Edit Admission Locations"})
     BedDetails unAssignPatientFromBed(Patient patient);
     
 }
