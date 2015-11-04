@@ -7,7 +7,7 @@
     <location location_id="123451" name="Physical Location for Cardio ward on first floor" description="This ward houses cardio patients. It is a general cardio ward." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="98bc9b32-9d1a-11e2-8137-0800271c1b75" parent_location="12345" />
 
     <location_tag location_tag_id="12" name="Admission Location" creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="ad7311e1-1674-4740-8791-07563925336e" />
-
+`
     <location_tag_map location_id="12345" location_tag_id="12" />
     <location_tag_map location_id="123451" location_tag_id="12" />
     <!--<location_tag_map location_id="123451" location_tag_id="12" />-->

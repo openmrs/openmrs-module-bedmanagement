@@ -108,7 +108,7 @@ public class BedDetailsResource extends DelegatingCrudResource<BedDetails> {
     @Override
     protected PageableResult doSearch(RequestContext context) {
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        String patientUuid = context.getRequest().getParameter("patientUuid");
+        String patientUuid = context.getParameter("patientUuid");
         Patient patient = Context.getPatientService().getPatientByUuid(patientUuid);
         BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
         AlreadyPaged<BedDetails> alreadyPaged = new AlreadyPaged<BedDetails>(context, Arrays.asList(bedDetails), false);
