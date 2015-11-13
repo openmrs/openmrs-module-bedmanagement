@@ -24,7 +24,7 @@ import java.util.List;
 
 @Transactional
 public interface BedManagementService extends OpenmrsService {
-
+    
     List<AdmissionLocation> getAllAdmissionLocations();
 
     AdmissionLocation getLayoutForWard(Location location);
@@ -42,6 +42,5 @@ public interface BedManagementService extends OpenmrsService {
     BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
 
     BedDetails unAssignPatientFromBed(Patient patient);
-
-    BedDetails getLatestBedDetailsByVisit(String visitUuid);
+    
 }

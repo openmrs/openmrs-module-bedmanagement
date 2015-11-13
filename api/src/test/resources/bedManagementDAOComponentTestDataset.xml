@@ -78,14 +78,6 @@
     <patient_identifier patient_identifier_id="1" patient_id="3" identifier="1234" identifier_type="1" preferred="1" location_id="12348" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="1ac98ec8-e9d9-4626-998c-c795c2f0aa9f"/>
     <patient_identifier patient_identifier_id="2" patient_id="4" identifier="1235" identifier_type="1" preferred="1" location_id="12348" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="1ac98ec8-e9d9-4626-998c-c795c2f0aa9e"/>
 
-    <encounter_type encounter_type_id="7" name="ADMISSION" description="Admission into Hospital" creator="1" date_created="2015-10-27 12:39:55.0" retired="false" retired_by="0" retire_reason="for testing" uuid="02c533ab-b74b-aaaa`-b6e5-ffb6d09a0ac8"/>
-    <encounter encounter_id="7" visit_id="5" encounter_type="7" patient_id="2" location_id="2" form_id="1" encounter_datetime="2008-08-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" uuid="y403fafb-aaab-42d0-9d11-4f52e89d123r"/>
-    <encounter encounter_id="8" visit_id="6" encounter_type="7" patient_id="2" location_id="2" form_id="1" encounter_datetime="2013-08-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" uuid="y403fafb-cccc-42d0-9d11-4f52e89d123r"/>
-    <encounter encounter_id="9" visit_id="6" encounter_type="7" patient_id="2" location_id="2" form_id="1" encounter_datetime="2013-10-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" uuid="y403fafb-cccc-42d0-9d01-4f52e89d123r"/>
-    <bed_patient_assignment_map bed_patient_assignment_map_id="6" patient_id="2" bed_id="12" date_started="2008-09-18 14:09:05.0" date_stopped="2008-10-18 14:09:05.0" encounter_id="7" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed_patient_assignment_map bed_patient_assignment_map_id="7" patient_id="2" bed_id="13" date_started="2013-09-18 14:09:05.0" date_stopped="2015-11-18 14:09:05.0" encounter_id="8" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed_patient_assignment_map bed_patient_assignment_map_id="8" patient_id="2" bed_id="12" date_started="2014-09-18 14:09:05.0"  encounter_id="9" date_created="2014-01-01 00:00:00.0" voided="false"/>
-
     <encounter encounter_id="1" encounter_type="2" patient_id="2" location_id="1" form_id="1" encounter_datetime="2008-08-01 00:00:00.0" creator="1" date_created="2008-08-18 14:09:05.0" voided="false" uuid="7519d653-393b-4118-9c83-a3715b82d4ac" />
     <encounter encounter_id="2" encounter_type="2" patient_id="3" location_id="1" form_id="1" encounter_datetime="2008-08-01 00:00:00.0" creator="1" date_created="2008-08-18 14:09:05.0" voided="false" uuid="8519d653-393b-4118-9c83-a3715b82d4ad"/>
     <encounter encounter_id="3" encounter_type="2" patient_id="4" location_id="1" form_id="1" encounter_datetime="2008-08-01 00:00:00.0" creator="1" date_created="2008-08-18 14:09:05.0" voided="false" uuid="9519d653-393b-4118-9c83-a3715b82d4ae"/>
