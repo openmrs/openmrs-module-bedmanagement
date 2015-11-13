@@ -43,10 +43,4 @@ public class HibernateBedManagementDAOTest extends BaseModuleContextSensitiveTes
         Bed bed = bedManagementDAO.getLatestBedByVisit("e1428fea-6b78-11e0-93c3-18a905e044dc");
         assertThat(bed.getId(), is(equalTo(12)));
     }
-
-    @Test
-    public void shouldGetTheLatestBedForSameEncounterAndSameVisit() {
-        Bed bed = bedManagementDAO.getLatestBedByVisit("8cfda6ae-6b78-11e0-93c3-18a905e044dc");
-        assertThat(bed.getId(), is(equalTo(12)));
-    }
 }
