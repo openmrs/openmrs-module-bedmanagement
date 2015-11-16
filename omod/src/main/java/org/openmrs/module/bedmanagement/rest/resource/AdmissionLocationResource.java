@@ -34,7 +34,7 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import java.util.Arrays;
 import java.util.List;
 
-@Resource(name = RestConstants.VERSION_1 + "/admissionLocation", supportedClass = AdmissionLocation.class, supportedOpenmrsVersions = {"1.9.*", "1.10.*", "1.11.*"})
+@Resource(name = RestConstants.VERSION_1 + "/admissionLocation", supportedClass = AdmissionLocation.class, supportedOpenmrsVersions = {"1.9.*", "1.10.*", "1.11.*", "1.12.*"})
 public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionLocation> {
 
     @Override

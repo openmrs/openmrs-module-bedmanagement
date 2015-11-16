@@ -31,7 +31,7 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import java.util.Arrays;
 import java.util.List;
 
-@Resource(name = RestConstants.VERSION_1 + "/bedPatientAssignment", supportedClass = BedPatientAssignment.class, supportedOpenmrsVersions = {"1.9.*", "1.10.*", "1.11.*"})
+@Resource(name = RestConstants.VERSION_1 + "/bedPatientAssignment", supportedClass = BedPatientAssignment.class, supportedOpenmrsVersions = {"1.9.*", "1.10.*", "1.11.*", "1.12.*"})
 public class BedPatientAssignmentResource extends DelegatingCrudResource<BedPatientAssignment> {
 
     @Override
