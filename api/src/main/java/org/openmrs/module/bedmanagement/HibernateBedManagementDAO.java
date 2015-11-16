@@ -20,12 +20,12 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Set;
-import java.util.Date;
 
 
 public class HibernateBedManagementDAO implements BedManagementDAO {
@@ -210,5 +210,16 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
                 .list();
         return assignments;
     }
-    
+
+    @Override
+    public Bed getLatestBedByVisit(String visitUuid) {
+        Session session = sessionFactory.getCurrentSession();
+        Bed bed = (Bed) session.createQuery("select bpa.bed from BedPatientAssignment bpa " +
+                "inner join bpa.encounter enc " +
+                "inner join enc.visit v where v.uuid = :visitUuid order by enc.encounterDatetime DESC")
+                .setParameter("visitUuid", visitUuid)
+                .setMaxResults(1)
+                .uniqueResult();
+        return bed;
+    }
 }

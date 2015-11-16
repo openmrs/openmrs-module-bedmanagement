@@ -18,7 +18,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-public class BedManagementServiceITTest extends BaseModuleContextSensitiveTest {
+public class BedManagementServiceIntegrationTest extends BaseModuleContextSensitiveTest {
     
     @Autowired
     private BedManagementService bedManagementService;
@@ -114,6 +114,7 @@ public class BedManagementServiceITTest extends BaseModuleContextSensitiveTest {
         bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
         assertEquals(bedId, bedDetails.getBedId());
     }
+
 
     @Test
     public void shouldUnAssingPatientFromBed() throws Exception {
