@@ -216,7 +216,7 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         Session session = sessionFactory.getCurrentSession();
         Bed bed = (Bed) session.createQuery("select bpa.bed from BedPatientAssignment bpa " +
                 "inner join bpa.encounter enc " +
-                "inner join enc.visit v where v.uuid = :visitUuid order by enc.encounterDatetime DESC")
+                "inner join enc.visit v where v.uuid = :visitUuid order by bpa.startDatetime DESC")
                 .setParameter("visitUuid", visitUuid)
                 .setMaxResults(1)
                 .uniqueResult();
