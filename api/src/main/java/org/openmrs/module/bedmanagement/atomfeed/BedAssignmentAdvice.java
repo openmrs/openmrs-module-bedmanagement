@@ -49,6 +49,9 @@ public class BedAssignmentAdvice implements AfterReturningAdvice {
             List<BedPatientAssignment> currentAssignments = bedDetails.getCurrentAssignments();
             publishEvent(currentAssignments.get(currentAssignments.size() - 1));
         } else if (execMethodName.equals(UNASSIGN_BED_METHOD)) {
+            if (returnValue == null){
+                return;
+            }
             BedDetails bedDetails = (BedDetails) returnValue;
             publishEvent(bedDetails.getLastAssignment());
         }
