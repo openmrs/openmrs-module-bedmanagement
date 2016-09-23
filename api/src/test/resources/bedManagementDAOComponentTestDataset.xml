@@ -46,7 +46,6 @@
     <bed_location_map bed_location_map_id="17" location_id="123451" row_number="3" column_number="5" />
     <bed_location_map bed_location_map_id="18" location_id="123451" row_number="3" column_number="6" bed_id="10" />
     
-    <patient patient_id="2" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
 
     <!--second ward-->
     <location location_id="12347" name="Orthopaedic ward" description="This ward houses orthopaedic patients." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="19e023e8-20ee-4237-ade6-9e68f897b7a9"/>
@@ -65,17 +64,18 @@
     <bed_location_map bed_location_map_id="23" location_id="123452" row_number="2" column_number="1"/>
     <bed_location_map bed_location_map_id="24" location_id="123452" row_number="2" column_number="2"/>
 
-    <person_name person_name_id="1" preferred="true" person_id="3" given_name="John" middle_name=" " family_name="Doe" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f1f7d08-076b-4fc6-acac-4bb91515141e"/>
-    <person_name person_name_id="2" preferred="true" person_id="4" given_name="Jane" middle_name=" " family_name="Doe" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f1f7d08-076b-4fc6-acac-4bb91515141f"/>
     <person person_id="3" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128762"/>
     <person person_id="4" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128823"/>
     <person person_id="5" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128824"/>
+
+    <person_name person_name_id="1" preferred="true" person_id="3" given_name="John" middle_name=" " family_name="Doe" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f1f7d08-076b-4fc6-acac-4bb91515141e"/>
+    <person_name person_name_id="2" preferred="true" person_id="4" given_name="Jane" middle_name=" " family_name="Doe" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f1f7d08-076b-4fc6-acac-4bb91515141f"/>
 
     <patient patient_id="3" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <patient patient_id="4" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <patient patient_id="5" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
 
-    <patient_identifier_type patient_identifier_type_id="1" name="Test Identifier Type" description="Test description" check_digit="false" creator="1" date_created="2005-01-01 00:00:00.0" required="false" retired="false" uuid="0cbecb62-7249-4f91-8edf-d0206ecceb63"/>
+    <patient_identifier_type patient_identifier_type_id="1" name="Test Identifier Type" description="Test description" creator="1" date_created="2005-01-01 00:00:00.0" required="false" retired="false" uuid="0cbecb62-7249-4f91-8edf-d0206ecceb63"/>
     <patient_identifier patient_identifier_id="1" patient_id="3" identifier="1234" identifier_type="1" preferred="1" location_id="12348" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="1ac98ec8-e9d9-4626-998c-c795c2f0aa9f"/>
     <patient_identifier patient_identifier_id="2" patient_id="4" identifier="1235" identifier_type="1" preferred="1" location_id="12348" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="1ac98ec8-e9d9-4626-998c-c795c2f0aa9e"/>
 
@@ -122,6 +122,7 @@
     <role role="InPatient-Read" description="To View InPatient details" uuid="3480cb6d-c291-46c8-8d3a-96dc33d109fb"/>
     <role role="Test Role" description="To View Patients" uuid="9480cddd-c291-46c8-8d3a-96dc33d109fb"/>
     <role role="InPatient-Patient-Movement" description="To assign, transfer and discharge patients" uuid="9400cddd-c291-46c8-8d3a-96dc33d109fb"/>
+    <role role="View Locations" description="To assign, transfer and discharge patients" uuid="9400cddd-c291-46c8-8d3a-96dc33deretr"/>
 
     <role_privilege role="InPatient-Read" privilege="Get Admission Locations"/>
     <role_privilege role="InPatient-Read" privilege="Get Beds"/>
@@ -130,6 +131,9 @@
     <role_privilege role="Test Role" privilege="View Encounters"/>
     <role_privilege role="InPatient-Patient-Movement" privilege="Assign Beds"/>
     <role_privilege role="InPatient-Patient-Movement" privilege="Edit Admission Locations"/>
+
+    <users user_id="190" person_id="567" system_id="1-8" username="test-user" password="4a1750c8607d0fa237de36c6305715c223415189" salt="c788c6ad82a157b712392ca695dfcf2eed193d7f" secret_question="" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" retired="false" retire_reason="" uuid="1010d442-e134-11de-babe-001e378eb670"/>
+    <users user_id="120" person_id="678" system_id="1-8" username="normal-user" password="62a9238a82b866a3e9e9ce8245ac230bf98bce2d" salt="c788c6ad82a157b712392ca695dfcf2eed193d7f" secret_question="" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" retired="false" retire_reason="" uuid="1010d442-e134-11de-babe-001e378ev670"/>
 
     <user_role user_id="190" role="InPatient-Read"/>
     <user_role user_id="190" role="View Locations"/>
@@ -141,8 +145,6 @@
     <person person_id="567" gender="" birthdate="1975-06-30" birthdate_estimated="false" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" voided="false" void_reason="" uuid="6adb7c42-cfd2-4301-b53b-ff17c5654ff7"/>
     <person person_id="678" gender="" birthdate="1975-06-30" birthdate_estimated="false" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" voided="false" void_reason="" uuid="6adb7c42-cfd2-4301-b53b-ff17c5654dd7"/>
 
-    <users user_id="190" person_id="567" system_id="1-8" username="test-user" password="4a1750c8607d0fa237de36c6305715c223415189" salt="c788c6ad82a157b712392ca695dfcf2eed193d7f" secret_question="" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" retired="false" retire_reason="" uuid="1010d442-e134-11de-babe-001e378eb670"/>
-    <users user_id="120" person_id="678" system_id="1-8" username="normal-user" password="62a9238a82b866a3e9e9ce8245ac230bf98bce2d" salt="c788c6ad82a157b712392ca695dfcf2eed193d7f" secret_question="" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" retired="false" retire_reason="" uuid="1010d442-e134-11de-babe-001e378ev670"/>
 </dataset>
 
 
