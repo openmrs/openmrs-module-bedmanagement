@@ -14,7 +14,7 @@
 package org.openmrs.module.bedmanagement;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
