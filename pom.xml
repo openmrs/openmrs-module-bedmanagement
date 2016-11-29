@@ -143,13 +143,6 @@
 			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
 		</repository>
 
-        <!--this repository is needed only till we keep it in bahmni organisation-->
-        <repository>
-            <id>bahmni-artifactory</id>
-            <name>bahmni-artifactory-snapshots</name>
-            <url>http://bahmnirepo.thoughtworks.com/artifactory/libs-snapshot-local</url>
-        </repository>
-
         <repository>
             <id>sonatype-nexus-snapshots</id>
             <name>Sonatype Nexus Snapshots</name>
@@ -176,16 +169,16 @@
 	</pluginRepositories>
 
     <distributionManagement>
-        <repository>
-            <id>bahmni-artifactory</id>
-            <name>bahmni-artifactory-releases</name>
-            <url>http://bahmnirepo.thoughtworks.com/artifactory/libs-release-local</url>
-        </repository>
-        <snapshotRepository>
-            <id>bahmni-artifactory</id>
-            <name>bahmni-artifactory-snapshots</name>
-            <url>http://bahmnirepo.thoughtworks.com/artifactory/libs-snapshot-local</url>
-        </snapshotRepository>
-    </distributionManagement>
+		<repository>
+			<id>openmrs-repo-modules</id>
+			<name>Modules</name>
+			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/modules/</url>
+		</repository>
+		<snapshotRepository>
+			<id>openmrs-repo-snapshots</id>
+			<name>OpenMRS Snapshots</name>
+			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 </project>
