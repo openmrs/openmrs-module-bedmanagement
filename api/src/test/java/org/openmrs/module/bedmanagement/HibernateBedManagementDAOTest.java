@@ -2,15 +2,19 @@ package org.openmrs.module.bedmanagement;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.junit.runner.RunWith;
+import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
-public class HibernateBedManagementDAOTest extends BaseModuleContextSensitiveTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@org.springframework.test.context.ContextConfiguration(locations = {"classpath:TestingApplicationContext.xml"}, inheritLocations = true)
+public class HibernateBedManagementDAOTest extends BaseModuleWebContextSensitiveTest {
 
     @Autowired
     BedManagementDAO bedManagementDAO;

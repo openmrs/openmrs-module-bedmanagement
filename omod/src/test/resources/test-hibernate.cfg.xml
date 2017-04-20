@@ -6,6 +6,8 @@
 <hibernate-configuration>
     <session-factory>
         <mapping resource="Bed.hbm.xml"/>
+        <mapping resource="BedTag.hbm.xml"/>
+        <mapping resource="BedTagMap.hbm.xml"/>
         <mapping resource="BedLocationMapping.hbm.xml"/>
         <mapping resource="BedPatientAssignment.hbm.xml"/>
         <mapping resource="BedType.hbm.xml"/>

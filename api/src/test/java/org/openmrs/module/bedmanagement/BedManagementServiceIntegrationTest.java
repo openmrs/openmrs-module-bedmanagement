@@ -3,6 +3,7 @@ package org.openmrs.module.bedmanagement;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
@@ -10,15 +11,17 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
-
-public class BedManagementServiceIntegrationTest extends BaseModuleContextSensitiveTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@org.springframework.test.context.ContextConfiguration(locations = {"classpath:TestingApplicationContext.xml"}, inheritLocations = true)
+public class BedManagementServiceIntegrationTest extends BaseModuleWebContextSensitiveTest {
     
     @Autowired
     private BedManagementService bedManagementService;
@@ -39,7 +42,7 @@ public class BedManagementServiceIntegrationTest extends BaseModuleContextSensit
         Assert.assertEquals(1, cardioWard.getOccupiedBeds());
 
         AdmissionLocation orthoWard = getWard(admissionLocationList, "Orthopaedic ward");
-        Assert.assertEquals(4, orthoWard.getTotalBeds());
+        Assert.assertEquals(6, orthoWard.getTotalBeds());
         Assert.assertEquals(2, orthoWard.getOccupiedBeds());
     }
 

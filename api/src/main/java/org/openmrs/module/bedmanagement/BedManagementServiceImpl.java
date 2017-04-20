@@ -118,6 +118,11 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
         return null;
     }
 
+    @Override
+    public List<BedTag> getAllBedTags() {
+        return  dao.getAllBedTags();
+    }
+
     private BedDetails constructBedDetails(Bed bed, Location location, List<BedPatientAssignment> currentAssignments) {
         BedDetails bedDetails = new BedDetails();
         bedDetails.setBed(bed);

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+    <person person_id="678" gender="" birthdate="1975-06-30" birthdate_estimated="false" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" voided="false" void_reason="" uuid="6adb7c42-cfd2-4301-b53b-ff17c5654dd7"/>
+    <person person_id="679" gender="" birthdate="1975-06-30" birthdate_estimated="false" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" voided="false" void_reason="" uuid="6adb7c42-cfd2-4301-b53b-ff17c5654ee3"/>
+
+    <users user_id="120" person_id="678" system_id="1-8" username="normal-user" password="62a9238a82b866a3e9e9ce8245ac230bf98bce2d" salt="c788c6ad82a157b712392ca695dfcf2eed193d7f" secret_question="" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" retired="false" retire_reason="" uuid="1010d442-e134-11de-babe-001e378ev670"/>
+    <users user_id="121" person_id="679" system_id="1-8" username="edit-tags-user" password="62a9238a82b866a3e9e9ce8245ac230bf98bce2d" salt="c788c6ad82a157b712392ca695dfcf2eed193d7f" secret_question="" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" retired="false" retire_reason="" uuid="1010d442-e134-11de-babe-001e378ev671"/>
+
+    <bed_type bed_type_id="3" name="normal" description="normal bed" display_name="NRM"/>
+    <bed bed_id="15" bed_number="306-c" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false" uuid="5580cddd-c290-66c8-8d3a-96dc33d199fb"/>
+
+    <bed_tag bed_tag_id="1" name="Oxygen" uuid="5580cddd-c290-66c8-8d3a-96dc33d199f1" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed_tag bed_tag_id="2" name="Broken" uuid="5580cddd-c290-66c8-8d3a-96dc33d199f2" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed_tag bed_tag_id="3" name="Isolation" uuid="5580cddd-c290-66c8-8d3a-96dc33d199f3" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
+
+    <bed_tag_map bed_tag_map_id="1" bed_id="15" bed_tag_id="1" uuid="5580cddd-c290-66c8-8d3a-96dc33d199f4" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" />
+
+    <privilege privilege="Get Beds" description="Able to Get bed details" uuid="5580ceed-c290-66c8-8d3a-96dc33d199fb"/>
+    <privilege privilege="Get Tags" description="Able to Get Tags details" uuid="5580ceed-1111-66c8-8d3a-96dc33d199fb"/>
+    <privilege privilege="Edit Tags" description="Able to Edit Tags for the bed" uuid="5580ceed-2222-66c8-8d3a-96dc33d199fb"/>
+
+    <role role="Test Role" description="To View Patients" uuid="9480cddd-c291-46c8-8d3a-96dc33d109fb"/>
+    <role role="InPatient-Edit-Tags" description="To be able to edit tags of bed" uuid="9400cddd-2222-46c8-8d3a-96dc33d109fb"/>
+
+    <role_privilege role="InPatient-Edit-Tags" privilege="Edit Tags"/>
+    <role_privilege role="InPatient-Edit-Tags" privilege="Get Tags"/>
+    <role_privilege role="InPatient-Edit-Tags" privilege="Get Beds"/>
+
+    <user_role user_id="120" role="Test Role"/>
+    <user_role user_id="121" role="InPatient-Edit-Tags"/>
+</dataset>

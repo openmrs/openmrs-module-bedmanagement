@@ -56,13 +56,15 @@
     <bed bed_id="13" bed_number="307-c" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed bed_id="14" bed_number="307-d" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed bed_id="15" bed_number="306-c" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false" uuid="5580cddd-c290-66c8-8d3a-96dc33d199fb"/>
+    <bed bed_id="16" bed_number="306-e" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="17" bed_number="306-f" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
 
     <bed_location_map bed_location_map_id="19" location_id="123452" row_number="1" column_number="1" bed_id="11"/>
     <bed_location_map bed_location_map_id="20" location_id="123452" row_number="1" column_number="2" bed_id="12"/>
     <bed_location_map bed_location_map_id="21" location_id="123452" row_number="1" column_number="3" bed_id="13"/>
     <bed_location_map bed_location_map_id="22" location_id="123452" row_number="1" column_number="4" bed_id="14"/>
-    <bed_location_map bed_location_map_id="23" location_id="123452" row_number="2" column_number="1"/>
-    <bed_location_map bed_location_map_id="24" location_id="123452" row_number="2" column_number="2"/>
+    <bed_location_map bed_location_map_id="23" location_id="123452" row_number="2" column_number="1" bed_id="15"/>
+    <bed_location_map bed_location_map_id="24" location_id="123452" row_number="2" column_number="2" bed_id="16"/>
 
     <person person_id="3" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128762"/>
     <person person_id="4" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128823"/>

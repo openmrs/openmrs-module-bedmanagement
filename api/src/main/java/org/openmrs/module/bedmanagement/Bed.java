@@ -10,6 +10,7 @@ public class Bed extends BaseOpenmrsData {
     private BedType bedType;
     private Set<BedPatientAssignment> bedPatientAssignment;
     private String status;
+    private Set<BedTagMap> bedTagMap;
 
     public Integer getId() {
         return id;
@@ -50,4 +51,13 @@ public class Bed extends BaseOpenmrsData {
     public void setBedType(BedType bedType) {
         this.bedType = bedType;
     }
+
+    public Set<BedTagMap> getBedTagMap() {
+        return bedTagMap;
+    }
+
+    public void setBedTagMap(Set<BedTagMap> bedTagMap) {
+        this.bedTagMap = bedTagMap;
+    }
+
 }
