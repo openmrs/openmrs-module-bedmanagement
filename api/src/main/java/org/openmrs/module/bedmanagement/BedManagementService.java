@@ -55,6 +55,6 @@ public interface BedManagementService extends OpenmrsService {
     @Authorized(value = {"Get Beds", "Get Admission Locations"}, requireAll=true)
     BedDetails getLatestBedDetailsByVisit(String visitUuid);
 
-    @Authorized(value = {"Get Beds", "Get Admission Locations"}, requireAll=true)
+    @Authorized(value = {"Get Tags"}, requireAll=true)
     List<BedTag> getAllBedTags();
 }
