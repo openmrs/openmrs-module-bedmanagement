@@ -55,13 +55,15 @@
     <bed bed_id="12" bed_number="307-b" status= "OCCUPIED" bed_type_id="2" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed bed_id="13" bed_number="307-c" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed bed_id="14" bed_number="307-d" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="15" bed_number="307-e" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="16" bed_number="307-f" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
 
     <bed_location_map bed_location_map_id="19" location_id="123452" row_number="1" column_number="1" bed_id="11"/>
     <bed_location_map bed_location_map_id="20" location_id="123452" row_number="1" column_number="2" bed_id="12"/>
     <bed_location_map bed_location_map_id="21" location_id="123452" row_number="1" column_number="3" bed_id="13"/>
     <bed_location_map bed_location_map_id="22" location_id="123452" row_number="1" column_number="4" bed_id="14"/>
-    <bed_location_map bed_location_map_id="23" location_id="123452" row_number="2" column_number="1"/>
-    <bed_location_map bed_location_map_id="24" location_id="123452" row_number="2" column_number="2"/>
+    <bed_location_map bed_location_map_id="23" location_id="123452" row_number="2" column_number="1" bed_id="15"/>
+    <bed_location_map bed_location_map_id="24" location_id="123452" row_number="2" column_number="2" bed_id="16"/>
 
 
     <person person_id="3" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128762"/>
@@ -109,6 +111,16 @@
     <location_tag_map location_id="12347" location_tag_id="12" />
     <location_tag_map location_id="123452" location_tag_id="12" />
 
+    <bed_tag bed_tag_id="1" name="Broken" creator="1" date_created="2017-02-07 20:01:30" voided="false" uuid="73e846d6-ed5f-11e6-a3c9-0800274a5156"/>
+    <bed_tag bed_tag_id="2" name="Oxygen" creator="1" date_created="2017-02-07 20:01:30" voided="false" uuid="73e846d6-ed5f-22e6-a3c9-0800274a5156"/>
+    <bed_tag bed_tag_id="3" name="Isolation" creator="1" date_created="2017-02-07 20:01:30" voided="false" uuid="73e846d6-ed5f-33e6-a3c9-0800274a5156"/>
+    <bed_tag bed_tag_id="4" name="Sanitation required" creator="1" date_created="2017-02-07 20:01:30" voided="false" uuid="73e846d6-ed5f-44e6-a3c9-0800274a5156"/>
+    <bed_tag bed_tag_id="5" name="Strict Isolation" creator="1" date_created="2017-02-07 20:01:30" voided="true" uuid="73e846d6-ed5f-55e6-a3c9-0800274a5156"/>
+
+    <bed_tag_map bed_tag_map_id="1" bed_id="11" bed_tag_id="1" uuid="73e846d6-ed5f-55e6-a3c9-0800274a1111" creator="0" date_created="2017-02-07 20:01:30" voided="false"/>
+    <bed_tag_map bed_tag_map_id="2" bed_id="11" bed_tag_id="2" uuid="73e846d6-ed5f-55e6-a3c9-0800274a2222" creator="0" date_created="2017-02-07 20:01:30" voided="false"/>
+    <bed_tag_map bed_tag_map_id="3" bed_id="13" bed_tag_id="2" uuid="73e846d6-ed5f-55e6-a3c9-0800274a3333" creator="0" date_created="2017-02-07 20:01:30" voided="false"/>
+    <bed_tag_map bed_tag_map_id="4" bed_id="11" bed_tag_id="3" uuid="73e846d6-ed5f-55e6-a3c9-0800274a4444" creator="0" date_created="2017-02-07 20:01:30" voided="true"/>
 </dataset>
 
 

@@ -71,18 +71,20 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         List<Location> physicalLocations = getPhysicalLocationsByLocationTagAndParentLocation(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION, location, session);
 
         String hql = "select blm.row as rowNumber, blm.column as columnNumber, " +
-                "bed.id as bedId, bed.bedNumber as bedNumber, " +
-                "bed.status as status, bedType as bedType, blm.location.name as location " +
+                "bed as bed, blm.location.name as location " +
                 "from BedLocationMapping blm " +
                 "left outer join blm.bed bed " +
-                "left outer join bed.bedType bedType " +
                 "where blm.location in (:physicalLocations) ";
 
-        List<BedLayout> bedLayouts = sessionFactory.getCurrentSession().createQuery(hql)
+        List<BedLayoutWithDetails> bedLayoutWithDetailsList = sessionFactory.getCurrentSession().createQuery(hql)
                 .setParameterList("physicalLocations", physicalLocations)
-                .setResultTransformer(Transformers.aliasToBean(BedLayout.class))
+                .setResultTransformer(Transformers.aliasToBean(BedLayoutWithDetails.class))
                 .list();
 
+        List<BedLayout> bedLayouts = new ArrayList<>();
+        for(BedLayoutWithDetails bedLayoutWithDetails : bedLayoutWithDetailsList) {
+            bedLayouts.add(bedLayoutWithDetails.convertToBedLayout());
+        }
         AdmissionLocation admissionLocation = new AdmissionLocation();
         admissionLocation.setBedLayouts(bedLayouts);
         return admissionLocation;
@@ -221,5 +223,13 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
                 .setMaxResults(1)
                 .uniqueResult();
         return bed;
+    }
+
+    @Override
+    public List<BedTag> getAllBedTags() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("from BedTag where voided =:voided")
+                .setParameter("voided", false)
+                .list();
     }
 }

@@ -3,11 +3,14 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="org.openmrs.module.bedmanagement.Bed" table="bed">
+    <class name="org.openmrs.module.bedmanagement.BedTagMap" table="bed_tag_map">
         
-        <id name="id" type="int" column="bed_id" unsaved-value="0">
+        <id name="id" type="int" column="bed_tag_map_id" unsaved-value="0">
             <generator class="native"/>
         </id>
+
+        <many-to-one name="bed" class="org.openmrs.module.bedmanagement.Bed" not-null="true" column="bed_id"/>
+        <many-to-one name="bedTag" class="org.openmrs.module.bedmanagement.BedTag" not-null="true" column="bed_tag_id"/>
 
         <property name="uuid" type="java.lang.String"
                   column="uuid" length="38" unique="true"/>
@@ -31,21 +34,6 @@
 
         <property name="voidReason" type="java.lang.String"
                   column="void_reason" length="255" />
-
-        <property name="bedNumber" type="java.lang.String" column="bed_number" length="10"/>
-        <property name="status" type="java.lang.String" column="status" length="20"/>
-
-        <many-to-one name="bedType" class="org.openmrs.module.bedmanagement.BedType" column="bed_type_id" lazy="false"/>
-
-        <set name="bedPatientAssignment" cascade="save-update" inverse="true">
-            <key column="bed_id"/>
-            <one-to-many class="org.openmrs.module.bedmanagement.BedPatientAssignment"/>
-        </set>
-
-        <set name="bedTagMap" cascade="save-update" inverse="true">
-            <key column="bed_id"/>
-            <one-to-many class="org.openmrs.module.bedmanagement.BedTagMap"/>
-        </set>
         
     </class>
 </hibernate-mapping>

@@ -44,4 +44,6 @@ public interface BedManagementDAO {
     List<BedPatientAssignment> getCurrentAssignmentsByBed(Bed bed);
 
     Bed getLatestBedByVisit(String visitUuid);
+
+    List<BedTag> getAllBedTags();
 }

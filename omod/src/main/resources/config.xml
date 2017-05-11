@@ -35,6 +35,8 @@
 	<!-- Maps hibernate file's, if present -->
 	<mappingFiles>
         Bed.hbm.xml
+		BedTag.hbm.xml
+		BedTagMap.hbm.xml
         BedLocationMapping.hbm.xml
         BedPatientAssignment.hbm.xml
         BedType.hbm.xml

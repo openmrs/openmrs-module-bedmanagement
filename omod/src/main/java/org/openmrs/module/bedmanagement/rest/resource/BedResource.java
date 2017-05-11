@@ -61,7 +61,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
 
     @Override
     public Bed newDelegate() {
-        throw new ResourceDoesNotSupportOperationException("newDelegate not allowed on bed resource");
+        return new Bed();
     }
 
     @Override

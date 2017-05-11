@@ -387,4 +387,125 @@
         </insert>
     </changeSet>
 
+    <changeSet id="bedmanagement-201625111153" author="Sourav, Chethan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="bed_tag"/>
+            </not>
+        </preConditions>
+        <comment>Creating bed_tag table</comment>
+        <createTable tableName="bed_tag">
+            <column name="bed_tag_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="voided" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="voided_by" type="int"/>
+            <column name="date_voided" type="datetime"/>
+            <column name="void_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="bed_tag_creator_fk"
+                                 baseTableName="bed_tag" baseColumnNames="creator"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="bed_tag_changed_by_fk"
+                                 baseTableName="bed_tag" baseColumnNames="changed_by"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="bed_tag_voided_by_fk"
+                                 baseTableName="bed_tag" baseColumnNames="voided_by"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"/>
+    </changeSet>
+
+    <changeSet id="201625111155" author="Sourav, Chethan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="bed_tag_map"/>
+            </not>
+        </preConditions>
+        <comment>Creating bed_tag_map table</comment>
+        <createTable tableName="bed_tag_map">
+            <column name="bed_tag_map_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="bed_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bed_tag_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="voided" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="voided_by" type="int"/>
+            <column name="date_voided" type="datetime"/>
+            <column name="void_reason" type="varchar(255)" defaultValue="null"/>
+        </createTable>
+        <addForeignKeyConstraint constraintName="bed_tag_map_bed_fk"
+                                 baseTableName="bed_tag_map" baseColumnNames="bed_id"
+                                 referencedTableName="bed"
+                                 referencedColumnNames="bed_id"/>
+        <addForeignKeyConstraint constraintName="bed_tag_map_tag_fk"
+                                 baseTableName="bed_tag_map" baseColumnNames="bed_tag_id"
+                                 referencedTableName="bed_tag"
+                                 referencedColumnNames="bed_tag_id"/>
+        <addForeignKeyConstraint constraintName="bed_tag_map_creator_fk"
+                                 baseTableName="bed_tag_map" baseColumnNames="creator" referencedTableName="users"
+                                 referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="bed_tag_map_changed_by_fk"
+                                 baseTableName="bed_tag_map" baseColumnNames="changed_by"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="bed_tag_map_voided_by_fk"
+                                 baseTableName="bed_tag_map" baseColumnNames="voided_by"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"/>
+    </changeSet>
+    <changeSet id="bedmanagement-201703221515" author="Santhosh, Maharjun">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from privilege where privilege='Get Tags'</sqlCheck>
+        </preConditions>
+        <insert tableName="privilege">
+            <column name="privilege" value="Get Tags"/>
+            <column name="description" value="Able to get the tags"/>
+            <column name="uuid" valueComputed="uuid()"/>
+        </insert>
+    </changeSet>
+    <changeSet id="bedmanagement-201703221516" author="Santhosh, Maharjun">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from privilege where privilege='Edit Tags'</sqlCheck>
+        </preConditions>
+        <insert tableName="privilege">
+            <column name="privilege" value="Edit Tags"/>
+            <column name="description" value="Able to associate tags to the bed"/>
+            <column name="uuid" valueComputed="uuid()"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
