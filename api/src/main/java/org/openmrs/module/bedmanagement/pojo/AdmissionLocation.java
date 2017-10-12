@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.pojo;
 
 import org.openmrs.Location;
 
@@ -23,8 +23,8 @@ import java.util.List;
  */
 
 public class AdmissionLocation {
-    private long totalBeds;
-    private long occupiedBeds;
+    private Long totalBeds;
+    private Long occupiedBeds;
     private Location ward;
     private List<BedLayout> bedLayouts;
 
@@ -36,19 +36,19 @@ public class AdmissionLocation {
         this.ward = ward;
     }
 
-    public long getTotalBeds() {
+    public Long getTotalBeds() {
         return totalBeds;
     }
 
-    public long getOccupiedBeds() {
+    public Long getOccupiedBeds() {
         return occupiedBeds;
     }
 
-    public void setTotalBeds(long totalBeds) {
+    public void setTotalBeds(Long totalBeds) {
         this.totalBeds = totalBeds;
     }
 
-    public void setOccupiedBeds(long occupiedBeds) {
+    public void setOccupiedBeds(Long occupiedBeds) {
         this.occupiedBeds = occupiedBeds;
     }
 
@@ -66,6 +66,7 @@ public class AdmissionLocation {
                 "totalBeds=" + totalBeds +
                 ", occupiedBeds=" + occupiedBeds +
                 ", ward=" + ward +
+                ", bedLayouts=" + bedLayouts +
                 '}';
     }
 }

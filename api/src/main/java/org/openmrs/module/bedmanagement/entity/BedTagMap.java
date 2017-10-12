@@ -1,4 +1,4 @@
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.entity;
 
 import org.openmrs.BaseOpenmrsData;
 
@@ -29,5 +29,14 @@ public class BedTagMap extends BaseOpenmrsData {
 
     public void setBedTag(BedTag bedTag) {
         this.bedTag = bedTag;
+    }
+
+    @Override
+    public String toString() {
+        return "BedTagMap{" +
+                "id=" + id +
+                ", bedId=" + (bed != null ? bed.getId() : null) +
+                ", bedTagId=" + (bedTag != null ? bedTag.getId() : null) +
+                '}';
     }
 }

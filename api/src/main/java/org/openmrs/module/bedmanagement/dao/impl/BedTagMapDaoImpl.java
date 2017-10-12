@@ -11,13 +11,17 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.dao.impl;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
+import org.openmrs.module.bedmanagement.dao.BedTagMapDao;
 
 
-public class HibernateBedTagMapDAO implements BedTagMapDAO {
+public class BedTagMapDaoImpl implements BedTagMapDao {
     SessionFactory sessionFactory;
 
     public void setSessionFactory(SessionFactory sessionFactory) {
@@ -25,7 +29,7 @@ public class HibernateBedTagMapDAO implements BedTagMapDAO {
     }
 
     @Override
-    public BedTagMap saveOrUpdate(BedTagMap bedTagMap) {
+    public BedTagMap saveBedTagMap(BedTagMap bedTagMap) {
         Session session = this.sessionFactory.getCurrentSession();
         session.saveOrUpdate(bedTagMap);
         session.flush();
@@ -33,10 +37,10 @@ public class HibernateBedTagMapDAO implements BedTagMapDAO {
     }
 
     @Override
-    public BedTagMap getBedTagMapByUuid(String bedTagMapUuid) {
+    public BedTagMap getBedTagMapByUuid(String uuid) {
         return (BedTagMap) sessionFactory.getCurrentSession()
                 .createQuery("from BedTagMap where uuid = :uuid and voided =:voided")
-                .setParameter("uuid", bedTagMapUuid)
+                .setParameter("uuid", uuid)
                 .setParameter("voided", false)
                 .uniqueResult();
     }

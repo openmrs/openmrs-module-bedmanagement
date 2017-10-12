@@ -8,6 +8,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.bedmanagement.dao.BedTagMapDao;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
+import org.openmrs.module.bedmanagement.service.impl.BedTagMapServiceImpl;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -26,7 +31,7 @@ public class BedTagMapServiceImplTest {
     BedTagMapServiceImpl bedTagMapService;
 
     @Mock
-    BedTagMapDAO bedTagMapDAO;
+    BedTagMapDao bedTagMapDAO;
 
     @Mock
     Context context;
@@ -82,7 +87,7 @@ public class BedTagMapServiceImplTest {
         bedTagMap.setBed(bed);
         bedTagMap.setBedTag(bedTag);
         when(bedTagMapDAO.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(bedTagMap);
-        bedTagMapService.save(bedTagMap);
+        bedTagMapService.saveBedTagMap(bedTagMap);
     }
 
     @Test
@@ -93,15 +98,15 @@ public class BedTagMapServiceImplTest {
         bedTagMap.setBed(bed);
         bedTagMap.setBedTag(bedTag);
         when(bedTagMapDAO.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(null);
-        bedTagMapService.save(bedTagMap);
-        verify(bedTagMapDAO, times(1)).saveOrUpdate(any(BedTagMap.class));
+        bedTagMapService.saveBedTagMap(bedTagMap);
+        verify(bedTagMapDAO, times(1)).saveBedTagMap(any(BedTagMap.class));
     }
 
     @Test
     public void shouldVoidGivenBedTagMap() throws Exception {
         String reason = "some reason";
         BedTagMap bedTagMap = new BedTagMap();
-        bedTagMapService.delete(bedTagMap, reason);
-        verify(bedTagMapDAO, times(1)).saveOrUpdate(any(BedTagMap.class));
+        bedTagMapService.deleteBedTagMap(bedTagMap, reason);
+        verify(bedTagMapDAO, times(1)).saveBedTagMap(any(BedTagMap.class));
     }
 }

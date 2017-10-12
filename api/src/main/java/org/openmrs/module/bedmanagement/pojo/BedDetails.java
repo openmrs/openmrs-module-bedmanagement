@@ -1,7 +1,10 @@
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.pojo;
 
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
+import org.openmrs.module.bedmanagement.entity.BedType;
+import org.openmrs.module.bedmanagement.entity.Bed;
 
 import java.util.ArrayList;
 import java.util.List;

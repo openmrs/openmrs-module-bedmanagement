@@ -16,8 +16,8 @@ package org.openmrs.module.bedmanagement.rest.resource;
 import org.openmrs.Encounter;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.bedmanagement.BedDetails;
-import org.openmrs.module.bedmanagement.BedManagementService;
+import org.openmrs.module.bedmanagement.pojo.BedDetails;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -41,9 +41,9 @@ public class BedDetailsResource extends DelegatingCrudResource<BedDetails> {
     @Override
     public BedDetails getByUniqueId(String id) {
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        BedDetails bedDetails = bedManagementService.getBedDetailsById(id);
+        BedDetails bedDetails = bedManagementService.getBedDetailsByBedId(id);
         if (bedDetails == null)
-            bedDetails = bedManagementService.getBedDetailsByUuid(id);
+            bedDetails = bedManagementService.getBedDetailsByBedUuid(id);
         return bedDetails;
     }
 
@@ -51,7 +51,7 @@ public class BedDetailsResource extends DelegatingCrudResource<BedDetails> {
     protected void delete(BedDetails bedDetails, String reason, RequestContext requestContext) throws ResponseException {
         String patientUuid = requestContext.getParameter("patientUuid");
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        bedManagementService.unAssignPatientFromBed(Context.getPatientService().getPatientByUuid(patientUuid));
+        bedManagementService.unassignPatientFromBed(Context.getPatientService().getPatientByUuid(patientUuid));
     }
 
     @Override
