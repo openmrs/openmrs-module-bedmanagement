@@ -16,18 +16,26 @@ package org.openmrs.module.bedmanagement;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BedManagementServiceImpl extends BaseOpenmrsService implements BedManagementService {
 
     BedManagementDAO dao;
 
+    BedDAO bedDao;
+
     public void setDao(BedManagementDAO dao) {
         this.dao = dao;
+    }
+
+    public void setBedDao(BedDAO bedDao) {
+        this.bedDao = bedDao;
     }
 
     @Override
@@ -44,7 +52,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     @Transactional
     public BedDetails assignPatientToBed(Patient patient, Encounter encounter, String bedId) {
         BedDetails prev = this.unAssignPatientFromBed(patient);
-        Bed bed = dao.getBedById(Integer.parseInt(bedId));
+        Bed bed = bedDao.getById(Integer.parseInt(bedId));
         BedDetails current = dao.assignPatientToBed(patient, encounter, bed);
         BedPatientAssignment prevAssignment = (prev != null) ? prev.getLastAssignment() : null;
         current.setLastAssignment(prevAssignment);
@@ -53,9 +61,28 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 
     @Override
     public Bed getBedById(int id) {
-        return dao.getBedById(id);
+        return bedDao.getById(id);
     }
 
+    @Override
+    public Bed getBedByUuid(String uuid) {
+        return bedDao.getByUuid(uuid);
+    }
+
+    @Override
+    public Bed saveBed(Bed bed) {
+        bedDao.save(bed);
+        return bed;
+    }
+
+    @Override
+    public void deleteBed(Bed bed, String reason) {
+        bed.setVoided(true);
+        bed.setDateVoided(new Date());
+        bed.setVoidReason(reason);
+        bed.setVoidedBy(Context.getAuthenticatedUser());
+        bedDao.save(bed);
+    }
 
     @Override
     public BedDetails getBedAssignmentDetailsByPatient(Patient patient) {
@@ -70,7 +97,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 
     @Override
     public BedDetails getBedDetailsById(String id) {
-        Bed bed = dao.getBedById(Integer.parseInt(id));
+        Bed bed = bedDao.getById(Integer.parseInt(id));
         if (bed != null) {
             List<BedPatientAssignment> currentAssignments = dao.getCurrentAssignmentsByBed(bed);
             Location location = dao.getWardForBed(bed);
@@ -82,7 +109,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 
     @Override
     public BedDetails getBedDetailsByUuid(String uuid) {
-        Bed bed = dao.getBedByUuid(uuid);
+        Bed bed = bedDao.getByUuid(uuid);
         if (bed != null) {
             List<BedPatientAssignment> currentAssignment = dao.getCurrentAssignmentsByBed(bed);
             Location location = dao.getWardForBed(bed);
