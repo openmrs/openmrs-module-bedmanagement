@@ -13,7 +13,9 @@
  */
 package org.openmrs.module.bedmanagement.rest.resource;
 
+import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.Bed;
+import org.openmrs.module.bedmanagement.BedManagementService;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
@@ -50,13 +52,13 @@ public class BedResource extends DelegatingCrudResource<Bed> {
     }
 
     @Override
-    public Bed getByUniqueId(String id) {
-        return null;
+    public Bed getByUniqueId(String uuid) {
+        return Context.getService(BedManagementService.class).getBedByUuid(uuid);
     }
 
     @Override
-    protected void delete(Bed bed, String s, RequestContext requestContext) throws ResponseException {
-        throw new ResourceDoesNotSupportOperationException("delete not allowed on bed resource");
+    protected void delete(Bed bed, String reason, RequestContext requestContext) throws ResponseException {
+        Context.getService(BedManagementService.class).deleteBed(bed, reason);
     }
 
     @Override
@@ -66,7 +68,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
 
     @Override
     public Bed save(Bed bed) {
-        throw new ResourceDoesNotSupportOperationException("save not allowed on bed resource");
+        return Context.getService(BedManagementService.class).saveBed(bed);
     }
 
     @Override
