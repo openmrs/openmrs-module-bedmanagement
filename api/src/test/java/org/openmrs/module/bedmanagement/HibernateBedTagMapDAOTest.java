@@ -17,6 +17,9 @@ public class HibernateBedTagMapDAOTest extends BaseModuleWebContextSensitiveTest
     @Autowired
     BedManagementDAO bedManagementDAO;
 
+    @Autowired
+    BedDAO bedDAO;
+
     @Before
     public void beforeAllTests() throws Exception {
         executeDataSet("bedTagMapTestDataSet.xml");
@@ -25,7 +28,7 @@ public class HibernateBedTagMapDAOTest extends BaseModuleWebContextSensitiveTest
     @Test
     public void shouldGetBedTagMapByUuid() throws Exception {
         BedTagMap bedTagMap = bedTagMapDAO.getBedTagMapByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f4");
-        Bed bed = bedManagementDAO.getBedByUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb");
+        Bed bed = bedDAO.getByUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb");
         BedTag bedTag = bedTagMapDAO.getBedTagByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f1");
         assertNotNull(bedTagMap);
         assertEquals(bed, bedTagMap.getBed());
@@ -53,7 +56,7 @@ public class HibernateBedTagMapDAOTest extends BaseModuleWebContextSensitiveTest
 
     @Test
     public void shouldGetBedTagMapForAGivenBedAndBedTag() throws Exception {
-        Bed bed = bedManagementDAO.getBedByUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb");
+        Bed bed = bedDAO.getByUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb");
         BedTag bedTag = bedTagMapDAO.getBedTagByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f1");
         BedTagMap actualBedTagMap = bedTagMapDAO.getBedTagMapWithBedAndTag(bed, bedTag);
         BedTagMap expectedBedTagMap = bedTagMapDAO.getBedTagMapByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f4");
@@ -63,7 +66,7 @@ public class HibernateBedTagMapDAOTest extends BaseModuleWebContextSensitiveTest
 
     @Test
     public void shouldReturnNullWhenGivenBedAndBedTagAreNotMapped() throws Exception {
-        Bed bed = bedManagementDAO.getBedByUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb");
+        Bed bed = bedDAO.getByUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb");
         BedTag bedTag = bedTagMapDAO.getBedTagByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f2");
         BedTagMap actualBedTagMap = bedTagMapDAO.getBedTagMapWithBedAndTag(bed, bedTag);
         assertNull(actualBedTagMap);
@@ -71,7 +74,7 @@ public class HibernateBedTagMapDAOTest extends BaseModuleWebContextSensitiveTest
 
     @Test
     public void shouldAssignBedWithATag() throws Exception {
-        Bed bed = bedManagementDAO.getBedByUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb");
+        Bed bed = bedDAO.getByUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb");
         BedTag bedTag = bedTagMapDAO.getBedTagByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f2");
         BedTagMap bedTagMap = new BedTagMap();
         bedTagMap.setBed(bed);
