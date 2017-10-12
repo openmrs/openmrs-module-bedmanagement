@@ -29,10 +29,6 @@ public interface BedManagementDAO {
 
     BedDetails assignPatientToBed(Patient patient, Encounter encounter, Bed bed);
 
-    Bed getBedById(int id);
-
-    Bed getBedByUuid(String uuid);
-
     Bed getBedByPatient(Patient patient);
 
     Location getWardForBed(Bed bed);
@@ -46,4 +42,12 @@ public interface BedManagementDAO {
     Bed getLatestBedByVisit(String visitUuid);
 
     List<BedTag> getAllBedTags();
+
+    List<Integer> getAdmissionLocationIds();
+
+    List<Location> getWards();
+
+    Location getWardByUuid(String uuid);
+
+    List<Location> searchWardByName(String name);
 }

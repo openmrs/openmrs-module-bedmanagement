@@ -19,9 +19,12 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.annotation.Authorized;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.webservices.rest.SimpleObject;
+import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 public interface BedManagementService extends OpenmrsService {
@@ -35,7 +38,38 @@ public interface BedManagementService extends OpenmrsService {
     @Authorized(value = {"Assign Beds", "Edit Admission Locations"}, requireAll=true)
     BedDetails assignPatientToBed(Patient patient, Encounter encounter, String bedId);
 
+    @Authorized(value = {"Get Beds"}, requireAll=true)
     Bed getBedById(int id);
+
+    @Authorized(value = {"Get Beds"}, requireAll=true)
+    Bed getBedByUuid(String uuid);
+
+    @Authorized(value = {"Get Beds"}, requireAll=true)
+    List<Bed> listBeds(String locationUuid, String bedType, String status, Integer limit, Integer offset);
+
+    @Authorized(value = {"Edit Beds"}, requireAll=true)
+    Bed saveBed(Bed bed);
+
+    @Authorized(value = {"Edit Beds", "Get Locations"}, requireAll=true)
+    Bed saveBed(String uuid, SimpleObject properties) throws IllegalPropertyException;
+
+    @Authorized(value = {"Edit Beds"}, requireAll=true)
+    void deleteBed(Bed bed, String reason);
+
+    @Authorized(value = {"Get Bed Type"}, requireAll=true)
+    BedType getBedTypeById(int id);
+
+    @Authorized(value = {"Get Bed Type"}, requireAll=true)
+    List<BedType> listBedTypes(String name, Integer limit, Integer offset);
+
+    @Authorized(value = {"Edit Bed Type"}, requireAll=true)
+    BedType saveBedType(BedType bedType);
+
+    @Authorized(value = {"Edit Bed Type"}, requireAll=true)
+    BedType saveBedType(Integer id, SimpleObject properties);
+
+    @Authorized(value = {"Edit Bed Type"}, requireAll=true)
+    void deleteBedType(BedType bedType);
 
     @Authorized(value = {"Get Beds", "Get Admission Locations"}, requireAll=true)
     BedDetails getBedAssignmentDetailsByPatient(Patient patient);
@@ -57,4 +91,28 @@ public interface BedManagementService extends OpenmrsService {
 
     @Authorized(value = {"Get Tags"}, requireAll=true)
     List<BedTag> getAllBedTags();
+
+    @Authorized({"Get Admission Locations"})
+    List<Location> getAllWards();
+
+    @Authorized({"Get Admission Locations"})
+    List<Location> getWardsByName(String name);
+
+    @Authorized({"Get Admission Locations"})
+    Location getWardByUuid(String uuid);
+
+    @Authorized(value = "Get Beds", requireAll=true)
+    Long getTotalBeds(Location location);
+
+    @Authorized(value = "Get Beds", requireAll=true)
+    BedLocationMapping getBedLocationMappingByBedId(Integer bedId);
+
+    @Authorized(value = "Get Beds", requireAll=true)
+    BedLocationMapping getBedLocationMappingByLocationAndLayout(String locationUuid, Integer row, Integer column);
+
+    @Authorized(value = "Edit Beds", requireAll=true)
+    BedLocationMapping saveBedLocationMapping(String locationUuid, Integer row, Integer column, Bed bed);
+
+    @Authorized({"Edit Admission Locations", "Manage Locations"})
+    Location saveWard(String uuid, SimpleObject properties);
 }

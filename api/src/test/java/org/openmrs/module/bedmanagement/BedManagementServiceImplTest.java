@@ -27,10 +27,14 @@ public class BedManagementServiceImplTest {
     @Mock
     BedManagementDAO bedManagementDAO;
 
+    @Mock
+    BedDAO bedDAO;
+
     @Before
     public void setup() {
         bedManagementService = new BedManagementServiceImpl();
         bedManagementService.setDao(bedManagementDAO);
+        bedManagementService.setBedDao(bedDAO);
     }
 
     @Test
@@ -68,7 +72,7 @@ public class BedManagementServiceImplTest {
         previousAssignment.setEndDatetime(new Date());
         bed.setBedPatientAssignment(new HashSet<BedPatientAssignment>(Arrays.asList(currentAssignment, previousAssignment)));
 
-        when(bedManagementDAO.getBedById(bedId)).thenReturn(bed);
+        when(bedDAO.getById(bedId)).thenReturn(bed);
         when(bedManagementDAO.getWardForBed(bed)).thenReturn(ward);
         when(bedManagementDAO.getCurrentAssignmentsByBed(bed)).thenReturn(Arrays.asList(currentAssignment));
 
@@ -111,7 +115,7 @@ public class BedManagementServiceImplTest {
         stoppedBedAssignment.setEndDatetime(new Date());
         bed.setBedPatientAssignment(new LinkedHashSet<BedPatientAssignment>(Arrays.asList(currentAssignment1, currentAssignment2, stoppedBedAssignment)));
 
-        when(bedManagementDAO.getBedById(bedId)).thenReturn(bed);
+        when(bedDAO.getById(bedId)).thenReturn(bed);
         when(bedManagementDAO.getWardForBed(bed)).thenReturn(ward);
         when(bedManagementDAO.getCurrentAssignmentsByBed(bed)).thenReturn(Arrays.asList(currentAssignment1, currentAssignment2));
 
