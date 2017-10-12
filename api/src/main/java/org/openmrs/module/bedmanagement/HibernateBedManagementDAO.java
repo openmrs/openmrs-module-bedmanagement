@@ -124,18 +124,6 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
     }
 
     @Override
-    public Bed getBedById(int id) {
-        Bed bed = null;
-        bed = (Bed) sessionFactory.getCurrentSession().createQuery("from Bed b where b.id = :id").setInteger("id", id).uniqueResult();
-        return bed;
-    }
-
-    @Override
-    public Bed getBedByUuid(String uuid) {
-        return (Bed) sessionFactory.getCurrentSession().createQuery("from Bed b where b.uuid = :uuid").setString("uuid", uuid).uniqueResult();
-    }
-
-    @Override
     public Bed getBedByPatient(Patient patient) {
         Session session = sessionFactory.getCurrentSession();
         Bed bed = (Bed) session.createQuery("select bpa.bed.bedNumber as bedNumber,bpa.bed.id as id from BedPatientAssignment bpa " +

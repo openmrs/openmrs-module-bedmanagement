@@ -29,10 +29,6 @@ public interface BedManagementDAO {
 
     BedDetails assignPatientToBed(Patient patient, Encounter encounter, Bed bed);
 
-    Bed getBedById(int id);
-
-    Bed getBedByUuid(String uuid);
-
     Bed getBedByPatient(Patient patient);
 
     Location getWardForBed(Bed bed);
