@@ -23,10 +23,14 @@ import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentat
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
+import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
+import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
+
+import java.util.List;
 
 @Resource(name = RestConstants.VERSION_1 + "/bed", supportedClass = Bed.class, supportedOpenmrsVersions = {"1.9.*", "1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*"})
 public class BedResource extends DelegatingCrudResource<Bed> {
@@ -49,6 +53,20 @@ public class BedResource extends DelegatingCrudResource<Bed> {
             return description;
         }
         return null;
+    }
+
+    @Override
+    protected PageableResult doGetAll(RequestContext context) throws ResponseException {
+        List<Bed> bedList = Context.getService(BedManagementService.class).listBeds(null, null, context.getLimit(), context.getStartIndex());
+        return new AlreadyPaged<Bed>(context, bedList, false);
+    }
+
+    @Override
+    protected PageableResult doSearch(RequestContext context) {
+        String status = context.getParameter("status");
+        String bedType = context.getParameter("bedType");
+        List<Bed> bedList = Context.getService(BedManagementService.class).listBeds(bedType, status, context.getLimit(), context.getStartIndex());
+        return new AlreadyPaged<Bed>(context, bedList, false);
     }
 
     @Override
