@@ -1,7 +1,10 @@
 package org.openmrs.module.bedmanagement;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 
@@ -22,18 +25,19 @@ public class HibernateBedTypeDAO implements BedTypeDAO {
     }
 
     @Override
-    public List<BedType> getAll(Integer limit, Integer offset) {
-        String hql = "select bt " +
-                "from BedType bt ";
+    public List<BedType> getAll(String name, Integer limit, Integer offset) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedType.class);
 
-        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        if(name != null)
+            criteria.add(Restrictions.eq("name", name));
+
         if (limit != null) {
-            query.setMaxResults(limit);
+            criteria.setMaxResults(limit);
             if (offset != null)
-                query.setFirstResult(offset);
+                criteria.setFirstResult(offset);
         }
 
-        return query.list();
+        return criteria.list();
     }
 
     @Override
@@ -45,5 +49,20 @@ public class HibernateBedTypeDAO implements BedTypeDAO {
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
 
         return (BedType)  query.setParameter("name", name).uniqueResult();
+    }
+
+    @Override
+    public BedType save(BedType bedType) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.saveOrUpdate(bedType);
+        session.flush();
+        return bedType;
+    }
+
+    @Override
+    public void delete(BedType bedType) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.delete(bedType);
+        session.flush();
     }
 }
