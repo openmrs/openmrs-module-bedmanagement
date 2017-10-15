@@ -113,7 +113,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
         if (uuid != null) {
             bed = getBedByUuid(uuid);
             if (bed == null)
-                throw new IllegalPropertyException("Invalid not exist");
+                throw new IllegalPropertyException("Bed not exist");
 
             if (properties.get("bedNumber") != null)
                 bed.setBedNumber((String) properties.get("bedNumber"));
@@ -144,6 +144,56 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
         bed.setVoidReason(reason);
         bed.setVoidedBy(Context.getAuthenticatedUser());
         bedDao.save(bed);
+    }
+
+    @Override
+    public BedType getBedTypeById(int id) {
+        return bedTypeDao.getById(id);
+    }
+
+    @Override
+    public List<BedType> listBedTypes(String name, Integer limit, Integer offset) {
+        return bedTypeDao.getAll(name, limit, offset);
+    }
+
+    @Override
+    public BedType saveBedType(BedType bedType) {
+        bedTypeDao.save(bedType);
+        return bedType;
+    }
+
+    @Override
+    public BedType saveBedType(Integer id, SimpleObject properties) {
+        BedType bedType;
+        if (id != null) {
+            bedType = getBedTypeById(id);
+            if (bedType == null)
+                throw new IllegalPropertyException("Bed Type not exist");
+
+            if (properties.get("name") != null)
+                bedType.setName((String) properties.get("name"));
+
+            if (properties.get("displayName") != null)
+                bedType.setDisplayName((String) properties.get("displayName"));
+
+            if (properties.get("description") != null)
+                bedType.setDescription((String) properties.get("description"));
+        } else {
+            bedType = new BedType();
+            if (properties.get("name") == null || properties.get("displayName") == null)
+                throw new IllegalPropertyException("Required parameters: name, displayName");
+            bedType.setName((String) properties.get("name"));
+            bedType.setDisplayName((String) properties.get("displayName"));
+            bedType.setDescription((String) properties.get("description"));
+        }
+
+        bedTypeDao.save(bedType);
+        return bedType;
+    }
+
+    @Override
+    public void deleteBedType(BedType bedType) {
+        bedTypeDao.delete(bedType);
     }
 
     @Override

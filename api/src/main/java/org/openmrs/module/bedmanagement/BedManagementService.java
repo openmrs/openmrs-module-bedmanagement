@@ -55,6 +55,21 @@ public interface BedManagementService extends OpenmrsService {
     @Authorized(value = {"Edit Beds"}, requireAll=true)
     void deleteBed(Bed bed, String reason);
 
+    @Authorized(value = {"Get Bed Type"}, requireAll=true)
+    BedType getBedTypeById(int id);
+
+    @Authorized(value = {"Get Bed Type"}, requireAll=true)
+    List<BedType> listBedTypes(String name, Integer limit, Integer offset);
+
+    @Authorized(value = {"Edit Bed Type"}, requireAll=true)
+    BedType saveBedType(BedType bedType);
+
+    @Authorized(value = {"Edit Bed Type"}, requireAll=true)
+    BedType saveBedType(Integer id, SimpleObject properties);
+
+    @Authorized(value = {"Edit Bed Type"}, requireAll=true)
+    void deleteBedType(BedType bedType);
+
     @Authorized(value = {"Get Beds", "Get Admission Locations"}, requireAll=true)
     BedDetails getBedAssignmentDetailsByPatient(Patient patient);
 
