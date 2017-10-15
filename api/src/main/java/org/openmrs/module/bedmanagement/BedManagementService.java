@@ -41,6 +41,9 @@ public interface BedManagementService extends OpenmrsService {
     @Authorized(value = {"Get Beds"}, requireAll=true)
     Bed getBedByUuid(String uuid);
 
+    @Authorized(value = {"Get Beds"}, requireAll=true)
+    List<Bed> listBeds(String bedType, String status, Integer limit, Integer offset);
+
     @Authorized(value = {"Edit Beds"}, requireAll=true)
     Bed saveBed(Bed bed);
 
