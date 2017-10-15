@@ -38,6 +38,13 @@
                         </property>
                     </bean>
                 </property>
+                <property name="bedTypeDao">
+                    <bean class="${project.parent.groupId}.${project.parent.artifactId}.HibernateBedTypeDAO">
+                        <property name="sessionFactory">
+                            <ref bean="sessionFactory"/>
+                        </property>
+                    </bean>
+                </property>
             </bean>
         </property>
         <property name="preInterceptors">
@@ -127,6 +134,26 @@
         </property>
         <property name="target">
             <bean class="org.openmrs.module.bedmanagement.HibernateBedDAO">
+                <property name="sessionFactory">
+                    <ref bean="sessionFactory"/>
+                </property>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean id="bedTypeDao"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.bedmanagement.HibernateBedTypeDAO">
                 <property name="sessionFactory">
                     <ref bean="sessionFactory"/>
                 </property>

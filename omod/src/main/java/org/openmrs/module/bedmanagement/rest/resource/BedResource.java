@@ -16,6 +16,8 @@ package org.openmrs.module.bedmanagement.rest.resource;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.Bed;
 import org.openmrs.module.bedmanagement.BedManagementService;
+import org.openmrs.module.webservices.rest.SimpleObject;
+import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
@@ -27,6 +29,7 @@ import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
 import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
+import org.openmrs.module.webservices.rest.web.response.ConversionException;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
@@ -82,6 +85,21 @@ public class BedResource extends DelegatingCrudResource<Bed> {
     @Override
     public Bed newDelegate() {
         return new Bed();
+    }
+
+    @Override
+    public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
+        if (propertiesToCreate.get("bedNumber") == null || propertiesToCreate.get("bedType") == null)
+            throw new ConversionException("The patient property is missing");
+
+        Bed bed = Context.getService(BedManagementService.class).saveBed(null, propertiesToCreate);
+        return ConversionUtil.convertToRepresentation(bed, Representation.FULL);
+    }
+
+    @Override
+    public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
+        Bed bed = Context.getService(BedManagementService.class).saveBed(uuid, propertiesToUpdate);
+        return ConversionUtil.convertToRepresentation(bed, Representation.FULL);
     }
 
     @Override
