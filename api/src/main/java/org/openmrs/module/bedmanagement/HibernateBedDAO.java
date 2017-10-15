@@ -1,7 +1,10 @@
 package org.openmrs.module.bedmanagement;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+
+import java.util.List;
 
 public class HibernateBedDAO implements BedDAO {
 
@@ -17,6 +20,80 @@ public class HibernateBedDAO implements BedDAO {
                 .createQuery("from Bed b where b.id = :id")
                 .setInteger("id", id)
                 .uniqueResult();
+    }
+
+    @Override
+    public List<Bed> getAll(Integer limit, Integer offset) {
+        String hql = "select b " +
+                "from Bed b " +
+                "where b.voided=:voided";
+
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("voided", false);
+
+        if (limit != null) {
+            query.setMaxResults(limit);
+            if (offset != null)
+                query.setFirstResult(offset);
+        }
+
+        return query.list();
+    }
+
+    @Override
+    public List<Bed> searchByBedType(String bedType, Integer limit, Integer offset) {
+        String hql = "select b " +
+                "from Bed b " +
+                "where b.voided=:voided and b.bedType.name=:bedType";
+
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("voided", false);
+        query.setParameter("bedType", bedType);
+        if (limit != null) {
+            query.setMaxResults(limit);
+            if (offset != null)
+                query.setFirstResult(offset);
+        }
+
+        return query.list();
+    }
+
+    @Override
+    public List<Bed> searchByBedStatus(String status, Integer limit, Integer offset) {
+        String hql = "select b " +
+                "from Bed b " +
+                "where b.voided=:voided and b.status=:status";
+
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("voided", false);
+        query.setParameter("status", status);
+        if (limit != null) {
+            query.setMaxResults(limit);
+            if (offset != null)
+                query.setFirstResult(offset);
+        }
+
+        return query.list();
+    }
+
+    @Override
+    public List<Bed> searchByBedTypeAndStatus(String bedType, String status, Integer limit, Integer offset) {
+        String hql = "select b " +
+                "from Bed b " +
+                "where b.voided=:voided and b.status=:status and b.bedType.name=:bedType";
+
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("voided", false);
+        query.setParameter("status", status);
+        query.setParameter("bedType", bedType);
+
+        if (limit != null) {
+            query.setMaxResults(limit);
+            if (offset != null)
+                query.setFirstResult(offset);
+        }
+
+        return query.list();
     }
 
     @Override
