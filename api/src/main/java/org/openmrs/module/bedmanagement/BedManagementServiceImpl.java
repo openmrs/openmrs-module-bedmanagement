@@ -18,6 +18,8 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.webservices.rest.SimpleObject;
+import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -30,12 +32,18 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 
     BedDAO bedDao;
 
+    BedTypeDAO bedTypeDao;
+
     public void setDao(BedManagementDAO dao) {
         this.dao = dao;
     }
 
     public void setBedDao(BedDAO bedDao) {
         this.bedDao = bedDao;
+    }
+
+    public void setBedTypeDao(BedTypeDAO bedTypeDao) {
+        this.bedTypeDao = bedTypeDao;
     }
 
     @Override
@@ -87,6 +95,44 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 
     @Override
     public Bed saveBed(Bed bed) {
+        bedDao.save(bed);
+        return bed;
+    }
+
+    @Override
+    public Bed saveBed(String uuid, SimpleObject properties) throws IllegalPropertyException {
+        Bed bed;
+        BedType bedType = null;
+        if (properties.get("bedType") != null) {
+            String bedTypeName = properties.get("bedType");
+            bedType = bedTypeDao.getByName(bedTypeName);
+            if (bedType == null)
+                throw new IllegalPropertyException("Invalid bed type name");
+        }
+
+        if (uuid != null) {
+            bed = getBedByUuid(uuid);
+            if (bed == null)
+                throw new IllegalPropertyException("Invalid not exist");
+
+            if (properties.get("bedNumber") != null)
+                bed.setBedNumber((String) properties.get("bedNumber"));
+
+            if (properties.get("status") != null)
+                bed.setStatus((String) properties.get("status"));
+
+            if (bedType != null) {
+                bed.setBedType(bedType);
+            }
+        } else {
+            bed = new Bed();
+            if (properties.get("bedNumber") == null || properties.get("bedType") == null)
+                throw new IllegalPropertyException("bedNumber & bedType should not be null");
+            bed.setBedNumber((String) properties.get("bedNumber"));
+            bed.setStatus(properties.get("status") != null ? (String) properties.get("status") : "AVAILABLE");
+            bed.setBedType(bedType);
+        }
+
         bedDao.save(bed);
         return bed;
     }

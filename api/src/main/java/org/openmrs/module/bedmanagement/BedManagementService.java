@@ -19,6 +19,8 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.annotation.Authorized;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.webservices.rest.SimpleObject;
+import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -46,6 +48,9 @@ public interface BedManagementService extends OpenmrsService {
 
     @Authorized(value = {"Edit Beds"}, requireAll=true)
     Bed saveBed(Bed bed);
+
+    @Authorized(value = {"Edit Beds"}, requireAll=true)
+    Bed saveBed(String uuid, SimpleObject properties) throws IllegalPropertyException;
 
     @Authorized(value = {"Edit Beds"}, requireAll=true)
     void deleteBed(Bed bed, String reason);
