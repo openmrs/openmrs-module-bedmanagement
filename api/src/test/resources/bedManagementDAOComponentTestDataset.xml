@@ -16,16 +16,16 @@
     <bed_type bed_type_id="2" name="luxury" description="luxury bed" display_name="LXY"/>
     <bed_type bed_type_id="3" name="normal" description="normal bed" display_name="NRM"/>
 
-    <bed bed_id="1" bed_number="304-a" status="OCCUPIED" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="2" bed_number="304-b" status="AVAILABLE" bed_type_id="2" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="3" bed_number="304-c" status="AVAILABLE" bed_type_id="2" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="4" bed_number="304-d" status="AVAILABLE" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="5" bed_number="305-a" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="6" bed_number="305-b" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="7" bed_number="305-c" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="8" bed_number="305-d" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="9" bed_number="306-a" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="10" bed_number="306-b" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="1" uuid="bb02b84b-d225-11e4-9c67-080027b662ec" bed_number="304-a" status="OCCUPIED" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="2" uuid="bb049d6d-d225-11e4-9c67-080027b662ec" bed_number="304-b" status="AVAILABLE" bed_type_id="2" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="3" uuid="bb0906fa-d225-11e4-9c67-080027b662ec" bed_number="304-c" status="AVAILABLE" bed_type_id="2" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="4" uuid="bb094d57-d225-11e4-9c67-080027b662ec" bed_number="304-d" status="AVAILABLE" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="5" uuid="bb098ed0-d225-11e4-9c67-080027b662ec" bed_number="305-a" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="6" uuid="bb09cacd-d225-11e4-9c67-080027b662ec" bed_number="305-b" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="7" uuid="bb0a083a-d225-11e4-9c67-080027b662ec" bed_number="305-c" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="8" uuid="bb0a43db-d225-11e4-9c67-080027b662ec" bed_number="305-d" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="9" uuid="bb0a7ad0-d225-11e4-9c67-080027b662ec" bed_number="306-a" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="10" uuid="bb0f8866-d225-11e4-9c67-080027b662ec" bed_number="306-b" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
 
     <bed_location_map bed_location_map_id="1" location_id="123451" row_number="1" column_number="1" bed_id="1"/>
     <bed_location_map bed_location_map_id="2" location_id="123451" row_number="1" column_number="2" bed_id="2"/>
