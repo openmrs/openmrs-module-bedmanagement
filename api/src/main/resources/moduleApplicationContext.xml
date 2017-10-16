@@ -166,4 +166,24 @@
             <ref bean="transactionAttributeSource"/>
         </property>
     </bean>
+
+    <bean id="bedLocationMappingDao"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.bedmanagement.HibernateBedLocationMappingDAO">
+                <property name="sessionFactory">
+                    <ref bean="sessionFactory"/>
+                </property>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
 </beans>
