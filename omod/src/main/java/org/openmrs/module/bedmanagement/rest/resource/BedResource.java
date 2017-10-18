@@ -90,7 +90,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
     @Override
     public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
         if (propertiesToCreate.get("bedNumber") == null || propertiesToCreate.get("bedType") == null)
-            throw new ConversionException("The patient property is missing");
+            throw new ConversionException("Required parameters: bedNumber, bedType");
 
         Bed bed = Context.getService(BedManagementService.class).saveBed(null, propertiesToCreate);
         return ConversionUtil.convertToRepresentation(bed, Representation.FULL);
