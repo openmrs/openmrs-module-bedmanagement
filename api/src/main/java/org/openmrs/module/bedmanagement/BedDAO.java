@@ -16,4 +16,8 @@ public interface BedDAO {
     Bed getByUuid(String uuid);
 
     Bed save(Bed bed);
+
+    List<Bed> getByLocationUuid(String uuid);
+
+    Long getTotalBedByLocationUuid(String uuid);
 }

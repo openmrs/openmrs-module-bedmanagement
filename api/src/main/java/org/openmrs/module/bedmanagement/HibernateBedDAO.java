@@ -111,4 +111,30 @@ public class HibernateBedDAO implements BedDAO {
         session.flush();
         return bed;
     }
+
+    @Override
+    public List<Bed> getByLocationUuid(String uuid) {
+        String hql = "select blm.bed " +
+                "from BedLocationMapping blm " +
+                "where blm.bed.voided=:voided and blm.location.uuid=:uuid";
+
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("voided", false);
+        query.setParameter("uuid", uuid);
+
+        return query.list();
+    }
+
+    @Override
+    public Long getTotalBedByLocationUuid(String uuid) {
+        String hql = "select count(blm.bed) " +
+                "from BedLocationMapping blm " +
+                "where blm.bed.voided=:voided and blm.location.uuid=:uuid";
+
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("voided", false);
+        query.setParameter("uuid", uuid);
+
+        return (Long) query.uniqueResult();
+    }
 }
