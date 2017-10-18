@@ -42,4 +42,12 @@ public interface BedManagementDAO {
     Bed getLatestBedByVisit(String visitUuid);
 
     List<BedTag> getAllBedTags();
+
+    List<Integer> getAdmissionLocationIds();
+
+    List<Location> getWards();
+
+    Location getWardByUuid(String uuid);
+
+    List<Location> searchWardByName(String name);
 }

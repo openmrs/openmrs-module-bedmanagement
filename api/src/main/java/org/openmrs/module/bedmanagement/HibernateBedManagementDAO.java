@@ -13,19 +13,16 @@
  */
 package org.openmrs.module.bedmanagement;
 
-import org.hibernate.SessionFactory;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class HibernateBedManagementDAO implements BedManagementDAO {
@@ -88,6 +85,57 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         AdmissionLocation admissionLocation = new AdmissionLocation();
         admissionLocation.setBedLayouts(bedLayouts);
         return admissionLocation;
+    }
+
+    @Override
+    public List<Integer> getAdmissionLocationIds(){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "SELECT ltm.location_id\n" +
+                "  FROM location_tag_map ltm\n" +
+                "    LEFT JOIN location_tag lt ON ltm.location_tag_id = lt.location_tag_id\n" +
+                "  WHERE lt.name = 'Admission Location'";
+
+        SQLQuery query = session.createSQLQuery(sql);
+        return query.list();
+    }
+
+    @Override
+    public List<Location> getWards(){
+        List<Integer> admissionLocationIds =  getAdmissionLocationIds();
+        String sql = "select l from Location l " +
+                "where l.locationId in :admissionLocationIds and " +
+                "(l.parentLocation.locationId not in :admissionLocationIds or l.parentLocation.locationId is null) and " +
+                "l.retired=0";
+        Query query = sessionFactory.getCurrentSession().createQuery(sql);
+        query.setParameterList("admissionLocationIds", admissionLocationIds);
+        return query.list();
+    }
+
+    @Override
+    public List<Location> searchWardByName(String name) {
+        List<Integer> admissionLocationIds =  getAdmissionLocationIds();
+        String sql = "select l from Location l " +
+                "where l.locationId in :admissionLocationIds and " +
+                "(l.parentLocation.locationId not in :admissionLocationIds or l.parentLocation.locationId is null) and " +
+                "l.retired=0 and l.name=:name";
+        Query query = sessionFactory.getCurrentSession().createQuery(sql);
+        System.out.println(query.getQueryString());
+        query.setParameter("name", name);
+        query.setParameterList("admissionLocationIds", admissionLocationIds);
+        return query.list();
+    }
+
+    @Override
+    public Location getWardByUuid(String uuid) {
+        List<Integer> admissionLocationIds =  getAdmissionLocationIds();
+        String sql = "select l from Location l " +
+                "where l.locationId in :admissionLocationIds and " +
+                "(l.parentLocation.locationId not in :admissionLocationIds or l.parentLocation.locationId is null) and " +
+                "l.uuid=:uuid";
+        Query query = sessionFactory.getCurrentSession().createQuery(sql);
+        query.setParameter("uuid", uuid);
+        query.setParameterList("admissionLocationIds", admissionLocationIds);
+        return (Location) query.uniqueResult();
     }
 
     private List<Location> getPhysicalLocationsByLocationTagAndParentLocation(String locationTagName, Location location, Session session) {
