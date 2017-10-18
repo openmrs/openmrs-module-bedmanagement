@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openmrs.Location;
+import org.openmrs.api.db.LocationDAO;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -64,13 +66,15 @@ public class HiberanateBedDAOTest extends BaseModuleWebContextSensitiveTest {
         Assert.assertEquals("normal", normalBedList.get(2).getBedType().getName());
     }
 
+    @Test
     public void shouldSearchByStatus() throws Exception {
         List<Bed> bedList = bedDao.searchByBedStatus("OCCUPIED", 5, 0);
 
-        Assert.assertEquals(1, bedList.size());
+        Assert.assertEquals(3, bedList.size());
         Assert.assertEquals("OCCUPIED", bedList.get(0).getStatus());
     }
 
+    @Test
     public void shouldSearchByBedTypeAndStatus() throws Exception {
         List<Bed> bedList = bedDao.searchByBedTypeAndStatus("deluxe", "AVAILABLE", 5, 0);
         Assert.assertEquals(1, bedList.size());
@@ -78,7 +82,7 @@ public class HiberanateBedDAOTest extends BaseModuleWebContextSensitiveTest {
         Assert.assertEquals("deluxe", bedList.get(0).getBedType().getName());
     }
 
-
+    @Test
     public void shouldSaveBed() throws Exception {
         Bed bed = new Bed();
         bed.setBedNumber("100-a");
@@ -89,5 +93,11 @@ public class HiberanateBedDAOTest extends BaseModuleWebContextSensitiveTest {
 
         Assert.assertNotNull(bed.getId());
         Assert.assertNotNull(bedDao.getById(bed.getId()));
+    }
+
+    @Test
+    public void shouldReturnBedNumber() throws Exception{
+       Long num =  bedDao.getTotalBedByLocationUuid("98bc9b32-9d1a-11e2-8137-0800271c1b56");
+        System.out.println(num);
     }
 }
