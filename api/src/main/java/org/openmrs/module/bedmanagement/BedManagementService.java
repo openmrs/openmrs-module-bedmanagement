@@ -90,4 +90,19 @@ public interface BedManagementService extends OpenmrsService {
 
     @Authorized(value = {"Get Tags"}, requireAll=true)
     List<BedTag> getAllBedTags();
+
+    @Authorized({"Get Admission Locations"})
+    List<Location> getAllWards();
+
+    @Authorized({"Get Admission Locations"})
+    List<Location> getWardsByName(String name);
+
+    @Authorized({"Get Admission Locations"})
+    Location getWardByUuid(String uuid);
+
+    @Authorized(value = "Get Beds", requireAll=true)
+    Long getTotalBeds(Location location);
+
+    @Authorized({"Edit Admission Locations"})
+    Location saveWard(String uuid, SimpleObject properties);
 }
