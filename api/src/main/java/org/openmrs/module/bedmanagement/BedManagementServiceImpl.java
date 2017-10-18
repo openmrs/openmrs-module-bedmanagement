@@ -19,9 +19,12 @@ import org.openmrs.LocationTag;
 import org.openmrs.Patient;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.db.LocationDAO;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -34,7 +37,9 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 
     BedTypeDAO bedTypeDao;
 
-    LocationService locationService;
+    @Autowired
+    @Qualifier("locationService")
+    private LocationService locationService;
 
     public void setDao(BedManagementDAO dao) {
         this.dao = dao;
@@ -46,10 +51,6 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 
     public void setBedTypeDao(BedTypeDAO bedTypeDao) {
         this.bedTypeDao = bedTypeDao;
-    }
-
-    public void setLocationService(LocationService locationService) {
-        this.locationService = locationService;
     }
 
     @Override
