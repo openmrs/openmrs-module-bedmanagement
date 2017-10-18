@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
     <!-- this creates admission locations for testing bed management dao. We also add few non admission locations. -->
-
+    <location location_id="12348" name="Ganiyari" description="This is a small village in central India." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="285e8574-9d21-11e2-8137-0800271c1b75"/>
     <!--first ward-->
-    <location location_id="12345" name="Cardio ward on first floor" description="This ward houses cardio patients. It is a general cardio ward." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="7779d653-393b-4118-9c83-a3715b82d4ac"/>
+    <location location_id="12345" name="Cardio ward on first floor" description="This ward houses cardio patients. It is a general cardio ward." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="7779d653-393b-4118-9c83-a3715b82d4ac" parent_location="12348"/>
     <location location_id="123451" name="Physical Location for Cardio ward on first floor" description="This ward houses cardio patients. It is a general cardio ward." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="98bc9b32-9d1a-11e2-8137-0800271c1b75" parent_location="12345" />
 
     <location_tag location_tag_id="12" name="Admission Location" creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="ad7311e1-1674-4740-8791-07563925336e" />
@@ -48,7 +48,7 @@
     
 
     <!--second ward-->
-    <location location_id="12347" name="Orthopaedic ward" description="This ward houses orthopaedic patients." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="19e023e8-20ee-4237-ade6-9e68f897b7a9"/>
+    <location location_id="12347" name="Orthopaedic ward" description="This ward houses orthopaedic patients." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="19e023e8-20ee-4237-ade6-9e68f897b7a9" parent_location="12348"/>
     <location location_id="123452" name="Physical Location for Orthopaedic ward" description="This ward houses Orthopaedic ward." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="98bc9b32-9d1a-11e2-8137-0800271c1b56" parent_location="12347" />
 
     <bed bed_id="11" bed_number="307-a" status= "OCCUPIED" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
@@ -104,8 +104,6 @@
 
     <!--additional wards-->
     <location location_id="12346" name="Cardio ward on third floor" description="This ward houses cardio patients. It is a special cardio ward." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="e26cea2c-1b9f-666e-6511-f3ef6c88af6f"/>
-    <location location_id="12348" name="Ganiyari" description="This is a small village in central India." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="285e8574-9d21-11e2-8137-0800271c1b75"/>
-
     <location_tag location_tag_id="13" name="Visit Location" creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="6f7e82dd-246d-46af-aaf1-04b00cac498b" />
 
     <location_tag_map location_id="12348" location_tag_id="13" />
