@@ -15,11 +15,13 @@ package org.openmrs.module.bedmanagement.rest.resource;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.Bed;
+import org.openmrs.module.bedmanagement.BedLocationMapping;
 import org.openmrs.module.bedmanagement.BedManagementService;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
+import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
@@ -42,20 +44,38 @@ public class BedResource extends DelegatingCrudResource<Bed> {
         if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("id");
+            description.addProperty("uuid");
             description.addProperty("bedNumber");
             description.addProperty("bedType");
+            description.addProperty("row");
+            description.addProperty("column");
             description.addProperty("status", Representation.DEFAULT);
             return description;
         }
         if ((rep instanceof FullRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("id");
+            description.addProperty("uuid");
             description.addProperty("bedNumber");
             description.addProperty("bedType");
+            description.addProperty("row");
+            description.addProperty("column");
             description.addProperty("status", Representation.FULL);
             return description;
         }
         return null;
+    }
+
+    @PropertyGetter("row")
+    public Object getRow(Bed bed) {
+        BedLocationMapping bedLocationMapping = Context.getService(BedManagementService.class).getBedLocationMappingByBedId(bed.getId());
+        return bedLocationMapping.getRow();
+    }
+
+    @PropertyGetter("column")
+    public Object getColumn(Bed bed){
+        BedLocationMapping bedLocationMapping = Context.getService(BedManagementService.class).getBedLocationMappingByBedId(bed.getId());
+        return bedLocationMapping.getColumn();
     }
 
     @Override
