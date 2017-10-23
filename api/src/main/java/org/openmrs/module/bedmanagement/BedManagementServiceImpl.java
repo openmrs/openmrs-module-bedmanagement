@@ -25,6 +25,7 @@ import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.instrument.classloading.LoadTimeWeaver;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -38,7 +39,6 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     BedTypeDAO bedTypeDao;
 
     @Autowired
-    @Qualifier("locationService")
     private LocationService locationService;
 
     public void setDao(BedManagementDAO dao) {
@@ -291,33 +291,48 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 
     @Override
     public Location saveWard(String uuid, SimpleObject properties) {
-        Location ward;
-        LocationTag admissionLocationTag = locationService.getLocationTagByName(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION);
-        if (uuid != null) {
-            ward = locationService.getLocationByUuid(uuid);
-            if (ward == null || !ward.getTags().contains(admissionLocationTag))
-                throw new IllegalPropertyException("Location not exist");
-
-            if (properties.get("name") != null)
-                ward.setName((String) properties.get("name"));
-
-            if (properties.get("description") != null)
-                ward.setDescription((String) properties.get("description"));
-        } else {
-            ward = new Location();
-            if (properties.get("name") == null)
-                throw new IllegalPropertyException("Required parameters: name");
-            ward.setName((String) properties.get("name"));
-            ward.setDescription((String) properties.get("description"));
-
-            Set<LocationTag> locationTagSet = new HashSet<>();
-            locationTagSet.add(admissionLocationTag);
-            ward.setTags(locationTagSet);
+        Location ward = constructLocation(uuid, properties.get("name"), properties.get("description"));
+        if (properties.get("room") != null) {
+            HashMap<String, Object> roomProperties = properties.get("room");
+            Location room = constructLocation(roomProperties.get("uuid"), roomProperties.get("name"), roomProperties.get("description"));
+            room.setParentLocation(ward);
+            Set<Location> rooms = ward.getChildLocations()!=null?ward.getChildLocations():new HashSet<Location>();
+            if(!rooms.contains(room)){
+                rooms.add(room);
+                ward.setChildLocations(rooms);
+            }
         }
 
         locationService.saveLocation(ward);
         return ward;
     }
+
+    private Location constructLocation(Object uuid, Object name, Object description) {
+        Location location = new Location();
+        LocationTag admissionLocationTag = locationService.getLocationTagByName(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION);
+
+        if (uuid != null) {
+            location = locationService.getLocationByUuid((String) uuid);
+            if (location == null || !location.getTags().contains(admissionLocationTag))
+                throw new IllegalPropertyException("Location not exist");
+        } else {
+            Set<LocationTag> locationTagSet = new HashSet<>();
+            locationTagSet.add(admissionLocationTag);
+            location.setTags(locationTagSet);
+        }
+
+        if (uuid == null && name == null)
+            throw new IllegalPropertyException("Missing required parameters: name");
+
+        if (name != null)
+            location.setName((String) name);
+
+        if (description != null)
+            location.setDescription((String) description);
+
+        return location;
+    }
+
 
     private BedDetails constructBedDetails(Bed bed, Location location, List<BedPatientAssignment> currentAssignments) {
         BedDetails bedDetails = new BedDetails();
