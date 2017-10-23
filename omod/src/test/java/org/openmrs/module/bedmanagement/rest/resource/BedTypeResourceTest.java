@@ -40,7 +40,7 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
         MockHttpServletRequest request = request(RequestMethod.GET, getURI());
         SimpleObject object = deserialize(handle(request));
         List results = (ArrayList) object.get("results");
-        System.out.print(results);
+
         HashMap bedType1 = (LinkedHashMap) results.get(0);
         HashMap bedType2 = (LinkedHashMap) results.get(1);
         HashMap bedType3 = (LinkedHashMap) results.get(2);
