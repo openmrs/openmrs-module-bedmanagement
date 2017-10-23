@@ -119,7 +119,6 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
                 "(l.parentLocation.locationId not in :admissionLocationIds or l.parentLocation.locationId is null) and " +
                 "l.retired=0 and l.name=:name";
         Query query = sessionFactory.getCurrentSession().createQuery(sql);
-        System.out.println(query.getQueryString());
         query.setParameter("name", name);
         query.setParameterList("admissionLocationIds", admissionLocationIds);
         return query.list();
@@ -131,7 +130,7 @@ public class HibernateBedManagementDAO implements BedManagementDAO {
         String sql = "select l from Location l " +
                 "where l.locationId in :admissionLocationIds and " +
                 "(l.parentLocation.locationId not in :admissionLocationIds or l.parentLocation.locationId is null) and " +
-                "l.uuid=:uuid";
+                "l.retired=0 and l.uuid=:uuid";
         Query query = sessionFactory.getCurrentSession().createQuery(sql);
         query.setParameter("uuid", uuid);
         query.setParameterList("admissionLocationIds", admissionLocationIds);
