@@ -1,6 +1,7 @@
 package org.openmrs.module.bedmanagement;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BedDAO {
     Bed getById(int id);
@@ -20,4 +21,6 @@ public interface BedDAO {
     List<Bed> getByLocationUuid(String uuid);
 
     Long getTotalBedByLocationUuid(String uuid);
+
+    BedLocationMapping getBedLocationMappingByBedId(Integer bedId);
 }

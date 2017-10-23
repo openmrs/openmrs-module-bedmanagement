@@ -24,6 +24,7 @@ import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 public interface BedManagementService extends OpenmrsService {
@@ -102,6 +103,9 @@ public interface BedManagementService extends OpenmrsService {
 
     @Authorized(value = "Get Beds", requireAll=true)
     Long getTotalBeds(Location location);
+
+    @Authorized(value = "Get Beds", requireAll=true)
+    BedLocationMapping getBedLocationMappingByBedId(Integer bedId);
 
     @Authorized({"Edit Admission Locations"})
     Location saveWard(String uuid, SimpleObject properties);

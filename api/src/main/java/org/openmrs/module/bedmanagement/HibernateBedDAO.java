@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
+import java.util.Map;
 
 public class HibernateBedDAO implements BedDAO {
 
@@ -136,5 +137,17 @@ public class HibernateBedDAO implements BedDAO {
         query.setParameter("uuid", uuid);
 
         return (Long) query.uniqueResult();
+    }
+
+    @Override
+    public BedLocationMapping getBedLocationMappingByBedId(Integer bedId) {
+        String hql = "select blm " +
+                "from BedLocationMapping blm " +
+                "where blm.bed.voided=:voided and blm.bed.id=:bedId";
+
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("voided", false);
+        query.setParameter("bedId", bedId);
+        return (BedLocationMapping) query.uniqueResult();
     }
 }

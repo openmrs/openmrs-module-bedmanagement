@@ -290,6 +290,12 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     }
 
     @Override
+    public BedLocationMapping getBedLocationMappingByBedId(Integer bedId) {
+        BedLocationMapping bedLocationMapping = bedDao.getBedLocationMappingByBedId(bedId);
+        return bedLocationMapping;
+    }
+
+    @Override
     public Location saveWard(String uuid, SimpleObject properties) {
         Location ward = constructLocation(uuid, properties.get("name"), properties.get("description"));
         if (properties.get("room") != null) {
