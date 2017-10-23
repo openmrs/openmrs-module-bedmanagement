@@ -67,15 +67,15 @@ public class BedResource extends DelegatingCrudResource<Bed> {
     }
 
     @PropertyGetter("row")
-    public Object getRow(Bed bed) {
+    public Integer getRow(Bed bed) {
         BedLocationMapping bedLocationMapping = Context.getService(BedManagementService.class).getBedLocationMappingByBedId(bed.getId());
-        return bedLocationMapping.getRow();
+        return bedLocationMapping != null ? bedLocationMapping.getRow() : null;
     }
 
     @PropertyGetter("column")
-    public Object getColumn(Bed bed){
+    public Integer getColumn(Bed bed){
         BedLocationMapping bedLocationMapping = Context.getService(BedManagementService.class).getBedLocationMappingByBedId(bed.getId());
-        return bedLocationMapping.getColumn();
+        return bedLocationMapping != null ? bedLocationMapping.getColumn() : null;
     }
 
     @Override
