@@ -149,8 +149,8 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
         if (properties.get("row") != null && properties.get("column") != null &&
                 properties.get("locationUuid") != null) {
             String locationUuid = properties.get("locationUuid");
-            Integer row = Integer.valueOf((String) properties.get("row"));
-            Integer column = Integer.valueOf((String) properties.get("column"));
+            Integer row = properties.get("row");
+            Integer column = properties.get("column");
             this.saveBedLocationMapping(locationUuid, row, column, bed);
         }
 

@@ -96,8 +96,8 @@ public class BedResourceTest extends MainResourceControllerTest {
         SimpleObject postParameters = new SimpleObject();
         postParameters.put("bedNumber", "110-a");
         postParameters.put("bedType", "luxury");
-        postParameters.put("row", "4");
-        postParameters.put("column", "1");
+        postParameters.put("row", 4);
+        postParameters.put("column", 1);
         postParameters.put("locationUuid", "98bc9b32-9d1a-11e2-8137-0800271c1b75");
         String json = new ObjectMapper().writeValueAsString(postParameters);
         request.setContent(json.getBytes());
@@ -117,8 +117,8 @@ public class BedResourceTest extends MainResourceControllerTest {
         SimpleObject postParameters = new SimpleObject();
         postParameters.put("bedNumber", "110-a");
         postParameters.put("bedType", "luxury");
-        postParameters.put("row", "1");
-        postParameters.put("column", "1");
+        postParameters.put("row", 1);
+        postParameters.put("column", 1);
         postParameters.put("locationUuid", "98bc9b32-9d1a-11e2-8137-0800271c1b75");
         String json = new ObjectMapper().writeValueAsString(postParameters);
         request.setContent(json.getBytes());
