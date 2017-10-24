@@ -107,6 +107,12 @@ public interface BedManagementService extends OpenmrsService {
     @Authorized(value = "Get Beds", requireAll=true)
     BedLocationMapping getBedLocationMappingByBedId(Integer bedId);
 
+    @Authorized(value = "Get Beds", requireAll=true)
+    BedLocationMapping getBedLocationMappingByLocationAndLayout(String locationUuid, Integer row, Integer column);
+
+    @Authorized(value = "Edit Beds", requireAll=true)
+    BedLocationMapping saveBedLocationMapping(String locationUuid, Integer row, Integer column, Bed bed);
+
     @Authorized({"Edit Admission Locations"})
     Location saveWard(String uuid, SimpleObject properties);
 }

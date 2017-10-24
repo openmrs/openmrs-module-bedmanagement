@@ -150,4 +150,19 @@ public class HibernateBedDAO implements BedDAO {
         query.setParameter("bedId", bedId);
         return (BedLocationMapping) query.uniqueResult();
     }
+
+    @Override
+    public BedLocationMapping getBedLocationMappingByLocationAndLayout(String locationUuid, Integer row, Integer column) {
+        String hql = "select blm " +
+                "from BedLocationMapping blm " +
+                "where blm.bed.voided=:voided and blm.location.uuid=:locationUuid " +
+                "and blm.row=:row and blm.column=:column";
+
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("voided", false);
+        query.setParameter("locationUuid", locationUuid);
+        query.setParameter("row", row);
+        query.setParameter("column", column);
+        return (BedLocationMapping) query.uniqueResult();
+    }
 }

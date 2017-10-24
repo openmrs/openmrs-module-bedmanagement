@@ -23,4 +23,6 @@ public interface BedDAO {
     Long getTotalBedByLocationUuid(String uuid);
 
     BedLocationMapping getBedLocationMappingByBedId(Integer bedId);
+
+    BedLocationMapping getBedLocationMappingByLocationAndLayout(String locationUuid, Integer row, Integer column);
 }

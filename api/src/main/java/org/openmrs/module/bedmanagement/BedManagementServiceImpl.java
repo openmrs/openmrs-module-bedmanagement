@@ -19,13 +19,10 @@ import org.openmrs.LocationTag;
 import org.openmrs.Patient;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.api.db.LocationDAO;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.instrument.classloading.LoadTimeWeaver;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -37,6 +34,8 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     BedDAO bedDao;
 
     BedTypeDAO bedTypeDao;
+
+    BedLocationMappingDAO bedLocationMappingDao;
 
     @Autowired
     private LocationService locationService;
@@ -51,6 +50,10 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 
     public void setBedTypeDao(BedTypeDAO bedTypeDao) {
         this.bedTypeDao = bedTypeDao;
+    }
+
+    public void setBedLocationMappingDao(BedLocationMappingDAO bedLocationMappingDao) {
+        this.bedLocationMappingDao = bedLocationMappingDao;
     }
 
     @Override
@@ -133,15 +136,44 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
             }
         } else {
             bed = new Bed();
-            if (properties.get("bedNumber") == null || properties.get("bedType") == null)
-                throw new IllegalPropertyException("bedNumber & bedType should not be null");
+            if (properties.get("bedNumber") == null || properties.get("bedType") == null ||
+                    properties.get("row") == null || properties.get("column") == null ||
+                    properties.get("locationUuid") == null)
+                throw new IllegalPropertyException("Required parameters: bedNumber, bedType, row, column, locationUuid");
             bed.setBedNumber((String) properties.get("bedNumber"));
             bed.setStatus(properties.get("status") != null ? (String) properties.get("status") : "AVAILABLE");
             bed.setBedType(bedType);
         }
 
         bedDao.save(bed);
+        if (properties.get("row") != null && properties.get("column") != null &&
+                properties.get("locationUuid") != null) {
+            String locationUuid = properties.get("locationUuid");
+            Integer row = Integer.valueOf((String) properties.get("row"));
+            Integer column = Integer.valueOf((String) properties.get("column"));
+            this.saveBedLocationMapping(locationUuid, row, column, bed);
+        }
+
         return bed;
+    }
+
+    @Override
+    public BedLocationMapping saveBedLocationMapping(String locationUuid, Integer row, Integer column, Bed bed){
+        BedLocationMapping existingBedLocationMapping = bedDao.getBedLocationMappingByLocationAndLayout(locationUuid, row, column);
+        if (existingBedLocationMapping != null && !existingBedLocationMapping.getBed().getId().equals(bed.getId()))
+            throw new IllegalPropertyException("Already bed assign to give row & column");
+
+        BedLocationMapping bedLocationMapping = bedDao.getBedLocationMappingByBedId(bed.getId());
+        if (bedLocationMapping == null){
+            bedLocationMapping = new BedLocationMapping();
+        }
+
+        Location location = locationService.getLocationByUuid(locationUuid);
+        bedLocationMapping.setLocation(location);
+        bedLocationMapping.setRow(row);
+        bedLocationMapping.setColumn(column);
+        bedLocationMapping.setBed(bed);
+        return bedLocationMappingDao.save(bedLocationMapping);
     }
 
     @Override
@@ -291,8 +323,12 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 
     @Override
     public BedLocationMapping getBedLocationMappingByBedId(Integer bedId) {
-        BedLocationMapping bedLocationMapping = bedDao.getBedLocationMappingByBedId(bedId);
-        return bedLocationMapping;
+        return bedDao.getBedLocationMappingByBedId(bedId);
+    }
+
+    @Override
+    public BedLocationMapping getBedLocationMappingByLocationAndLayout(String locationUuid, Integer row, Integer column) {
+        return bedDao.getBedLocationMappingByLocationAndLayout(locationUuid, row, column);
     }
 
     @Override
@@ -302,8 +338,8 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
             HashMap<String, Object> roomProperties = properties.get("room");
             Location room = constructLocation(roomProperties.get("uuid"), roomProperties.get("name"), roomProperties.get("description"));
             room.setParentLocation(ward);
-            Set<Location> rooms = ward.getChildLocations()!=null?ward.getChildLocations():new HashSet<Location>();
-            if(!rooms.contains(room)){
+            Set<Location> rooms = ward.getChildLocations() != null ? ward.getChildLocations() : new HashSet<Location>();
+            if (!rooms.contains(room)) {
                 rooms.add(room);
                 ward.setChildLocations(rooms);
             }
