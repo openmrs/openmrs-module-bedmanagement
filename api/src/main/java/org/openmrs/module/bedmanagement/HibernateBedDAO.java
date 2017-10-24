@@ -100,7 +100,7 @@ public class HibernateBedDAO implements BedDAO {
     @Override
     public Bed getByUuid(String uuid) {
         return (Bed) sessionFactory.getCurrentSession()
-                .createQuery("from Bed b where b.uuid = :uuid")
+                .createQuery("from Bed b where b.uuid = :uuid and b.voided=false ")
                 .setString("uuid", uuid)
                 .uniqueResult();
     }

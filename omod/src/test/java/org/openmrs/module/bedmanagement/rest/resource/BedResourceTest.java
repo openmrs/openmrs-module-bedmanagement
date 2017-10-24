@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
+import org.openmrs.module.webservices.rest.web.response.ObjectNotFoundException;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -112,7 +113,7 @@ public class BedResourceTest extends MainResourceControllerTest {
     }
 
     @Test(expected = IllegalPropertyException.class)
-    public void shouldThrowExceptionOnAlreadyAssignedBedPosition() throws Exception{
+    public void shouldThrowExceptionOnAlreadyAssignedBedPosition() throws Exception {
         MockHttpServletRequest request = request(RequestMethod.POST, getURI());
         SimpleObject postParameters = new SimpleObject();
         postParameters.put("bedNumber", "110-a");
@@ -123,5 +124,36 @@ public class BedResourceTest extends MainResourceControllerTest {
         String json = new ObjectMapper().writeValueAsString(postParameters);
         request.setContent(json.getBytes());
         deserialize(handle(request));
+    }
+
+    @Test
+    public void shouldUpdateBed() throws Exception {
+        MockHttpServletRequest request = request(RequestMethod.POST, getURI() + "/" + getUuid());
+        SimpleObject postParameters = new SimpleObject();
+        postParameters.put("bedNumber", "307-ab");
+        postParameters.put("bedType", "luxury");
+        postParameters.put("row", 2);
+        postParameters.put("column", 3);
+        postParameters.put("locationUuid", "98bc9b32-9d1a-11e2-8137-0800271c1b75");
+        String json = new ObjectMapper().writeValueAsString(postParameters);
+        request.setContent(json.getBytes());
+        SimpleObject bed = deserialize(handle(request));
+        HashMap bedType = (LinkedHashMap) bed.get("bedType");
+
+
+        Assert.assertEquals("307-ab", bed.get("bedNumber"));
+        Assert.assertEquals(2, bed.get("row"));
+        Assert.assertEquals(3, bed.get("column"));
+        Assert.assertEquals("luxury", bedType.get("name"));
+    }
+
+    @Test(expected = ObjectNotFoundException.class)
+    public void shouldDeleteBed() throws Exception {
+        MockHttpServletRequest deleteRequest = request(RequestMethod.DELETE, getURI() + "/" + getUuid());
+        deleteRequest.setParameter("reason", "not needed");
+        handle(deleteRequest);
+
+        MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI() + "/" + getUuid());
+        handle(getRequest);
     }
 }

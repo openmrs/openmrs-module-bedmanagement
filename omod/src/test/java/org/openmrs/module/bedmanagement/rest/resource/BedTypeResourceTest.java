@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.webservices.rest.SimpleObject;
+import org.openmrs.module.webservices.rest.web.response.ObjectNotFoundException;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -90,7 +91,7 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 
     @Test
     public void shouldUpdateBedTypeById() throws Exception {
-        MockHttpServletRequest request = request(RequestMethod.POST, getURI()+ "/" + getUuid());
+        MockHttpServletRequest request = request(RequestMethod.POST, getURI() + "/" + getUuid());
         SimpleObject postParameters = new SimpleObject();
         postParameters.put("name", "Vip Bed");
         postParameters.put("displayName", "VIP");
@@ -106,11 +107,11 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 
     @Test(expected = ConstraintViolationException.class)
     public void onDeleteBedTypeByIdShouldThrowException() throws Exception {
-        MockHttpServletRequest request = request(RequestMethod.DELETE, getURI()+ "/2");
+        MockHttpServletRequest request = request(RequestMethod.DELETE, getURI() + "/2");
         handle(request);
     }
 
-    @Test
+    @Test(expected = ObjectNotFoundException.class)
     public void shouldDeleteNewBedType() throws Exception {
         MockHttpServletRequest request = request(RequestMethod.POST, getURI());
         SimpleObject postParameters = new SimpleObject();
@@ -120,8 +121,12 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
         String json = new ObjectMapper().writeValueAsString(postParameters);
         request.setContent(json.getBytes());
         SimpleObject bedType = deserialize(handle(request));
+        Integer bedTypeId = bedType.get("id");
 
-        MockHttpServletRequest deleteRequest = request(RequestMethod.DELETE, getURI()+ "/"+bedType.get("id"));
+        MockHttpServletRequest deleteRequest = request(RequestMethod.DELETE, getURI() + "/" + bedTypeId);
         handle(deleteRequest);
+
+        MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI() + "/" + bedTypeId);
+        handle(getRequest);
     }
 }
