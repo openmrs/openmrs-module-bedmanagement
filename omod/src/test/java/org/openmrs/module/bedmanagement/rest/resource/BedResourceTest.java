@@ -92,6 +92,20 @@ public class BedResourceTest extends MainResourceControllerTest {
     }
 
     @Test
+    public void shouldSearchBedByTypeAndLocationUuid() throws Exception {
+        MockHttpServletRequest request = request(RequestMethod.GET, getURI());
+        request.addParameter("status", "AVAILABLE");
+        request.addParameter("locationUuid", "98bc9b32-9d1a-11e2-8137-0800271c1b75");
+        SimpleObject object = deserialize(handle(request));
+        List results = (ArrayList) object.get("results");
+        HashMap bed = (LinkedHashMap) results.get(0);
+
+        Assert.assertEquals(9, results.size());
+        Assert.assertEquals("304-b", bed.get("bedNumber"));
+        Assert.assertEquals("AVAILABLE", bed.get("status"));
+    }
+
+    @Test
     public void shouldAddNewBed() throws Exception {
         MockHttpServletRequest request = request(RequestMethod.POST, getURI());
         SimpleObject postParameters = new SimpleObject();

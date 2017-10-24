@@ -73,14 +73,14 @@ public class BedResource extends DelegatingCrudResource<Bed> {
     }
 
     @PropertyGetter("column")
-    public Integer getColumn(Bed bed){
+    public Integer getColumn(Bed bed) {
         BedLocationMapping bedLocationMapping = Context.getService(BedManagementService.class).getBedLocationMappingByBedId(bed.getId());
         return bedLocationMapping != null ? bedLocationMapping.getColumn() : null;
     }
 
     @Override
     protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-        List<Bed> bedList = Context.getService(BedManagementService.class).listBeds(null, null, context.getLimit(), context.getStartIndex());
+        List<Bed> bedList = Context.getService(BedManagementService.class).listBeds(null, null, null, context.getLimit(), context.getStartIndex());
         return new AlreadyPaged<Bed>(context, bedList, false);
     }
 
@@ -88,7 +88,8 @@ public class BedResource extends DelegatingCrudResource<Bed> {
     protected PageableResult doSearch(RequestContext context) {
         String status = context.getParameter("status");
         String bedType = context.getParameter("bedType");
-        List<Bed> bedList = Context.getService(BedManagementService.class).listBeds(bedType, status, context.getLimit(), context.getStartIndex());
+        String locationUuid = context.getParameter("locationUuid");
+        List<Bed> bedList = Context.getService(BedManagementService.class).listBeds(locationUuid, bedType, status, context.getLimit(), context.getStartIndex());
         return new AlreadyPaged<Bed>(context, bedList, false);
     }
 
