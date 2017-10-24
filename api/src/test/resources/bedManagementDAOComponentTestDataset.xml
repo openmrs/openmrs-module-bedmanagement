@@ -17,12 +17,12 @@
     <bed_type bed_type_id="3" name="normal" description="normal bed" display_name="NRM"/>
 
     <bed bed_id="1" uuid="bb02b84b-d225-11e4-9c67-080027b662ec" bed_number="304-a" status="OCCUPIED" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="2" uuid="bb049d6d-d225-11e4-9c67-080027b662ec" bed_number="304-b" status="AVAILABLE" bed_type_id="2" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="3" uuid="bb0906fa-d225-11e4-9c67-080027b662ec" bed_number="304-c" status="AVAILABLE" bed_type_id="2" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="4" uuid="bb094d57-d225-11e4-9c67-080027b662ec" bed_number="304-d" status="AVAILABLE" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="2" uuid="bb049d6d-d225-11e4-9c67-080027b662fc" bed_number="304-b" status="AVAILABLE" bed_type_id="2" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="3" uuid="bb0906fa-d225-11e4-9c67-080027b662gh" bed_number="304-c" status="AVAILABLE" bed_type_id="2" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="4" uuid="bb094d57-d225-11e4-9c67-080027b662mh" bed_number="304-d" status="AVAILABLE" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed bed_id="5" uuid="bb098ed0-d225-11e4-9c67-080027b662ec" bed_number="305-a" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="6" uuid="bb09cacd-d225-11e4-9c67-080027b662ec" bed_number="305-b" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed bed_id="7" uuid="bb0a083a-d225-11e4-9c67-080027b662ec" bed_number="305-c" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="6" uuid="bb09cacd-d225-11e4-9c67-080027b662sc" bed_number="305-b" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="7" uuid="bb0a083a-d225-11e4-9c67-080027b652ec" bed_number="305-c" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed bed_id="8" uuid="bb0a43db-d225-11e4-9c67-080027b662ec" bed_number="305-d" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed bed_id="9" uuid="bb0a7ad0-d225-11e4-9c67-080027b662ec" bed_number="306-a" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed bed_id="10" uuid="bb0f8866-d225-11e4-9c67-080027b662ec" bed_number="306-b" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
@@ -51,7 +51,7 @@
     <location location_id="12347" name="Orthopaedic ward" description="This ward houses orthopaedic patients." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="19e023e8-20ee-4237-ade6-9e68f897b7a9" parent_location="12348"/>
     <location location_id="123452" name="Physical Location for Orthopaedic ward" description="This ward houses Orthopaedic ward." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="98bc9b32-9d1a-11e2-8137-0800271c1b56" parent_location="12347" />
 
-    <bed bed_id="11" bed_number="307-a" status= "OCCUPIED" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="bb02b84b-d225-11e4-9c67-080027b662ec"/>
+    <bed bed_id="11" bed_number="307-a" status= "OCCUPIED" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="bb02b84b-d225-11e4-9c67-080027b662ab"/>
     <bed bed_id="12" bed_number="307-b" status= "OCCUPIED" bed_type_id="2" date_created="2005-01-01 00:00:00.0" voided="false" uuid="bb049d6d-d225-11e4-9c67-080027b662ec"/>
     <bed bed_id="13" bed_number="307-c" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false" uuid="bb0906fa-d225-11e4-9c67-080027b662ec"/>
     <bed bed_id="14" bed_number="307-d" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false" uuid="bb094d57-d225-11e4-9c67-080027b662ec"/>

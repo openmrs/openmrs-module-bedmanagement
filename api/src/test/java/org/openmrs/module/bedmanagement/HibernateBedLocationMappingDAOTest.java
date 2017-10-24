@@ -40,7 +40,7 @@ public class HibernateBedLocationMappingDAOTest extends BaseModuleWebContextSens
         Bed bed = bedLocationMappingDao.getBedByLocationAndLayout("98bc9b32-9d1a-11e2-8137-0800271c1b75", 1, 2);
 
         Assert.assertNotNull(bed);
-        Assert.assertEquals("bb049d6d-d225-11e4-9c67-080027b662ec", bed.getUuid());
+        Assert.assertEquals("bb049d6d-d225-11e4-9c67-080027b662fc", bed.getUuid());
         Assert.assertFalse(bed.getVoided());
 
         Bed bed2 = bedLocationMappingDao.getBedByLocationAndLayout("98bc9b32-9d1a-11e2-8137-0800271c1b75", 2, 1);

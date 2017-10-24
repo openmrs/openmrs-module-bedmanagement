@@ -6,13 +6,13 @@ import java.util.Map;
 public interface BedDAO {
     Bed getById(int id);
 
-    List<Bed> getAll(Integer limit, Integer offset);
+    List<Bed> getAll(String locationUuid, Integer limit, Integer offset);
 
-    List<Bed> searchByBedType(String bedType, Integer limit, Integer offset);
+    List<Bed> searchByBedType(String locationUuid, String bedType, Integer limit, Integer offset);
 
-    List<Bed> searchByBedStatus(String status, Integer limit, Integer offset);
+    List<Bed> searchByBedStatus(String locationUuid, String status, Integer limit, Integer offset);
 
-    List<Bed> searchByBedTypeAndStatus(String bedType, String status, Integer limit, Integer offset);
+    List<Bed> searchByBedTypeAndStatus(String locationUuid, String bedType, String status, Integer limit, Integer offset);
 
     Bed getByUuid(String uuid);
 

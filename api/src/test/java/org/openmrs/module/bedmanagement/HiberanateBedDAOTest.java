@@ -39,13 +39,13 @@ public class HiberanateBedDAOTest extends BaseModuleWebContextSensitiveTest {
     public void shouldReturnByUuid() throws Exception {
         Bed bed = bedDao.getByUuid("bb049d6d-d225-11e4-9c67-080027b662ec");
 
-        Assert.assertEquals("304-b", bed.getBedNumber());
+        Assert.assertEquals("307-b", bed.getBedNumber());
         Assert.assertFalse(bed.getVoided());
     }
 
     @Test
     public void shouldListAllBeds() throws Exception {
-        List<Bed> bedList = bedDao.getAll(3, 0);
+        List<Bed> bedList = bedDao.getAll(null, 3, 0);
 
         Assert.assertEquals(3, bedList.size());
         Assert.assertEquals("304-a", bedList.get(0).getBedNumber());
@@ -54,13 +54,13 @@ public class HiberanateBedDAOTest extends BaseModuleWebContextSensitiveTest {
 
     @Test
     public void shouldSearchByBedType() throws Exception {
-        List<Bed> bedList = bedDao.searchByBedType("deluxe", null, null);
+        List<Bed> bedList = bedDao.searchByBedType(null, "deluxe", null, null);
 
         Assert.assertEquals(3, bedList.size());
         Assert.assertEquals("deluxe", bedList.get(0).getBedType().getName());
         Assert.assertEquals("deluxe", bedList.get(1).getBedType().getName());
 
-        List<Bed> normalBedList = bedDao.searchByBedType("normal", 3, 0);
+        List<Bed> normalBedList = bedDao.searchByBedType(null, "normal", 3, 0);
         Assert.assertEquals(3, normalBedList.size());
         Assert.assertEquals("normal", normalBedList.get(0).getBedType().getName());
         Assert.assertEquals("normal", normalBedList.get(2).getBedType().getName());
@@ -68,15 +68,23 @@ public class HiberanateBedDAOTest extends BaseModuleWebContextSensitiveTest {
 
     @Test
     public void shouldSearchByStatus() throws Exception {
-        List<Bed> bedList = bedDao.searchByBedStatus("OCCUPIED", 5, 0);
+        List<Bed> bedList = bedDao.searchByBedStatus(null, "OCCUPIED", 5, 0);
 
         Assert.assertEquals(3, bedList.size());
         Assert.assertEquals("OCCUPIED", bedList.get(0).getStatus());
     }
 
     @Test
+    public void shouldSearchByStatusAndLocationUuid() throws Exception {
+        List<Bed> bedList = bedDao.searchByBedStatus("98bc9b32-9d1a-11e2-8137-0800271c1b75", "OCCUPIED", 5, 0);
+
+        Assert.assertEquals(1, bedList.size());
+        Assert.assertEquals("OCCUPIED", bedList.get(0).getStatus());
+    }
+
+    @Test
     public void shouldSearchByBedTypeAndStatus() throws Exception {
-        List<Bed> bedList = bedDao.searchByBedTypeAndStatus("deluxe", "AVAILABLE", 5, 0);
+        List<Bed> bedList = bedDao.searchByBedTypeAndStatus(null, "deluxe", "AVAILABLE", 5, 0);
         Assert.assertEquals(1, bedList.size());
         Assert.assertEquals("AVAILABLE", bedList.get(0).getStatus());
         Assert.assertEquals("deluxe", bedList.get(0).getBedType().getName());

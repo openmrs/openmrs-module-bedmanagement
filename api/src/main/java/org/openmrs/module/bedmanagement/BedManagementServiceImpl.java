@@ -88,16 +88,16 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     }
 
     @Override
-    public List<Bed> listBeds(String bedType, String status, Integer limit, Integer offset) {
+    public List<Bed> listBeds(String locationUuid, String bedType, String status, Integer limit, Integer offset) {
         List<Bed> bedList = new ArrayList<>();
         if (bedType != null && status == null) {
-            bedList = bedDao.searchByBedType(bedType, limit, offset);
+            bedList = bedDao.searchByBedType(locationUuid, bedType, limit, offset);
         } else if (bedType == null && status != null) {
-            bedList = bedDao.searchByBedStatus(status, limit, offset);
+            bedList = bedDao.searchByBedStatus(locationUuid, status, limit, offset);
         } else if (bedType != null && status != null) {
-            bedList = bedDao.searchByBedTypeAndStatus(bedType, status, limit, offset);
+            bedList = bedDao.searchByBedTypeAndStatus(locationUuid, bedType, status, limit, offset);
         } else {
-            bedList = bedDao.getAll(limit, offset);
+            bedList = bedDao.getAll(locationUuid, limit, offset);
         }
 
         return bedList;

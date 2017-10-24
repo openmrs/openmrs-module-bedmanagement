@@ -5,7 +5,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
-import java.util.Map;
 
 public class HibernateBedDAO implements BedDAO {
 
@@ -24,13 +23,24 @@ public class HibernateBedDAO implements BedDAO {
     }
 
     @Override
-    public List<Bed> getAll(Integer limit, Integer offset) {
-        String hql = "select b " +
-                "from Bed b " +
-                "where b.voided=:voided";
+    public List<Bed> getAll(String locationUuid, Integer limit, Integer offset) {
+        String hql;
+        if (locationUuid != null) {
+            hql = "select blm.bed " +
+                    "from BedLocationMapping blm " +
+                    "join blm.bed b " +
+                    "join blm.location l " +
+                    "where b.voided=:voided and l.uuid=:locationUuid";
+        } else {
+            hql = "select b " +
+                    "from Bed b " +
+                    "where b.voided=:voided";
+        }
 
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("voided", false);
+        if (locationUuid != null)
+            query.setParameter("locationUuid", locationUuid);
 
         if (limit != null) {
             query.setMaxResults(limit);
@@ -42,14 +52,26 @@ public class HibernateBedDAO implements BedDAO {
     }
 
     @Override
-    public List<Bed> searchByBedType(String bedType, Integer limit, Integer offset) {
-        String hql = "select b " +
-                "from Bed b " +
-                "where b.voided=:voided and b.bedType.name=:bedType";
+    public List<Bed> searchByBedType(String locationUuid, String bedType, Integer limit, Integer offset) {
+        String hql;
+
+        if (locationUuid != null) {
+            hql = "select blm.bed " +
+                    "from BedLocationMapping blm " +
+                    "join blm.bed b " +
+                    "join blm.location l " +
+                    "where b.voided=:voided and b.bedType.name=:bedType and l.uuid=:locationUuid";
+        } else {
+            hql = "select b " +
+                    "from Bed b " +
+                    "where b.voided=:voided and b.bedType.name=:bedType";
+        }
 
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("voided", false);
         query.setParameter("bedType", bedType);
+        if (locationUuid != null)
+            query.setParameter("locationUuid", locationUuid);
         if (limit != null) {
             query.setMaxResults(limit);
             if (offset != null)
@@ -60,14 +82,25 @@ public class HibernateBedDAO implements BedDAO {
     }
 
     @Override
-    public List<Bed> searchByBedStatus(String status, Integer limit, Integer offset) {
-        String hql = "select b " +
-                "from Bed b " +
-                "where b.voided=:voided and b.status=:status";
+    public List<Bed> searchByBedStatus(String locationUuid, String status, Integer limit, Integer offset) {
+        String hql;
+        if (locationUuid != null) {
+            hql = "select blm.bed " +
+                    "from BedLocationMapping blm " +
+                    "join blm.bed b " +
+                    "join blm.location l " +
+                    "where b.voided=:voided and b.status=:status and l.uuid=:locationUuid";
+        } else {
+            hql = "select b " +
+                    "from Bed b " +
+                    "where b.voided=:voided and b.status=:status";
+        }
 
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("voided", false);
         query.setParameter("status", status);
+        if (locationUuid != null)
+            query.setParameter("locationUuid", locationUuid);
         if (limit != null) {
             query.setMaxResults(limit);
             if (offset != null)
@@ -78,16 +111,26 @@ public class HibernateBedDAO implements BedDAO {
     }
 
     @Override
-    public List<Bed> searchByBedTypeAndStatus(String bedType, String status, Integer limit, Integer offset) {
-        String hql = "select b " +
-                "from Bed b " +
-                "where b.voided=:voided and b.status=:status and b.bedType.name=:bedType";
+    public List<Bed> searchByBedTypeAndStatus(String locationUuid, String bedType, String status, Integer limit, Integer offset) {
+        String hql;
+        if (locationUuid != null) {
+            hql = "select blm.bed " +
+                    "from BedLocationMapping blm " +
+                    "join blm.bed b " +
+                    "join blm.location l " +
+                    "where b.voided=:voided and b.status=:status and b.bedType.name=:bedType and l.uuid=:locationUuid";
+        } else {
+            hql = "select b " +
+                    "from Bed b " +
+                    "where b.voided=:voided and b.status=:status and b.bedType.name=:bedType";
+        }
 
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("voided", false);
         query.setParameter("status", status);
         query.setParameter("bedType", bedType);
-
+        if (locationUuid != null)
+            query.setParameter("locationUuid", locationUuid);
         if (limit != null) {
             query.setMaxResults(limit);
             if (offset != null)
