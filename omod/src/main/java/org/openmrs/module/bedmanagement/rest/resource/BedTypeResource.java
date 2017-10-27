@@ -1,9 +1,9 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.bedmanagement.Bed;
-import org.openmrs.module.bedmanagement.BedManagementService;
-import org.openmrs.module.bedmanagement.BedType;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
+import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -39,14 +39,14 @@ public class BedTypeResource extends DelegatingCrudResource<BedType> {
 
     @Override
     protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-        List<BedType> bedTypeList = Context.getService(BedManagementService.class).listBedTypes(null, context.getLimit(), context.getStartIndex());
+        List<BedType> bedTypeList = Context.getService(BedManagementService.class).getBedTypes(null, context.getLimit(), context.getStartIndex());
         return new AlreadyPaged<BedType>(context, bedTypeList, false);
     }
 
     @Override
     protected PageableResult doSearch(RequestContext context) {
         String name = context.getParameter("name");
-        List<BedType> bedTypeList = Context.getService(BedManagementService.class).listBedTypes(name, context.getLimit(), context.getStartIndex());
+        List<BedType> bedTypeList = Context.getService(BedManagementService.class).getBedTypes(name, context.getLimit(), context.getStartIndex());
         return new AlreadyPaged<BedType>(context, bedTypeList, false);
     }
 

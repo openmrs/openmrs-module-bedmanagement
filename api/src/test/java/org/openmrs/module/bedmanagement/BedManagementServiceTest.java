@@ -9,6 +9,13 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
+import org.openmrs.module.bedmanagement.dao.AdmissionLocationDao;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
+import org.openmrs.module.bedmanagement.pojo.AdmissionLocation;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
+import org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -49,11 +56,11 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
     public void getAllAdmissionLocations_gets_locations_that_support_admission() {
         ArrayList<AdmissionLocation> expectedWards = new ArrayList<AdmissionLocation>();
 
-        BedManagementDAO bedManagementDao = mock(BedManagementDAO.class);
-        when(bedManagementDao.getAdmissionLocationsBy(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION)).thenReturn(expectedWards);
+        AdmissionLocationDao admissionLocationDao = mock(AdmissionLocationDao.class);
+        when(admissionLocationDao.getAdmissionLocationsByLocationTagName(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION)).thenReturn(expectedWards);
 
         BedManagementServiceImpl bedManagementService = new BedManagementServiceImpl();
-        bedManagementService.setDao(bedManagementDao);
+        bedManagementService.setAdmissionLocationDao(admissionLocationDao);
 
         List<AdmissionLocation> wards = bedManagementService.getAllAdmissionLocations();
         Assert.assertSame(expectedWards, wards);
@@ -86,7 +93,7 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
         BedManagementService bedManagementService = Context.getService(BedManagementService.class);
 
         assertNotNull(bedManagementService.assignPatientToBed(patient, encounter, bedNumber));
-        assertNotNull(bedManagementService.unAssignPatientFromBed(patient));
+        assertNotNull(bedManagementService.unassignPatientFromBed(patient));
     }
 
     @Test(expected = APIAuthenticationException.class)
@@ -96,7 +103,7 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
         BedManagementService bedManagementService = Context.getService(BedManagementService.class);
 
         bedManagementService.assignPatientToBed(patient, encounter, bedNumber);
-        bedManagementService.unAssignPatientFromBed(patient);
+        bedManagementService.unassignPatientFromBed(patient);
     }
 
     @Test
@@ -106,10 +113,10 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
         BedManagementService bedManagementService = Context.getService(BedManagementService.class);
 
         assertNotNull(bedManagementService.getBedAssignmentDetailsByPatient(patient));
-        assertNotNull(bedManagementService.getBedDetailsById("12"));
-        assertNotNull(bedManagementService.getBedDetailsByUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb"));
+        assertNotNull(bedManagementService.getBedDetailsByBedId("12"));
+        assertNotNull(bedManagementService.getBedDetailsByBedUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb"));
         assertNotNull(bedManagementService.getBedPatientAssignmentByUuid("7819d653-393b-4118-9c83-a3715b82d4dd"));
-        assertNotNull(bedManagementService.getLatestBedDetailsByVisit("8cfda6ae-6b78-11e0-93c3-18a905e044dc"));
+        assertNotNull(bedManagementService.getLatestBedDetailsByVisitUuid("8cfda6ae-6b78-11e0-93c3-18a905e044dc"));
     }
 
     @Test(expected = APIAuthenticationException.class)
@@ -119,10 +126,10 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
         BedManagementService bedManagementService = Context.getService(BedManagementService.class);
 
         bedManagementService.getBedAssignmentDetailsByPatient(patient);
-        bedManagementService.getBedDetailsById("13");
-        bedManagementService.getBedDetailsByUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb");
+        bedManagementService.getBedDetailsByBedId("13");
+        bedManagementService.getBedDetailsByBedUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb");
         bedManagementService.getBedPatientAssignmentByUuid("7819d653-393b-4118-9c83-a3715b82d4dd");
-        bedManagementService.getLatestBedDetailsByVisit("8cfda6ae-6b78-11e0-93c3-18a905e044dc");
+        bedManagementService.getLatestBedDetailsByVisitUuid("8cfda6ae-6b78-11e0-93c3-18a905e044dc");
     }
 
     @Test

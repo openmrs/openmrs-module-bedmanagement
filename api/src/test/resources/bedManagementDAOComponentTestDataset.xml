@@ -87,7 +87,7 @@
     <encounter encounter_id="9" visit_id="6" encounter_type="7" patient_id="2" location_id="2" form_id="1" encounter_datetime="2013-10-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" uuid="y403fafb-cccc-42d0-9d01-4f52e89d123r"/>
     <bed_patient_assignment_map bed_patient_assignment_map_id="6" patient_id="2" bed_id="12" date_started="2008-09-18 14:09:05.0" date_stopped="2008-10-18 14:09:05.0" encounter_id="7" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed_patient_assignment_map bed_patient_assignment_map_id="7" patient_id="2" bed_id="13" date_started="2013-09-18 14:09:05.0" date_stopped="2015-11-18 14:09:05.0" encounter_id="8" date_created="2005-01-01 00:00:00.0" voided="false"/>
-    <bed_patient_assignment_map bed_patient_assignment_map_id="8" patient_id="2" bed_id="12" date_started="2014-09-18 14:09:05.0"  encounter_id="9" date_created="2014-01-01 00:00:00.0" voided="false"/>
+    <bed_patient_assignment_map bed_patient_assignment_map_id="8" patient_id="2" bed_id="12" date_started="2014-09-18 14:09:05.0"  date_stopped="2008-11-25 14:09:05.0" encounter_id="9" date_created="2014-01-01 00:00:00.0" voided="false"/>
 
     <encounter encounter_id="1" encounter_type="2" patient_id="2" location_id="1" form_id="1" encounter_datetime="2008-08-01 00:00:00.0" creator="1" date_created="2008-08-18 14:09:05.0" voided="false" uuid="7519d653-393b-4118-9c83-a3715b82d4ac" />
     <encounter encounter_id="2" encounter_type="2" patient_id="3" location_id="1" form_id="1" encounter_datetime="2008-08-01 00:00:00.0" creator="1" date_created="2008-08-18 14:09:05.0" voided="false" uuid="8519d653-393b-4118-9c83-a3715b82d4ad"/>
@@ -100,7 +100,7 @@
     <bed_patient_assignment_map bed_patient_assignment_map_id="4" patient_id="3" bed_id="12" date_started="2008-09-18 14:09:05.0" date_stopped="2008-10-18 14:09:05.0" encounter_id="2" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed_patient_assignment_map bed_patient_assignment_map_id="5" patient_id="4" bed_id="12" date_started="2008-08-18 14:09:05.0" encounter_id="3" date_created="2005-01-01 00:00:00.0" voided="false" uuid="7819d653-393b-4118-9c83-a3715b82d4dd"/>
     <bed_patient_assignment_map bed_patient_assignment_map_id="6" patient_id="2" bed_id="13" date_started="2008-08-18 14:19:05.0" encounter_id="7" date_created="2005-01-01 00:00:00.0" voided="false" uuid="7819d653-393b-4118-9c83-a3715c82d4dd"/>
-    <bed_patient_assignment_map bed_patient_assignment_map_id="7" patient_id="2" bed_id="12" date_started="2008-08-18 14:25:05.0" encounter_id="7" date_created="2005-01-01 00:00:00.0" voided="false" uuid="7819d653-393b-4118-9c83-a3715e82d4dd"/>
+    <bed_patient_assignment_map bed_patient_assignment_map_id="7" patient_id="2" bed_id="12" date_stopped="2008-10-18 14:09:05.0" date_started="2008-08-18 14:25:05.0" encounter_id="7" date_created="2005-01-01 00:00:00.0" voided="false" uuid="7819d653-393b-4118-9c83-a3715e82d4dd"/>
 
     <!--additional wards-->
     <location location_id="12346" name="Cardio ward on third floor" description="This ward houses cardio patients. It is a special cardio ward." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="e26cea2c-1b9f-666e-6511-f3ef6c88af6f"/>

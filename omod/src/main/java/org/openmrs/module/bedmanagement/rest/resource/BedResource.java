@@ -14,9 +14,10 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.bedmanagement.Bed;
-import org.openmrs.module.bedmanagement.BedLocationMapping;
-import org.openmrs.module.bedmanagement.BedManagementService;
+import org.openmrs.module.bedmanagement.constants.BedStatus;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -80,16 +81,19 @@ public class BedResource extends DelegatingCrudResource<Bed> {
 
     @Override
     protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-        List<Bed> bedList = Context.getService(BedManagementService.class).listBeds(null, null, null, context.getLimit(), context.getStartIndex());
+        List<Bed> bedList = Context.getService(BedManagementService.class).getBeds(null, null, null, context.getLimit(), context.getStartIndex());
         return new AlreadyPaged<Bed>(context, bedList, false);
     }
 
     @Override
     protected PageableResult doSearch(RequestContext context) {
+        BedStatus bedStatus = null;
+        if(context.getParameter("status") != null)
+            bedStatus = context.getParameter("status").equals("AVAILABLE") ? BedStatus.AVAILABLE : BedStatus.OCCUPIED;
         String status = context.getParameter("status");
         String bedType = context.getParameter("bedType");
         String locationUuid = context.getParameter("locationUuid");
-        List<Bed> bedList = Context.getService(BedManagementService.class).listBeds(locationUuid, bedType, status, context.getLimit(), context.getStartIndex());
+        List<Bed> bedList = Context.getService(BedManagementService.class).getBeds(locationUuid, bedType, bedStatus, context.getLimit(), context.getStartIndex());
         return new AlreadyPaged<Bed>(context, bedList, false);
     }
 

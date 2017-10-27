@@ -14,8 +14,8 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.bedmanagement.BedDetails;
-import org.openmrs.module.bedmanagement.BedManagementService;
+import org.openmrs.module.bedmanagement.pojo.BedDetails;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
@@ -43,7 +43,7 @@ public class BedDetailsResourceSearchHandler implements SearchHandler {
     public PageableResult search(RequestContext requestContext) throws ResponseException {
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
         String visitUuid = requestContext.getRequest().getParameter("visitUuid");
-        BedDetails bedDetails = bedManagementService.getLatestBedDetailsByVisit(visitUuid);
+        BedDetails bedDetails = bedManagementService.getLatestBedDetailsByVisitUuid(visitUuid);
         AlreadyPaged<BedDetails> alreadyPaged = new AlreadyPaged<BedDetails>(requestContext, Collections.singletonList(bedDetails), false);
         return bedDetails == null ? new EmptySearchResult() : alreadyPaged;
     }

@@ -15,10 +15,10 @@ package org.openmrs.module.bedmanagement.rest.resource;
 
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.bedmanagement.AdmissionLocation;
-import org.openmrs.module.bedmanagement.BedLayout;
-import org.openmrs.module.bedmanagement.BedManagementService;
-import org.openmrs.module.bedmanagement.BedTagMap;
+import org.openmrs.module.bedmanagement.pojo.AdmissionLocation;
+import org.openmrs.module.bedmanagement.pojo.BedLayout;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;

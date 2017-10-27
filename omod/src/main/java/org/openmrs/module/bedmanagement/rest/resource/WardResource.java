@@ -3,7 +3,7 @@ package org.openmrs.module.bedmanagement.rest.resource;
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.bedmanagement.BedManagementService;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -45,7 +45,7 @@ public class WardResource extends DelegatingCrudResource<Location> {
             room.put("name", subLocation.getName());
             room.put("display", subLocation.getDisplayString());
             room.put("description", subLocation.getDescription());
-            room.put("totalBed", Context.getService(BedManagementService.class).getTotalBeds(subLocation));
+            room.put("totalBed", Context.getService(BedManagementService.class).getBedCount(subLocation));
             rooms.add(room);
         }
 
