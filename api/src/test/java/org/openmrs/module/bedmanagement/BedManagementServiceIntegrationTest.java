@@ -11,6 +11,9 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.bedmanagement.pojo.AdmissionLocation;
+import org.openmrs.module.bedmanagement.pojo.BedDetails;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -92,7 +95,7 @@ public class BedManagementServiceIntegrationTest extends BaseModuleWebContextSen
     @Test
     public void shouldGetBedDetailsById() {
         int deluxeBedId = 1;
-        BedDetails details = bedManagementService.getBedDetailsById(String.valueOf(deluxeBedId));
+        BedDetails details = bedManagementService.getBedDetailsByBedId(String.valueOf(deluxeBedId));
         assertNotNull(details);
         assertNotNull(details.getPatients());
         assertNotNull(details.getCurrentAssignments());
@@ -125,7 +128,7 @@ public class BedManagementServiceIntegrationTest extends BaseModuleWebContextSen
         Patient patient = patientService.getPatient(4);
         BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
         assertEquals(Integer.valueOf(12), bedDetails.getBed().getId());
-        BedDetails unAssignedBed = bedManagementService.unAssignPatientFromBed(patient);
+        BedDetails unAssignedBed = bedManagementService.unassignPatientFromBed(patient);
         assertEquals(Integer.valueOf(12), unAssignedBed.getBed().getId());
         bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
         assertNull(bedDetails);

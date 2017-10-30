@@ -14,8 +14,8 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.bedmanagement.BedTagMap;
-import org.openmrs.module.bedmanagement.BedTagMapService;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
+import org.openmrs.module.bedmanagement.service.BedTagMapService;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
@@ -39,7 +39,7 @@ public class BedTagMapResource extends DataDelegatingCrudResource<BedTagMap> {
     @Override
     protected void delete(BedTagMap delegate, String reason, RequestContext context) throws ResponseException {
         BedTagMapService bedTagMapService = Context.getService(BedTagMapService.class);
-        bedTagMapService.delete(delegate, reason);
+        bedTagMapService.deleteBedTagMap(delegate, reason);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class BedTagMapResource extends DataDelegatingCrudResource<BedTagMap> {
 
     @Override
     public BedTagMap save(BedTagMap delegate) {
-        return Context.getService(BedTagMapService.class).save(delegate);
+        return Context.getService(BedTagMapService.class).saveBedTagMap(delegate);
     }
 
     @Override
