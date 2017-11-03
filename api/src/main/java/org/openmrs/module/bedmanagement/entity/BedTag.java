@@ -1,8 +1,6 @@
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.entity;
 
 import org.openmrs.BaseOpenmrsData;
-
-import java.util.Set;
 
 public class BedTag extends BaseOpenmrsData {
     private Integer id;
@@ -23,5 +21,13 @@ public class BedTag extends BaseOpenmrsData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "BedTag{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

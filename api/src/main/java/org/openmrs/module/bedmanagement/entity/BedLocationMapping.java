@@ -1,4 +1,4 @@
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.entity;
 
 import org.openmrs.Location;
 
@@ -50,5 +50,16 @@ public class BedLocationMapping {
 
     public void setColumn(int column) {
         this.column = column;
+    }
+
+    @Override
+    public String toString() {
+        return "BedLocationMapping{" +
+                "id=" + id +
+                ", locationId=" + (location != null ? location.getId() : null) +
+                ", bedId=" + (bed != null ? bed.getId() : null) +
+                ", row=" + row +
+                ", column=" + column +
+                '}';
     }
 }

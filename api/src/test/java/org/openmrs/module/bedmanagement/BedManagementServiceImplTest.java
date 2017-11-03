@@ -10,6 +10,14 @@ import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonName;
+import org.openmrs.module.bedmanagement.constants.BedStatus;
+import org.openmrs.module.bedmanagement.dao.AdmissionLocationDao;
+import org.openmrs.module.bedmanagement.dao.BedDao;
+import org.openmrs.module.bedmanagement.dao.BedPatientAssignmentDao;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
+import org.openmrs.module.bedmanagement.pojo.BedDetails;
+import org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -17,7 +25,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,24 +32,23 @@ public class BedManagementServiceImplTest {
 
     BedManagementServiceImpl bedManagementService;
     @Mock
-    BedManagementDAO bedManagementDAO;
+    BedDao bedDao;
+
+    @Mock
+    AdmissionLocationDao admissionLocationDao;
+
+    @Mock
+    BedPatientAssignmentDao bedPatientAssignmentDao;
+
+    @Mock
+    BedDao bedDAO;
 
     @Before
     public void setup() {
         bedManagementService = new BedManagementServiceImpl();
-        bedManagementService.setDao(bedManagementDAO);
-    }
-
-    @Test
-    public void should_get_layouts_for_ward() {
-        String wardId = "123";
-
-        Location location = new Location();
-        location.setUuid(wardId);
-
-        bedManagementService.getLayoutForWard(location);
-
-        verify(bedManagementDAO).getLayoutForWard(location);
+        bedManagementService.setAdmissionLocationDao(admissionLocationDao);
+        bedManagementService.setBedPatientAssignmentDao(bedPatientAssignmentDao);
+        bedManagementService.setBedDao(bedDAO);
     }
 
     @Test
@@ -68,11 +74,11 @@ public class BedManagementServiceImplTest {
         previousAssignment.setEndDatetime(new Date());
         bed.setBedPatientAssignment(new HashSet<BedPatientAssignment>(Arrays.asList(currentAssignment, previousAssignment)));
 
-        when(bedManagementDAO.getBedById(bedId)).thenReturn(bed);
-        when(bedManagementDAO.getWardForBed(bed)).thenReturn(ward);
-        when(bedManagementDAO.getCurrentAssignmentsByBed(bed)).thenReturn(Arrays.asList(currentAssignment));
+        when(bedDAO.getBedById(bedId)).thenReturn(bed);
+        when(admissionLocationDao.getWardForBed(bed)).thenReturn(ward);
+        when(bedPatientAssignmentDao.getCurrentAssignmentsForBed(bed)).thenReturn(Arrays.asList(currentAssignment));
 
-        BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bedId));
+        BedDetails bedDetails = bedManagementService.getBedDetailsByBedId(String.valueOf(bedId));
 
         Patient patient1 = bedDetails.getPatients().get(0);
         assertEquals("GAN123", patient1.getPatientIdentifier().getIdentifier());
@@ -111,11 +117,11 @@ public class BedManagementServiceImplTest {
         stoppedBedAssignment.setEndDatetime(new Date());
         bed.setBedPatientAssignment(new LinkedHashSet<BedPatientAssignment>(Arrays.asList(currentAssignment1, currentAssignment2, stoppedBedAssignment)));
 
-        when(bedManagementDAO.getBedById(bedId)).thenReturn(bed);
-        when(bedManagementDAO.getWardForBed(bed)).thenReturn(ward);
-        when(bedManagementDAO.getCurrentAssignmentsByBed(bed)).thenReturn(Arrays.asList(currentAssignment1, currentAssignment2));
+        when(bedDAO.getBedById(bedId)).thenReturn(bed);
+        when(admissionLocationDao.getWardForBed(bed)).thenReturn(ward);
+        when(bedPatientAssignmentDao.getCurrentAssignmentsForBed(bed)).thenReturn(Arrays.asList(currentAssignment1, currentAssignment2));
 
-        BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bedId));
+        BedDetails bedDetails = bedManagementService.getBedDetailsByBedId(String.valueOf(bedId));
 
         assertEquals(2, bedDetails.getPatients().size());
         Patient actualPatient1 = bedDetails.getPatients().get(0);
@@ -129,7 +135,7 @@ public class BedManagementServiceImplTest {
         assertEquals("M", actualPatient2.getGender());
     }
 
-    private Patient createPatient(String identifierString, String patientUuid, String firstName, String middleName, String lastName){
+    private Patient createPatient(String identifierString, String patientUuid, String firstName, String middleName, String lastName) {
         PatientIdentifier identifier = new PatientIdentifier(identifierString, new PatientIdentifierType(), new Location());
         identifier.setPreferred(true);
         PersonName personName = new PersonName(firstName, middleName, lastName);

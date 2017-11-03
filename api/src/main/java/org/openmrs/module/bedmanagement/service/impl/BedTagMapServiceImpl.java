@@ -11,38 +11,44 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.service.impl;
 
 
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import java.util.Date;
+
+import org.openmrs.module.bedmanagement.dao.BedTagMapDao;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
+import org.openmrs.module.bedmanagement.service.BedTagMapService;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 
 
 public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMapService {
 
-    BedTagMapDAO dao;
+    BedTagMapDao dao;
 
-    public void setDao(BedTagMapDAO dao) {
+    public void setDao(BedTagMapDao dao) {
         this.dao = dao;
     }
 
     @Override
-    public BedTagMap save(BedTagMap bedTagMap) throws IllegalPropertyException{
+    public BedTagMap saveBedTagMap(BedTagMap bedTagMap) throws IllegalPropertyException{
         if (getBedTagMapWithBedAndTag(bedTagMap.getBed(), bedTagMap.getBedTag()) != null) {
             throw new IllegalPropertyException("Tag Already Present For Bed");
         }
-        return dao.saveOrUpdate(bedTagMap);
+        return dao.saveBedTagMap(bedTagMap);
     }
 
     @Override
-    public void delete(BedTagMap bedTagMap, String reason) {
+    public void deleteBedTagMap(BedTagMap bedTagMap, String reason) {
         bedTagMap.setVoided(true);
         bedTagMap.setDateVoided(new Date());
         bedTagMap.setVoidReason(reason);
         bedTagMap.setVoidedBy(Context.getAuthenticatedUser());
-        dao.saveOrUpdate(bedTagMap);
+        dao.saveBedTagMap(bedTagMap);
     }
 
     @Override

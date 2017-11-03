@@ -1,4 +1,4 @@
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.entity;
 
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.Encounter;
@@ -61,5 +61,17 @@ public class BedPatientAssignment extends BaseOpenmrsData {
 
     public void setEncounter(Encounter encounter) {
         this.encounter = encounter;
+    }
+
+    @Override
+    public String toString() {
+        return "BedPatientAssignment{" +
+                "id=" + id +
+                ", bedId=" + (bed != null ? bed.getId() : null) +
+                ", patientId=" + (patient != null ? patient.getId() : null) +
+                ", startDatetime=" + startDatetime +
+                ", endDatetime=" + endDatetime +
+                ", encounter=" + (encounter != null ? encounter.getId() : null) +
+                '}';
     }
 }

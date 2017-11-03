@@ -11,18 +11,21 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.bedmanagement.pojo.AdmissionLocation;
+import org.openmrs.module.bedmanagement.pojo.BedDetails;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @org.springframework.test.context.ContextConfiguration(locations = {"classpath:TestingApplicationContext.xml"}, inheritLocations = true)
 public class BedManagementServiceIntegrationTest extends BaseModuleWebContextSensitiveTest {
-    
+
     @Autowired
     private BedManagementService bedManagementService;
     private int bedIdFromDataSetup = 11;
@@ -30,31 +33,6 @@ public class BedManagementServiceIntegrationTest extends BaseModuleWebContextSen
     @Before
     public void beforeAllTests() throws Exception {
         executeDataSet("bedManagementDAOComponentTestDataset.xml");
-    }
-
-    @Test
-    public void getAllLocationsBy_gets_locations_for_a_tag() {
-        List<AdmissionLocation> admissionLocationList = bedManagementService.getAllAdmissionLocations();
-        assertThat(admissionLocationList.size(), is(2));
-
-        AdmissionLocation cardioWard = getWard(admissionLocationList, "Cardio ward on first floor");
-        Assert.assertEquals(10, cardioWard.getTotalBeds());
-        Assert.assertEquals(1, cardioWard.getOccupiedBeds());
-
-        AdmissionLocation orthoWard = getWard(admissionLocationList, "Orthopaedic ward");
-        Assert.assertEquals(6, orthoWard.getTotalBeds());
-        Assert.assertEquals(2, orthoWard.getOccupiedBeds());
-    }
-
-    @Test
-    public void getBedsForWard_gets_all_bed_layouts_for_ward() {
-        LocationService locationService = Context.getLocationService();
-
-        Location ward = locationService.getLocationByUuid("19e023e8-20ee-4237-ade6-9e68f897b7a9");
-        AdmissionLocation admissionLocation = bedManagementService.getLayoutForWard(ward);
-
-        assertEquals(6, admissionLocation.getBedLayouts().size());
-        assertEquals("Physical Location for Orthopaedic ward", admissionLocation.getBedLayouts().get(0).getLocation());
     }
 
     private AdmissionLocation getWard(List<AdmissionLocation> admissionLocationList, String wardName) {
@@ -92,7 +70,7 @@ public class BedManagementServiceIntegrationTest extends BaseModuleWebContextSen
     @Test
     public void shouldGetBedDetailsById() {
         int deluxeBedId = 1;
-        BedDetails details = bedManagementService.getBedDetailsById(String.valueOf(deluxeBedId));
+        BedDetails details = bedManagementService.getBedDetailsByBedId(String.valueOf(deluxeBedId));
         assertNotNull(details);
         assertNotNull(details.getPatients());
         assertNotNull(details.getCurrentAssignments());
@@ -125,7 +103,7 @@ public class BedManagementServiceIntegrationTest extends BaseModuleWebContextSen
         Patient patient = patientService.getPatient(4);
         BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
         assertEquals(Integer.valueOf(12), bedDetails.getBed().getId());
-        BedDetails unAssignedBed = bedManagementService.unAssignPatientFromBed(patient);
+        BedDetails unAssignedBed = bedManagementService.unassignPatientFromBed(patient);
         assertEquals(Integer.valueOf(12), unAssignedBed.getBed().getId());
         bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
         assertNull(bedDetails);

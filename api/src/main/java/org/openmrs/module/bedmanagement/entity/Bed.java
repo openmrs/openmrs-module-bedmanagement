@@ -1,4 +1,4 @@
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.entity;
 
 import org.openmrs.BaseOpenmrsData;
 
@@ -60,4 +60,15 @@ public class Bed extends BaseOpenmrsData {
         this.bedTagMap = bedTagMap;
     }
 
+    @Override
+    public String toString() {
+        return "Bed{" +
+                "id=" + id +
+                ", bedNumber='" + bedNumber + '\'' +
+                ", bedTypeId=" + (bedType != null ? bedType.getId() : null) +
+                ", bedPatientAssignment=" + bedPatientAssignment +
+                ", status='" + status + '\'' +
+                ", bedTagMap=" + bedTagMap +
+                '}';
+    }
 }
