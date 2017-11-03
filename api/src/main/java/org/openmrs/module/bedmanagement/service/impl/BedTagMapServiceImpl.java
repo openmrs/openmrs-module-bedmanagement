@@ -11,21 +11,27 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.service.impl;
 
 
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import java.util.Date;
+
+import org.openmrs.module.bedmanagement.dao.BedTagMapDao;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
+import org.openmrs.module.bedmanagement.service.BedTagMapService;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 
 
 public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMapService {
 
-    BedTagMapDAO dao;
+    BedTagMapDao bedTagMapDao;
 
-    public void setDao(BedTagMapDAO dao) {
-        this.dao = dao;
+    public void setDao(BedTagMapDao dao) {
+        this.bedTagMapDao = dao;
     }
 
     @Override
@@ -33,7 +39,7 @@ public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMa
         if (getBedTagMapWithBedAndTag(bedTagMap.getBed(), bedTagMap.getBedTag()) != null) {
             throw new IllegalPropertyException("Tag Already Present For Bed");
         }
-        return dao.saveOrUpdate(bedTagMap);
+        return bedTagMapDao.saveOrUpdate(bedTagMap);
     }
 
     @Override
@@ -42,21 +48,21 @@ public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMa
         bedTagMap.setDateVoided(new Date());
         bedTagMap.setVoidReason(reason);
         bedTagMap.setVoidedBy(Context.getAuthenticatedUser());
-        dao.saveOrUpdate(bedTagMap);
+        bedTagMapDao.saveOrUpdate(bedTagMap);
     }
 
     @Override
     public BedTagMap getBedTagMapByUuid(String bedTagMapUuid) {
-        return dao.getBedTagMapByUuid(bedTagMapUuid);
+        return bedTagMapDao.getBedTagMapByUuid(bedTagMapUuid);
     }
 
     @Override
     public BedTagMap getBedTagMapWithBedAndTag(Bed bed, BedTag bedTag) {
-        return dao.getBedTagMapWithBedAndTag(bed, bedTag);
+        return bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag);
     }
 
     @Override
     public BedTag getBedTagByUuid(String bedTagUuid) {
-        return dao.getBedTagByUuid(bedTagUuid);
+        return bedTagMapDao.getBedTagByUuid(bedTagUuid);
     }
 }

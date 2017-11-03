@@ -3,14 +3,14 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="org.openmrs.module.bedmanagement.BedTagMap" table="bed_tag_map">
+    <class name="org.openmrs.module.bedmanagement.entity.BedTagMap" table="bed_tag_map">
         
         <id name="id" type="int" column="bed_tag_map_id" unsaved-value="0">
             <generator class="native"/>
         </id>
 
-        <many-to-one name="bed" class="org.openmrs.module.bedmanagement.Bed" not-null="true" column="bed_id"/>
-        <many-to-one name="bedTag" class="org.openmrs.module.bedmanagement.BedTag" not-null="true" column="bed_tag_id"/>
+        <many-to-one name="bed" class="org.openmrs.module.bedmanagement.entity.Bed" not-null="true" column="bed_id"/>
+        <many-to-one name="bedTag" class="org.openmrs.module.bedmanagement.entity.BedTag" not-null="true" column="bed_tag_id"/>
 
         <property name="uuid" type="java.lang.String"
                   column="uuid" length="38" unique="true"/>

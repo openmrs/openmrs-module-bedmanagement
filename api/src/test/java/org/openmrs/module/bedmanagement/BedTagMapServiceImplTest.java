@@ -8,6 +8,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.bedmanagement.dao.BedTagMapDao;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
+import org.openmrs.module.bedmanagement.service.impl.BedTagMapServiceImpl;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -26,7 +31,7 @@ public class BedTagMapServiceImplTest {
     BedTagMapServiceImpl bedTagMapService;
 
     @Mock
-    BedTagMapDAO bedTagMapDAO;
+    BedTagMapDao bedTagMapDao;
 
     @Mock
     Context context;
@@ -43,18 +48,18 @@ public class BedTagMapServiceImplTest {
         PowerMockito.mockStatic(Context.class);
         when(Context.getAuthenticatedUser()).thenReturn(authenticatedUser);
         bedTagMapService = new BedTagMapServiceImpl();
-        bedTagMapService.setDao(bedTagMapDAO);
+        bedTagMapService.setDao(bedTagMapDao);
     }
 
     @Test
     public void shouldGetBedTagMapByUuid() {
         String bedTagMapUuid = "bedTagMapUuid";
         BedTagMap bedTagMap = new BedTagMap();
-        when(bedTagMapDAO.getBedTagMapByUuid(bedTagMapUuid)).thenReturn(bedTagMap);
+        when(bedTagMapDao.getBedTagMapByUuid(bedTagMapUuid)).thenReturn(bedTagMap);
 
         BedTagMap actualBedTagMap = bedTagMapService.getBedTagMapByUuid(bedTagMapUuid);
 
-        verify(bedTagMapDAO, times(1)).getBedTagMapByUuid(bedTagMapUuid);
+        verify(bedTagMapDao, times(1)).getBedTagMapByUuid(bedTagMapUuid);
         assertEquals(bedTagMap, actualBedTagMap);
     }
 
@@ -62,11 +67,11 @@ public class BedTagMapServiceImplTest {
     public void shouldGetBedTagByUuid() {
         String bedTagUuid = "bedTagUuid";
         BedTag bedTag = new BedTag();
-        when(bedTagMapDAO.getBedTagByUuid(bedTagUuid)).thenReturn(bedTag);
+        when(bedTagMapDao.getBedTagByUuid(bedTagUuid)).thenReturn(bedTag);
 
         BedTag actualBedTag = bedTagMapService.getBedTagByUuid(bedTagUuid);
 
-        verify(bedTagMapDAO, times(1)).getBedTagByUuid(bedTagUuid);
+        verify(bedTagMapDao, times(1)).getBedTagByUuid(bedTagUuid);
         assertEquals(bedTag, actualBedTag);
     }
 
@@ -81,7 +86,7 @@ public class BedTagMapServiceImplTest {
         BedTagMap bedTagMap = new BedTagMap();
         bedTagMap.setBed(bed);
         bedTagMap.setBedTag(bedTag);
-        when(bedTagMapDAO.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(bedTagMap);
+        when(bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(bedTagMap);
         bedTagMapService.save(bedTagMap);
     }
 
@@ -92,9 +97,9 @@ public class BedTagMapServiceImplTest {
         BedTagMap bedTagMap = new BedTagMap();
         bedTagMap.setBed(bed);
         bedTagMap.setBedTag(bedTag);
-        when(bedTagMapDAO.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(null);
+        when(bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(null);
         bedTagMapService.save(bedTagMap);
-        verify(bedTagMapDAO, times(1)).saveOrUpdate(any(BedTagMap.class));
+        verify(bedTagMapDao, times(1)).saveOrUpdate(any(BedTagMap.class));
     }
 
     @Test
@@ -102,6 +107,6 @@ public class BedTagMapServiceImplTest {
         String reason = "some reason";
         BedTagMap bedTagMap = new BedTagMap();
         bedTagMapService.delete(bedTagMap, reason);
-        verify(bedTagMapDAO, times(1)).saveOrUpdate(any(BedTagMap.class));
+        verify(bedTagMapDao, times(1)).saveOrUpdate(any(BedTagMap.class));
     }
 }

@@ -1,6 +1,8 @@
 package org.openmrs.module.bedmanagement;
 
-import java.util.HashSet;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
+
 import java.util.Set;
 
 public class BedLayoutWithDetails {

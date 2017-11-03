@@ -1,7 +1,10 @@
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.service;
 
 import org.openmrs.annotation.Authorized;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.springframework.transaction.annotation.Transactional;
 

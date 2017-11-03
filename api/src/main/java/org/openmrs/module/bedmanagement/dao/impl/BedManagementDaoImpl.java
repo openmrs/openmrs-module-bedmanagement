@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.dao.impl;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
@@ -19,6 +19,17 @@ import org.hibernate.transform.Transformers;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
+import org.openmrs.module.bedmanagement.constants.BedStatus;
+import org.openmrs.module.bedmanagement.dao.BedManagementDao;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
+import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.AdmissionLocation;
+import org.openmrs.module.bedmanagement.BedDetails;
+import org.openmrs.module.bedmanagement.BedLayout;
+import org.openmrs.module.bedmanagement.BedLayoutWithDetails;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,7 +39,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class HibernateBedManagementDAO implements BedManagementDAO {
+public class BedManagementDaoImpl implements BedManagementDao {
     SessionFactory sessionFactory;
 
     public void setSessionFactory(SessionFactory sessionFactory) {

@@ -11,9 +11,13 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.dao;
 
-public interface BedTagMapDAO {
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
+
+public interface BedTagMapDao {
 
     BedTagMap saveOrUpdate(BedTagMap bedTagMap);
 

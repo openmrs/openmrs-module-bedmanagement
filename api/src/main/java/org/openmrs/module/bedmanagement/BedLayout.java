@@ -1,6 +1,8 @@
 package org.openmrs.module.bedmanagement;
 
 import org.openmrs.Patient;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
+import org.openmrs.module.bedmanagement.entity.BedType;
 
 import java.util.Set;
 
