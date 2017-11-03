@@ -43,7 +43,7 @@ public class BedDetailsResourceSearchHandler implements SearchHandler {
     public PageableResult search(RequestContext requestContext) throws ResponseException {
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
         String visitUuid = requestContext.getRequest().getParameter("visitUuid");
-        BedDetails bedDetails = bedManagementService.getLatestBedDetailsByVisit(visitUuid);
+        BedDetails bedDetails = bedManagementService.getLatestBedDetailsByVisitUuid(visitUuid);
         AlreadyPaged<BedDetails> alreadyPaged = new AlreadyPaged<BedDetails>(requestContext, Collections.singletonList(bedDetails), false);
         return bedDetails == null ? new EmptySearchResult() : alreadyPaged;
     }

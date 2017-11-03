@@ -29,7 +29,7 @@ public class BedTagMapDaoImpl implements BedTagMapDao {
     }
 
     @Override
-    public BedTagMap saveOrUpdate(BedTagMap bedTagMap) {
+    public BedTagMap saveBedTagMap(BedTagMap bedTagMap) {
         Session session = this.sessionFactory.getCurrentSession();
         session.saveOrUpdate(bedTagMap);
         session.flush();
@@ -37,10 +37,10 @@ public class BedTagMapDaoImpl implements BedTagMapDao {
     }
 
     @Override
-    public BedTagMap getBedTagMapByUuid(String bedTagMapUuid) {
+    public BedTagMap getBedTagMapByUuid(String uuid) {
         return (BedTagMap) sessionFactory.getCurrentSession()
                 .createQuery("from BedTagMap where uuid = :uuid and voided =:voided")
-                .setParameter("uuid", bedTagMapUuid)
+                .setParameter("uuid", uuid)
                 .setParameter("voided", false)
                 .uniqueResult();
     }

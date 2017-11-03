@@ -48,12 +48,14 @@ public class BedLayoutWithDetails {
         bedLayout.setRowNumber(this.rowNumber);
         bedLayout.setColumnNumber(this.columnNumber);
         bedLayout.setLocation(this.location);
-        bedLayout.setBedNumber(this.bed.getBedNumber());
-        bedLayout.setBedId(this.bed.getId());
-        bedLayout.setStatus(this.bed.getStatus());
-        bedLayout.setBedType(this.bed.getBedType());
-        bedLayout.setBedTagMaps(this.bed.getBedTagMap());
-        setPatientInfo(bedLayout);
+        bedLayout.setBedNumber(this.bed != null ? this.bed.getBedNumber() : null);
+        bedLayout.setBedId(this.bed != null ? this.bed.getId() : null);
+        bedLayout.setBedUuid(this.bed != null ? this.bed.getUuid() : null);
+        bedLayout.setStatus(this.bed != null ? this.bed.getStatus() : null);
+        bedLayout.setBedType(this.bed != null ? this.bed.getBedType() : null);
+        bedLayout.setBedTagMaps(this.bed != null ? this.bed.getBedTagMap() : null);
+        if (this.bed != null)
+            setPatientInfo(bedLayout);
         return bedLayout;
     }
 

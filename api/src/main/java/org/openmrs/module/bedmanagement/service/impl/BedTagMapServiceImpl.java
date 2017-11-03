@@ -30,25 +30,25 @@ public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMa
 
     BedTagMapDao bedTagMapDao;
 
-    public void setDao(BedTagMapDao dao) {
-        this.bedTagMapDao = dao;
+    public void setDao(BedTagMapDao bedTagMapDao) {
+        this.bedTagMapDao = bedTagMapDao;
     }
 
     @Override
-    public BedTagMap save(BedTagMap bedTagMap) throws IllegalPropertyException{
+    public BedTagMap saveBedTagMap(BedTagMap bedTagMap) throws IllegalPropertyException{
         if (getBedTagMapWithBedAndTag(bedTagMap.getBed(), bedTagMap.getBedTag()) != null) {
             throw new IllegalPropertyException("Tag Already Present For Bed");
         }
-        return bedTagMapDao.saveOrUpdate(bedTagMap);
+        return bedTagMapDao.saveBedTagMap(bedTagMap);
     }
 
     @Override
-    public void delete(BedTagMap bedTagMap, String reason) {
+    public void deleteBedTagMap(BedTagMap bedTagMap, String reason) {
         bedTagMap.setVoided(true);
         bedTagMap.setDateVoided(new Date());
         bedTagMap.setVoidReason(reason);
         bedTagMap.setVoidedBy(Context.getAuthenticatedUser());
-        bedTagMapDao.saveOrUpdate(bedTagMap);
+        bedTagMapDao.saveBedTagMap(bedTagMap);
     }
 
     @Override
