@@ -12,7 +12,7 @@
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">
-                <value>${project.parent.groupId}.${project.parent.artifactId}.BedManagementService</value>
+                <value>org.openmrs.module.bedmanagement.service.BedManagementService</value>
                 <ref local="bedManagementService"/>
             </list>
         </property>
@@ -23,9 +23,9 @@
             <ref bean="transactionManager"/>
         </property>
         <property name="target">
-            <bean class="org.openmrs.module.bedmanagement.BedManagementServiceImpl">
+            <bean class="org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl">
                 <property name="dao">
-                    <bean class="${project.parent.groupId}.${project.parent.artifactId}.HibernateBedManagementDAO">
+                    <bean class="org.openmrs.module.bedmanagement.dao.impl.BedManagementDaoImpl">
                         <property name="sessionFactory">
                             <ref bean="sessionFactory"/>
                         </property>
@@ -47,7 +47,7 @@
             <ref bean="transactionManager"/>
         </property>
         <property name="target">
-            <bean class="org.openmrs.module.bedmanagement.HibernateBedManagementDAO">
+            <bean class="org.openmrs.module.bedmanagement.dao.impl.BedManagementDaoImpl">
                 <property name="sessionFactory">
                     <ref bean="sessionFactory"/>
                 </property>
@@ -64,7 +64,7 @@
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">
-                <value>${project.parent.groupId}.${project.parent.artifactId}.BedTagMapService</value>
+                <value>org.openmrs.module.bedmanagement.service.BedTagMapService</value>
                 <ref local="bedTagMapService"/>
             </list>
         </property>
@@ -75,9 +75,9 @@
             <ref bean="transactionManager"/>
         </property>
         <property name="target">
-            <bean class="org.openmrs.module.bedmanagement.BedTagMapServiceImpl">
+            <bean class="org.openmrs.module.bedmanagement.service.impl.BedTagMapServiceImpl">
                 <property name="dao">
-                    <bean class="${project.parent.groupId}.${project.parent.artifactId}.HibernateBedTagMapDAO">
+                    <bean class="org.openmrs.module.bedmanagement.dao.impl.BedTagMapDaoImpl">
                         <property name="sessionFactory">
                             <ref bean="sessionFactory"/>
                         </property>
@@ -99,7 +99,7 @@
             <ref bean="transactionManager"/>
         </property>
         <property name="target">
-            <bean class="org.openmrs.module.bedmanagement.HibernateBedTagMapDAO">
+            <bean class="org.openmrs.module.bedmanagement.dao.impl.BedTagMapDaoImpl">
                 <property name="sessionFactory">
                     <ref bean="sessionFactory"/>
                 </property>

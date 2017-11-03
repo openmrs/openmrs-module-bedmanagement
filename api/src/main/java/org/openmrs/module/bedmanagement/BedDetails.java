@@ -2,6 +2,9 @@ package org.openmrs.module.bedmanagement;
 
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
+import org.openmrs.module.bedmanagement.entity.BedType;
 
 import java.util.ArrayList;
 import java.util.List;

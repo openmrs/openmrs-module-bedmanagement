@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.openmrs.module.bedmanagement.BedDetails;
-import org.openmrs.module.bedmanagement.BedPatientAssignment;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.transaction.PlatformTransactionManager;
 

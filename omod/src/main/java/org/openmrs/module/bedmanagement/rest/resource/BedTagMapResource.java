@@ -14,8 +14,8 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.bedmanagement.BedTagMap;
-import org.openmrs.module.bedmanagement.BedTagMapService;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
+import org.openmrs.module.bedmanagement.service.BedTagMapService;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;

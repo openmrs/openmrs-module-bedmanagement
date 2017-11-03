@@ -9,6 +9,10 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
+import org.openmrs.module.bedmanagement.dao.BedManagementDao;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
+import org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -47,7 +51,7 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
     public void getAllAdmissionLocations_gets_locations_that_support_admission() {
         ArrayList<AdmissionLocation> expectedWards = new ArrayList<AdmissionLocation>();
 
-        BedManagementDAO bedManagementDao = mock(BedManagementDAO.class);
+        BedManagementDao bedManagementDao = mock(BedManagementDao.class);
         when(bedManagementDao.getAdmissionLocationsBy(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION)).thenReturn(expectedWards);
 
         BedManagementServiceImpl bedManagementService = new BedManagementServiceImpl();

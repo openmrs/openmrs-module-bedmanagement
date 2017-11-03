@@ -11,6 +11,7 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;

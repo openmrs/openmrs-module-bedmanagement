@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.service;
 
 
 import org.openmrs.Encounter;
@@ -19,6 +19,11 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.annotation.Authorized;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
+import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.AdmissionLocation;
+import org.openmrs.module.bedmanagement.BedDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

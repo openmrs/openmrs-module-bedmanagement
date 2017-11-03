@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="org.openmrs.module.bedmanagement.BedPatientAssignment" table="bed_patient_assignment_map">
+    <class name="org.openmrs.module.bedmanagement.entity.BedPatientAssignment" table="bed_patient_assignment_map">
 
         <id name="id" type="int" column="bed_patient_assignment_map_id" unsaved-value="0">
             <generator class="native"/>
@@ -34,7 +34,7 @@
                   column="void_reason" length="255" />
 
         <many-to-one name="patient" class="org.openmrs.Patient" not-null="true" column="patient_id"/>
-        <many-to-one name="bed" class="org.openmrs.module.bedmanagement.Bed" not-null="true" column="bed_id"/>
+        <many-to-one name="bed" class="org.openmrs.module.bedmanagement.entity.Bed" not-null="true" column="bed_id"/>
         <many-to-one name="encounter" class="org.openmrs.Encounter" not-null="true" column="encounter_id"/>
 
         <property name="startDatetime" type="java.util.Date" column="date_started" not-null="true" length="19"/>

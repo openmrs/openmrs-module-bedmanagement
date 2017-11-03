@@ -1,4 +1,4 @@
-package org.openmrs.module.bedmanagement;
+package org.openmrs.module.bedmanagement.entity;
 
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.Encounter;

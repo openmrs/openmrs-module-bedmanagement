@@ -17,7 +17,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.BedDetails;
-import org.openmrs.module.bedmanagement.BedManagementService;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;

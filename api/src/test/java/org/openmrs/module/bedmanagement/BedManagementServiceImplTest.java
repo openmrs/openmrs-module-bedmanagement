@@ -10,6 +10,11 @@ import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonName;
+import org.openmrs.module.bedmanagement.constants.BedStatus;
+import org.openmrs.module.bedmanagement.dao.BedManagementDao;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
+import org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -25,12 +30,12 @@ public class BedManagementServiceImplTest {
 
     BedManagementServiceImpl bedManagementService;
     @Mock
-    BedManagementDAO bedManagementDAO;
+    BedManagementDao bedManagementDao;
 
     @Before
     public void setup() {
         bedManagementService = new BedManagementServiceImpl();
-        bedManagementService.setDao(bedManagementDAO);
+        bedManagementService.setDao(bedManagementDao);
     }
 
     @Test
@@ -42,7 +47,7 @@ public class BedManagementServiceImplTest {
 
         bedManagementService.getLayoutForWard(location);
 
-        verify(bedManagementDAO).getLayoutForWard(location);
+        verify(bedManagementDao).getLayoutForWard(location);
     }
 
     @Test
@@ -68,9 +73,9 @@ public class BedManagementServiceImplTest {
         previousAssignment.setEndDatetime(new Date());
         bed.setBedPatientAssignment(new HashSet<BedPatientAssignment>(Arrays.asList(currentAssignment, previousAssignment)));
 
-        when(bedManagementDAO.getBedById(bedId)).thenReturn(bed);
-        when(bedManagementDAO.getWardForBed(bed)).thenReturn(ward);
-        when(bedManagementDAO.getCurrentAssignmentsByBed(bed)).thenReturn(Arrays.asList(currentAssignment));
+        when(bedManagementDao.getBedById(bedId)).thenReturn(bed);
+        when(bedManagementDao.getWardForBed(bed)).thenReturn(ward);
+        when(bedManagementDao.getCurrentAssignmentsByBed(bed)).thenReturn(Arrays.asList(currentAssignment));
 
         BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bedId));
 
@@ -111,9 +116,9 @@ public class BedManagementServiceImplTest {
         stoppedBedAssignment.setEndDatetime(new Date());
         bed.setBedPatientAssignment(new LinkedHashSet<BedPatientAssignment>(Arrays.asList(currentAssignment1, currentAssignment2, stoppedBedAssignment)));
 
-        when(bedManagementDAO.getBedById(bedId)).thenReturn(bed);
-        when(bedManagementDAO.getWardForBed(bed)).thenReturn(ward);
-        when(bedManagementDAO.getCurrentAssignmentsByBed(bed)).thenReturn(Arrays.asList(currentAssignment1, currentAssignment2));
+        when(bedManagementDao.getBedById(bedId)).thenReturn(bed);
+        when(bedManagementDao.getWardForBed(bed)).thenReturn(ward);
+        when(bedManagementDao.getCurrentAssignmentsByBed(bed)).thenReturn(Arrays.asList(currentAssignment1, currentAssignment2));
 
         BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bedId));
 
