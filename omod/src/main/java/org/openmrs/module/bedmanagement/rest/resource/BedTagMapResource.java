@@ -39,7 +39,7 @@ public class BedTagMapResource extends DataDelegatingCrudResource<BedTagMap> {
     @Override
     protected void delete(BedTagMap delegate, String reason, RequestContext context) throws ResponseException {
         BedTagMapService bedTagMapService = Context.getService(BedTagMapService.class);
-        bedTagMapService.delete(delegate, reason);
+        bedTagMapService.deleteBedTagMap(delegate, reason);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class BedTagMapResource extends DataDelegatingCrudResource<BedTagMap> {
 
     @Override
     public BedTagMap save(BedTagMap delegate) {
-        return Context.getService(BedTagMapService.class).save(delegate);
+        return Context.getService(BedTagMapService.class).saveBedTagMap(delegate);
     }
 
     @Override

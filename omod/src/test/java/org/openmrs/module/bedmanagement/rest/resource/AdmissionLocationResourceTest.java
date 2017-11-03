@@ -70,11 +70,11 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 
         List results = (List) object.get("results");
         LinkedHashMap<String, Object> cardioWardOnFirstFloor = (LinkedHashMap<String, Object>) ((List) object.get("results")).get(0);
-        LinkedHashMap<String, Object> orthopaedicWard = (LinkedHashMap<String, Object>) ((List) object.get("results")).get(1);
+        LinkedHashMap<String, Object> orthopaedicWard = (LinkedHashMap<String, Object>) ((List) object.get("results")).get(2);
         LinkedHashMap<String, Object> cardioWardOnFirstFloorInfo = (LinkedHashMap<String, Object>) cardioWardOnFirstFloor.get("ward");
         LinkedHashMap<String, Object> orthopaedicWardInfo = (LinkedHashMap<String, Object>) orthopaedicWard.get("ward");
 
-        assertEquals(2, results.size());
+        assertEquals(3, results.size());
         assertNotNull(cardioWardOnFirstFloor);
         assertNotNull(cardioWardOnFirstFloorInfo);
         assertEquals("Cardio ward on first floor", cardioWardOnFirstFloorInfo.get("name"));

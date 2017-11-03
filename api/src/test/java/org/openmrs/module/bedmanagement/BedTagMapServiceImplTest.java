@@ -31,7 +31,7 @@ public class BedTagMapServiceImplTest {
     BedTagMapServiceImpl bedTagMapService;
 
     @Mock
-    BedTagMapDao bedTagMapDao;
+    BedTagMapDao bedTagMapDAO;
 
     @Mock
     Context context;
@@ -48,18 +48,18 @@ public class BedTagMapServiceImplTest {
         PowerMockito.mockStatic(Context.class);
         when(Context.getAuthenticatedUser()).thenReturn(authenticatedUser);
         bedTagMapService = new BedTagMapServiceImpl();
-        bedTagMapService.setDao(bedTagMapDao);
+        bedTagMapService.setDao(bedTagMapDAO);
     }
 
     @Test
     public void shouldGetBedTagMapByUuid() {
         String bedTagMapUuid = "bedTagMapUuid";
         BedTagMap bedTagMap = new BedTagMap();
-        when(bedTagMapDao.getBedTagMapByUuid(bedTagMapUuid)).thenReturn(bedTagMap);
+        when(bedTagMapDAO.getBedTagMapByUuid(bedTagMapUuid)).thenReturn(bedTagMap);
 
         BedTagMap actualBedTagMap = bedTagMapService.getBedTagMapByUuid(bedTagMapUuid);
 
-        verify(bedTagMapDao, times(1)).getBedTagMapByUuid(bedTagMapUuid);
+        verify(bedTagMapDAO, times(1)).getBedTagMapByUuid(bedTagMapUuid);
         assertEquals(bedTagMap, actualBedTagMap);
     }
 
@@ -67,11 +67,11 @@ public class BedTagMapServiceImplTest {
     public void shouldGetBedTagByUuid() {
         String bedTagUuid = "bedTagUuid";
         BedTag bedTag = new BedTag();
-        when(bedTagMapDao.getBedTagByUuid(bedTagUuid)).thenReturn(bedTag);
+        when(bedTagMapDAO.getBedTagByUuid(bedTagUuid)).thenReturn(bedTag);
 
         BedTag actualBedTag = bedTagMapService.getBedTagByUuid(bedTagUuid);
 
-        verify(bedTagMapDao, times(1)).getBedTagByUuid(bedTagUuid);
+        verify(bedTagMapDAO, times(1)).getBedTagByUuid(bedTagUuid);
         assertEquals(bedTag, actualBedTag);
     }
 
@@ -86,8 +86,8 @@ public class BedTagMapServiceImplTest {
         BedTagMap bedTagMap = new BedTagMap();
         bedTagMap.setBed(bed);
         bedTagMap.setBedTag(bedTag);
-        when(bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(bedTagMap);
-        bedTagMapService.save(bedTagMap);
+        when(bedTagMapDAO.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(bedTagMap);
+        bedTagMapService.saveBedTagMap(bedTagMap);
     }
 
     @Test
@@ -97,16 +97,16 @@ public class BedTagMapServiceImplTest {
         BedTagMap bedTagMap = new BedTagMap();
         bedTagMap.setBed(bed);
         bedTagMap.setBedTag(bedTag);
-        when(bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(null);
-        bedTagMapService.save(bedTagMap);
-        verify(bedTagMapDao, times(1)).saveOrUpdate(any(BedTagMap.class));
+        when(bedTagMapDAO.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(null);
+        bedTagMapService.saveBedTagMap(bedTagMap);
+        verify(bedTagMapDAO, times(1)).saveBedTagMap(any(BedTagMap.class));
     }
 
     @Test
     public void shouldVoidGivenBedTagMap() throws Exception {
         String reason = "some reason";
         BedTagMap bedTagMap = new BedTagMap();
-        bedTagMapService.delete(bedTagMap, reason);
-        verify(bedTagMapDao, times(1)).saveOrUpdate(any(BedTagMap.class));
+        bedTagMapService.deleteBedTagMap(bedTagMap, reason);
+        verify(bedTagMapDAO, times(1)).saveBedTagMap(any(BedTagMap.class));
     }
 }

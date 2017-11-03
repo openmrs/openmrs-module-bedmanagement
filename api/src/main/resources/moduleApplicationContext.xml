@@ -12,7 +12,7 @@
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">
-                <value>org.openmrs.module.bedmanagement.service.BedManagementService</value>
+                <value>${project.parent.groupId}.${project.parent.artifactId}.service.BedManagementService</value>
                 <ref local="bedManagementService"/>
             </list>
         </property>
@@ -24,8 +24,36 @@
         </property>
         <property name="target">
             <bean class="org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl">
-                <property name="dao">
-                    <bean class="org.openmrs.module.bedmanagement.dao.impl.BedManagementDaoImpl">
+                <property name="bedDao">
+                    <bean class="${project.parent.groupId}.${project.parent.artifactId}.dao.impl.BedDaoImpl">
+                        <property name="sessionFactory">
+                            <ref bean="sessionFactory"/>
+                        </property>
+                    </bean>
+                </property>
+                <property name="bedTypeDao">
+                    <bean class="${project.parent.groupId}.${project.parent.artifactId}.dao.impl.BedTypeDaoImpl">
+                        <property name="sessionFactory">
+                            <ref bean="sessionFactory"/>
+                        </property>
+                    </bean>
+                </property>
+                <property name="bedLocationMappingDao">
+                    <bean class="${project.parent.groupId}.${project.parent.artifactId}.dao.impl.BedLocationMappingDaoImpl">
+                        <property name="sessionFactory">
+                            <ref bean="sessionFactory"/>
+                        </property>
+                    </bean>
+                </property>
+                <property name="admissionLocationDao">
+                    <bean class="${project.parent.groupId}.${project.parent.artifactId}.dao.impl.AdmissionLocationDaoImpl">
+                        <property name="sessionFactory">
+                            <ref bean="sessionFactory"/>
+                        </property>
+                    </bean>
+                </property>
+                <property name="bedPatientAssignmentDao">
+                    <bean class="${project.parent.groupId}.${project.parent.artifactId}.dao.impl.BedPatientAssignmentDaoImpl">
                         <property name="sessionFactory">
                             <ref bean="sessionFactory"/>
                         </property>
@@ -41,30 +69,10 @@
         </property>
     </bean>
 
-    <bean id="bedManagementDao"
-          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager">
-            <ref bean="transactionManager"/>
-        </property>
-        <property name="target">
-            <bean class="org.openmrs.module.bedmanagement.dao.impl.BedManagementDaoImpl">
-                <property name="sessionFactory">
-                    <ref bean="sessionFactory"/>
-                </property>
-            </bean>
-        </property>
-        <property name="preInterceptors">
-            <ref bean="serviceInterceptors"/>
-        </property>
-        <property name="transactionAttributeSource">
-            <ref bean="transactionAttributeSource"/>
-        </property>
-    </bean>
-
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">
-                <value>org.openmrs.module.bedmanagement.service.BedTagMapService</value>
+                <value>${project.parent.groupId}.${project.parent.artifactId}.service.BedTagMapService</value>
                 <ref local="bedTagMapService"/>
             </list>
         </property>
@@ -77,7 +85,7 @@
         <property name="target">
             <bean class="org.openmrs.module.bedmanagement.service.impl.BedTagMapServiceImpl">
                 <property name="dao">
-                    <bean class="org.openmrs.module.bedmanagement.dao.impl.BedTagMapDaoImpl">
+                    <bean class="${project.parent.groupId}.${project.parent.artifactId}.dao.impl.BedTagMapDaoImpl">
                         <property name="sessionFactory">
                             <ref bean="sessionFactory"/>
                         </property>
@@ -100,6 +108,106 @@
         </property>
         <property name="target">
             <bean class="org.openmrs.module.bedmanagement.dao.impl.BedTagMapDaoImpl">
+                <property name="sessionFactory">
+                    <ref bean="sessionFactory"/>
+                </property>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean id="bedDao"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.bedmanagement.dao.impl.BedDaoImpl">
+                <property name="sessionFactory">
+                    <ref bean="sessionFactory"/>
+                </property>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean id="bedTypeDao"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.bedmanagement.dao.impl.BedTypeDaoImpl">
+                <property name="sessionFactory">
+                    <ref bean="sessionFactory"/>
+                </property>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean id="bedLocationMappingDao"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.bedmanagement.dao.impl.BedLocationMappingDaoImpl">
+                <property name="sessionFactory">
+                    <ref bean="sessionFactory"/>
+                </property>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean id="admissionLocationDao"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.bedmanagement.dao.impl.AdmissionLocationDaoImpl">
+                <property name="sessionFactory">
+                    <ref bean="sessionFactory"/>
+                </property>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean id="bedPatientAssignmentDao"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.bedmanagement.dao.impl.BedPatientAssignmentDaoImpl">
                 <property name="sessionFactory">
                     <ref bean="sessionFactory"/>
                 </property>

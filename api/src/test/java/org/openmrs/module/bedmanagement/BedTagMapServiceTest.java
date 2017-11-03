@@ -47,7 +47,7 @@ public class BedTagMapServiceTest extends BaseModuleWebContextSensitiveTest {
     @Test
     public void shouldAssignTheBedTagToBedIfTheUserHasTheGetTagsEditTagsAndGetBedsPrivileges() throws IllegalPropertyException {
         Context.authenticate(privilegedUser, privilegedUserPassword);
-        BedTagMap savedBedTagMap = bedTagMapService.save(bedTagMap);
+        BedTagMap savedBedTagMap = bedTagMapService.saveBedTagMap(bedTagMap);
 
         assertNotNull(savedBedTagMap);
         assertNotNull(savedBedTagMap.getId());
@@ -58,19 +58,19 @@ public class BedTagMapServiceTest extends BaseModuleWebContextSensitiveTest {
     @Test(expected = APIAuthenticationException.class)
     public void shouldThrowAuthenticationExceptionIfTheUserDoesNotHaveTheGetTagsEditTagsAndGetBedsPrivileges() throws IllegalPropertyException {
         Context.authenticate(normalUser, normalUserPassword);
-        bedTagMapService.save(bedTagMap);
+        bedTagMapService.saveBedTagMap(bedTagMap);
     }
 
     @Test
     public void shouldUnAssignTheBedTagFromTheBedIfTheUserHasTheGetTagsEditTagsAndGetBedsPrivileges() {
         Context.authenticate(privilegedUser, privilegedUserPassword);
-        bedTagMapService.delete(bedTagMap, "Need beds in general ward");
+        bedTagMapService.deleteBedTagMap(bedTagMap, "Need beds in general ward");
     }
 
     @Test(expected = APIAuthenticationException.class)
     public void shouldThrowAuthenticationExceptionIfTheUserDoesNotHaveTheGetTagsEditTagsAndGetBedsPrivilegesWhileDeletingTheBedTagMap() {
         Context.authenticate(normalUser, normalUserPassword);
-        bedTagMapService.delete(bedTagMap, "Need beds in general ward");
+        bedTagMapService.deleteBedTagMap(bedTagMap, "Need beds in general ward");
     }
 
     @Test

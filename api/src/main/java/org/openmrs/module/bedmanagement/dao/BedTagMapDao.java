@@ -19,11 +19,36 @@ import org.openmrs.module.bedmanagement.entity.BedTagMap;
 
 public interface BedTagMapDao {
 
-    BedTagMap saveOrUpdate(BedTagMap bedTagMap);
+    /**
+     * Save / Update bed tag map
+     *
+     * @param bedTagMap {@link BedTagMap}
+     * @return {@link BedTagMap}
+     */
+    BedTagMap saveBedTagMap(BedTagMap bedTagMap);
 
-    BedTagMap getBedTagMapByUuid(String bedTagMapUuid);
+    /**
+     * Get bed tag map by Uuid
+     *
+     * @param uuid {@link String} bed tag map uuid
+     * @return {@link BedTagMap}
+     */
+    BedTagMap getBedTagMapByUuid(String uuid);
 
+    /**
+     * Get Bed tag by bed tag uuid
+     *
+     * @param bedTagUuid  {@link String} bed tag uuid
+     * @return {@link BedTag}
+     */
     BedTag getBedTagByUuid(String bedTagUuid);
 
+    /**
+     * Get Bed tag map By Bed and Bed tag
+     *
+     * @param bed {@link Bed}
+     * @param bedTag {@link BedTag}
+     * @return {@link BedTagMap}
+     */
     BedTagMap getBedTagMapWithBedAndTag(Bed bed, BedTag bedTag);
 }

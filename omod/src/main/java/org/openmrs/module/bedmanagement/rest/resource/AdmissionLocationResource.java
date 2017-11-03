@@ -48,7 +48,7 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
     @Override
     protected PageableResult doGetAll(RequestContext context) throws ResponseException {
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        List<AdmissionLocation> admissionLocations = bedManagementService.getAllAdmissionLocations();
+        List<AdmissionLocation> admissionLocations = bedManagementService.getAdmissionLocations();
         return new AlreadyPaged<AdmissionLocation>(context, admissionLocations, false);
     }
 
@@ -121,7 +121,7 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
     public AdmissionLocation getByUniqueId(String uuid) {
         BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
         LocationService locationService = Context.getLocationService();
-        return bedManagementService.getLayoutForWard(locationService.getLocationByUuid(uuid));
+        return bedManagementService.getAdmissionLocationByLocation(locationService.getLocationByUuid(uuid));
     }
 
     @Override
