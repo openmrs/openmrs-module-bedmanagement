@@ -20,6 +20,7 @@ import org.openmrs.Patient;
 import org.openmrs.annotation.Authorized;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
@@ -31,11 +32,51 @@ import java.util.List;
 @Transactional
 public interface BedManagementService extends OpenmrsService {
 
-    @Authorized({"Get Admission Locations"})
-    List<AdmissionLocation> getAllAdmissionLocations();
+    /**
+     * Get all admission locations
+     *
+     * @return {@link List<AdmissionLocation>}
+     */
+    @Authorized({"Get Admission Locations", "Get Beds"})
+    List<AdmissionLocation> getAdmissionLocations();
 
-    @Authorized({"Get Admission Locations"})
-    AdmissionLocation getLayoutForWard(Location location);
+    /**
+     * Get bed location mapping by location
+     *
+     * @param location {@link Location}
+     * @return {@link List< BedLocationMapping >}
+     */
+    @Authorized({"Get Admission Locations", "Get Beds"})
+    List<BedLocationMapping> getBedLocationMappingByLocation(Location location);
+
+    /**
+     * Get admission location by location
+     *
+     * @param location {@link Location}
+     * @return
+     */
+    @Authorized({"Get Admission Locations", "Get Beds"})
+    AdmissionLocation getAdmissionLocationByLocation(Location location);
+
+    /**
+     * Save / Update admission location
+     *
+     * @param admissionLocation
+     * @return
+     */
+    @Authorized({"Edit Admission Locations", "Manage Locations"})
+    AdmissionLocation saveAdmissionLocation(AdmissionLocation admissionLocation);
+
+    /**
+     * Set bed location mapping for admission location
+     *
+     * @param admissionLocation {@link AdmissionLocation}
+     * @param row {@link Integer} admission location bed layout row
+     * @param column {@link Integer} admission location bed layout column
+     * @return {@link AdmissionLocation}
+     */
+    @Authorized({"Edit Admission Locations", "Manage Locations"})
+    AdmissionLocation setBedLayoutForAdmissionLocation(AdmissionLocation admissionLocation, Integer row, Integer column);
 
     @Authorized(value = {"Assign Beds", "Edit Admission Locations"}, requireAll=true)
     BedDetails assignPatientToBed(Patient patient, Encounter encounter, String bedId);

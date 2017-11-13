@@ -3,58 +3,57 @@
  * Version 1.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://license.openmrs.org
- *
+ * <p>
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- *
+ * <p>
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 package org.openmrs.module.bedmanagement.rest.resource;
 
+import org.openmrs.Location;
+import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
+import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
 import org.openmrs.module.bedmanagement.BedLayout;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
-import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
-import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
-import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
-import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
-import org.openmrs.module.webservices.rest.web.representation.CustomRepresentation;
-import org.openmrs.module.webservices.rest.web.representation.Representation;
+import org.openmrs.module.webservices.rest.web.representation.*;
 import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
 import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
+import org.openmrs.module.webservices.rest.web.response.ConversionException;
+import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Resource(name = RestConstants.VERSION_1 + "/admissionLocation", supportedClass = AdmissionLocation.class, supportedOpenmrsVersions = {"1.9.*", "1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*"})
 public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionLocation> {
 
     @Override
     protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-        BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        List<AdmissionLocation> admissionLocations = bedManagementService.getAllAdmissionLocations();
+        List<AdmissionLocation> admissionLocations = Context.getService(BedManagementService.class).getAdmissionLocations();
         return new AlreadyPaged<AdmissionLocation>(context, admissionLocations, false);
     }
 
     @Override
     public List<Representation> getAvailableRepresentations() {
-        return Arrays.asList(Representation.DEFAULT, Representation.FULL);
+        CustomRepresentation layoutRepresentation = new CustomRepresentation("layout");
+        return Arrays.asList(Representation.DEFAULT, Representation.FULL, layoutRepresentation);
     }
 
     @Override
@@ -68,9 +67,19 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
         }
         if ((rep instanceof FullRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
+            description.addProperty("ward");
+            description.addProperty("totalBeds");
+            description.addProperty("occupiedBeds");
             description.addProperty("bedLayouts");
             return description;
         }
+        if ((rep instanceof NamedRepresentation) && rep.getRepresentation().equals("layout")){
+            DelegatingResourceDescription description = new DelegatingResourceDescription();
+            description.addProperty("ward");
+            description.addProperty("bedLocationMappings");
+            return description;
+        }
+
         return null;
     }
 
@@ -84,12 +93,33 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
         return ret;
     }
 
+    @PropertyGetter("bedLocationMappings")
+    public Object getBedLocationMappings(AdmissionLocation admissionLocation) throws Exception {
+        List<BedLocationMapping> bedLocationMappings = Context.getService(BedManagementService.class)
+                .getBedLocationMappingByLocation(admissionLocation.getWard());
+
+        List<SimpleObject> ret = new ArrayList<SimpleObject>();
+        for (BedLocationMapping bedLocationMapping : bedLocationMappings) {
+            SimpleObject object = new SimpleObject();
+            object.put("rowNumber", bedLocationMapping.getRow());
+            object.put("columnNumber", bedLocationMapping.getColumn());
+            object.put("bedNumber", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getBedNumber() : null);
+            object.put("bedId", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getId() : null);
+            object.put("bedUuid", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getUuid() : null);
+            object.put("status", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getStatus() : null);
+            object.put("bedType", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getBedType() : null);
+            ret.add(object);
+        }
+        return ret;
+    }
+
     private SimpleObject getBedLayout(BedLayout bedLayout) throws Exception {
         SimpleObject ret = new SimpleObject();
         ret.put("rowNumber", bedLayout.getRowNumber());
         ret.put("columnNumber", bedLayout.getColumnNumber());
         ret.put("bedNumber", bedLayout.getBedNumber());
         ret.put("bedId", bedLayout.getBedId());
+        ret.put("bedUuid", bedLayout.getBedUuid());
         ret.put("status", bedLayout.getStatus());
         ret.put("bedType", bedLayout.getBedType());
         ret.put("location", bedLayout.getLocation());
@@ -103,11 +133,12 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
         String specification = "(uuid,bedTag:(name))";
         Representation rep = new CustomRepresentation(specification);
         List<SimpleObject> customBedTagMaps = new ArrayList<SimpleObject>();
-        for (BedTagMap bedTagMap : bedTagMaps) {
-            if (!bedTagMap.isVoided()) {
-                customBedTagMaps.add((SimpleObject) ConversionUtil.convertToRepresentation(bedTagMap, rep));
+        if(bedTagMaps != null)
+            for (BedTagMap bedTagMap : bedTagMaps) {
+                if (!bedTagMap.isVoided()) {
+                    customBedTagMaps.add((SimpleObject) ConversionUtil.convertToRepresentation(bedTagMap, rep));
+                }
             }
-        }
         return customBedTagMaps;
     }
 
@@ -119,14 +150,80 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 
     @Override
     public AdmissionLocation getByUniqueId(String uuid) {
-        BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        LocationService locationService = Context.getLocationService();
-        return bedManagementService.getLayoutForWard(locationService.getLocationByUuid(uuid));
+        Location location = Context.getService(LocationService.class).getLocationByUuid(uuid);
+        return Context.getService(BedManagementService.class).getAdmissionLocationByLocation(location);
     }
 
     @Override
-    protected void delete(AdmissionLocation admissionLocation, String s, RequestContext requestContext) throws ResponseException {
-        throw new ResourceDoesNotSupportOperationException("delete of admission location not supported");
+    public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
+        if (propertiesToCreate.get("name") == null)
+            throw new ConversionException("The name property is missing");
+
+        Location location = new Location();
+        AdmissionLocation admissionLocation = new AdmissionLocation();
+        admissionLocation.setWard(location);
+        admissionLocation.getWard().setName((String) propertiesToCreate.get("name"));
+        if (propertiesToCreate.get("description") != null)
+            admissionLocation.getWard().setDescription((String) propertiesToCreate.get("description"));
+        if (propertiesToCreate.get("parentLocationUuid") != null) {
+            Location parentLocation = Context.getService(LocationService.class)
+                    .getLocationByUuid((String) propertiesToCreate.get("parentLocationUuid"));
+            if (parentLocation == null)
+                throw new IllegalPropertyException("Parent location not exist");
+            admissionLocation.getWard().setParentLocation(parentLocation);
+        }
+
+        LocationTag admissionLocationTag = Context.getService(LocationService.class)
+                .getLocationTagByName(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION);
+        Set<LocationTag> locationTagSet = new HashSet<LocationTag>();
+        locationTagSet.add(admissionLocationTag);
+        admissionLocation.getWard().setTags(locationTagSet);
+
+        Context.getService(BedManagementService.class).saveAdmissionLocation(admissionLocation);
+        return ConversionUtil.convertToRepresentation(admissionLocation, context.getRepresentation());
+    }
+
+    @Override
+    public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
+        Location location = Context.getService(LocationService.class).getLocationByUuid(uuid);
+        if (location == null)
+            throw new IllegalPropertyException("Location not exist");
+
+        AdmissionLocation admissionLocation = Context.getService(BedManagementService.class)
+                .getAdmissionLocationByLocation(location);
+
+        if (propertiesToUpdate.get("name") != null)
+            admissionLocation.getWard().setName((String) propertiesToUpdate.get("name"));
+
+        if (propertiesToUpdate.get("description") != null)
+            admissionLocation.getWard().setDescription((String) propertiesToUpdate.get("description"));
+
+        if (propertiesToUpdate.get("parentLocationUuid") != null) {
+            Location parentLocation = Context.getService(LocationService.class)
+                    .getLocationByUuid((String) propertiesToUpdate.get("parentLocationUuid"));
+            if (parentLocation == null)
+                throw new IllegalPropertyException("Parent location not exist");
+            admissionLocation.getWard().setParentLocation(parentLocation);
+        }
+
+        if(propertiesToUpdate.get("bedLayout") != null){
+            HashMap<String, Integer> bedLayout = propertiesToUpdate.get("bedLayout");
+            Integer row = bedLayout.get("row");
+            Integer column = bedLayout.get("column");
+            Context.getService(BedManagementService.class).setBedLayoutForAdmissionLocation(admissionLocation, row, column);
+        }
+
+        Context.getService(BedManagementService.class).saveAdmissionLocation(admissionLocation);
+        return ConversionUtil.convertToRepresentation(admissionLocation, context.getRepresentation());
+    }
+
+    @Override
+    protected void delete(AdmissionLocation admissionLocation, String reason, RequestContext requestContext) throws ResponseException {
+        admissionLocation.getWard().setRetired(true);
+        admissionLocation.getWard().setRetireReason(reason);
+        admissionLocation.getWard().setRetiredBy(Context.getAuthenticatedUser());
+        admissionLocation.getWard().setDateRetired(new Date());
+        Context.getService(LocationService.class).saveLocation(admissionLocation.getWard());
     }
 
     @Override
@@ -136,7 +233,11 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 
     @Override
     public DelegatingResourceDescription getCreatableProperties() throws ResourceDoesNotSupportOperationException {
-        throw new ResourceDoesNotSupportOperationException("create of admission location not supported");
+        DelegatingResourceDescription description = new DelegatingResourceDescription();
+        description.addProperty("name");
+        description.addProperty("description");
+        description.addProperty("parentLocationUuid");
+        return description;
     }
 
     @Override
@@ -146,6 +247,6 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 
     @Override
     public AdmissionLocation save(AdmissionLocation admissionLocation) {
-        throw new ResourceDoesNotSupportOperationException("save of admission location not supported");
+        return Context.getService(BedManagementService.class).saveAdmissionLocation(admissionLocation);
     }
 }

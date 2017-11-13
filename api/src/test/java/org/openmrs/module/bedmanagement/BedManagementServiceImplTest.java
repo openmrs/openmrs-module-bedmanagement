@@ -45,9 +45,9 @@ public class BedManagementServiceImplTest {
         Location location = new Location();
         location.setUuid(wardId);
 
-        bedManagementService.getLayoutForWard(location);
+        bedManagementService.getAdmissionLocationByLocation(location);
 
-        verify(bedManagementDao).getLayoutForWard(location);
+        verify(bedManagementDao).getAdmissionLocationsByLocation(location);
     }
 
     @Test

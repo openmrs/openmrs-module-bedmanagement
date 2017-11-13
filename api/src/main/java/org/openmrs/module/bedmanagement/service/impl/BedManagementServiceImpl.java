@@ -16,15 +16,17 @@ package org.openmrs.module.bedmanagement.service.impl;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.api.LocationService;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
-import org.openmrs.module.bedmanagement.dao.BedManagementDao;
-import org.openmrs.module.bedmanagement.entity.Bed;
-import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
-import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
 import org.openmrs.module.bedmanagement.BedDetails;
+import org.openmrs.module.bedmanagement.dao.BedManagementDao;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
+import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -34,18 +36,54 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 
     BedManagementDao bedManagementDao;
 
+    @Autowired
+    private LocationService locationService;
+
     public void setDao(BedManagementDao dao) {
         this.bedManagementDao = dao;
     }
 
     @Override
-    public List<AdmissionLocation> getAllAdmissionLocations() {
-        return bedManagementDao.getAdmissionLocationsBy(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION);
+    public List<AdmissionLocation> getAdmissionLocations() {
+        return bedManagementDao.getAdmissionLocations();
     }
 
     @Override
-    public AdmissionLocation getLayoutForWard(Location location) {
-        return bedManagementDao.getLayoutForWard(location);
+    public List<BedLocationMapping> getBedLocationMappingByLocation(Location location) {
+        return bedManagementDao.getBedLocationMappingByLocation(location);
+    }
+
+    @Override
+    public AdmissionLocation getAdmissionLocationByLocation(Location location) {
+        return bedManagementDao.getAdmissionLocationsByLocation(location);
+    }
+
+    @Override
+    public AdmissionLocation saveAdmissionLocation(AdmissionLocation admissionLocation) {
+        Location location = admissionLocation.getWard();
+        locationService.saveLocation(location);
+        admissionLocation = bedManagementDao.getAdmissionLocationsByLocation(location);
+        return admissionLocation;
+    }
+
+    @Override
+    public AdmissionLocation setBedLayoutForAdmissionLocation(AdmissionLocation admissionLocation, Integer row, Integer column) {
+        Location location = admissionLocation.getWard();
+        for (int i = 1; i <= row; i++) {
+            for (int j = 1; j <= column; j++) {
+                BedLocationMapping bedLocationMapping = bedManagementDao.getBedLocationMappingByLocationAndRowAndColumn(location, i, j);
+                if (bedLocationMapping == null) {
+                    bedLocationMapping = new BedLocationMapping();
+                    bedLocationMapping.setLocation(location);
+                    bedLocationMapping.setRow(i);
+                    bedLocationMapping.setColumn(j);
+                    bedManagementDao.saveBedLocationMapping(bedLocationMapping);
+                }
+            }
+        }
+
+        admissionLocation = bedManagementDao.getAdmissionLocationsByLocation(location);
+        return admissionLocation;
     }
 
     @Override

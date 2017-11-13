@@ -13,6 +13,8 @@
  */
 package org.openmrs.module.bedmanagement.dao.impl;
 
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
@@ -242,5 +244,137 @@ public class BedManagementDaoImpl implements BedManagementDao {
         return session.createQuery("from BedTag where voided =:voided")
                 .setParameter("voided", false)
                 .list();
+    }
+
+    @Override
+    public List<AdmissionLocation> getAdmissionLocations() {
+        List<Integer> admissionLocationIds = getAdmissionLocationIds();
+        String sql = "select l from Location l " +
+                "where l.locationId in :admissionLocationIds and " +
+                "(l.parentLocation.locationId not in :admissionLocationIds or l.parentLocation.locationId is null) and " +
+                "l.retired=0";
+        Query query = sessionFactory.getCurrentSession().createQuery(sql);
+        query.setParameterList("admissionLocationIds", admissionLocationIds);
+        List<Location> locations = (List<Location>) query.list();
+
+        List<AdmissionLocation> admissionLocations = new ArrayList<AdmissionLocation>();
+        for(Location location : locations){
+            admissionLocations.add(this.getAdmissionLocationsByLocation(location));
+        }
+
+        return admissionLocations;
+    }
+
+    @Override
+    public AdmissionLocation getAdmissionLocationsByLocation(Location location) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Integer> locationIds = new ArrayList<>();
+        locationIds.add(location.getId());
+        Set<Location> childLocations = location.getChildLocations();
+        if(childLocations != null)
+            for (Location childLocation : childLocations) {
+                locationIds.add(childLocation.getId());
+            }
+
+        String hql = "select count(blm.bed) as totalBeds ," +
+                " COALESCE(sum(CASE WHEN blm.bed IS NOT NULL AND blm.bed.status = :occupied THEN 1 ELSE 0 END), 0) as occupiedBeds" +
+                " from BedLocationMapping blm where blm.location.locationId in (:locationIds)";
+
+        AdmissionLocation admissionLocation = (AdmissionLocation) session.createQuery(hql)
+                .setParameterList("locationIds", locationIds)
+                .setParameter("occupied", BedStatus.OCCUPIED.toString())
+                .setResultTransformer(Transformers.aliasToBean(AdmissionLocation.class))
+                .uniqueResult();
+        List<BedLayout> bedLayouts = getBedLayoutByLocation(location);
+
+        admissionLocation.setWard(location);
+        admissionLocation.setBedLayouts(bedLayouts);
+        return admissionLocation;
+    }
+
+    @Override
+    public List<BedLocationMapping> getBedLocationMappingByLocation(Location location) {
+        String hql = "select blm " +
+                "from BedLocationMapping blm " +
+                "where blm.location=:location";
+
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("location", location);
+        return query.list();
+    }
+
+    @Override
+    public BedLocationMapping getBedLocationMappingByLocationAndRowAndColumn(Location location, Integer row, Integer column) {
+        String hql = "select blm " +
+                "from BedLocationMapping blm " +
+                "where blm.location=:location " +
+                "and blm.row=:row and blm.column=:column";
+
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("location", location);
+        query.setParameter("row", row);
+        query.setParameter("column", column);
+        return (BedLocationMapping) query.uniqueResult();
+    }
+
+    @Override
+    public BedLocationMapping saveBedLocationMapping(BedLocationMapping bedLocationMapping) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.saveOrUpdate(bedLocationMapping);
+        session.flush();
+        return bedLocationMapping;
+    }
+
+    @Override
+    public List<Integer> getAdmissionLocationIds() {
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "SELECT ltm.location_id\n" +
+                "  FROM location_tag_map ltm\n" +
+                "    LEFT JOIN location_tag lt ON ltm.location_tag_id = lt.location_tag_id\n" +
+                "  WHERE lt.name = 'Admission Location'";
+
+        SQLQuery query = session.createSQLQuery(sql);
+        return query.list();
+    }
+
+    @Override
+    public List<BedLayout> getBedLayoutByLocation(Location location) {
+        List<Integer> locationIds = new ArrayList<>();
+        locationIds.add(location.getId());
+        Set<Location> childLocations = location.getChildLocations();
+        if(childLocations != null)
+            for (Location childLocation : childLocations) {
+                locationIds.add(childLocation.getId());
+            }
+
+        String hql = "select blm.row as rowNumber, blm.column as columnNumber, " +
+                "bed as bed, blm.location.name as location " +
+                "from BedLocationMapping blm " +
+                "left outer join blm.bed bed " +
+                "where blm.location.locationId in (:locationIds) ";
+
+        List<BedLayoutWithDetails> bedLayoutWithDetailsList = sessionFactory.getCurrentSession().createQuery(hql)
+                .setParameterList("locationIds", locationIds)
+                .setResultTransformer(Transformers.aliasToBean(BedLayoutWithDetails.class))
+                .list();
+
+        List<BedLayout> bedLayouts = new ArrayList<>();
+        for (BedLayoutWithDetails bedLayoutWithDetails : bedLayoutWithDetailsList) {
+            bedLayouts.add(bedLayoutWithDetails.convertToBedLayout());
+        }
+
+        return bedLayouts;
+    }
+
+    @Override
+    public BedLocationMapping getBedLocationMappingByBed(Bed bed) {
+        String hql = "select blm " +
+                "from BedLocationMapping blm " +
+                "where blm.bed.voided=:voided and blm.bed=:bed";
+
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("voided", false);
+        query.setParameter("bed", bed);
+        return (BedLocationMapping) query.uniqueResult();
     }
 }

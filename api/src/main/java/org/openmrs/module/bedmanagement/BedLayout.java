@@ -11,6 +11,7 @@ public class BedLayout {
     private Integer columnNumber;
     private String bedNumber;
     private Integer bedId;
+    private String bedUuid;
     private String status;
     private BedType bedType;
     private String location;
@@ -31,6 +32,14 @@ public class BedLayout {
 
     public void setBedId(Integer bedId) {
         this.bedId = bedId;
+    }
+
+    public String getBedUuid() {
+        return bedUuid;
+    }
+
+    public void setBedUuid(String bedUuid) {
+        this.bedUuid = bedUuid;
     }
 
     public String getStatus() {
@@ -88,6 +97,7 @@ public class BedLayout {
                 ", columnNumber=" + columnNumber +
                 ", bedNumber='" + bedNumber + '\'' +
                 ", bedId=" + bedId +
+                ", bedUuid=" + bedUuid +
                 ", status='" + status + '\'' +
                 ", bedType=" + bedType +
                 ", location='" + location + '\'' +
