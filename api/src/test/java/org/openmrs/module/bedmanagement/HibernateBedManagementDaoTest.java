@@ -5,7 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.Location;
+import org.openmrs.LocationTag;
 import org.openmrs.api.db.LocationDAO;
+import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
@@ -13,6 +15,7 @@ import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -76,14 +79,6 @@ public class HibernateBedManagementDaoTest extends BaseModuleWebContextSensitive
     }
 
     @Test
-    public void shouldReturnAdmissionLocationIds() {
-        List<Integer> idList = bedManagementDao.getAdmissionLocationIds();
-        Assert.assertEquals(5, idList.size());
-        Assert.assertTrue(idList.contains(12345));
-        Assert.assertTrue(idList.contains(12346));
-    }
-
-    @Test
     public void shouldReturnAdmissionLocationLayoutByLocation() throws Exception {
         Location location = locationDao.getLocationByUuid("19e023e8-20ee-4237-ade6-9e68f897b7a9");
         List<BedLayout> bedLayouts = bedManagementDao.getBedLayoutByLocation(location);
@@ -110,7 +105,7 @@ public class HibernateBedManagementDaoTest extends BaseModuleWebContextSensitive
     @Test
     public void shouldReturnAdmissionLocationByLocation() throws Exception {
         Location location = locationDao.getLocationByUuid("19e023e8-20ee-4237-ade6-9e68f897b7a9");
-        AdmissionLocation admissionLocation = bedManagementDao.getAdmissionLocationsByLocation(location);
+        AdmissionLocation admissionLocation = bedManagementDao.getAdmissionLocationForLocation(location);
         List<BedLayout> bedLayouts = admissionLocation.getBedLayouts();
 
         Assert.assertEquals(6, admissionLocation.getTotalBeds());
@@ -127,7 +122,15 @@ public class HibernateBedManagementDaoTest extends BaseModuleWebContextSensitive
 
     @Test
     public void shouldReturnAllAdmissionLocations() throws Exception {
-        List<AdmissionLocation> admissionLocations = bedManagementDao.getAdmissionLocations();
+        LocationTag admissionLocationTag = locationDao.getLocationTagByName(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION);
+        List<Location> locations = new ArrayList<>();
+        for (Location l : locationDao.getAllLocations(false)) {
+            if (l.getTags().contains(admissionLocationTag)) {
+                locations.add(l);
+            }
+        }
+
+        List<AdmissionLocation> admissionLocations = bedManagementDao.getAdmissionLocations(locations);
 
         Assert.assertEquals(3, admissionLocations.size());
         Assert.assertEquals("Cardio ward on first floor", admissionLocations.get(0).getWard().getName());

@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
+import org.openmrs.LocationTag;
 import org.openmrs.Patient;
 import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.LocationService;
@@ -17,6 +18,7 @@ import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
@@ -37,6 +39,9 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
     private Encounter encounter;
     private String bedNumber;
 
+    @Autowired
+    private LocationService locationService;
+
     @Before
     public void setUp() throws Exception {
         superUser = "test-user";
@@ -48,20 +53,6 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
         location = Context.getLocationService().getLocation(12347);
         encounter = Context.getEncounterService().getEncounter(2);
         bedNumber = "11";
-    }
-
-    @Test
-    public void getAllAdmissionLocations_gets_locations_that_support_admission() {
-        ArrayList<AdmissionLocation> expectedWards = new ArrayList<AdmissionLocation>();
-
-        BedManagementDao bedManagementDao = mock(BedManagementDao.class);
-        when(bedManagementDao.getAdmissionLocationsBy(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION)).thenReturn(expectedWards);
-
-        BedManagementServiceImpl bedManagementService = new BedManagementServiceImpl();
-        bedManagementService.setDao(bedManagementDao);
-
-        List<AdmissionLocation> wards = bedManagementService.getAdmissionLocations();
-        Assert.assertEquals(0, wards.size());
     }
 
     @Test

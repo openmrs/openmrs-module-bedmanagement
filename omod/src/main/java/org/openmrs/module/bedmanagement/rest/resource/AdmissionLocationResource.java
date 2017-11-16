@@ -160,24 +160,25 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
             throw new ConversionException("The name property is missing");
 
         Location location = new Location();
-        AdmissionLocation admissionLocation = new AdmissionLocation();
-        admissionLocation.setWard(location);
-        admissionLocation.getWard().setName((String) propertiesToCreate.get("name"));
+        location.setName((String) propertiesToCreate.get("name"));
         if (propertiesToCreate.get("description") != null)
-            admissionLocation.getWard().setDescription((String) propertiesToCreate.get("description"));
+            location.setDescription((String) propertiesToCreate.get("description"));
         if (propertiesToCreate.get("parentLocationUuid") != null) {
             Location parentLocation = Context.getService(LocationService.class)
                     .getLocationByUuid((String) propertiesToCreate.get("parentLocationUuid"));
             if (parentLocation == null)
                 throw new IllegalPropertyException("Parent location not exist");
-            admissionLocation.getWard().setParentLocation(parentLocation);
+            location.setParentLocation(parentLocation);
         }
 
         LocationTag admissionLocationTag = Context.getService(LocationService.class)
                 .getLocationTagByName(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION);
         Set<LocationTag> locationTagSet = new HashSet<LocationTag>();
         locationTagSet.add(admissionLocationTag);
-        admissionLocation.getWard().setTags(locationTagSet);
+        location.setTags(locationTagSet);
+
+        AdmissionLocation admissionLocation = new AdmissionLocation();
+        admissionLocation.setWard(location);
 
         Context.getService(BedManagementService.class).saveAdmissionLocation(admissionLocation);
         return ConversionUtil.convertToRepresentation(admissionLocation, context.getRepresentation());

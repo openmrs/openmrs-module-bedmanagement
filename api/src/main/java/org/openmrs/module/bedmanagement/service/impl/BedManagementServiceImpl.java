@@ -15,11 +15,13 @@ package org.openmrs.module.bedmanagement.service.impl;
 
 import org.openmrs.Encounter;
 import org.openmrs.Location;
+import org.openmrs.LocationTag;
 import org.openmrs.Patient;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
 import org.openmrs.module.bedmanagement.BedDetails;
+import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
@@ -34,18 +36,23 @@ import java.util.List;
 
 public class BedManagementServiceImpl extends BaseOpenmrsService implements BedManagementService {
 
-    BedManagementDao bedManagementDao;
-
-    @Autowired
+    private BedManagementDao bedManagementDao;
     private LocationService locationService;
 
     public void setDao(BedManagementDao dao) {
         this.bedManagementDao = dao;
     }
 
+    @Autowired
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
+    }
+
     @Override
     public List<AdmissionLocation> getAdmissionLocations() {
-        return bedManagementDao.getAdmissionLocations();
+        LocationTag admissionLocationTag = locationService.getLocationTagByName(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION);
+        List<Location> locations = locationService.getLocationsByTag(admissionLocationTag);
+        return bedManagementDao.getAdmissionLocations(locations);
     }
 
     @Override
@@ -55,14 +62,14 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 
     @Override
     public AdmissionLocation getAdmissionLocationByLocation(Location location) {
-        return bedManagementDao.getAdmissionLocationsByLocation(location);
+        return bedManagementDao.getAdmissionLocationForLocation(location);
     }
 
     @Override
     public AdmissionLocation saveAdmissionLocation(AdmissionLocation admissionLocation) {
         Location location = admissionLocation.getWard();
         locationService.saveLocation(location);
-        admissionLocation = bedManagementDao.getAdmissionLocationsByLocation(location);
+        admissionLocation = bedManagementDao.getAdmissionLocationForLocation(location);
         return admissionLocation;
     }
 
@@ -82,7 +89,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
             }
         }
 
-        admissionLocation = bedManagementDao.getAdmissionLocationsByLocation(location);
+        admissionLocation = bedManagementDao.getAdmissionLocationForLocation(location);
         return admissionLocation;
     }
 

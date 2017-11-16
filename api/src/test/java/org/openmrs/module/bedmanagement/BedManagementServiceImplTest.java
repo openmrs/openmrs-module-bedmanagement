@@ -47,7 +47,7 @@ public class BedManagementServiceImplTest {
 
         bedManagementService.getAdmissionLocationByLocation(location);
 
-        verify(bedManagementDao).getAdmissionLocationsByLocation(location);
+        verify(bedManagementDao).getAdmissionLocationForLocation(location);
     }
 
     @Test

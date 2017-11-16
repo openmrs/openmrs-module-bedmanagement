@@ -28,10 +28,6 @@ import org.openmrs.module.bedmanagement.BedDetails;
 import java.util.List;
 
 public interface BedManagementDao {
-    
-    List<AdmissionLocation> getAdmissionLocationsBy(String locationTagName);
-
-    AdmissionLocation getLayoutForWard(Location location);
 
     BedDetails assignPatientToBed(Patient patient, Encounter encounter, Bed bed);
 
@@ -55,24 +51,20 @@ public interface BedManagementDao {
 
     /**
      * Get all admission locations
-     *
+     * @param locations {@link List<Location>}
      * @return {@link List<AdmissionLocation>}
      */
-    List<AdmissionLocation> getAdmissionLocations();
+    List<AdmissionLocation> getAdmissionLocations(List<Location> locations);
 
     /**
-     * Get admission location by location
+     * Get admission location for for a given location.
+     * Locations marked with the appropriate tag are <i>admission</i> locations. This method
+     * returns the admission location, if applicable, when given a candidate location.
      *
      * @param location {@link Location}
      * @return {@link AdmissionLocation} return null if not exist
      */
-    AdmissionLocation getAdmissionLocationsByLocation(Location location);
-
-    /**
-     * Get admissionLocation Ids
-     * @return {@link List<Integer>}
-     */
-    List<Integer> getAdmissionLocationIds();
+    AdmissionLocation getAdmissionLocationForLocation(Location location);
 
     /**
      * Get bed location mappings by location

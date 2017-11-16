@@ -1,6 +1,7 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
@@ -99,19 +100,16 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
         SimpleObject object = deserialize(handle(request));
         List results = (ArrayList) object.get("results");
         LinkedHashMap location1 = (LinkedHashMap) results.get(0);
-        LinkedHashMap ward1 = (LinkedHashMap) location1.get("ward");
         LinkedHashMap location2 = (LinkedHashMap) results.get(1);
-        LinkedHashMap ward2 = (LinkedHashMap) location2.get("ward");
         LinkedHashMap location3 = (LinkedHashMap) results.get(2);
-        LinkedHashMap ward3 = (LinkedHashMap) location3.get("ward");
 
         Assert.assertEquals(3, results.size());
-        Assert.assertEquals("7779d653-393b-4118-9c83-a3715b82d4ac", ward1.get("uuid"));
+        Assert.assertEquals("7779d653-393b-4118-9c83-a3715b82d4ac", PropertyUtils.getProperty(location1.get("ward"), "uuid"));
         Assert.assertTrue(location1.containsKey("ward"));
         Assert.assertTrue(location1.containsKey("totalBeds"));
         Assert.assertTrue(location1.containsKey("occupiedBeds"));
-        Assert.assertEquals("e26cea2c-1b9f-666e-6511-f3ef6c88af6f", ward2.get("uuid"));
-        Assert.assertEquals("19e023e8-20ee-4237-ade6-9e68f897b7a9", ward3.get("uuid"));
+        Assert.assertEquals("e26cea2c-1b9f-666e-6511-f3ef6c88af6f", PropertyUtils.getProperty(location2.get("ward"), "uuid"));
+        Assert.assertEquals("19e023e8-20ee-4237-ade6-9e68f897b7a9", PropertyUtils.getProperty(location3.get("ward"), "uuid"));
     }
 
     @Test
@@ -119,9 +117,8 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
         MockHttpServletRequest request = request(RequestMethod.GET, getURI() + "/" + getUuid());
         request.setParameter("v", "full");
         SimpleObject location = deserialize(handle(request));
-        LinkedHashMap ward = location.get("ward");
 
-        Assert.assertEquals("19e023e8-20ee-4237-ade6-9e68f897b7a9", ward.get("uuid"));
+        Assert.assertEquals("19e023e8-20ee-4237-ade6-9e68f897b7a9",PropertyUtils.getProperty(location.get("ward"), "uuid"));
         Assert.assertEquals(6, location.get("totalBeds"));
         Assert.assertEquals(2, location.get("occupiedBeds"));
         Assert.assertTrue(location.containsKey("bedLayouts"));
@@ -130,9 +127,8 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 
         MockHttpServletRequest request2 = request(RequestMethod.GET, getURI() + "/98bc9b32-9d1a-11e2-8137-0800271c1b75");
         SimpleObject location2 = deserialize(handle(request2));
-        LinkedHashMap wardRoom = location2.get("ward");
 
-        Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", wardRoom.get("uuid"));
+        Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", PropertyUtils.getProperty(location2.get("ward"), "uuid"));
         Assert.assertEquals(10, location2.get("totalBeds"));
         Assert.assertEquals(1, location2.get("occupiedBeds"));
         Assert.assertFalse(location2.containsKey("bedLayouts"));
@@ -146,9 +142,9 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 
         Assert.assertTrue(admissionLocation.containsKey("ward"));
         Assert.assertTrue(admissionLocation.containsKey("bedLocationMappings"));
-        LinkedHashMap ward = admissionLocation.get("ward");
+
         List bedLocationMappings =  (ArrayList) admissionLocation.get("bedLocationMappings");
-        Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", ward.get("uuid"));
+        Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75",PropertyUtils.getProperty(admissionLocation.get("ward"), "uuid"));
         Assert.assertEquals(18, bedLocationMappings.size());
     }
 
@@ -161,13 +157,11 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
         String json = new ObjectMapper().writeValueAsString(postParameters);
         request.setContent(json.getBytes());
         SimpleObject admissionLocation = deserialize(handle(request));
-        LinkedHashMap ward = admissionLocation.get("ward");
-        List tags = (ArrayList) ward.get("tags");
-        HashMap tag = (LinkedHashMap) tags.get(0);
 
-        Assert.assertEquals("VIPs Ward", ward.get("name"));
-        Assert.assertEquals("Admission Location", tag.get("display"));
-        Assert.assertNull(ward.get("childLocations"));
+        Assert.assertEquals("VIPs Ward", PropertyUtils.getProperty(admissionLocation.get("ward"), "name"));
+        Assert.assertNull(PropertyUtils.getProperty(admissionLocation.get("ward"), "childLocations"));
+        List tags = (ArrayList) PropertyUtils.getProperty(admissionLocation.get("ward"), "tags");
+        Assert.assertEquals("Admission Location", PropertyUtils.getProperty(tags.get(0), "display"));
         Assert.assertEquals(0, admissionLocation.get("totalBeds"));
         Assert.assertEquals(0, admissionLocation.get("occupiedBeds"));
     }
@@ -182,14 +176,12 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
         String json = new ObjectMapper().writeValueAsString(postParameters);
         request.setContent(json.getBytes());
         SimpleObject admissionLocation = deserialize(handle(request));
-        LinkedHashMap ward = admissionLocation.get("ward");
-        List tags = (ArrayList) ward.get("tags");
-        HashMap tag = (LinkedHashMap) tags.get(0);
 
-        Assert.assertEquals("VIPs Ward", ward.get("name"));
-        Assert.assertEquals("Admission Location", tag.get("display"));
-        Assert.assertNotNull(ward.get("parentLocation"));
-        HashMap parentAdmissionLocation = (LinkedHashMap) ward.get("parentLocation");
+        Assert.assertEquals("VIPs Ward", PropertyUtils.getProperty(admissionLocation.get("ward"), "name"));
+        List tags = (ArrayList) PropertyUtils.getProperty(admissionLocation.get("ward"), "tags");
+        Assert.assertEquals("Admission Location", PropertyUtils.getProperty(tags.get(0), "display"));
+        Assert.assertNotNull(PropertyUtils.getProperty(admissionLocation.get("ward"), "parentLocation"));
+        HashMap parentAdmissionLocation = (LinkedHashMap) PropertyUtils.getProperty(admissionLocation.get("ward"), "parentLocation");
         Assert.assertEquals("7779d653-393b-4118-9c83-a3715b82d4ac", parentAdmissionLocation.get("uuid"));
         Assert.assertEquals(0, admissionLocation.get("totalBeds"));
         Assert.assertEquals(0, admissionLocation.get("occupiedBeds"));
@@ -203,9 +195,8 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
         String json = new ObjectMapper().writeValueAsString(postParameters);
         request.setContent(json.getBytes());
         SimpleObject admissionLocation = deserialize(handle(request));
-        LinkedHashMap ward = admissionLocation.get("ward");
 
-        Assert.assertEquals("VIPs Ward", ward.get("name"));
+        Assert.assertEquals("VIPs Ward", PropertyUtils.getProperty(admissionLocation.get("ward"), "name"));
     }
 
     @Test
@@ -221,9 +212,8 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
         request.setContent(json.getBytes());
         SimpleObject admissionLocation = deserialize(handle(request));
 
-        LinkedHashMap ward = admissionLocation.get("ward");
         List bedLocationMappings =  (ArrayList) admissionLocation.get("bedLocationMappings");
-        Assert.assertEquals("e26cea2c-1b9f-666e-6511-f3ef6c88af6f", ward.get("uuid"));
+        Assert.assertEquals("e26cea2c-1b9f-666e-6511-f3ef6c88af6f", PropertyUtils.getProperty(admissionLocation.get("ward"), "uuid"));
         Assert.assertEquals(6, bedLocationMappings.size());
     }
 }

@@ -13,32 +13,26 @@
  */
 package org.openmrs.module.bedmanagement.dao.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.SessionFactory;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
-import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
+import org.openmrs.module.bedmanagement.AdmissionLocation;
+import org.openmrs.module.bedmanagement.BedDetails;
+import org.openmrs.module.bedmanagement.BedLayout;
+import org.openmrs.module.bedmanagement.BedLayoutWithDetails;
 import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedTag;
-import org.openmrs.module.bedmanagement.AdmissionLocation;
-import org.openmrs.module.bedmanagement.BedDetails;
-import org.openmrs.module.bedmanagement.BedLayout;
-import org.openmrs.module.bedmanagement.BedLayoutWithDetails;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class BedManagementDaoImpl implements BedManagementDao {
@@ -46,61 +40,6 @@ public class BedManagementDaoImpl implements BedManagementDao {
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-    }
-
-    @Override
-    public List<AdmissionLocation> getAdmissionLocationsBy(String locationTagName) {
-        Session session = sessionFactory.getCurrentSession();
-
-        List<Location> physicalLocations = getPhysicalLocationsByLocationTag(locationTagName, session);
-
-        String hql = "select  blm.location.parentLocation as ward ,count(blm.bed) as totalBeds ," +
-                " sum(CASE WHEN blm.bed.status = :occupied THEN 1 ELSE 0 END) as occupiedBeds" +
-                " from BedLocationMapping blm where blm.location in (:physicalLocationList) " +
-                " group by blm.location.parentLocation";
-
-        List<AdmissionLocation> admissionLocations = session.createQuery(hql)
-                .setParameterList("physicalLocationList", physicalLocations)
-                .setParameter("occupied", BedStatus.OCCUPIED.toString())
-                .setResultTransformer(Transformers.aliasToBean(AdmissionLocation.class))
-                .list();
-
-        return admissionLocations;
-    }
-
-    private List<Location> getPhysicalLocationsByLocationTag(String locationTagName, Session session) {
-        return session.createQuery("select ward.childLocations from Location ward where exists (from ward.tags tag where tag.name = :locationTag)")
-                .setParameter("locationTag", locationTagName).list();
-    }
-
-    public Bed getL(int id) {
-        Bed bed = (Bed) sessionFactory.getCurrentSession().createQuery("from Bed b where b.id = :id").setInteger("id", id).uniqueResult();
-        return bed;
-    }
-
-    @Override
-    public AdmissionLocation getLayoutForWard(Location location) {
-        Session session = sessionFactory.getCurrentSession();
-        List<Location> physicalLocations = getPhysicalLocationsByLocationTagAndParentLocation(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION, location, session);
-
-        String hql = "select blm.row as rowNumber, blm.column as columnNumber, " +
-                "bed as bed, blm.location.name as location " +
-                "from BedLocationMapping blm " +
-                "left outer join blm.bed bed " +
-                "where blm.location in (:physicalLocations) ";
-
-        List<BedLayoutWithDetails> bedLayoutWithDetailsList = sessionFactory.getCurrentSession().createQuery(hql)
-                .setParameterList("physicalLocations", physicalLocations)
-                .setResultTransformer(Transformers.aliasToBean(BedLayoutWithDetails.class))
-                .list();
-
-        List<BedLayout> bedLayouts = new ArrayList<>();
-        for(BedLayoutWithDetails bedLayoutWithDetails : bedLayoutWithDetailsList) {
-            bedLayouts.add(bedLayoutWithDetails.convertToBedLayout());
-        }
-        AdmissionLocation admissionLocation = new AdmissionLocation();
-        admissionLocation.setBedLayouts(bedLayouts);
-        return admissionLocation;
     }
 
     private List<Location> getPhysicalLocationsByLocationTagAndParentLocation(String locationTagName, Location location, Session session) {
@@ -247,41 +186,38 @@ public class BedManagementDaoImpl implements BedManagementDao {
     }
 
     @Override
-    public List<AdmissionLocation> getAdmissionLocations() {
-        List<Integer> admissionLocationIds = getAdmissionLocationIds();
+    public List<AdmissionLocation> getAdmissionLocations(List<Location> locations) {
         String sql = "select l from Location l " +
-                "where l.locationId in :admissionLocationIds and " +
-                "(l.parentLocation.locationId not in :admissionLocationIds or l.parentLocation.locationId is null) and " +
+                "where l in :locations and " +
+                "(l.parentLocation not in :locations or l.parentLocation is null) and " +
                 "l.retired=0";
         Query query = sessionFactory.getCurrentSession().createQuery(sql);
-        query.setParameterList("admissionLocationIds", admissionLocationIds);
-        List<Location> locations = (List<Location>) query.list();
+        query.setParameterList("locations", locations);
+        List<Location> locationList = query.list();
 
-        List<AdmissionLocation> admissionLocations = new ArrayList<AdmissionLocation>();
-        for(Location location : locations){
-            admissionLocations.add(this.getAdmissionLocationsByLocation(location));
+        List<AdmissionLocation> admissionLocations = new ArrayList<>();
+        for(Location location : locationList){
+            admissionLocations.add(this.getAdmissionLocationForLocation(location));
         }
 
         return admissionLocations;
     }
 
     @Override
-    public AdmissionLocation getAdmissionLocationsByLocation(Location location) {
+    public AdmissionLocation getAdmissionLocationForLocation(Location location) {
         Session session = sessionFactory.getCurrentSession();
-        List<Integer> locationIds = new ArrayList<>();
-        locationIds.add(location.getId());
+        Set<Location> locations = new HashSet<Location>(Arrays.asList(location));
         Set<Location> childLocations = location.getChildLocations();
-        if(childLocations != null)
-            for (Location childLocation : childLocations) {
-                locationIds.add(childLocation.getId());
-            }
+        if (!CollectionUtils.isEmpty(childLocations)) {
+            locations.addAll(childLocations);
+        }
 
         String hql = "select count(blm.bed) as totalBeds ," +
                 " COALESCE(sum(CASE WHEN blm.bed IS NOT NULL AND blm.bed.status = :occupied THEN 1 ELSE 0 END), 0) as occupiedBeds" +
-                " from BedLocationMapping blm where blm.location.locationId in (:locationIds)";
+                " from BedLocationMapping blm where blm.location in (:locations)";
 
         AdmissionLocation admissionLocation = (AdmissionLocation) session.createQuery(hql)
-                .setParameterList("locationIds", locationIds)
+                .setParameterList("locations", locations)
                 .setParameter("occupied", BedStatus.OCCUPIED.toString())
                 .setResultTransformer(Transformers.aliasToBean(AdmissionLocation.class))
                 .uniqueResult();
@@ -326,35 +262,21 @@ public class BedManagementDaoImpl implements BedManagementDao {
     }
 
     @Override
-    public List<Integer> getAdmissionLocationIds() {
-        Session session = sessionFactory.getCurrentSession();
-        String sql = "SELECT ltm.location_id\n" +
-                "  FROM location_tag_map ltm\n" +
-                "    LEFT JOIN location_tag lt ON ltm.location_tag_id = lt.location_tag_id\n" +
-                "  WHERE lt.name = 'Admission Location'";
-
-        SQLQuery query = session.createSQLQuery(sql);
-        return query.list();
-    }
-
-    @Override
     public List<BedLayout> getBedLayoutByLocation(Location location) {
-        List<Integer> locationIds = new ArrayList<>();
-        locationIds.add(location.getId());
+        Set<Location> locations = new HashSet<Location>(Arrays.asList(location));
         Set<Location> childLocations = location.getChildLocations();
-        if(childLocations != null)
-            for (Location childLocation : childLocations) {
-                locationIds.add(childLocation.getId());
-            }
+        if (!CollectionUtils.isEmpty(childLocations)) {
+            locations.addAll(childLocations);
+        }
 
         String hql = "select blm.row as rowNumber, blm.column as columnNumber, " +
                 "bed as bed, blm.location.name as location " +
                 "from BedLocationMapping blm " +
                 "left outer join blm.bed bed " +
-                "where blm.location.locationId in (:locationIds) ";
+                "where blm.location in (:locations) ";
 
         List<BedLayoutWithDetails> bedLayoutWithDetailsList = sessionFactory.getCurrentSession().createQuery(hql)
-                .setParameterList("locationIds", locationIds)
+                .setParameterList("locations", locations)
                 .setResultTransformer(Transformers.aliasToBean(BedLayoutWithDetails.class))
                 .list();
 
