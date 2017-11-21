@@ -17,7 +17,9 @@ package org.openmrs.module.bedmanagement.dao;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.module.bedmanagement.BedLayout;
 import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
@@ -26,10 +28,6 @@ import org.openmrs.module.bedmanagement.BedDetails;
 import java.util.List;
 
 public interface BedManagementDao {
-    
-    List<AdmissionLocation> getAdmissionLocationsBy(String locationTagName);
-
-    AdmissionLocation getLayoutForWard(Location location);
 
     BedDetails assignPatientToBed(Patient patient, Encounter encounter, Bed bed);
 
@@ -50,4 +48,63 @@ public interface BedManagementDao {
     Bed getLatestBedByVisit(String visitUuid);
 
     List<BedTag> getAllBedTags();
+
+    /**
+     * Get all admission locations
+     * @param locations {@link List<Location>}
+     * @return {@link List<AdmissionLocation>}
+     */
+    List<AdmissionLocation> getAdmissionLocations(List<Location> locations);
+
+    /**
+     * Get admission location for for a given location.
+     * Locations marked with the appropriate tag are <i>admission</i> locations. This method
+     * returns the admission location, if applicable, when given a candidate location.
+     *
+     * @param location {@link Location}
+     * @return {@link AdmissionLocation} return null if not exist
+     */
+    AdmissionLocation getAdmissionLocationForLocation(Location location);
+
+    /**
+     * Get bed location mappings by location
+     *
+     * @param location {@link Location}
+     * @return {@link List< BedLocationMapping >}
+     */
+    List<BedLocationMapping> getBedLocationMappingByLocation(Location location);
+
+    /**
+     * Get bed location mapping by location and row and column
+     *
+     * @param location {@link Location}  ward's room location
+     * @param row {@link Integer} bed row
+     * @param column {@link Integer} bed column
+     * @return {@link BedLocationMapping}
+     */
+    BedLocationMapping getBedLocationMappingByLocationAndRowAndColumn(Location location, Integer row, Integer column);
+
+    /**
+     * Save / Update Bed location mapping
+     *
+     * @param bedLocationMapping {@link BedLocationMapping}
+     * @return {@link BedLocationMapping}
+     */
+    BedLocationMapping saveBedLocationMapping(BedLocationMapping bedLocationMapping);
+
+    /**
+     * Get bed layout by location
+     *
+     * @param location {@link Location}
+     * @return {@link List<BedLayout>}
+     */
+    List<BedLayout> getBedLayoutByLocation(Location location);
+
+    /**
+     * Get bed location mapping {@link BedLocationMapping} by bed
+     *
+     * @param bed {@link Bed} bed
+     * @return {@link BedLocationMapping}
+     */
+    BedLocationMapping getBedLocationMappingByBed(Bed bed);
 }

@@ -35,8 +35,8 @@ public class BedManagementServiceIntegrationTest extends BaseModuleWebContextSen
 
     @Test
     public void getAllLocationsBy_gets_locations_for_a_tag() {
-        List<AdmissionLocation> admissionLocationList = bedManagementService.getAllAdmissionLocations();
-        assertThat(admissionLocationList.size(), is(2));
+        List<AdmissionLocation> admissionLocationList = bedManagementService.getAdmissionLocations();
+        assertThat(admissionLocationList.size(), is(3));
 
         AdmissionLocation cardioWard = getWard(admissionLocationList, "Cardio ward on first floor");
         Assert.assertEquals(10, cardioWard.getTotalBeds());
@@ -52,7 +52,7 @@ public class BedManagementServiceIntegrationTest extends BaseModuleWebContextSen
         LocationService locationService = Context.getLocationService();
 
         Location ward = locationService.getLocationByUuid("19e023e8-20ee-4237-ade6-9e68f897b7a9");
-        AdmissionLocation admissionLocation = bedManagementService.getLayoutForWard(ward);
+        AdmissionLocation admissionLocation = bedManagementService.getAdmissionLocationByLocation(ward);
 
         assertEquals(6, admissionLocation.getBedLayouts().size());
         assertEquals("Physical Location for Orthopaedic ward", admissionLocation.getBedLayouts().get(0).getLocation());
