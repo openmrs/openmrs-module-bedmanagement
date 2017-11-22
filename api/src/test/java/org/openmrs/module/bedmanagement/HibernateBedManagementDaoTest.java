@@ -8,9 +8,11 @@ import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.api.db.LocationDAO;
 import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
+import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
+import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -199,4 +201,151 @@ public class HibernateBedManagementDaoTest extends BaseModuleWebContextSensitive
         Assert.assertNull(bedLocationMapping.getBed());
         Assert.assertNotNull(bedManagementDao.getBedLocationMappingByLocationAndRowAndColumn(location, 4, 1));
     }
+
+    @Test
+    public void shouldGetBeds() throws Exception {
+        List<Bed> bedList = bedManagementDao.getBeds(null, null, null, null, null);
+
+        Assert.assertEquals(17, bedList.size());
+        Assert.assertEquals("304-a", bedList.get(0).getBedNumber());
+        Assert.assertEquals("304-b", bedList.get(1).getBedNumber());
+    }
+
+    @Test
+    public void shouldGetBedsByLocation() throws Exception {
+        Location location = locationDao.getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
+        List<Bed> BedList = bedManagementDao.getBeds(location, null, null, null, null);
+
+        Assert.assertEquals(10, BedList.size());
+        Assert.assertEquals("304-a", BedList.get(0).getBedNumber());
+        Assert.assertEquals("304-b", BedList.get(1).getBedNumber());
+    }
+
+    @Test
+    public void shouldGetBedsByBedType() throws Exception {
+        BedType bedType = bedManagementDao.getBedTypeById(2);
+        List<Bed> bedList = bedManagementDao.getBeds(null, bedType, null,5, 0);
+
+        Assert.assertEquals(3, bedList.size());
+        Assert.assertEquals("luxury", bedList.get(0).getBedType().getName());
+        Assert.assertEquals("luxury", bedList.get(1).getBedType().getName());
+    }
+
+    @Test
+    public void shouldGetBedsByLocationAndBedType() throws Exception {
+        BedType bedType = bedManagementDao.getBedTypeById(2);
+        Location location = locationDao.getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
+        List<Bed> bedList = bedManagementDao.getBeds(location, bedType, null, 5, 0);
+
+        Assert.assertEquals(2, bedList.size());
+        Assert.assertEquals("bb049d6d-d225-11e4-9c67-080027b662fc", bedList.get(0).getUuid());
+        Assert.assertEquals("luxury", bedList.get(0).getBedType().getName());
+        Assert.assertEquals("luxury", bedList.get(1).getBedType().getName());
+    }
+
+    @Test
+    public void shouldGetBedsByStatus() throws Exception {
+        List<Bed> bedList = bedManagementDao.getBeds(null, null, BedStatus.OCCUPIED, 5, 0);
+
+        Assert.assertEquals(3, bedList.size());
+        Assert.assertEquals("OCCUPIED", bedList.get(0).getStatus());
+
+        List<Bed> bedList2 = bedManagementDao.getBeds(null, null, BedStatus.AVAILABLE, 5, 0);
+
+        Assert.assertEquals(5, bedList2.size());
+        Assert.assertEquals("AVAILABLE", bedList2.get(0).getStatus());
+        Assert.assertEquals("AVAILABLE", bedList2.get(4).getStatus());
+    }
+
+    @Test
+    public void shouldGetBedsByLocationAndStatus() throws Exception {
+        Location location = locationDao.getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
+        List<Bed> bedList = bedManagementDao.getBeds(location, null, BedStatus.OCCUPIED, 5, 0);
+
+        Assert.assertEquals(1, bedList.size());
+        Assert.assertEquals("bb02b84b-d225-11e4-9c67-080027b662ec", bedList.get(0).getUuid());
+        Assert.assertEquals("OCCUPIED", bedList.get(0).getStatus());
+    }
+
+    @Test
+    public void shouldGetBedsByBedTypeAndStatus() throws Exception {
+        BedType bedType = bedManagementDao.getBedTypeById(3);
+        List<Bed> bedList = bedManagementDao.getBeds(null, bedType, BedStatus.AVAILABLE, 20, 0);
+
+        Assert.assertEquals(11, bedList.size());
+        Assert.assertEquals("AVAILABLE", bedList.get(0).getStatus());
+        Assert.assertEquals("normal", bedList.get(0).getBedType().getName());
+        Assert.assertEquals("AVAILABLE", bedList.get(10).getStatus());
+        Assert.assertEquals("normal", bedList.get(10).getBedType().getName());
+    }
+
+    @Test
+    public void shouldGetBedsByLocationAndBedTypeAndStatus() throws Exception {
+        BedType bedType = bedManagementDao.getBedTypeById(1);
+        Location location = locationDao.getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
+        List<Bed> bedList = bedManagementDao.getBeds(location, bedType, BedStatus.AVAILABLE, 10, 0);
+
+        Assert.assertEquals(1, bedList.size());
+        Assert.assertEquals("bb094d57-d225-11e4-9c67-080027b662mh", bedList.get(0).getUuid());
+        Assert.assertEquals("AVAILABLE", bedList.get(0).getStatus());
+        Assert.assertEquals("deluxe", bedList.get(0).getBedType().getName());
+    }
+
+    @Test
+    public void shouldReturnBedListByLocationUuid() throws Exception {
+        Location location = locationDao.getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b56");
+        List<Bed> bedList = bedManagementDao.getBeds(location, null, null, null, null);
+        Assert.assertEquals(6, bedList.size());
+        Assert.assertEquals("bb02b84b-d225-11e4-9c67-080027b662ab", bedList.get(0).getUuid());
+        Assert.assertFalse(bedList.get(0).getVoided());
+    }
+
+    @Test
+    public void shouldReturnTotalBedNumberByLocationUuid() throws Exception {
+        Location location = locationDao.getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b56");
+        long num = bedManagementDao.getBedCountByLocation(location);
+
+        Assert.assertEquals(6, num);
+    }
+
+    @Test
+    public void shouldSaveBed() throws Exception {
+        Bed bed = new Bed();
+        bed.setBedNumber("100-a");
+        bed.setStatus("AVAILABLE");
+        BedType bedType = bedManagementDao.getBedTypeById(1);
+        bed.setBedType(bedType);
+        bedManagementDao.saveBed(bed);
+
+        Assert.assertNotNull(bed.getId());
+        Assert.assertNotNull(bedManagementDao.getBedById(bed.getId()));
+    }
+
+    @Test
+    public void shouldGetBedTypeById() throws Exception {
+        BedType bedType = bedManagementDao.getBedTypeById(1);
+        assertThat(bedType.getName(), is(equalTo("deluxe")));
+
+        BedType bedType2 = bedManagementDao.getBedTypeById(2);
+        assertThat(bedType2.getName(), is(equalTo("luxury")));
+    }
+
+    @Test
+    public void shouldListBedTypes() throws Exception {
+        List<BedType> bedTypeList = bedManagementDao.getBedTypes(null, 3, 0);
+
+        Assert.assertNotNull(bedTypeList);
+        Assert.assertEquals(3, bedTypeList.size());
+        Assert.assertTrue(bedTypeList.get(0).getName().equals("deluxe"));
+        Assert.assertTrue(bedTypeList.get(1).getName().equals("luxury"));
+    }
+
+    @Test
+    public void shouldReturnBedTypeByName() throws Exception {
+        BedType bedType = bedManagementDao.getBedTypes("luxury", 1, 0).get(0);
+
+        Assert.assertNotNull(bedType);
+        Assert.assertEquals("luxury", bedType.getName());
+    }
+
 }

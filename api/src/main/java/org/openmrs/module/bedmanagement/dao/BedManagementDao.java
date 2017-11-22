@@ -18,10 +18,8 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.module.bedmanagement.BedLayout;
-import org.openmrs.module.bedmanagement.entity.Bed;
-import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
-import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
-import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.constants.BedStatus;
+import org.openmrs.module.bedmanagement.entity.*;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
 import org.openmrs.module.bedmanagement.BedDetails;
 
@@ -107,4 +105,49 @@ public interface BedManagementDao {
      * @return {@link BedLocationMapping}
      */
     BedLocationMapping getBedLocationMappingByBed(Bed bed);
+
+    /**
+     * Get beds.
+     *
+     * @param location {@link Location} admission location, if null filter by location criteria will not applied
+     * @param bedType {@link BedType} bed type, if null filter by bed type criteria will not applied
+     * @param status {@link BedStatus} bed status, if filter by null bed type criteria will not applied
+     * @param limit {@link Integer} limit result set, return all result set if limit is null
+     * @param offset {@link Integer} specify the starting row offset into the result set
+     * @return {@link List<Bed>}
+     */
+    List<Bed> getBeds(Location location, BedType bedType, BedStatus status, Integer limit, Integer offset);
+
+    /**
+     * Get total bed number by location {@link Location} uuid
+     *
+     * @param location {@link Location} ward's room location
+     * @return {@link Long} total number of beds
+     */
+    Integer getBedCountByLocation(Location location);
+
+    /**
+     * Save / update bed
+     *
+     * @param bed {@link Bed}
+     * @return {@link Bed}
+     */
+    Bed saveBed(Bed bed);
+
+    /**
+     * Get bed type by Id
+     * @param id {@link Integer} bed Id
+     * @return {@link BedType}
+     */
+    BedType getBedTypeById(Integer id);
+
+    /**
+     * Get bed sypes
+     *
+     * @param name {@link String} bed type name, if null filter by name criteria will not applied
+     * @param limit {@link Integer} limit result set, return all result set if limit is null
+     * @param offset {@link Integer} specify the starting row offset into the result set
+     * @return {@link List<BedType>}
+     */
+    List<BedType> getBedTypes(String name, Integer limit, Integer offset);
 }
