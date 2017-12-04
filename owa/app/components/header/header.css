@@ -1,0 +1,38 @@
+ul.title-section {
+    list-style: none;
+    padding: 0;
+}
+
+ul.title-section li {
+    display: inline-block;
+    position: relative;
+}
+
+ul.title-section li:not(:last-child):after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 15%;
+    color: #ccc;
+    height: 70%;
+    border-right: 1px solid #ccc;
+}
+
+ul.title-section li a
+{
+    display: block;
+    padding: 10px 15px;
+    color: #454e59;
+    border-radius: 3px;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+ul.title-section li a.active {
+    color:#00AEEF;
+    text-decoration: underline;
+}
+
+ul.title-section li a:hover {
+    background: #f9f9f9;
+}

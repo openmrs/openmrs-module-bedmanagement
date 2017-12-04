@@ -1,0 +1,50 @@
+{
+    "name": "bedManagementOWA",
+    "version": "1.0.0",
+    "description": "Bed Management OWA",
+    "repository": "https://github.com/openmrs/openmrs-module-bedmanagement",
+    "license": "MIT",
+    "scripts": {
+        "webpack": "webpack -wd",
+        "build-webpack": "webpack -p",
+        "test": "jest",
+        "test-watch": "jest --watch",
+        "test-coverage": "jest --coverage"
+    },
+    "babel": {
+        "presets": [
+            "react",
+            ["env", {
+                "targets": {
+                    "node": "current"
+                }
+            }],
+            "stage-2"
+        ]
+    },
+    "devDependencies": {
+        "babel-eslint": "^8.0.2",
+        "eslint": "^4.12.1",
+        "eslint-plugin-react": "^7.5.1",
+        "jest": "^21.2.1",
+        "react-test-renderer": "^16.2.0"
+    },
+    "dependencies": {
+        "axios": "^0.17.1",
+        "babel-cli": "^6.26.0",
+        "babel-loader": "^7.1.2",
+        "babel-polyfill": "^6.26.0",
+        "babel-preset-env": "^1.6.1",
+        "babel-preset-react": "^6.24.1",
+        "babel-preset-stage-2": "^6.24.1",
+        "css-loader": "^0.28.7",
+        "ejs": "^2.5.7",
+        "lodash.pickby": "^4.6.0",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0",
+        "react-router-dom": "^4.2.2",
+        "prop-types": "^15.6.0",
+        "style-loader": "^0.19.0",
+        "webpack": "^3.9.1"
+    }
+}

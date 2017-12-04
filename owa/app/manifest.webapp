@@ -1,0 +1,19 @@
+{
+  "version": "0.1.0",
+  "name": "Bed Management",
+  "description": "Bed Management UI",
+  "launch_path": "admissionLocations.html",
+  "icons": {
+    "48": "/img/omrs-button.png"
+  },
+  "developer": {
+    "name": "sanishmaharjan",
+    "url": "https://github.com/openmrs/openmrs-module-bedmanagement"
+  },
+  "default_locale": "en",
+    "activities": {
+      "openmrs": {
+        "href": "*"
+      }
+    }
+}
