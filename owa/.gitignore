@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea
+/node_modules/
+/coverage/
+/yarn.lock
+/app/build/
+/package-lock.json
