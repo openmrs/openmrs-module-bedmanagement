@@ -18,20 +18,21 @@ import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.Patient;
 import org.openmrs.api.LocationService;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
 import org.openmrs.module.bedmanagement.BedDetails;
 import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
+import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
-import org.openmrs.module.bedmanagement.entity.Bed;
-import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
-import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
-import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.entity.*;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
+import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BedManagementServiceImpl extends BaseOpenmrsService implements BedManagementService {
@@ -174,6 +175,84 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     @Override
     public List<BedTag> getAllBedTags() {
         return  bedManagementDao.getAllBedTags();
+    }
+
+    @Override
+    public BedLocationMapping getBedLocationMappingByBedId(Integer bedId) {
+        Bed bed = bedManagementDao.getBedById(bedId);
+        return bedManagementDao.getBedLocationMappingByBed(bed);
+    }
+
+    @Override
+    public List<Bed> getBeds(Integer limit, Integer offset) {
+        return bedManagementDao.getBeds(null, null, null, limit, offset);
+    }
+
+    @Override
+    public List<Bed> getBeds(String locationUuid, String bedTypeName, BedStatus status, Integer limit, Integer offset) {
+        Location location = locationUuid != null ? locationService.getLocationByUuid(locationUuid) : null;
+        BedType bedType = null;
+        if (bedTypeName != null) {
+            List<BedType> bedTypes = bedManagementDao.getBedTypes(bedTypeName, 1, 0);
+            if (bedTypes.size() == 0)
+                throw new IllegalPropertyException("Invalid bed type name");
+            bedType = bedTypes.get(0);
+        }
+
+        return bedManagementDao.getBeds(location, bedType, status, limit, offset);
+    }
+
+    @Override
+    public Bed getBedByUuid(String uuid) {
+        return bedManagementDao.getBedByUuid(uuid);
+    }
+
+    @Override
+    public void deleteBed(Bed bed, String reason) {
+        BedLocationMapping bedLocationMapping =  bedManagementDao.getBedLocationMappingByBed(bed);
+        if(bedLocationMapping != null){
+            bedLocationMapping.setBed(null);
+            bedManagementDao.saveBedLocationMapping(bedLocationMapping);
+        }
+
+        bed.setVoided(true);
+        bed.setDateVoided(new Date());
+        bed.setVoidReason(reason);
+        bed.setVoidedBy(Context.getAuthenticatedUser());
+        bedManagementDao.saveBed(bed);
+    }
+
+    @Override
+    public Bed saveBed(Bed bed) {
+        return bedManagementDao.saveBed(bed);
+    }
+
+    @Override
+    public BedLocationMapping saveBedLocationMapping(BedLocationMapping bedLocationMapping) {
+        Location location = bedLocationMapping.getLocation();
+        BedLocationMapping existingBedLocationMapping = bedManagementDao
+                .getBedLocationMappingByLocationAndRowAndColumn(location, bedLocationMapping.getRow(), bedLocationMapping.getColumn());
+
+        if (existingBedLocationMapping != null && existingBedLocationMapping.getBed() == null) {
+            existingBedLocationMapping.setBed(bedLocationMapping.getBed());
+            bedLocationMapping = existingBedLocationMapping;
+        } else if (existingBedLocationMapping != null && existingBedLocationMapping.getBed() != null
+                && !existingBedLocationMapping.getBed().getId().equals(bedLocationMapping.getBed().getId())) {
+            throw new IllegalPropertyException("Already bed assign to give row & column");
+        }
+
+        return bedManagementDao.saveBedLocationMapping(bedLocationMapping);
+    }
+
+    @Override
+    public List<BedType> getBedTypesByName(String name, Integer limit, Integer offset) {
+        return bedManagementDao.getBedTypes(name, limit, offset);
+    }
+
+    @Override
+    public BedLocationMapping getBedLocationMappingByLocationUuidAndRowColumn(String locationUuid, Integer row, Integer column) {
+        Location location = locationService.getLocationByUuid(locationUuid);
+        return bedManagementDao.getBedLocationMappingByLocationAndRowAndColumn(location, row, column);
     }
 
     private BedDetails constructBedDetails(Bed bed, Location location, List<BedPatientAssignment> currentAssignments) {

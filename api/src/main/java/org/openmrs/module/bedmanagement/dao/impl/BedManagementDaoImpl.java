@@ -3,20 +3,22 @@
  * Version 1.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://license.openmrs.org
- *
+ * <p>
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- *
+ * <p>
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 package org.openmrs.module.bedmanagement.dao.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
@@ -27,10 +29,7 @@ import org.openmrs.module.bedmanagement.BedLayout;
 import org.openmrs.module.bedmanagement.BedLayoutWithDetails;
 import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
-import org.openmrs.module.bedmanagement.entity.Bed;
-import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
-import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
-import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.entity.*;
 
 import java.util.*;
 
@@ -84,7 +83,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
 
     @Override
     public Bed getBedByUuid(String uuid) {
-        return (Bed) sessionFactory.getCurrentSession().createQuery("from Bed b where b.uuid = :uuid").setString("uuid", uuid).uniqueResult();
+        return (Bed) sessionFactory.getCurrentSession().createQuery("from Bed b where b.uuid = :uuid and b.voided=false").setString("uuid", uuid).uniqueResult();
     }
 
     @Override
@@ -123,7 +122,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
 
         Bed bedFromSession = (Bed) session.get(Bed.class, bed.getId());
         List<BedPatientAssignment> activeBedPatientAssignment = filterActiveBedPatientAssignments(bedFromSession);
-        if(activeBedPatientAssignment.size() == 0) {
+        if (activeBedPatientAssignment.size() == 0) {
             bedFromSession.setStatus(BedStatus.AVAILABLE.toString());
         }
         session.saveOrUpdate(bedFromSession);
@@ -139,8 +138,8 @@ public class BedManagementDaoImpl implements BedManagementDao {
 
     private List<BedPatientAssignment> filterActiveBedPatientAssignments(Bed bedFromSession) {
         List<BedPatientAssignment> activeBedPatientAssignment = new ArrayList<BedPatientAssignment>();
-        for(BedPatientAssignment bedPatientAssignment: bedFromSession.getBedPatientAssignment()){
-            if(bedPatientAssignment.getEndDatetime() == null){
+        for (BedPatientAssignment bedPatientAssignment : bedFromSession.getBedPatientAssignment()) {
+            if (bedPatientAssignment.getEndDatetime() == null) {
                 activeBedPatientAssignment.add(bedPatientAssignment);
             }
         }
@@ -150,7 +149,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
     @Override
     public BedPatientAssignment getBedPatientAssignmentByUuid(String uuid) {
         Session session = sessionFactory.getCurrentSession();
-        return  (BedPatientAssignment) session.createQuery("from BedPatientAssignment bpa " +
+        return (BedPatientAssignment) session.createQuery("from BedPatientAssignment bpa " +
                 "where bpa.uuid = :uuid")
                 .setParameter("uuid", uuid)
                 .uniqueResult();
@@ -196,7 +195,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
         List<Location> locationList = query.list();
 
         List<AdmissionLocation> admissionLocations = new ArrayList<>();
-        for(Location location : locationList){
+        for (Location location : locationList) {
             admissionLocations.add(this.getAdmissionLocationForLocation(location));
         }
 
@@ -298,5 +297,86 @@ public class BedManagementDaoImpl implements BedManagementDao {
         query.setParameter("voided", false);
         query.setParameter("bed", bed);
         return (BedLocationMapping) query.uniqueResult();
+    }
+
+    private Criteria createGetBedsCriteria(Location location, BedType bedType, BedStatus bedStatus, Integer limit, Integer offset) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria;
+        if (location != null) {
+            criteria = session.createCriteria(BedLocationMapping.class, "blm");
+            criteria.createAlias("blm.bed", "bed");
+            criteria.createAlias("blm.location", "location");
+            criteria.add(Restrictions.eq("location", location));
+            criteria.add(Restrictions.eq("bed.voided", false));
+            if (bedStatus != null)
+                criteria.add(Restrictions.eq("bed.status", bedStatus.toString()));
+            if (bedType != null)
+                criteria.add(Restrictions.eq("bed.bedType", bedType));
+        } else {
+            criteria = session.createCriteria(Bed.class, "bed");
+            criteria.add(Restrictions.eq("voided", false));
+            if (bedStatus != null)
+                criteria.add(Restrictions.eq("status", bedStatus.toString()));
+            if (bedType != null)
+                criteria.add(Restrictions.eq("bedType", bedType));
+        }
+
+        if (limit != null) {
+            criteria.setMaxResults(limit);
+            if (offset != null)
+                criteria.setFirstResult(offset);
+        }
+
+        return criteria;
+    }
+
+    @Override
+    public List<Bed> getBeds(Location location, BedType bedType, BedStatus status, Integer limit, Integer offset) {
+        Criteria cr = createGetBedsCriteria(location, bedType, status, limit, offset);
+        if (location != null) {
+            List<BedLocationMapping> bedLocationMappings = cr.list();
+            List<Bed> beds = new ArrayList<>();
+            for (BedLocationMapping bedLocationMapping : bedLocationMappings) {
+                beds.add(bedLocationMapping.getBed());
+            }
+
+            return beds;
+        } else {
+            return cr.list();
+        }
+    }
+
+    @Override
+    public Integer getBedCountByLocation(Location location) {
+        Criteria cr = createGetBedsCriteria(location, null, null, null, null);
+        return cr.list().size();
+    }
+
+    @Override
+    public Bed saveBed(Bed bed) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.saveOrUpdate(bed);
+        session.flush();
+        return bed;
+    }
+
+    @Override
+    public BedType getBedTypeById(Integer id) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedType.class);
+        criteria.add(Restrictions.eq("id", id));
+        return (BedType) criteria.uniqueResult();
+    }
+
+    @Override
+    public List<BedType> getBedTypes(String name, Integer limit, Integer offset) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedType.class);
+        if(name != null)
+            criteria.add(Restrictions.eq("name", name));
+        if (limit != null) {
+            criteria.setMaxResults(limit);
+            if (offset != null)
+                criteria.setFirstResult(offset);
+        }
+        return criteria.list();
     }
 }

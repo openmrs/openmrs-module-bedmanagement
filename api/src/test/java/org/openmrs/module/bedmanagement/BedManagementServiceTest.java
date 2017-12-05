@@ -12,6 +12,7 @@ import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
+import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
@@ -172,5 +173,124 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
         Assert.assertEquals("19e023e8-20ee-4237-ade6-9e68f897b7a9", admissionLocation.getWard().getUuid());
         Assert.assertEquals(6, admissionLocation.getTotalBeds());
         Assert.assertNotNull(admissionLocation.getBedLayouts());
+    }
+
+    @Test
+    public void shouldReturnAllBeds() throws Exception {
+        Context.authenticate(superUser, superUserPassword);
+
+        List<Bed> allBeds = Context.getService(BedManagementService.class).getBeds(null, null);
+        Assert.assertEquals(17, allBeds.size());
+
+        List<Bed> BedsWithLimit = Context.getService(BedManagementService.class).getBeds(10, 0);
+        Assert.assertEquals(10, BedsWithLimit.size());
+    }
+
+    @Test
+    public void shouldReturnBedsByLocationUuidAndBedTypeNameAndStatus() throws Exception {
+        Context.authenticate(superUser, superUserPassword);
+
+        List<Bed> beds = Context.getService(BedManagementService.class).getBeds("98bc9b32-9d1a-11e2-8137-0800271c1b75", "luxury", BedStatus.AVAILABLE, 10, 0);
+
+        Assert.assertEquals(2, beds.size());
+        Assert.assertEquals("luxury", beds.get(0).getBedType().getName());
+        Assert.assertEquals("AVAILABLE", beds.get(0).getStatus());
+        Assert.assertEquals("bb049d6d-d225-11e4-9c67-080027b662fc", beds.get(0).getUuid());
+
+        Assert.assertEquals("luxury", beds.get(1).getBedType().getName());
+        Assert.assertEquals("AVAILABLE", beds.get(1).getStatus());
+        Assert.assertEquals("bb0906fa-d225-11e4-9c67-080027b662gh", beds.get(1).getUuid());
+    }
+
+    @Test
+    public void shouldReturnBedsByLocationUuidAndStatus() throws Exception {
+        Context.authenticate(superUser, superUserPassword);
+
+        List<Bed> beds = Context.getService(BedManagementService.class).getBeds("98bc9b32-9d1a-11e2-8137-0800271c1b75", null, BedStatus.AVAILABLE, 10, 0);
+
+        Assert.assertEquals(9, beds.size());
+        Assert.assertEquals("bb049d6d-d225-11e4-9c67-080027b662fc", beds.get(0).getUuid());
+        Assert.assertEquals("AVAILABLE", beds.get(0).getStatus());
+
+        Assert.assertEquals("AVAILABLE", beds.get(4).getStatus());
+        Assert.assertEquals("bb09cacd-d225-11e4-9c67-080027b662sc", beds.get(4).getUuid());
+
+        Assert.assertEquals("AVAILABLE", beds.get(8).getStatus());
+        Assert.assertEquals("bb0f8866-d225-11e4-9c67-080027b662ec", beds.get(8).getUuid());
+    }
+
+    @Test
+    public void shouldReturnBedsByLocationUuid() throws Exception {
+        Context.authenticate(superUser, superUserPassword);
+
+        List<Bed> beds = Context.getService(BedManagementService.class).getBeds("98bc9b32-9d1a-11e2-8137-0800271c1b75", null, null, 10, 0);
+
+        Assert.assertEquals(10, beds.size());
+        Assert.assertEquals("bb02b84b-d225-11e4-9c67-080027b662ec", beds.get(0).getUuid());
+        Assert.assertEquals("OCCUPIED", beds.get(0).getStatus());
+
+        Assert.assertEquals("AVAILABLE", beds.get(5).getStatus());
+        Assert.assertEquals("bb09cacd-d225-11e4-9c67-080027b662sc", beds.get(5).getUuid());
+
+        Assert.assertFalse(beds.get(9).getVoided());
+        Assert.assertEquals("bb0f8866-d225-11e4-9c67-080027b662ec", beds.get(9).getUuid());
+
+    }
+
+    @Test
+    public void shouldSoftDeleteBedIfUserHasEditBedsPrivileges() throws Exception {
+        Context.authenticate(superUser, superUserPassword);
+
+        Bed bed = Context.getService(BedManagementService.class).getBedById(1);
+        Context.getService(BedManagementService.class).deleteBed(bed, "remove bed form location");
+
+        Assert.assertTrue(bed.getVoided());
+        Assert.assertEquals("remove bed form location", bed.getVoidReason());
+    }
+
+    @Test(expected = APIAuthenticationException.class)
+    public void shouldThrowExceptionSoftDeleteBedIfUserHasNotEditBedsPrivileges() throws Exception {
+        Context.authenticate(normalUser, normalUserPassword);
+
+        Bed bed = Context.getService(BedManagementService.class).getBedById(1);
+        Context.getService(BedManagementService.class).deleteBed(bed, "remove bed form location");
+    }
+
+    @Test
+    public void shouldSaveBedLocationMappingIfUserHasEditBedsPrivileges() throws Exception {
+        Context.authenticate(superUser, superUserPassword);
+
+        Bed bed = Context.getService(BedManagementService.class).getBedById(1);
+        Location location = Context.getService(LocationService.class).getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
+        BedLocationMapping bedLocationMapping = new BedLocationMapping();
+        bedLocationMapping.setBed(bed);
+        bedLocationMapping.setLocation(location);
+        bedLocationMapping.setRow(4);
+        bedLocationMapping.setColumn(1);
+        Context.getService(BedManagementService.class).saveBedLocationMapping(bedLocationMapping);
+
+        Assert.assertNotNull(bedLocationMapping);
+        Assert.assertEquals(4, bedLocationMapping.getRow());
+        Assert.assertEquals(1, bedLocationMapping.getColumn());
+        Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMapping.getLocation().getUuid());
+    }
+
+    @Test(expected = APIAuthenticationException.class)
+    public void shouldThrowSaveBedLocationMappingIfUserNotHasEditBedsPrivileges() throws Exception {
+        Context.authenticate(normalUser, normalUserPassword);
+
+        Bed bed = Context.getService(BedManagementService.class).getBedById(1);
+        Location location = Context.getService(LocationService.class).getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
+        BedLocationMapping bedLocationMapping = new BedLocationMapping();
+        bedLocationMapping.setBed(bed);
+        bedLocationMapping.setLocation(location);
+        bedLocationMapping.setRow(1);
+        bedLocationMapping.setColumn(1);
+        Context.getService(BedManagementService.class).saveBedLocationMapping(bedLocationMapping);
+
+        Assert.assertNotNull(bedLocationMapping);
+        Assert.assertEquals(1, bedLocationMapping.getRow());
+        Assert.assertEquals(1, bedLocationMapping.getColumn());
+        Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMapping.getLocation().getUuid());
     }
 }

@@ -19,10 +19,8 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.annotation.Authorized;
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.module.bedmanagement.entity.Bed;
-import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
-import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
-import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.constants.BedStatus;
+import org.openmrs.module.bedmanagement.entity.*;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
 import org.openmrs.module.bedmanagement.BedDetails;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,4 +101,94 @@ public interface BedManagementService extends OpenmrsService {
 
     @Authorized(value = {"Get Tags"}, requireAll=true)
     List<BedTag> getAllBedTags();
+
+    /**
+     * Get bed location mapping by bed id
+     *
+     * @param bedId {@link Integer} bed Id
+     * @return {@link BedLocationMapping}
+     */
+    @Authorized(value = "Get Beds", requireAll = true)
+    BedLocationMapping getBedLocationMappingByBedId(Integer bedId);
+
+    /**
+     * Get all beds
+     *
+     * @param limit        {@link Integer} limit result set, return all result set if limit is null
+     * @param offset       {@link Integer} specify the starting row offset into the result set
+     * @return {@link List<Bed>}
+     */
+    @Authorized(value = {"Get Beds"}, requireAll = true)
+    List<Bed> getBeds(Integer limit, Integer offset);
+
+    /**
+     * Get beds by location uuid and/or bed type name and/or status
+     *
+     * @param locationUuid {@link String} location Uuid, if null location uuid criteria will not set
+     * @param bedTypeName  {@link String} bedTypeName, if null bedTypeName criteria will not set
+     * @param status       {@link BedStatus} bed status, if null status criteria will not set
+     * @param limit        {@link Integer} limit result set, return all result set if limit is null
+     * @param offset       {@link Integer} specify the starting row offset into the result set
+     * @return {@link List<Bed>}
+     */
+    @Authorized(value = {"Get Beds"}, requireAll = true)
+    List<Bed> getBeds(String locationUuid, String bedTypeName, BedStatus status, Integer limit, Integer offset);
+
+    /**
+     * Get bed by bed uuid
+     *
+     * @param uuid {@link String} bed uuid
+     * @return {@link Bed}
+     */
+    @Authorized(value = {"Get Beds"}, requireAll = true)
+    Bed getBedByUuid(String uuid);
+
+    /**
+     * Soft delete bed
+     *
+     * @param bed    {@link Bed}
+     * @param reason {@link String} reason of bed delete
+     */
+    @Authorized(value = {"Edit Beds"}, requireAll = true)
+    void deleteBed(Bed bed, String reason);
+
+    /**
+     * Save / update bed
+     *
+     * @param bed {@link Bed}
+     * @return {@link Bed}
+     */
+    @Authorized(value = {"Edit Beds"}, requireAll = true)
+    Bed saveBed(Bed bed);
+
+    /**
+     * Save / Update bed location mapping
+     *
+     * @param bedLocationMapping {@link BedLocationMapping}
+     * @return {@link BedLocationMapping}
+     */
+    @Authorized(value = "Edit Beds", requireAll = true)
+    BedLocationMapping saveBedLocationMapping(BedLocationMapping bedLocationMapping);
+
+    /**
+     * Get bed types by name
+     *
+     * @param name   {@link String} bed type name, if null bed type name criteria will not set
+     * @param limit  {@link Integer} limit result set, return all result set if limit is null
+     * @param offset {@link Integer} specify the starting row offset into the result set
+     * @return {@link List<BedType>}
+     */
+    @Authorized(value = {"Get Bed Type"}, requireAll = true)
+    List<BedType> getBedTypesByName(String name, Integer limit, Integer offset);
+
+    /**
+     * Get bed location mapping by location uuid and row and column
+     *
+     * @param locationUuid {@link String} location Uuid
+     * @param row          {@link Integer} bed row
+     * @param column       {@link Integer} bed column
+     * @return {@link BedLocationMapping}
+     */
+    @Authorized(value = "Get Beds", requireAll = true)
+    BedLocationMapping getBedLocationMappingByLocationUuidAndRowColumn(String locationUuid, Integer row, Integer column);
 }
