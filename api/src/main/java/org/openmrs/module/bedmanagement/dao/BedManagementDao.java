@@ -150,4 +150,19 @@ public interface BedManagementDao {
      * @return {@link List<BedType>}
      */
     List<BedType> getBedTypes(String name, Integer limit, Integer offset);
+
+    /**
+     * Save/Update bed type
+     *
+     * @param bedType {@link BedType}
+     * @return {@link BedType}
+     */
+    BedType saveBedType(BedType bedType);
+
+    /**
+     * Delete Bed type
+     *
+     * @param bedType {@link BedType}
+     */
+    void deleteBedType(BedType bedType);
 }
