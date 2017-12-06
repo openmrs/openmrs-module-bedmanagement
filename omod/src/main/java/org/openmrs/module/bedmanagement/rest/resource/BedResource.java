@@ -168,7 +168,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
         BedType bedType = null;
         if (properties.get("bedType") != null) {
             String bedTypeName = properties.get("bedType");
-            List<BedType> bedTypes = Context.getService(BedManagementService.class).getBedTypesByName(bedTypeName, 1, 0);
+            List<BedType> bedTypes = Context.getService(BedManagementService.class).getBedTypes(bedTypeName, 1, 0);
             if (bedTypes.size() == 0)
                 throw new IllegalPropertyException("Invalid bed type name");
             bedType = bedTypes.get(0);
