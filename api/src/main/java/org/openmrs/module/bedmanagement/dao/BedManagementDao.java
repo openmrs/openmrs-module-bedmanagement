@@ -135,6 +135,39 @@ public interface BedManagementDao {
     Bed saveBed(Bed bed);
 
     /**
+     * Get bed tag by Uuid
+     *
+     * @param uuid {@link String} bed tag uuid
+     * @return {@link BedTag}
+     */
+    BedTag getBedTagByUuid(String uuid);
+
+    /**
+     * Return bed tags
+     *
+     * @param name {@link String} bed tag name, if null filter by name criteria will not applied
+     * @param limit {@link Integer} limit result set, return all result set if limit is null
+     * @param offset {@link Integer} specify the starting row offset into the result set
+     * @return {@link List<BedTag>}
+     */
+    List<BedTag> getBedTags(String name, Integer limit, Integer offset);
+
+    /**
+     * Save / Update bed tag
+     *
+     * @param bedTag {@link BedTag}
+     * @return {@link BedTag}
+     */
+    BedTag saveBedTag(BedTag bedTag);
+
+    /**
+     * Delete bed tag
+     *
+     * @param bedTag {@link BedTag}
+     */
+    void deleteBedTag(BedTag bedTag);
+
+    /**
      * Get bed type by Id
      * @param id {@link Integer} bed Id
      * @return {@link BedType}

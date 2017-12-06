@@ -12,6 +12,7 @@ import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
+import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
@@ -375,6 +377,53 @@ public class HibernateBedManagementDaoTest extends BaseModuleWebContextSensitive
         bedManagementDao.deleteBedType(specialBedType);
 
         Assert.assertTrue(bedManagementDao.getBedTypes("special", 1, 0).size() == 0);
+    }
+
+    @Test
+    public void shouldGetBedTagByUuid() throws Exception {
+        BedTag bedTag = bedManagementDao.getBedTagByUuid("73e846d6-ed5f-11e6-a3c9-0800274a5156");
+        assertThat(bedTag.getName(), is(equalTo("Broken")));
+
+        BedTag bedTag2 = bedManagementDao.getBedTagByUuid("73e846d6-ed5f-33e6-a3c9-0800274a5156");
+        assertThat(bedTag2.getName(), is(equalTo("Isolation")));
+    }
+
+    @Test
+    public void shouldReturnBedTags() throws Exception {
+        List<BedTag> bedTags = bedManagementDao.getBedTags(null, 10, 0);
+
+        Assert.assertEquals(4, bedTags.size());
+        Assert.assertFalse(bedTags.get(0).getVoided());
+        Assert.assertFalse(bedTags.get(1).getVoided());
+        Assert.assertFalse(bedTags.get(2).getVoided());
+        Assert.assertFalse(bedTags.get(3).getVoided());
+    }
+
+    @Test
+    public void shouldReturnBedTagsByName() throws Exception {
+        List<BedTag> bedTags = bedManagementDao.getBedTags("Isolation", 10, 0);
+        Assert.assertEquals(1, bedTags.size());
+        Assert.assertFalse(bedTags.get(0).getVoided());
+        Assert.assertEquals("Isolation", bedTags.get(0).getName());
+    }
+
+    @Test
+    public void shouldAddNewBedTag() throws Exception {
+        BedTag bedTag = new BedTag();
+        bedTag.setName("Reserved");
+        bedManagementDao.saveBedTag(bedTag);
+
+        Assert.assertNotNull(bedTag.getId());
+        Assert.assertNotNull(bedTag.getUuid());
+    }
+
+    @Test
+    public void shouldDeleteBedTag() throws Exception {
+        BedTag bedTag = bedManagementDao.getBedTagByUuid("73e846d6-ed5f-44e6-a3c9-0800274a5156");
+        bedManagementDao.deleteBedTag(bedTag);
+
+        bedTag = bedManagementDao.getBedTagByUuid("73e846d6-ed5f-44e6-a3c9-0800274a5156");
+        Assert.assertNull(bedTag);
     }
 
 }

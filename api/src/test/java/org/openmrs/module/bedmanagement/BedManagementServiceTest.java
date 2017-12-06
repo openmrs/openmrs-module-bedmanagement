@@ -16,6 +16,7 @@ import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
+import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
@@ -292,5 +293,62 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
         Assert.assertEquals(1, bedLocationMapping.getRow());
         Assert.assertEquals(1, bedLocationMapping.getColumn());
         Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMapping.getLocation().getUuid());
+    }
+
+    @Test
+    public void shouldReturnBedTagByUuid() throws Exception {
+        Context.authenticate(superUser, superUserPassword);
+
+        BedTag bedTag = Context.getService(BedManagementService.class).getBedTagByUuid("73e846d6-ed5f-33e6-a3c9-0800274a5156");
+
+        Assert.assertNotNull(bedTag);
+        Assert.assertEquals("73e846d6-ed5f-33e6-a3c9-0800274a5156", bedTag.getUuid());
+    }
+
+    @Test
+    public void shouldReturnBedTags() throws Exception {
+        Context.authenticate(superUser, superUserPassword);
+
+        List<BedTag> allBedTags = Context.getService(BedManagementService.class).getBedTags(null, 10, 0);
+
+        Assert.assertEquals(4, allBedTags.size());
+        Assert.assertFalse(allBedTags.get(0).getVoided());
+
+        List<BedTag> bedTags = Context.getService(BedManagementService.class).getBedTags("Broken", 10, 0);
+        Assert.assertEquals(1, bedTags.size());
+        Assert.assertFalse(bedTags.get(0).getVoided());
+        Assert.assertEquals("Broken", bedTags.get(0).getName());
+    }
+
+    @Test
+    public void shouldAddNewBedTagIfUserHasEditTagsPrivileges(){
+        Context.authenticate(superUser, superUserPassword);
+
+        BedTag bedTag = new BedTag();
+        bedTag.setName("Reserved");
+        Context.getService(BedManagementService.class).saveBedTag(bedTag);
+
+        Assert.assertNotNull(bedTag.getId());
+        Assert.assertNotEquals("", bedTag.getUuid());
+    }
+
+    @Test(expected = APIAuthenticationException.class)
+    public void shouldThorwExceptionOnAddNewBedTagIfUserNotHasEditTagsPrivileges(){
+        Context.authenticate(normalUser, normalUserPassword);
+
+        BedTag bedTag = new BedTag();
+        bedTag.setName("Reserved");
+        Context.getService(BedManagementService.class).saveBedTag(bedTag);
+    }
+
+    @Test
+    public void shouldSoftDeleteBedTagIfUserHasEditTagsPrivileges(){
+        Context.authenticate(superUser, superUserPassword);
+
+        BedTag bedTag = Context.getService(BedManagementService.class).getBedTagByUuid("73e846d6-ed5f-22e6-a3c9-0800274a5156");
+        Context.getService(BedManagementService.class).deleteBedTag(bedTag, "Not needed more");
+
+        Assert.assertEquals("Not needed more", bedTag.getVoidReason());
+        Assert.assertTrue(bedTag.getVoided());
     }
 }
