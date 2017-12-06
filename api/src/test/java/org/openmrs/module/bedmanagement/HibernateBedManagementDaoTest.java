@@ -348,4 +348,33 @@ public class HibernateBedManagementDaoTest extends BaseModuleWebContextSensitive
         Assert.assertEquals("luxury", bedType.getName());
     }
 
+    @Test
+    public void shouldAddNewBedType() throws Exception {
+        BedType bedType = new BedType();
+        bedType.setName("special");
+        bedType.setDisplayName("SPL");
+        bedType.setDescription("Special bed");
+        bedManagementDao.saveBedType(bedType);
+
+        Assert.assertNotNull(bedType.getId());
+
+        BedType specialBedType = bedManagementDao.getBedTypes("special", 1, 0).get(0);
+        Assert.assertNotNull(specialBedType);
+        Assert.assertEquals("special", specialBedType.getName());
+    }
+
+    @Test
+    public void shouldDeleteBedType() throws Exception {
+        BedType bedType = new BedType();
+        bedType.setName("special");
+        bedType.setDisplayName("SPL");
+        bedType.setDescription("Special bed");
+        bedManagementDao.saveBedType(bedType);
+
+        BedType specialBedType = bedManagementDao.getBedTypes("special", 1, 0).get(0);
+        bedManagementDao.deleteBedType(specialBedType);
+
+        Assert.assertTrue(bedManagementDao.getBedTypes("special", 1, 0).size() == 0);
+    }
+
 }
