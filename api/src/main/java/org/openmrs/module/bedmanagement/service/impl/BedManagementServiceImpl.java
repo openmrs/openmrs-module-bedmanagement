@@ -228,6 +228,29 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     }
 
     @Override
+    public BedTag getBedTagByUuid(String uuid) {
+        return bedManagementDao.getBedTagByUuid(uuid);
+    }
+
+    @Override
+    public List<BedTag> getBedTags(String name, Integer limit, Integer offset) {
+        return bedManagementDao.getBedTags(name, limit, offset);
+    }
+
+    @Override
+    public BedTag saveBedTag(BedTag bedTag) {
+        return bedManagementDao.saveBedTag(bedTag);
+    }
+
+    @Override
+    public void deleteBedTag(BedTag bedTag, String reason) {
+        bedTag.setVoided(true);
+        bedTag.setVoidReason(reason);
+        bedTag.setVoidedBy(Context.getAuthenticatedUser());
+        bedManagementDao.saveBedTag(bedTag);
+    }
+
+    @Override
     public BedLocationMapping saveBedLocationMapping(BedLocationMapping bedLocationMapping) {
         Location location = bedLocationMapping.getLocation();
         BedLocationMapping existingBedLocationMapping = bedManagementDao

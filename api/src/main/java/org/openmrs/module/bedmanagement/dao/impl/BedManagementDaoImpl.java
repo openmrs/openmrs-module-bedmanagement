@@ -361,6 +361,44 @@ public class BedManagementDaoImpl implements BedManagementDao {
     }
 
     @Override
+    public BedTag getBedTagByUuid(String uuid) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedTag.class);
+        criteria.add(Restrictions.eq("uuid", uuid));
+        criteria.add(Restrictions.eq("voided", false));
+        return (BedTag) criteria.uniqueResult();
+    }
+
+    @Override
+    public List<BedTag> getBedTags(String name, Integer limit, Integer offset) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedTag.class);
+        criteria.add(Restrictions.eq("voided", false));
+        if(name != null)
+            criteria.add(Restrictions.eq("name", name));
+
+        if (limit != null) {
+            criteria.setMaxResults(limit);
+            if (offset != null)
+                criteria.setFirstResult(offset);
+        }
+        return criteria.list();
+    }
+
+    @Override
+    public BedTag saveBedTag(BedTag bedTag) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.saveOrUpdate(bedTag);
+        session.flush();
+        return bedTag;
+    }
+
+    @Override
+    public void deleteBedTag(BedTag bedTag) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.delete(bedTag);
+        session.flush();
+    }
+
+    @Override
     public BedType getBedTypeById(Integer id) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedType.class);
         criteria.add(Restrictions.eq("id", id));

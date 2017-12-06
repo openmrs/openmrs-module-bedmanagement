@@ -162,6 +162,44 @@ public interface BedManagementService extends OpenmrsService {
     Bed saveBed(Bed bed);
 
     /**
+     * Get bed tag by Id
+     *
+     * @param uuid {@link String} Bed tag uuid
+     * @return {@link BedTag}
+     */
+    @Authorized(value = {"Get Tags"}, requireAll = true)
+    BedTag getBedTagByUuid(String uuid);
+
+    /**
+     * Get bed tags
+     *
+     * @param name   {@link String} bed tag name, if null bed tag name criteria will not set
+     * @param limit  {@link Integer} limit result set, return all result set if limit is null
+     * @param offset {@link Integer} specify the starting row offset into the result set
+     * @return {@link List<BedTag>}
+     */
+    @Authorized(value = {"Get Tags"}, requireAll = true)
+    List<BedTag> getBedTags(String name, Integer limit, Integer offset);
+
+    /**
+     * Save / Update bed Tag
+     *
+     * @param bedTag {@link BedTag}
+     * @return {@link BedTag}
+     */
+    @Authorized(value = {"Edit Tags"}, requireAll = true)
+    BedTag saveBedTag(BedTag bedTag);
+
+    /**
+     * Delete bed tag
+     *
+     * @param bedTag {@link BedTag}
+     * @param reason {@link String}
+     */
+    @Authorized(value = {"Edit Tags"}, requireAll = true)
+    void deleteBedTag(BedTag bedTag, String reason);
+
+    /**
      * Save / Update bed location mapping
      *
      * @param bedLocationMapping {@link BedLocationMapping}
