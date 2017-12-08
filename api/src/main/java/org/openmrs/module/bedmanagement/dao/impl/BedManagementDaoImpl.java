@@ -379,4 +379,20 @@ public class BedManagementDaoImpl implements BedManagementDao {
         }
         return criteria.list();
     }
+
+
+    @Override
+    public BedType saveBedType(BedType bedType) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.saveOrUpdate(bedType);
+        session.flush();
+        return bedType;
+    }
+
+    @Override
+    public void deleteBedType(BedType bedType) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.delete(bedType);
+        session.flush();
+    }
 }
