@@ -134,7 +134,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
             Context.getService(BedManagementService.class).saveBedLocationMapping(bedLocationMapping);
         }
 
-        return ConversionUtil.convertToRepresentation(bed, Representation.FULL);
+        return ConversionUtil.convertToRepresentation(bed, context.getRepresentation());
     }
 
     @Override
@@ -150,7 +150,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
             Context.getService(BedManagementService.class).saveBedLocationMapping(bedLocationMapping);
         }
         System.out.println(bed);
-        return ConversionUtil.convertToRepresentation(bed, Representation.DEFAULT);
+        return ConversionUtil.convertToRepresentation(bed, context.getRepresentation());
     }
 
     @Override
