@@ -179,7 +179,7 @@ public interface BedManagementService extends OpenmrsService {
      * @return {@link List<BedType>}
      */
     @Authorized(value = {"Get Bed Type"}, requireAll = true)
-    List<BedType> getBedTypesByName(String name, Integer limit, Integer offset);
+    List<BedType> getBedTypes(String name, Integer limit, Integer offset);
 
     /**
      * Get bed location mapping by location uuid and row and column
@@ -191,4 +191,31 @@ public interface BedManagementService extends OpenmrsService {
      */
     @Authorized(value = "Get Beds", requireAll = true)
     BedLocationMapping getBedLocationMappingByLocationUuidAndRowColumn(String locationUuid, Integer row, Integer column);
+
+
+    /**
+     * Get bedType by Id
+     *
+     * @param id {@link Integer} Bed type id
+     * @return {@link BedType}
+     */
+    @Authorized(value = {"Get Bed Type"}, requireAll = true)
+    BedType getBedTypeById(Integer id);
+
+    /**
+     * Save / Update bed Type
+     *
+     * @param bedType {@link BedType}
+     * @return {@link BedType}
+     */
+    @Authorized(value = {"Edit Bed Type"}, requireAll = true)
+    BedType saveBedType(BedType bedType);
+
+    /**
+     * Delete bed type
+     *
+     * @param bedType {@link BedType}
+     */
+    @Authorized(value = {"Edit Bed Type"}, requireAll = true)
+    void deleteBedType(BedType bedType);
 }
