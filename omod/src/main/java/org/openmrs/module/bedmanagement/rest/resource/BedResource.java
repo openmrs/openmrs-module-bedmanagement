@@ -54,7 +54,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
             description.addProperty("bedType");
             description.addProperty("row");
             description.addProperty("column");
-            description.addProperty("status", Representation.DEFAULT);
+            description.addProperty("status");
             return description;
         }
         if ((rep instanceof FullRepresentation)) {
@@ -65,7 +65,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
             description.addProperty("bedType");
             description.addProperty("row");
             description.addProperty("column");
-            description.addProperty("status", Representation.FULL);
+            description.addProperty("status");
             return description;
         }
         return null;
