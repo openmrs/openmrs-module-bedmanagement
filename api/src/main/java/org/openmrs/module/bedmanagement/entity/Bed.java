@@ -60,4 +60,14 @@ public class Bed extends BaseOpenmrsData {
         this.bedTagMap = bedTagMap;
     }
 
+
+    @Override
+    public String toString() {
+        return "Bed{" +
+                "id=" + id +
+                ", bedNumber='" + bedNumber + '\'' +
+                ", bedType=" + bedType +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }
