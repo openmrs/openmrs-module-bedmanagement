@@ -180,7 +180,7 @@ public class BedResourceTest extends MainResourceControllerTest {
         MockHttpServletRequest request = request(RequestMethod.POST, getURI() + "/" + getUuid());
         SimpleObject postParameters = new SimpleObject();
         postParameters.put("bedNumber", "307-ab");
-        postParameters.put("bedType", "luxury");
+        postParameters.put("bedType", "normal");
         postParameters.put("row", 2);
         postParameters.put("column", 3);
         postParameters.put("locationUuid", "98bc9b32-9d1a-11e2-8137-0800271c1b75");
@@ -191,7 +191,7 @@ public class BedResourceTest extends MainResourceControllerTest {
         Assert.assertEquals("307-ab", bed.get("bedNumber"));
         Assert.assertEquals(2, bed.get("row"));
         Assert.assertEquals(3, bed.get("column"));
-        Assert.assertEquals("luxury", PropertyUtils.getProperty(bed.get("bedType"), "name"));
+        Assert.assertEquals("normal", PropertyUtils.getProperty(bed.get("bedType"), "name"));
     }
 
     @Test(expected = ObjectNotFoundException.class)

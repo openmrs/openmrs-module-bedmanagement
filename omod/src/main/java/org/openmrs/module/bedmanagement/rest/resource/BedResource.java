@@ -54,7 +54,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
             description.addProperty("bedType");
             description.addProperty("row");
             description.addProperty("column");
-            description.addProperty("status", Representation.DEFAULT);
+            description.addProperty("status");
             return description;
         }
         if ((rep instanceof FullRepresentation)) {
@@ -65,7 +65,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
             description.addProperty("bedType");
             description.addProperty("row");
             description.addProperty("column");
-            description.addProperty("status", Representation.FULL);
+            description.addProperty("status");
             return description;
         }
         return null;
@@ -134,7 +134,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
             Context.getService(BedManagementService.class).saveBedLocationMapping(bedLocationMapping);
         }
 
-        return ConversionUtil.convertToRepresentation(bed, Representation.FULL);
+        return ConversionUtil.convertToRepresentation(bed, context.getRepresentation());
     }
 
     @Override
@@ -149,8 +149,8 @@ public class BedResource extends DelegatingCrudResource<Bed> {
             BedLocationMapping bedLocationMapping = this.constructBedLocationMapping(bed, locationUuid, row, column);
             Context.getService(BedManagementService.class).saveBedLocationMapping(bedLocationMapping);
         }
-
-        return ConversionUtil.convertToRepresentation(bed, Representation.FULL);
+        System.out.println(bed);
+        return ConversionUtil.convertToRepresentation(bed, context.getRepresentation());
     }
 
     @Override
@@ -168,7 +168,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
         BedType bedType = null;
         if (properties.get("bedType") != null) {
             String bedTypeName = properties.get("bedType");
-            List<BedType> bedTypes = Context.getService(BedManagementService.class).getBedTypesByName(bedTypeName, 1, 0);
+            List<BedType> bedTypes = Context.getService(BedManagementService.class).getBedTypes(bedTypeName, 1, 0);
             if (bedTypes.size() == 0)
                 throw new IllegalPropertyException("Invalid bed type name");
             bedType = bedTypes.get(0);

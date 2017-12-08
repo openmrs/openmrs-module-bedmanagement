@@ -245,7 +245,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     }
 
     @Override
-    public List<BedType> getBedTypesByName(String name, Integer limit, Integer offset) {
+    public List<BedType> getBedTypes(String name, Integer limit, Integer offset) {
         return bedManagementDao.getBedTypes(name, limit, offset);
     }
 
@@ -253,6 +253,21 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
     public BedLocationMapping getBedLocationMappingByLocationUuidAndRowColumn(String locationUuid, Integer row, Integer column) {
         Location location = locationService.getLocationByUuid(locationUuid);
         return bedManagementDao.getBedLocationMappingByLocationAndRowAndColumn(location, row, column);
+    }
+
+    @Override
+    public BedType getBedTypeById(Integer id) {
+        return bedManagementDao.getBedTypeById(id);
+    }
+
+    @Override
+    public BedType saveBedType(BedType bedType) {
+        return bedManagementDao.saveBedType(bedType);
+    }
+
+    @Override
+    public void deleteBedType(BedType bedType) {
+        bedManagementDao.deleteBedType(bedType);
     }
 
     private BedDetails constructBedDetails(Bed bed, Location location, List<BedPatientAssignment> currentAssignments) {
