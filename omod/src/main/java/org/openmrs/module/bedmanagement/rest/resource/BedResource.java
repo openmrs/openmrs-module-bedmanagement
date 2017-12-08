@@ -134,6 +134,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
             Context.getService(BedManagementService.class).saveBedLocationMapping(bedLocationMapping);
         }
 
+        System.out.println(bed);
         return ConversionUtil.convertToRepresentation(bed, Representation.FULL);
     }
 
