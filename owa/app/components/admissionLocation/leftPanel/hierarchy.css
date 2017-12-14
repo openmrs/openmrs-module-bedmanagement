@@ -1,0 +1,43 @@
+.left-container {
+    width: 23.129%;
+    float: left;
+    border-right: 1px solid #999;
+    padding: 5px;
+    height: 100%;
+}
+
+.left-container ul {
+    margin-left: 15px;
+}
+
+.left-container ul li {
+    display: block;
+    margin-bottom: 5px;
+    padding: 0 5px;
+}
+
+.left-container ul li span {
+    cursor: pointer;
+}
+
+.left-container ul li span.active {
+    color: #00AEEF;
+    font-weight: bold;
+}
+
+.left-container ul li.hide {
+    display: none;
+}
+
+.left-container ul li.title {
+    font-weight: bold;
+}
+
+.left-container ul li i {
+    margin-right: 3px;
+}
+
+.left-container ul li i.fa-minus-square, .left-container ul li i.fa-plus-square {
+    cursor: pointer;
+}
+

@@ -1,10 +1,11 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import UrlHelper from '../../utilities/urlHelper';
+import UrlHelper from 'utilities/urlHelper';
 
 require('./header.css');
-const urlHelper = new UrlHelper();
 class Header extends React.PureComponent {
+
+    urlHelper = new UrlHelper();
 
     linkClass = (path) => {
         return this.props.path == path ? 'active' : '';
@@ -14,20 +15,20 @@ class Header extends React.PureComponent {
         return <nav>
             <ul className="title-section">
                 <li>
-                    <Link to={urlHelper.owaPath() + '/admissionLocations.html'}
-                        className={this.linkClass(urlHelper.owaPath() + '/admissionLocations.html')}>
+                    <Link to={this.urlHelper.owaPath() + '/admissionLocations.html'}
+                        className={this.linkClass(this.urlHelper.owaPath() + '/admissionLocations.html')}>
                         Admission Locations
                     </Link>
                 </li>
                 <li>
-                    <Link to={urlHelper.owaPath() + '/bedTypes.html'}
-                        className={this.linkClass(urlHelper.owaPath() + '/bedTypes.html')}>
+                    <Link to={this.urlHelper.owaPath() + '/bedTypes.html'}
+                        className={this.linkClass(this.urlHelper.owaPath() + '/bedTypes.html')}>
                         Bed Types
                     </Link>
                 </li>
                 <li>
-                    <Link to={urlHelper.owaPath() + '/bedTags.html'}
-                        className={this.linkClass(urlHelper.owaPath() + '/bedTags.html')}>
+                    <Link to={this.urlHelper.owaPath() + '/bedTags.html'}
+                        className={this.linkClass(this.urlHelper.owaPath() + '/bedTags.html')}>
                         Bed Tags
                     </Link>
                 </li>

@@ -2,11 +2,11 @@ import React from 'react';
 import {Switch, Route} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import AdmissionLocationWrapper from './admissionLocation/admissionLocationWrapper';
-import BedTypeWrapper from './bedType/bedTypeWrapper';
-import BedTagWrapper from './bedTag/bedTagWrapper';
-import StateApi from '../utilities/stateApi';
-import UrlHelper from '../utilities/urlHelper';
+import AdmissionLocationWrapper from 'components/admissionLocation/admissionLocationWrapper';
+import BedTypeWrapper from 'components/bedType/bedTypeWrapper';
+import BedTagWrapper from 'components/bedTag/bedTagWrapper';
+import StateApi from 'utilities/stateApi';
+import UrlHelper from 'utilities/urlHelper';
 
 const urlHelper = new UrlHelper();
 class App extends React.Component {

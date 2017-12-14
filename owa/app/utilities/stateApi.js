@@ -9,7 +9,11 @@ export default class StateApi {
     };
 
     getContextDataByKey = (key) => {
-      return this.contextData[key];
+        return typeof this.contextData[key] !== 'undefined'? this.contextData[key]: null;
+    };
+
+    setContextData = (contexData) => {
+        Object.assign(this.contextData, contexData);
     };
 
     setState = (stateChange) => {
@@ -20,5 +24,9 @@ export default class StateApi {
 
     getState = () => {
         return this.app.state;
-    }
+    };
+
+    getStateByKey = (key) => {
+        return typeof this.app.state[key] !=='undefined'? this.app.state[key] : null;
+    };
 }

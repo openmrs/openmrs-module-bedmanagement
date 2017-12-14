@@ -1,0 +1,61 @@
+{
+    "admissionLocations": {
+        "baf7bd38-d225-11e4-9c67-080027b662ec": {
+            "name": "General Ward",
+            "uuid": "baf7bd38-d225-11e4-9c67-080027b662ec",
+            "description": "Hospital General Ward Section",
+            "parentAdmissionLocationUuid": "c1e42932-3f10-11e4-adec-0800271c1b75",
+            "isOpen": false,
+            "isHigherLevel": true
+        },
+        "bb0e512e-d225-11e4-9c67-080027b662ec": {
+            "name": "Labour Ward",
+            "uuid": "bb0e512e-d225-11e4-9c67-080027b662ec",
+            "description": "Hospital Labour Ward Section",
+            "parentAdmissionLocationUuid": null,
+            "isOpen": false,
+            "isHigherLevel": true
+        },
+        "e48fb2b3-d490-11e5-b193-0800270d80ce": {
+            "name": "General Ward - Room 2",
+            "uuid": "e48fb2b3-d490-11e5-b193-0800270d80ce",
+            "description": "General Ward room number 2",
+            "parentAdmissionLocationUuid": "baf7bd38-d225-11e4-9c67-080027b662ec",
+            "isOpen": false,
+            "isHigherLevel": false
+        },
+        "baf83667-d225-11e4-9c67-080027b662ec": {
+            "name": "General Ward - floor-2",
+            "uuid": "baf83667-d225-11e4-9c67-080027b662ec",
+            "description": "General Ward of second floor",
+            "parentAdmissionLocationUuid": "baf7bd38-d225-11e4-9c67-080027b662ec",
+            "isOpen": false,
+            "isHigherLevel": false
+        },
+        "baf83667-d225-11e4-as58-080027b662ec": {
+            "name": "General Ward - Room-200",
+            "uuid": "baf83667-d225-11e4-as58-080027b662ec",
+            "description": "General Ward room number 200",
+            "parentAdmissionLocationUuid": "baf83667-d225-11e4-9c67-080027b662ec",
+            "isOpen": false,
+            "isHigherLevel": false
+        }
+    },
+    "visitLocations": {
+        "c1e42932-3f10-11e4-adec-0800271c1b75": {
+            "description": "Ganiyari hospital",
+            "name": "Ganiyari",
+            "uuid": "c1e42932-3f10-11e4-adec-0800271c1b75"
+        },
+        "c1e4950f-3f10-11e4-adec-0800271c1b75": {
+            "description": "Subcenter 2 (SEM)",
+            "name": "Subcenter 2 (SEM)",
+            "uuid": "c1e4950f-3f10-11e4-adec-0800271c1b75"
+        },
+        "c1f25be5-3f10-11e4-adec-0800271c1b75": {
+            "description": "Subcenter 1 (BAM)",
+            "name": "Subcenter 1 (BAM)",
+            "uuid": "c1f25be5-3f10-11e4-adec-0800271c1b75"
+        }
+    }
+}

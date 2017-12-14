@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HierarchyItem Renders correctly General ward hierarchy 1`] = `
+<li
+  className=""
+>
+  <ul>
+    <li>
+      <i
+        aria-hidden="true"
+        className="fa fa-plus-square"
+        onClick={[Function]}
+      />
+      <span
+        className="active"
+        onClick={[Function]}
+      >
+         
+        General Ward
+         
+      </span>
+    </li>
+    <HierarchyItem
+      admissionLocation={
+        Object {
+          "description": "General Ward room number 2",
+          "isHigherLevel": false,
+          "isOpen": false,
+          "name": "General Ward - Room 2",
+          "parentAdmissionLocationUuid": "baf7bd38-d225-11e4-9c67-080027b662ec",
+          "uuid": "e48fb2b3-d490-11e5-b193-0800270d80ce",
+        }
+      }
+      hierarchyFunction={
+        Object {
+          "getActiveUuid": [Function],
+          "getAdmissionLocations": [Function],
+          "setActiveUuid": [Function],
+          "setAdmissionLocationIsOpen": [Function],
+          "setState": [Function],
+          "toggleIsOpen": [Function],
+        }
+      }
+      isParentOpen={false}
+      key="e48fb2b3-d490-11e5-b193-0800270d80ce"
+    />
+    <HierarchyItem
+      admissionLocation={
+        Object {
+          "description": "General Ward of second floor",
+          "isHigherLevel": false,
+          "isOpen": false,
+          "name": "General Ward - floor-2",
+          "parentAdmissionLocationUuid": "baf7bd38-d225-11e4-9c67-080027b662ec",
+          "uuid": "baf83667-d225-11e4-9c67-080027b662ec",
+        }
+      }
+      hierarchyFunction={
+        Object {
+          "getActiveUuid": [Function],
+          "getAdmissionLocations": [Function],
+          "setActiveUuid": [Function],
+          "setAdmissionLocationIsOpen": [Function],
+          "setState": [Function],
+          "toggleIsOpen": [Function],
+        }
+      }
+      isParentOpen={false}
+      key="baf83667-d225-11e4-9c67-080027b662ec"
+    />
+  </ul>
+</li>
+`;
+
+exports[`HierarchyItem Renders correctly Labour ward hierarchy 1`] = `
+<li
+  className=""
+>
+  <ul>
+    <li>
+      <i
+        aria-hidden="true"
+        className="fa fa-caret-right"
+        onClick={[Function]}
+      />
+      <span
+        className=""
+        onClick={[Function]}
+      >
+         
+        Labour Ward
+         
+      </span>
+    </li>
+  </ul>
+</li>
+`;

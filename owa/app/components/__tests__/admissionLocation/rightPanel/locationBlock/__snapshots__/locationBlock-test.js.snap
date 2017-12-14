@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LocationBlock Should display location block properly 1`] = `
+<div
+  className="location block"
+  onClick={[Function]}
+>
+  <div
+    className="left-block"
+  >
+    <span>
+      General Ward
+    </span>
+  </div>
+  <ul
+    className="right-block"
+  >
+    <li>
+      <a
+        href="javascript:void(0);"
+        onClick={[Function]}
+        title="edit"
+      >
+        <i
+          aria-hidden="true"
+          className="fa fa-pencil"
+        />
+      </a>
+    </li>
+    <li>
+      <a
+        href="javascript:void(0);"
+        onClick={[Function]}
+        title="delete"
+      >
+        <i
+          aria-hidden="true"
+          className="fa fa-trash"
+        />
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`LocationBlock Should display location block properly 2`] = `
+<div
+  className="location block"
+  onClick={[Function]}
+>
+  <div
+    className="left-block"
+  >
+    <span>
+      Labour Ward
+    </span>
+  </div>
+  <ul
+    className="right-block"
+  >
+    <li>
+      <a
+        href="javascript:void(0);"
+        onClick={[Function]}
+        title="edit"
+      >
+        <i
+          aria-hidden="true"
+          className="fa fa-pencil"
+        />
+      </a>
+    </li>
+    <li>
+      <a
+        href="javascript:void(0);"
+        onClick={[Function]}
+        title="delete"
+      >
+        <i
+          aria-hidden="true"
+          className="fa fa-trash"
+        />
+      </a>
+    </li>
+  </ul>
+</div>
+`;

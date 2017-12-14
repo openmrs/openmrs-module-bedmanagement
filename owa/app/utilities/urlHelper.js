@@ -9,6 +9,10 @@ export default class UrlHelper {
 
     owaPath = () => {
         const fullPath = window.location.pathname;
-        return fullPath.substring(0, fullPath.lastIndexOf("/"));
-    }
+        return fullPath.substring(0, fullPath.lastIndexOf('/'));
+    };
+
+    apiBaseUrl = () => {
+        return window.location.origin + '/openmrs/ws/rest/v1';
+    };
 }
