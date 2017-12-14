@@ -2,6 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 
 const config = {
+    resolve: {
+        modules: [path.resolve('./app'), path.resolve('./node_modules')]
+    },
     entry:{
         vendor: [
             'react',

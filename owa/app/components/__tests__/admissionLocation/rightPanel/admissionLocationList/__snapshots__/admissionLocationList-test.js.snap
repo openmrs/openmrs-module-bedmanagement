@@ -1,0 +1,142 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AdmissionLocationList Should render location list properly 1`] = `
+<div
+  className="main-container"
+>
+  <Breadcrumb
+    activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
+    admissionLocationFunctions={
+      Object {
+        "getActiveLocationUuid": [Function],
+        "getAdmissionLocationByUuid": [Function],
+        "getAdmissionLocations": [Function],
+        "getChildAdmissionLocations": [Function],
+        "getParentAdmissionLocation": [Function],
+        "getState": [Function],
+        "getVisitLocations": [Function],
+        "notify": [Function],
+        "reFetchAllAdmissionLocations": [Function],
+        "setActiveLocationUuid": [Function],
+        "setState": [Function],
+      }
+    }
+  />
+  <div
+    className="main-block"
+  >
+    <div>
+      <LocationBlock
+        admissionLocation={
+          Object {
+            "description": "General Ward room number 2",
+            "isHigherLevel": false,
+            "isOpen": false,
+            "name": "General Ward - Room 2",
+            "parentAdmissionLocationUuid": "baf7bd38-d225-11e4-9c67-080027b662ec",
+            "uuid": "e48fb2b3-d490-11e5-b193-0800270d80ce",
+          }
+        }
+        admissionLocationFunctions={
+          Object {
+            "getActiveLocationUuid": [Function],
+            "getAdmissionLocationByUuid": [Function],
+            "getAdmissionLocations": [Function],
+            "getChildAdmissionLocations": [Function],
+            "getParentAdmissionLocation": [Function],
+            "getState": [Function],
+            "getVisitLocations": [Function],
+            "notify": [Function],
+            "reFetchAllAdmissionLocations": [Function],
+            "setActiveLocationUuid": [Function],
+            "setState": [Function],
+          }
+        }
+        key="e48fb2b3-d490-11e5-b193-0800270d80ce"
+      />
+      <LocationBlock
+        admissionLocation={
+          Object {
+            "description": "General Ward of second floor",
+            "isHigherLevel": false,
+            "isOpen": false,
+            "name": "General Ward - floor-2",
+            "parentAdmissionLocationUuid": "baf7bd38-d225-11e4-9c67-080027b662ec",
+            "uuid": "baf83667-d225-11e4-9c67-080027b662ec",
+          }
+        }
+        admissionLocationFunctions={
+          Object {
+            "getActiveLocationUuid": [Function],
+            "getAdmissionLocationByUuid": [Function],
+            "getAdmissionLocations": [Function],
+            "getChildAdmissionLocations": [Function],
+            "getParentAdmissionLocation": [Function],
+            "getState": [Function],
+            "getVisitLocations": [Function],
+            "notify": [Function],
+            "reFetchAllAdmissionLocations": [Function],
+            "setActiveLocationUuid": [Function],
+            "setState": [Function],
+          }
+        }
+        key="baf83667-d225-11e4-9c67-080027b662ec"
+      />
+      <span
+        className="btn btn-primary"
+        onClick={[Function]}
+      >
+        <i
+          aria-hidden="true"
+          className="icon fa fa-plus"
+        />
+         Add Ward
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AdmissionLocationList Should render location list properly 2`] = `
+<div
+  className="main-container"
+>
+  <Breadcrumb
+    activeUuid="bb0e512e-d225-11e4-9c67-080027b662ec"
+    admissionLocationFunctions={
+      Object {
+        "getActiveLocationUuid": [Function],
+        "getAdmissionLocationByUuid": [Function],
+        "getAdmissionLocations": [Function],
+        "getChildAdmissionLocations": [Function],
+        "getParentAdmissionLocation": [Function],
+        "getState": [Function],
+        "getVisitLocations": [Function],
+        "notify": [Function],
+        "reFetchAllAdmissionLocations": [Function],
+        "setActiveLocationUuid": [Function],
+        "setState": [Function],
+      }
+    }
+  />
+  <div
+    className="main-block"
+  >
+    <div
+      className="location option"
+    >
+      <label
+        className="btn btn-primary"
+        onClick={[Function]}
+      >
+        Add Child Admission Location
+      </label>
+      <label
+        className="btn btn-primary"
+      >
+        Set Bed Layout
+      </label>
+    </div>
+  </div>
+</div>
+`;
