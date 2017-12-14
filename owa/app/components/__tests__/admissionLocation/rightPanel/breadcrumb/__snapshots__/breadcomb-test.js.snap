@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Breadcomb Should render properly 1`] = `
+<ul
+  className="breadcrumb-section"
+>
+  <li>
+    <a
+      href="javascript:void(0)"
+      onClick={[Function]}
+      title="Admission Locations"
+    >
+      Admission Locations
+    </a>
+  </li>
+  <li
+    key="0"
+  >
+    <a
+      href="javascript:void(0)"
+      onClick={[Function]}
+      title="General Ward"
+    >
+      General Ward
+    </a>
+  </li>
+  <li
+    key="1"
+  >
+    <a
+      href="javascript:void(0)"
+      onClick={[Function]}
+      title="General Ward - Room 2"
+    >
+      General Ward - Room 2
+    </a>
+  </li>
+</ul>
+`;

@@ -1,0 +1,29 @@
+ul.breadcrumb-section li a {
+    padding: 10px 15px;
+    display: inline-block;
+    color: #454e59;
+}
+
+ul.breadcrumb-section li:not(:last-child):after {
+    content: '\003e';
+    position: absolute;
+    right: -1%;
+    top: 60%;
+    transform: translate(0, -50%);
+    color: #454e59;
+    height: 70%;
+}
+
+ul.breadcrumb-section li a:hover {
+    background: #f9f9f9;
+}
+
+ul.breadcrumb-section {
+    list-style: none;
+    padding: 0;
+}
+
+ul.breadcrumb-section li {
+    display: inline-block;
+    position: relative;
+}

@@ -1,0 +1,80 @@
+.location.block {
+    width: 22.80%;
+    padding: 10px;
+    float: left;
+    position: relative;
+    margin-right: 20px;
+    min-height: 80px;
+    box-shadow: 1px 1px 3px #ccc;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    word-wrap: break-word;
+    cursor: pointer;
+}
+
+.location.block .block-title {
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+.location.block .block-content {
+    padding: 10px;
+}
+
+.location.block .btn-primary, .location.option .btn-primary {
+    display: inline-block;
+    width: 23.936%;
+    margin-top: 18px;
+    padding: 30px 0;
+}
+
+.location.block .left-block {
+    width: 80%;
+    float: left;
+    top: 50%;
+    position: absolute;
+    transform: translate(0, -50%);
+}
+
+.location.block .left-block span {
+    vertical-align: middle;
+}
+
+.location.block ul {
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 0;
+}
+
+.location.block ul.right-block li {
+    display: none;
+    text-align: right;
+    padding: 5px 0;
+}
+
+.location.block:hover ul.right-block li{
+    display: block;
+}
+
+.location.block ul.right-block li a {
+    color: #454e59;
+}
+
+.location.option {
+    margin-bottom: 20px;
+}
+
+.location.option .btn {
+    background: #00AEEF;
+    max-width: 300px;
+    padding: 10px 5px;
+    margin-right: 10px;
+}
+
+.location.option .btn:hover {;
+    background: #0780AD;
+    transition: all 0.6s;
+    color: #fff;
+}

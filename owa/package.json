@@ -4,22 +4,38 @@
     "description": "Bed Management OWA",
     "repository": "https://github.com/openmrs/openmrs-module-bedmanagement",
     "license": "MIT",
+    "NODE_PATH": "./app",
     "scripts": {
         "webpack": "webpack -wd",
-        "build-webpack": "webpack -p",
-        "test": "jest",
-        "test-watch": "jest --watch",
-        "test-coverage": "jest --coverage"
+        "build": "webpack -p",
+        "test": "NODE_PATH=./app jest --notify",
+        "test-watch": "NODE_PATH=./app jest --watch",
+        "test-coverage": "NODE_PATH=./app jest --coverage"
     },
     "babel": {
         "presets": [
             "react",
-            ["env", {
-                "targets": {
-                    "node": "current"
+            [
+                "env",
+                {
+                    "targets": {
+                        "node": "current"
+                    }
                 }
-            }],
+            ],
             "stage-2"
+        ]
+    },
+    "jest": {
+        "transform": {
+            ".*": "jest-css-modules"
+        },
+        "setupFiles": [
+            "raf/polyfill",
+            "./.jest.js"
+        ],
+        "snapshotSerializers": [
+            "enzyme-to-json/serializer"
         ]
     },
     "devDependencies": {
@@ -27,10 +43,12 @@
         "eslint": "^4.12.1",
         "eslint-plugin-react": "^7.5.1",
         "jest": "^21.2.1",
+        "jest-css-modules": "^1.1.0",
         "react-test-renderer": "^16.2.0"
     },
     "dependencies": {
         "axios": "^0.17.1",
+        "axios-mock-adapter": "^1.10.0",
         "babel-cli": "^6.26.0",
         "babel-loader": "^7.1.2",
         "babel-polyfill": "^6.26.0",
@@ -39,11 +57,17 @@
         "babel-preset-stage-2": "^6.24.1",
         "css-loader": "^0.28.7",
         "ejs": "^2.5.7",
+        "enzyme": "^3.2.0",
+        "enzyme-adapter-react-16": "^1.1.0",
+        "enzyme-to-json": "^3.2.2",
+        "lodash": "^4.17.4",
         "lodash.pickby": "^4.6.0",
+        "prop-types": "^15.6.0",
+        "raf": "^3.4.0",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
+        "react-notify": "^3.0.0",
         "react-router-dom": "^4.2.2",
-        "prop-types": "^15.6.0",
         "style-loader": "^0.19.0",
         "webpack": "^3.9.1"
     }

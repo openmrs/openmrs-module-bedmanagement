@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders correctly 1`] = `
+<StaticRouter
+  basename=""
+  context={Object {}}
+  location="/"
+>
+  <Router
+    history={
+      Object {
+        "action": "POP",
+        "block": [Function],
+        "createHref": [Function],
+        "go": [Function],
+        "goBack": [Function],
+        "goForward": [Function],
+        "listen": [Function],
+        "location": Object {
+          "hash": "",
+          "pathname": "/",
+          "search": "",
+        },
+        "push": [Function],
+        "replace": [Function],
+      }
+    }
+  >
+    <Header
+      path="/owa/bedmanagement/admissionLocations.html"
+    >
+      <nav>
+        <ul
+          className="title-section"
+        >
+          <li>
+            <Link
+              className="active"
+              replace={false}
+              to="/owa/bedmanagement/admissionLocations.html"
+            >
+              <a
+                className="active"
+                href="/owa/bedmanagement/admissionLocations.html"
+                onClick={[Function]}
+              >
+                Admission Locations
+              </a>
+            </Link>
+          </li>
+          <li>
+            <Link
+              className=""
+              replace={false}
+              to="/owa/bedmanagement/bedTypes.html"
+            >
+              <a
+                className=""
+                href="/owa/bedmanagement/bedTypes.html"
+                onClick={[Function]}
+              >
+                Bed Types
+              </a>
+            </Link>
+          </li>
+          <li>
+            <Link
+              className=""
+              replace={false}
+              to="/owa/bedmanagement/bedTags.html"
+            >
+              <a
+                className=""
+                href="/owa/bedmanagement/bedTags.html"
+                onClick={[Function]}
+              >
+                Bed Tags
+              </a>
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </Header>
+  </Router>
+</StaticRouter>
+`;

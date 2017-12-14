@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LocationHierarchy Renders correctly Location hierarchy 1`] = `
+<div
+  className="left-container"
+>
+  <ul>
+    <li
+      className="title"
+    >
+      <i
+        aria-hidden="true"
+        className="fa fa-minus-square"
+        onClick={[Function]}
+      />
+      <span
+        className=""
+        onClick={[Function]}
+      >
+         Admission Locations 
+      </span>
+    </li>
+    <HierarchyItem
+      admissionLocation={
+        Object {
+          "description": "Hospital General Ward Section",
+          "isHigherLevel": true,
+          "isOpen": false,
+          "name": "General Ward",
+          "parentAdmissionLocationUuid": "c1e42932-3f10-11e4-adec-0800271c1b75",
+          "uuid": "baf7bd38-d225-11e4-9c67-080027b662ec",
+        }
+      }
+      hierarchyFunction={
+        Object {
+          "getActiveUuid": [Function],
+          "getAdmissionLocations": [Function],
+          "setActiveUuid": [Function],
+          "setAdmissionLocationIsOpen": [Function],
+          "setState": [Function],
+          "toggleIsOpen": [Function],
+        }
+      }
+      isParentOpen={true}
+      key="baf7bd38-d225-11e4-9c67-080027b662ec"
+    />
+    <HierarchyItem
+      admissionLocation={
+        Object {
+          "description": "Hospital Labour Ward Section",
+          "isHigherLevel": true,
+          "isOpen": false,
+          "name": "Labour Ward",
+          "parentAdmissionLocationUuid": null,
+          "uuid": "bb0e512e-d225-11e4-9c67-080027b662ec",
+        }
+      }
+      hierarchyFunction={
+        Object {
+          "getActiveUuid": [Function],
+          "getAdmissionLocations": [Function],
+          "setActiveUuid": [Function],
+          "setAdmissionLocationIsOpen": [Function],
+          "setState": [Function],
+          "toggleIsOpen": [Function],
+        }
+      }
+      isParentOpen={true}
+      key="bb0e512e-d225-11e4-9c67-080027b662ec"
+    />
+  </ul>
+</div>
+`;
