@@ -27,18 +27,6 @@ exports[`LocationBlock Should display location block properly 1`] = `
         />
       </a>
     </li>
-    <li>
-      <a
-        href="javascript:void(0);"
-        onClick={[Function]}
-        title="delete"
-      >
-        <i
-          aria-hidden="true"
-          className="fa fa-trash"
-        />
-      </a>
-    </li>
   </ul>
 </div>
 `;

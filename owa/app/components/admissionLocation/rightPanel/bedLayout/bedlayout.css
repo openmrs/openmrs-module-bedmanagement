@@ -1,0 +1,83 @@
+.main-block .bed-layout .block {
+    width: 12%;
+    padding: 0 10px 0 10px;
+    float: left;
+    position: relative;
+    margin-right: 20px;
+    min-height: 55px;
+    box-shadow: 1px 1px 3px #ccc;
+    border: 1px solid #ccc;
+    margin: 10px 5px;
+    word-wrap: break-word;
+}
+
+.bed-layout .block.add-block{
+    cursor: pointer;
+}
+
+.bed-layout .block .block-title {
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+.bed-layout .block .block-content {
+    padding: 10px;
+}
+
+.bed-layout .block .btn-primary, .bed-layout .option .btn-primary {
+    display: inline-block;
+    width: 23.936%;
+    margin-top: 18px;
+    padding: 30px 0;
+}
+
+.bed-layout .block .left-block {
+    width: 80%;
+    float: left;
+    top: 50%;
+    position: absolute;
+    transform: translate(0, -50%);
+}
+
+.bed-layout .block .left-block span {
+    vertical-align: middle;
+}
+
+.bed-layout.block ul {
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 0;
+}
+
+.bed-layout .block ul.right-block li {
+    display: none;
+    text-align: right;
+    padding: 5px 0 0 0;
+}
+
+.bed-layout .block:hover ul.right-block li{
+    display: block;
+}
+
+.bed-layout .block ul.right-block li a {
+    color: #454e59;
+}
+
+.bed-layout .option {
+    margin-bottom: 20px;
+}
+
+.bed-layout .option .btn {
+    background: #00AEEF;
+    max-width: 300px;
+    padding: 10px 5px;
+    margin-right: 10px;
+}
+
+.bed-layout .option .btn:hover {;
+    background: #0780AD;
+    transition: all 0.6s;
+    color: #fff;
+}

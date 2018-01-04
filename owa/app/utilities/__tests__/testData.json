@@ -57,5 +57,45 @@
             "name": "Subcenter 1 (BAM)",
             "uuid": "c1f25be5-3f10-11e4-adec-0800271c1b75"
         }
-    }
+    },
+    "bedTypes" : [{
+        "id": 1,
+        "name": "deluxe",
+        "displayName": "deluxe bed",
+        "description": "DLX"
+    },
+    {
+        "id": 2,
+        "name": "luxury",
+        "displayName": "luxury bed",
+        "description": "LXY"
+    },
+    {
+        "id": 3,
+        "name": "dbl",
+        "displayName": "double bed",
+        "description": "deluxe"
+    }],
+    "bedTags" : [
+        {
+            "id": 2,
+            "name": "Broken",
+            "uuid": "e67ce6b1-8382-4514-80db-6d67a6611534"
+        },
+        {
+            "id": 3,
+            "name": "Oxygen",
+            "uuid": "25d9b2c8-7b70-48a5-a033-1051dcf7cc8a"
+        },
+        {
+            "id": 4,
+            "name": "Isolation",
+            "uuid": "ff7ed494-7b9c-4478-812a-5187e297f94c"
+        },
+        {
+            "id": 5,
+            "name": "Sanitation required",
+            "uuid": "39376170-c020-4e19-9960-c6f9044886fd"
+        }
+    ]
 }

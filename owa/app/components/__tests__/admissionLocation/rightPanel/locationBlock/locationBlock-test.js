@@ -66,7 +66,10 @@ describe('LocationBlock', () => {
             activeUuid: 'baf7bd38-d225-11e4-9c67-080027b662ec'
         });
 
-        generalWardLocationBlock.find('.fa-trash').simulate('click');
+        const labourWardLocationBlock = mount(<LocationBlock activeUuid="bb0e512e-d225-11e4-9c67-080027b662ec"
+            admissionLocation={testProps.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
+            admissionLocationFunctions={testProps.admissionLocationFunctions} />);
+        labourWardLocationBlock.find('.fa-trash').simulate('click');
         expect(spyOnDeleteHandler).toHaveBeenCalled();
     });
 

@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BedLayout Should render bed block properly 1`] = `
+<div
+  className="bed-layout"
+>
+  <BedLayoutRow
+    admissionLocationFunctions={
+      Object {
+        "getActiveLocationUuid": [Function],
+        "getAdmissionLocationByUuid": [Function],
+        "getAdmissionLocations": [Function],
+        "getBedTypes": [Function],
+        "getChildAdmissionLocations": [Function],
+        "getParentAdmissionLocation": [Function],
+        "getState": [Function],
+        "getVisitLocations": [Function],
+        "notify": [Function],
+        "reFetchAllAdmissionLocations": [Function],
+        "setActiveLocationUuid": [Function],
+        "setState": [Function],
+      }
+    }
+    key="1"
+    layoutColumn={2}
+    layoutRow={2}
+    loadAdmissionLocationLayout={[Function]}
+    row={1}
+    rowBeds={
+      Array [
+        undefined,
+        Object {
+          "bedId": 52,
+          "bedNumber": "vip-100",
+          "bedType": Object {
+            "description": "DLXdfdfds",
+            "displayName": "deluxe bed",
+            "id": 1,
+            "name": "deluxe",
+          },
+          "bedUuid": "30dfc421-48ef-427f-9a67-001d2f75b8c5",
+          "columnNumber": 1,
+          "rowNumber": 1,
+          "status": "AVAILABLE",
+        },
+        Object {
+          "bedId": null,
+          "bedNumber": null,
+          "bedType": null,
+          "bedUuid": null,
+          "columnNumber": 2,
+          "rowNumber": 1,
+          "status": null,
+        },
+      ]
+    }
+  />
+  <BedLayoutRow
+    admissionLocationFunctions={
+      Object {
+        "getActiveLocationUuid": [Function],
+        "getAdmissionLocationByUuid": [Function],
+        "getAdmissionLocations": [Function],
+        "getBedTypes": [Function],
+        "getChildAdmissionLocations": [Function],
+        "getParentAdmissionLocation": [Function],
+        "getState": [Function],
+        "getVisitLocations": [Function],
+        "notify": [Function],
+        "reFetchAllAdmissionLocations": [Function],
+        "setActiveLocationUuid": [Function],
+        "setState": [Function],
+      }
+    }
+    key="2"
+    layoutColumn={2}
+    layoutRow={2}
+    loadAdmissionLocationLayout={[Function]}
+    row={2}
+    rowBeds={
+      Array [
+        undefined,
+        Object {
+          "bedId": null,
+          "bedNumber": null,
+          "bedType": null,
+          "bedUuid": null,
+          "columnNumber": 1,
+          "rowNumber": 2,
+          "status": null,
+        },
+      ]
+    }
+  />
+</div>
+`;
+
+exports[`BedLayout Should render bed block properly 2`] = `
+<div
+  className="location option"
+>
+  <label
+    className="btn btn-primary"
+    onClick={[Function]}
+  >
+    Add Child Admission Location
+  </label>
+  <label
+    className="btn btn-primary"
+    onClick={[Function]}
+  >
+    Set Bed Layout
+  </label>
+</div>
+`;

@@ -6,6 +6,9 @@ import _ from 'lodash';
 import Header from 'components/header';
 import LocationHierarchy from 'components/admissionLocation/leftPanel/locationHierarchy';
 import AdmissionLocationList from 'components/admissionLocation/rightPanel/admissionLocationList';
+import AddEditAdmissionLocation from 'components/admissionLocation/rightPanel/admissionLocationForm/addEditAdmissionLocation';
+import SetBedLayout from 'components/admissionLocation/rightPanel/admissionLocationForm/setBedLayout';
+import AddEditBed from 'components/admissionLocation/rightPanel/admissionLocationForm/addEditBed';
 import AdmissionLocationHelper from 'utilities/admissionLocationHelper';
 import UrlHelper from 'utilities/urlHelper';
 import ReactNotify from 'react-notify';
@@ -28,7 +31,7 @@ export default class AdmissionLocationWrapper extends React.Component {
 
         this.fetchAllAdmissionLocations = this.fetchAllAdmissionLocations.bind(this);
         this.fetchBedTypes = this.fetchBedTypes.bind(this);
-        this.getPage = this.getPage.bind(this);
+        this.getBody = this.getBody.bind(this);
         this.fetchAllAdmissionLocations(this);
         this.fetchBedTypes();
     }
@@ -83,7 +86,7 @@ export default class AdmissionLocationWrapper extends React.Component {
                 visitLocations : visitLocations
             });
         }).catch(function (error) {
-            self.props.admissionLocationFunctions.notify('error', error.message);
+            self.admissionLocationFunctions.notify('error', error.message);
         });
     }
 
@@ -128,6 +131,9 @@ export default class AdmissionLocationWrapper extends React.Component {
         getVisitLocations: () => {
             return this.state.visitLocations;
         },
+        getBedTypes: () => {
+            return this.state.bedTypes;
+        },
         getAdmissionLocationByUuid: (admissionLocationUuid) => {
             return this.admissionLocationHelper.getAdmissionLocation(this.state.admissionLocations, admissionLocationUuid);
         },
@@ -159,18 +165,31 @@ export default class AdmissionLocationWrapper extends React.Component {
         }
     };
 
-    getPage() {
-        return <AdmissionLocationList activeUuid={this.state.activeUuid}
-            admissionLocationFunctions={this.admissionLocationFunctions}/>;
+    getBody() {
+        if (this.state.activePage == 'listing') {
+            return <AdmissionLocationList activeUuid={this.state.activeUuid}
+                admissionLocationFunctions={this.admissionLocationFunctions}/>;
+        } else if (this.state.activePage == 'addEditLocation') {
+            return <AddEditAdmissionLocation operation={this.state.pageData.operation}
+                activeUuid={this.state.activeUuid} admissionLocationFunctions={this.admissionLocationFunctions}/>;
+        } else if(this.state.activePage == 'set-layout'){
+            return <SetBedLayout activeUuid={this.state.activeUuid}
+                admissionLocationFunctions={this.admissionLocationFunctions}/>;
+        } else if (this.state.activePage == 'addEditBed') {
+            return <AddEditBed operation={this.state.pageData.operation} layoutColumn={this.state.pageData.layoutColumn}
+                layoutRow={this.state.pageData.layoutRow} bed={this.state.pageData.bed} bedTypes={this.state.bedTypes}
+                activeUuid={this.state.activeUuid} admissionLocationFunctions={this.admissionLocationFunctions}/>;
+        }
     }
 
     render() {
         return <div style={this.style.container}>
+            <ReactNotify ref='notificator'/>
             <Header path={this.props.match.path}/>
             <div style={this.style.wrapper}>
                 <LocationHierarchy admissionLocationFunctions={this.admissionLocationFunctions}
                     isOpen={this.state.isOpen} />
-                {this.getPage()}
+                {this.getBody()}
             </div>
         </div>;
     }

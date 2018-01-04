@@ -1,0 +1,235 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BedLayoutRow Should render bed layout properly 1`] = `
+<div
+  className="bed-layout-row"
+>
+   
+  <BedBlock
+    admissionLocationFunctions={
+      Object {
+        "getActiveLocationUuid": [Function],
+        "getAdmissionLocationByUuid": [Function],
+        "getAdmissionLocations": [Function],
+        "getBedTypes": [Function],
+        "getChildAdmissionLocations": [Function],
+        "getParentAdmissionLocation": [Function],
+        "getState": [Function],
+        "getVisitLocations": [Function],
+        "notify": [Function],
+        "reFetchAllAdmissionLocations": [Function],
+        "setActiveLocationUuid": [Function],
+        "setState": [Function],
+      }
+    }
+    bed={
+      Object {
+        "bedId": 9,
+        "bedNumber": "306-a",
+        "bedType": Object {
+          "description": "deluxe",
+          "displayName": "Double",
+          "id": 3,
+        },
+        "bedUuid": "bb0a43db-d225-11e4-9c67-080027b662ec",
+        "columnNumber": 1,
+        "name": "double",
+        "rowNumber": 2,
+        "status": "AVAILABLE",
+      }
+    }
+    key="1"
+    layoutColumn={3}
+    layoutRow={3}
+    loadAdmissionLocationLayout={[Function]}
+  />
+  <BedBlock
+    admissionLocationFunctions={
+      Object {
+        "getActiveLocationUuid": [Function],
+        "getAdmissionLocationByUuid": [Function],
+        "getAdmissionLocations": [Function],
+        "getBedTypes": [Function],
+        "getChildAdmissionLocations": [Function],
+        "getParentAdmissionLocation": [Function],
+        "getState": [Function],
+        "getVisitLocations": [Function],
+        "notify": [Function],
+        "reFetchAllAdmissionLocations": [Function],
+        "setActiveLocationUuid": [Function],
+        "setState": [Function],
+      }
+    }
+    bed={
+      Object {
+        "bedId": null,
+        "bedNumber": null,
+        "bedType": null,
+        "bedUuid": null,
+        "columnNumber": 2,
+        "rowNumber": 2,
+        "status": null,
+      }
+    }
+    key="2"
+    layoutColumn={3}
+    layoutRow={3}
+    loadAdmissionLocationLayout={[Function]}
+  />
+  <BedBlock
+    admissionLocationFunctions={
+      Object {
+        "getActiveLocationUuid": [Function],
+        "getAdmissionLocationByUuid": [Function],
+        "getAdmissionLocations": [Function],
+        "getBedTypes": [Function],
+        "getChildAdmissionLocations": [Function],
+        "getParentAdmissionLocation": [Function],
+        "getState": [Function],
+        "getVisitLocations": [Function],
+        "notify": [Function],
+        "reFetchAllAdmissionLocations": [Function],
+        "setActiveLocationUuid": [Function],
+        "setState": [Function],
+      }
+    }
+    bed={
+      Object {
+        "bedId": 10,
+        "bedNumber": "306-c",
+        "bedType": Object {
+          "description": "deluxe",
+          "displayName": "DLX",
+          "id": 1,
+          "name": "deluxe",
+        },
+        "bedUuid": "4a83f079-6859-447a-aec7-e54b98ca8a73",
+        "columnNumber": 3,
+        "rowNumber": 2,
+        "status": "AVAILABLE",
+      }
+    }
+    key="3"
+    layoutColumn={3}
+    layoutRow={3}
+    loadAdmissionLocationLayout={[Function]}
+  />
+</div>
+`;
+
+exports[`BedLayoutRow Should render bed layout properly 2`] = `
+<div
+  className="bed-layout-row"
+>
+   
+  <BedBlock
+    admissionLocationFunctions={
+      Object {
+        "getActiveLocationUuid": [Function],
+        "getAdmissionLocationByUuid": [Function],
+        "getAdmissionLocations": [Function],
+        "getBedTypes": [Function],
+        "getChildAdmissionLocations": [Function],
+        "getParentAdmissionLocation": [Function],
+        "getState": [Function],
+        "getVisitLocations": [Function],
+        "notify": [Function],
+        "reFetchAllAdmissionLocations": [Function],
+        "setActiveLocationUuid": [Function],
+        "setState": [Function],
+      }
+    }
+    bed={
+      Object {
+        "bedId": 9,
+        "bedNumber": "306-a",
+        "bedType": Object {
+          "description": "deluxe",
+          "displayName": "Double",
+          "id": 3,
+        },
+        "bedUuid": "bb0a43db-d225-11e4-9c67-080027b662ec",
+        "columnNumber": 1,
+        "name": "double",
+        "rowNumber": 2,
+        "status": "AVAILABLE",
+      }
+    }
+    key="1"
+    layoutColumn={3}
+    layoutRow={3}
+    loadAdmissionLocationLayout={[Function]}
+  />
+  <BedBlock
+    admissionLocationFunctions={
+      Object {
+        "getActiveLocationUuid": [Function],
+        "getAdmissionLocationByUuid": [Function],
+        "getAdmissionLocations": [Function],
+        "getBedTypes": [Function],
+        "getChildAdmissionLocations": [Function],
+        "getParentAdmissionLocation": [Function],
+        "getState": [Function],
+        "getVisitLocations": [Function],
+        "notify": [Function],
+        "reFetchAllAdmissionLocations": [Function],
+        "setActiveLocationUuid": [Function],
+        "setState": [Function],
+      }
+    }
+    bed={
+      Object {
+        "bedId": null,
+        "bedNumber": null,
+        "bedType": null,
+        "bedUuid": null,
+        "columnNumber": 2,
+        "rowNumber": 2,
+        "status": null,
+      }
+    }
+    key="2"
+    layoutColumn={3}
+    layoutRow={3}
+    loadAdmissionLocationLayout={[Function]}
+  />
+  <BedBlock
+    admissionLocationFunctions={
+      Object {
+        "getActiveLocationUuid": [Function],
+        "getAdmissionLocationByUuid": [Function],
+        "getAdmissionLocations": [Function],
+        "getBedTypes": [Function],
+        "getChildAdmissionLocations": [Function],
+        "getParentAdmissionLocation": [Function],
+        "getState": [Function],
+        "getVisitLocations": [Function],
+        "notify": [Function],
+        "reFetchAllAdmissionLocations": [Function],
+        "setActiveLocationUuid": [Function],
+        "setState": [Function],
+      }
+    }
+    bed={
+      Object {
+        "bedId": 10,
+        "bedNumber": "306-c",
+        "bedType": Object {
+          "description": "deluxe",
+          "displayName": "DLX",
+          "id": 1,
+          "name": "deluxe",
+        },
+        "bedUuid": "4a83f079-6859-447a-aec7-e54b98ca8a73",
+        "columnNumber": 3,
+        "rowNumber": 2,
+        "status": "AVAILABLE",
+      }
+    }
+    key="3"
+    layoutColumn={3}
+    layoutRow={3}
+    loadAdmissionLocationLayout={[Function]}
+  />
+</div>
+`;

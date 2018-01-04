@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Breadcrumb from 'components/admissionLocation/rightPanel/breadcrumb';
 import LocationBlock from 'components/admissionLocation/rightPanel/locationBlock';
+import BedLayout from 'components/admissionLocation/rightPanel/bedLayout';
 import AdmissionLocationHelper from 'utilities/admissionLocationHelper';
 
 require('./admissionLocationList.css');
@@ -14,7 +15,7 @@ export default class AdmissionLocationList extends React.Component {
         this.childAdmissionLocations = this.admissionLocationHelper.getChildAdmissionLocations(
             props.admissionLocationFunctions.getAdmissionLocations(), props.activeUuid);
         this.addWardClickHandler = this.addWardClickHandler.bind(this);
-        this.getPage = this.getPage.bind(this);
+        this.getBody = this.getBody.bind(this);
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -32,12 +33,14 @@ export default class AdmissionLocationList extends React.Component {
         });
     }
 
-    getPage() {
-        if (Object.keys(this.childAdmissionLocations).length == 0) {
-            return <div className="location option">
-                <label className="btn btn-primary" onClick={this.addWardClickHandler}>Add Child Admission Location</label>
-                <label className="btn btn-primary">Set Bed Layout</label>
-            </div>;
+    getBody() {
+        if(Object.keys(this.childAdmissionLocations).length == 0 && this.props.activeUuid == null){
+            return <span className="btn btn-primary" onClick={this.addWardClickHandler}>
+                <i className="icon fa fa-plus" aria-hidden="true"></i> Add Ward
+            </span>;
+        } else if (Object.keys(this.childAdmissionLocations).length == 0) {
+            return <BedLayout activeUuid={this.props.activeUuid}
+                admissionLocationFunctions={this.props.admissionLocationFunctions}/>;
         } else {
             return <div>
                 {Object.keys(this.childAdmissionLocations).map((key) => <LocationBlock key={key}
@@ -55,7 +58,7 @@ export default class AdmissionLocationList extends React.Component {
             <Breadcrumb activeUuid={this.props.activeUuid}
                 admissionLocationFunctions={this.props.admissionLocationFunctions}/>
             <div className="main-block">
-                {this.getPage()}
+                {this.getBody()}
             </div>
         </div>;
     }

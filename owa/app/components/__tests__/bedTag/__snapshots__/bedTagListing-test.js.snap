@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BedTagList Should render bed tag list properly 1`] = `
+<div
+  className="bed-Tag-listing"
+>
+  <div
+    className="block-title"
+  >
+    Existing Bed Tags
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>
+          Name
+        </th>
+        <th
+          className="description"
+        >
+          Description
+        </th>
+        <th>
+          Action
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <BedTagListRow
+        bedTag={
+          Object {
+            "id": 2,
+            "name": "Broken",
+            "uuid": "e67ce6b1-8382-4514-80db-6d67a6611534",
+          }
+        }
+        bedTagFunctions={
+          Object {
+            "fetchBedTags": [Function],
+            "getBedTagByUuid": [Function],
+            "getBedTags": [Function],
+            "notify": [Function],
+            "setState": [Function],
+          }
+        }
+        key="0"
+      />
+      <BedTagListRow
+        bedTag={
+          Object {
+            "id": 3,
+            "name": "Oxygen",
+            "uuid": "25d9b2c8-7b70-48a5-a033-1051dcf7cc8a",
+          }
+        }
+        bedTagFunctions={
+          Object {
+            "fetchBedTags": [Function],
+            "getBedTagByUuid": [Function],
+            "getBedTags": [Function],
+            "notify": [Function],
+            "setState": [Function],
+          }
+        }
+        key="1"
+      />
+      <BedTagListRow
+        bedTag={
+          Object {
+            "id": 4,
+            "name": "Isolation",
+            "uuid": "ff7ed494-7b9c-4478-812a-5187e297f94c",
+          }
+        }
+        bedTagFunctions={
+          Object {
+            "fetchBedTags": [Function],
+            "getBedTagByUuid": [Function],
+            "getBedTags": [Function],
+            "notify": [Function],
+            "setState": [Function],
+          }
+        }
+        key="2"
+      />
+      <BedTagListRow
+        bedTag={
+          Object {
+            "id": 5,
+            "name": "Sanitation required",
+            "uuid": "39376170-c020-4e19-9960-c6f9044886fd",
+          }
+        }
+        bedTagFunctions={
+          Object {
+            "fetchBedTags": [Function],
+            "getBedTagByUuid": [Function],
+            "getBedTags": [Function],
+            "notify": [Function],
+            "setState": [Function],
+          }
+        }
+        key="3"
+      />
+    </tbody>
+  </table>
+  <button
+    className="btn btn-primary"
+    onClick={[Function]}
+    value="Add New"
+  >
+     Add New 
+  </button>
+</div>
+`;

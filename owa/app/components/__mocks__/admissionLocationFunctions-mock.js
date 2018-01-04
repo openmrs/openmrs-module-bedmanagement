@@ -1,5 +1,5 @@
 import pickBy from 'lodash.pickby';
-import {admissionLocations, visitLocations} from 'utilities/__tests__/testData.json';
+import {admissionLocations, visitLocations, bedTypes} from 'utilities/__tests__/testData.json';
 
 const admissionLocationFunctionsMock = {
     setActiveLocationUuid: (admissionLocationUuid) => jest.fn(),
@@ -13,6 +13,9 @@ const admissionLocationFunctionsMock = {
     },
     getVisitLocations: () => {
         return visitLocations;
+    },
+    getBedTypes: () => {
+        return bedTypes;
     },
     getAdmissionLocationByUuid: (admissionLocationUuid) => {
         return typeof admissionLocations[admissionLocationUuid] !== 'undefined' ?

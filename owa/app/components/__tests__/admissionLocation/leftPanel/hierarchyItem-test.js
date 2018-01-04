@@ -3,7 +3,7 @@ import { shallowToJson } from 'enzyme-to-json';
 import {shallow, mount} from 'enzyme';
 
 import HierarchyItem from 'components/admissionLocation/leftPanel/hierarchyItem';
-import hierarchyFunctionMock from 'components/__mocks__/hierarchyFunction-mock';
+import hierarchyFunctionMock from 'components/__mocks__/hierarchyFunctions-mock';
 
 const testProp = {
     hierarchyFunction : hierarchyFunctionMock,
