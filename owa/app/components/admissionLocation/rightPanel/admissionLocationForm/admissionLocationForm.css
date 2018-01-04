@@ -1,0 +1,64 @@
+.main-container {
+    width: 74.80%;
+    float: right;
+}
+
+.admission-location-form {
+    box-shadow: 1px 1px 3px #ccc;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.admission-location-form .block-title {
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+.admission-location-form .block-title .back-link {
+    float: right;
+}
+
+.admission-location-form .block-content {
+    padding: 10px;
+}
+
+.admission-location-form .form-block {
+    margin-bottom: 10px;
+}
+
+.admission-location-form .form-block input[type="text"],
+.admission-location-form .form-block input[type="number"],
+.admission-location-form .form-block select,
+.admission-location-form .form-block textarea {
+    border-radius: 4px;
+    float: left;
+    width: calc(100% - 500px);
+}
+
+.admission-location-form .form-block input[type="button"] {
+    border-radius: 4px;
+}
+
+.admission-location-form label.form-title {
+    width: 15%;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: #454e59;
+    float: left;
+}
+
+.btn-primary:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}
+
+.admission-location-form p.error {
+    clear: both;
+    margin-left: 15%;
+    font-size: 12px;
+    padding: 5px 0;
+    color: #f36363;
+}

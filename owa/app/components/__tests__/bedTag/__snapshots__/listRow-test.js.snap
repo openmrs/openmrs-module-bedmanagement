@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BedTagListRow Should render bed tag list properly 1`] = `
+<table>
+  <tbody>
+    <BedTagListRow
+      bedTag={
+        Object {
+          "id": 4,
+          "name": "Isolation",
+          "uuid": "ff7ed494-7b9c-4478-812a-5187e297f94c",
+        }
+      }
+      bedTagFunctions={
+        Object {
+          "fetchBedTags": [Function],
+          "getBedTagByUuid": [Function],
+          "getBedTags": [Function],
+          "notify": [Function],
+          "setState": [Function],
+        }
+      }
+    >
+      <tr>
+        <td>
+          Isolation
+        </td>
+        <td />
+        <td>
+          <a
+            href="javascript:void(0);"
+            onClick={[Function]}
+          >
+            <i
+              aria-hidden="true"
+              className="icon fa fa-edit"
+            />
+             Edit
+          </a>
+            |  
+          <a
+            href="javascript:void(0);"
+            onClick={[Function]}
+          >
+            <i
+              aria-hidden="true"
+              className="icon fa fa-trash"
+            />
+             Delete
+          </a>
+        </td>
+      </tr>
+    </BedTagListRow>
+  </tbody>
+</table>
+`;

@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SetBedLayout Should display set layout form properly 1`] = `
+<div
+  className="main-container"
+>
+  <div
+    className="admission-location-form"
+  >
+    <div
+      className="block"
+    >
+      <div
+        className="block-title"
+      >
+        Set Layout
+        <a
+          className="back-link"
+          href="javascript:void(0);"
+          onClick={[Function]}
+          title="back"
+        >
+          &lt;&lt; Back
+        </a>
+      </div>
+      <div
+        className="block-content"
+      >
+        <form
+          onSubmit={[Function]}
+        >
+          <div
+            className="form-block"
+          >
+            <label
+              className="form-title"
+            >
+              Location
+            </label>
+            <span>
+              General Ward
+            </span>
+          </div>
+          <div
+            className="form-block"
+          >
+            <label
+              className="form-title"
+            >
+              Rows
+            </label>
+            <input
+              id="row-field"
+              onChange={[Function]}
+              required={true}
+              type="number"
+              value={1}
+            />
+          </div>
+          <div
+            className="form-block"
+          >
+            <label
+              className="form-title"
+            >
+              Column
+            </label>
+            <input
+              id="column-field"
+              onChange={[Function]}
+              required={true}
+              type="number"
+              value={1}
+            />
+          </div>
+          <div
+            className="form-block"
+          >
+            <input
+              className="btn btn-primary float-left margin-right"
+              disabled={false}
+              name="submit"
+              type="submit"
+              value="Save"
+            />
+            <input
+              className="btn btn-danger float-left"
+              name="submit"
+              onClick={[Function]}
+              type="button"
+              value="Cancel"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+`;

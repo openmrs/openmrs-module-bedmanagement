@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BedTagWrapper Should render bed Tag page properly 1`] = `
+<div>
+  <Notify />
+  <Header
+    path="/owa/bedmanagement/bedTags.html"
+  />
+  <div
+    style={
+      Object {
+        "marginTop": 30,
+      }
+    }
+  >
+    <BedTagList
+      bedTagFunctions={
+        Object {
+          "fetchBedTags": [Function],
+          "getBedTagByUuid": [Function],
+          "getBedTags": [Function],
+          "notify": [Function],
+          "setState": [Function],
+        }
+      }
+      bedTags={Array []}
+    />
+  </div>
+</div>
+`;
+
+exports[`BedTagWrapper Should render bed Tag page properly 2`] = `
+<div>
+  <Notify />
+  <Header
+    path="/owa/bedmanagement/bedTags.html"
+  />
+  <div
+    style={
+      Object {
+        "marginTop": 30,
+      }
+    }
+  >
+    <AddEditBedTag
+      bedTagFunctions={
+        Object {
+          "fetchBedTags": [Function],
+          "getBedTagByUuid": [Function],
+          "getBedTags": [Function],
+          "notify": [Function],
+          "setState": [Function],
+        }
+      }
+      operation="add"
+    />
+  </div>
+</div>
+`;

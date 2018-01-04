@@ -10,6 +10,7 @@ export default class LocationBlock extends React.PureComponent {
         super(props);
 
         this.urlHelper = new UrlHelper();
+        this.childLocations = this.props.admissionLocationFunctions.getChildAdmissionLocations(this.props.admissionLocation.uuid);
         this.onDeleteHandler = this.onDeleteHandler.bind(this);
         this.editWardClickHandler = this.editWardClickHandler.bind(this);
         this.onClickHandler = this.onClickHandler.bind(this);
@@ -65,11 +66,11 @@ export default class LocationBlock extends React.PureComponent {
                         <i className="fa fa-pencil" aria-hidden="true"></i>
                     </a>
                 </li>
-                <li>
+                {Object.keys(this.childLocations).length == 0 ? <li>
                     <a href="javascript:void(0);" title="delete" onClick={this.onDeleteHandler}>
                         <i className="fa fa-trash" aria-hidden="true"></i>
                     </a>
-                </li>
+                </li> : ''}
             </ul>
         </div>;
     }

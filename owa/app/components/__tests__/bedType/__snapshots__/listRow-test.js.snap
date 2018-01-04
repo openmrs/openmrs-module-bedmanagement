@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BedTypeListRow Should render bed Type list properly 1`] = `
+<table>
+  <tbody>
+    <BedTypeListRow
+      bedType={
+        Object {
+          "description": "LXY",
+          "displayName": "luxury bed",
+          "id": 2,
+          "name": "luxury",
+        }
+      }
+      bedTypeFunctions={
+        Object {
+          "fetchBedTypes": [Function],
+          "getBedTypeById": [Function],
+          "getBedTypeName": [Function],
+          "getBedTypes": [Function],
+          "notify": [Function],
+          "setState": [Function],
+        }
+      }
+    >
+      <tr>
+        <td>
+          luxury
+        </td>
+        <td>
+          luxury bed
+        </td>
+        <td>
+          LXY
+        </td>
+        <td>
+          <a
+            href="javascript:void(0);"
+            onClick={[Function]}
+          >
+            <i
+              aria-hidden="true"
+              className="icon fa fa-edit"
+            />
+             Edit
+          </a>
+            |  
+          <a
+            href="javascript:void(0);"
+            onClick={[Function]}
+          >
+            <i
+              aria-hidden="true"
+              className="icon fa fa-trash"
+            />
+             Delete
+          </a>
+        </td>
+      </tr>
+    </BedTypeListRow>
+  </tbody>
+</table>
+`;

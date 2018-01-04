@@ -1,0 +1,309 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddEditAdmissionLocation Should display admission location form properly 1`] = `
+<div
+  className="main-container"
+>
+  <div
+    className="admission-location-form"
+  >
+    <div
+      className="block-title"
+    >
+      Add
+       Ward
+      <a
+        className="back-link"
+        href="javascript:void(0);"
+        onClick={[Function]}
+        title="back"
+      >
+        &lt;&lt; Back
+      </a>
+    </div>
+    <div
+      className="block-content"
+    >
+      <form
+        onSubmit={[Function]}
+      >
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
+          >
+            Parent Location
+          </label>
+          <span>
+            General Ward
+          </span>
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
+          >
+            Name
+          </label>
+          <input
+            onChange={[Function]}
+            required={true}
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
+          >
+            Description
+          </label>
+          <textarea
+            cols="50"
+            name="description"
+            onChange={[Function]}
+            rows="4"
+            value=""
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <input
+            className="btn btn-primary float-left margin-right"
+            disabled={false}
+            name="submit"
+            type="submit"
+            value="Save"
+          />
+          <input
+            className="btn btn-danger float-left"
+            name="submit"
+            onClick={[Function]}
+            type="button"
+            value="Cancel"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AddEditAdmissionLocation Should display admission location form properly 2`] = `
+<div
+  className="main-container"
+>
+  <div
+    className="admission-location-form"
+  >
+    <div
+      className="block-title"
+    >
+      Edit
+       Ward
+      <a
+        className="back-link"
+        href="javascript:void(0);"
+        onClick={[Function]}
+        title="back"
+      >
+        &lt;&lt; Back
+      </a>
+    </div>
+    <div
+      className="block-content"
+    >
+      <form
+        onSubmit={[Function]}
+      >
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
+          >
+            Parent Location
+          </label>
+          <span>
+            General Ward
+          </span>
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
+          >
+            Name
+          </label>
+          <input
+            onChange={[Function]}
+            required={true}
+            type="text"
+            value="General Ward - Room 2"
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
+          >
+            Description
+          </label>
+          <textarea
+            cols="50"
+            name="description"
+            onChange={[Function]}
+            rows="4"
+            value="General Ward room number 2"
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <input
+            className="btn btn-primary float-left margin-right"
+            disabled={false}
+            name="submit"
+            type="submit"
+            value="Save"
+          />
+          <input
+            className="btn btn-danger float-left"
+            name="submit"
+            onClick={[Function]}
+            type="button"
+            value="Cancel"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AddEditAdmissionLocation Should display admission location form properly 3`] = `
+<div
+  className="main-container"
+>
+  <div
+    className="admission-location-form"
+  >
+    <div
+      className="block-title"
+    >
+      Edit
+       Ward
+      <a
+        className="back-link"
+        href="javascript:void(0);"
+        onClick={[Function]}
+        title="back"
+      >
+        &lt;&lt; Back
+      </a>
+    </div>
+    <div
+      className="block-content"
+    >
+      <form
+        onSubmit={[Function]}
+      >
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
+          >
+            Parent Location
+          </label>
+          <select
+            name="parent-location"
+            onChange={[Function]}
+            value="c1e42932-3f10-11e4-adec-0800271c1b75"
+          >
+            <option
+              value=""
+            >
+              None
+            </option>
+            <option
+              key="c1e42932-3f10-11e4-adec-0800271c1b75"
+              value="c1e42932-3f10-11e4-adec-0800271c1b75"
+            >
+              Ganiyari
+            </option>
+            <option
+              key="c1e4950f-3f10-11e4-adec-0800271c1b75"
+              value="c1e4950f-3f10-11e4-adec-0800271c1b75"
+            >
+              Subcenter 2 (SEM)
+            </option>
+            <option
+              key="c1f25be5-3f10-11e4-adec-0800271c1b75"
+              value="c1f25be5-3f10-11e4-adec-0800271c1b75"
+            >
+              Subcenter 1 (BAM)
+            </option>
+          </select>
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
+          >
+            Name
+          </label>
+          <input
+            onChange={[Function]}
+            required={true}
+            type="text"
+            value="General Ward"
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
+          >
+            Description
+          </label>
+          <textarea
+            cols="50"
+            name="description"
+            onChange={[Function]}
+            rows="4"
+            value="Hospital General Ward Section"
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <input
+            className="btn btn-primary float-left margin-right"
+            disabled={false}
+            name="submit"
+            type="submit"
+            value="Save"
+          />
+          <input
+            className="btn btn-danger float-left"
+            name="submit"
+            onClick={[Function]}
+            type="button"
+            value="Cancel"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+`;

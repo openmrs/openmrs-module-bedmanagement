@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BedTypeList Should render bed Type list properly 1`] = `
+<div
+  className="bed-type-listing"
+>
+  <div
+    className="block-title"
+  >
+    Existing Bed Types
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>
+          Name
+        </th>
+        <th>
+          Display Name
+        </th>
+        <th
+          className="description"
+        >
+          Description
+        </th>
+        <th>
+          Action
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <BedTypeListRow
+        bedType={
+          Object {
+            "description": "DLX",
+            "displayName": "deluxe bed",
+            "id": 1,
+            "name": "deluxe",
+          }
+        }
+        bedTypeFunctions={
+          Object {
+            "fetchBedTypes": [Function],
+            "getBedTypeById": [Function],
+            "getBedTypeName": [Function],
+            "getBedTypes": [Function],
+            "notify": [Function],
+            "setState": [Function],
+          }
+        }
+        key="0"
+      />
+      <BedTypeListRow
+        bedType={
+          Object {
+            "description": "LXY",
+            "displayName": "luxury bed",
+            "id": 2,
+            "name": "luxury",
+          }
+        }
+        bedTypeFunctions={
+          Object {
+            "fetchBedTypes": [Function],
+            "getBedTypeById": [Function],
+            "getBedTypeName": [Function],
+            "getBedTypes": [Function],
+            "notify": [Function],
+            "setState": [Function],
+          }
+        }
+        key="1"
+      />
+      <BedTypeListRow
+        bedType={
+          Object {
+            "description": "deluxe",
+            "displayName": "double bed",
+            "id": 3,
+            "name": "dbl",
+          }
+        }
+        bedTypeFunctions={
+          Object {
+            "fetchBedTypes": [Function],
+            "getBedTypeById": [Function],
+            "getBedTypeName": [Function],
+            "getBedTypes": [Function],
+            "notify": [Function],
+            "setState": [Function],
+          }
+        }
+        key="2"
+      />
+    </tbody>
+  </table>
+  <button
+    className="btn btn-primary"
+    onClick={[Function]}
+    value="Add New"
+  >
+     Add New 
+  </button>
+</div>
+`;

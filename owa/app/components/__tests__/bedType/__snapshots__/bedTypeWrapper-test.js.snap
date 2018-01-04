@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BedTypeWrapper Should render bed Type page properly 1`] = `
+<div>
+  <Notify />
+  <Header
+    path="/owa/bedmanagement/bedTypes.html"
+  />
+  <div
+    style={
+      Object {
+        "marginTop": 30,
+      }
+    }
+  >
+    <BedTypeList
+      bedTypeFunctions={
+        Object {
+          "fetchBedTypes": [Function],
+          "getBedTypeById": [Function],
+          "getBedTypeName": [Function],
+          "getBedTypes": [Function],
+          "notify": [Function],
+          "setState": [Function],
+        }
+      }
+      bedTypes={Array []}
+    />
+  </div>
+</div>
+`;
+
+exports[`BedTypeWrapper Should render bed Type page properly 2`] = `
+<div>
+  <Notify />
+  <Header
+    path="/owa/bedmanagement/bedTypes.html"
+  />
+  <div
+    style={
+      Object {
+        "marginTop": 30,
+      }
+    }
+  >
+    <AddEditBedType
+      bedTypeFunctions={
+        Object {
+          "fetchBedTypes": [Function],
+          "getBedTypeById": [Function],
+          "getBedTypeName": [Function],
+          "getBedTypes": [Function],
+          "notify": [Function],
+          "setState": [Function],
+        }
+      }
+      bedTypeId={null}
+      operation="add"
+    />
+  </div>
+</div>
+`;

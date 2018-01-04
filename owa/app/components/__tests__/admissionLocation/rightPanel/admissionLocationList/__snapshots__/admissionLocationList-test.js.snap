@@ -11,6 +11,7 @@ exports[`AdmissionLocationList Should render location list properly 1`] = `
         "getActiveLocationUuid": [Function],
         "getAdmissionLocationByUuid": [Function],
         "getAdmissionLocations": [Function],
+        "getBedTypes": [Function],
         "getChildAdmissionLocations": [Function],
         "getParentAdmissionLocation": [Function],
         "getState": [Function],
@@ -42,6 +43,7 @@ exports[`AdmissionLocationList Should render location list properly 1`] = `
             "getActiveLocationUuid": [Function],
             "getAdmissionLocationByUuid": [Function],
             "getAdmissionLocations": [Function],
+            "getBedTypes": [Function],
             "getChildAdmissionLocations": [Function],
             "getParentAdmissionLocation": [Function],
             "getState": [Function],
@@ -70,6 +72,7 @@ exports[`AdmissionLocationList Should render location list properly 1`] = `
             "getActiveLocationUuid": [Function],
             "getAdmissionLocationByUuid": [Function],
             "getAdmissionLocations": [Function],
+            "getBedTypes": [Function],
             "getChildAdmissionLocations": [Function],
             "getParentAdmissionLocation": [Function],
             "getState": [Function],
@@ -108,6 +111,7 @@ exports[`AdmissionLocationList Should render location list properly 2`] = `
         "getActiveLocationUuid": [Function],
         "getAdmissionLocationByUuid": [Function],
         "getAdmissionLocations": [Function],
+        "getBedTypes": [Function],
         "getChildAdmissionLocations": [Function],
         "getParentAdmissionLocation": [Function],
         "getState": [Function],
@@ -122,21 +126,25 @@ exports[`AdmissionLocationList Should render location list properly 2`] = `
   <div
     className="main-block"
   >
-    <div
-      className="location option"
-    >
-      <label
-        className="btn btn-primary"
-        onClick={[Function]}
-      >
-        Add Child Admission Location
-      </label>
-      <label
-        className="btn btn-primary"
-      >
-        Set Bed Layout
-      </label>
-    </div>
+    <BedLayout
+      activeUuid="bb0e512e-d225-11e4-9c67-080027b662ec"
+      admissionLocationFunctions={
+        Object {
+          "getActiveLocationUuid": [Function],
+          "getAdmissionLocationByUuid": [Function],
+          "getAdmissionLocations": [Function],
+          "getBedTypes": [Function],
+          "getChildAdmissionLocations": [Function],
+          "getParentAdmissionLocation": [Function],
+          "getState": [Function],
+          "getVisitLocations": [Function],
+          "notify": [Function],
+          "reFetchAllAdmissionLocations": [Function],
+          "setActiveLocationUuid": [Function],
+          "setState": [Function],
+        }
+      }
+    />
   </div>
 </div>
 `;

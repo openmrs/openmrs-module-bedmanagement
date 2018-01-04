@@ -1,0 +1,41 @@
+.bed-type-listing {
+    width: 80%;
+    margin: 0 auto;
+    box-shadow: 1px 1px 3px #ccc;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.bed-type-listing .block-title {
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+.bed-type-listing .block-content {
+    padding: 10px;
+}
+
+.bed-type-listing table {
+    width: 100%;
+    text-align: left;
+    border: none;
+    border-collapse: collapse;
+    background-color: transparent;
+}
+
+.bed-type-listing table tr th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #eceeef;
+}
+
+.bed-type-listing table tr td,
+.bed-type-listing table tr th {
+    border: 1px solid #eceeef;
+    padding: .75rem;
+}
+
+.bed-type-listing table th.description{
+    width: 50%;
+}
+

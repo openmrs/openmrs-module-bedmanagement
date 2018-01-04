@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BedBlock Should render bed block properly 1`] = `
+<div
+  className="block"
+>
+  <div
+    className="left-block"
+  >
+    <i
+      aria-hidden="true"
+      className="fa fa-bed"
+    >
+       
+    </i>
+    <span>
+      306-a
+    </span>
+  </div>
+  <ul
+    className="right-block"
+  >
+    <li>
+      <a
+        href="javascript:void(0);"
+        onClick={[Function]}
+        title="edit"
+      >
+        <i
+          aria-hidden="true"
+          className="fa fa-pencil"
+        />
+      </a>
+    </li>
+    <li>
+      <a
+        href="javascript:void(0);"
+        onClick={[Function]}
+        title="delete"
+      >
+        <i
+          aria-hidden="true"
+          className="fa fa-trash"
+        />
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`BedBlock Should render bed block properly 2`] = `
+<div
+  className="block add-block"
+  onClick={[Function]}
+>
+  <div
+    className="left-block"
+  >
+    <i
+      aria-hidden="true"
+      className="fa fa-plus-circle"
+    >
+       
+    </i>
+    <span>
+      Add Bed
+    </span>
+  </div>
+</div>
+`;

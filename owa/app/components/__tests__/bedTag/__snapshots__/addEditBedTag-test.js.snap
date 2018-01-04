@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddEditBedTag Should display add edit bed tag form properly 1`] = `
+<div
+  className="form-container"
+>
+  <div
+    className="bed-tag-form"
+  >
+    <div
+      className="block"
+    >
+      <div
+        className="block-title"
+      >
+        Add
+         Bed Tag
+        <a
+          className="back-link"
+          href="javascript:void(0);"
+          onClick={[Function]}
+          title="back"
+        >
+          &lt;&lt; Back
+        </a>
+      </div>
+      <div
+        className="block-content"
+      >
+        <form
+          onSubmit={[Function]}
+        >
+          <div
+            className="form-block"
+          >
+            <label
+              className="form-title"
+            >
+              Name
+            </label>
+            <input
+              id="name-field"
+              onChange={[Function]}
+              required={true}
+              type="text"
+              value=""
+            />
+          </div>
+          <div
+            className="form-block"
+          >
+            <input
+              className="btn btn-primary float-left margin-right"
+              disabled={false}
+              name="submit"
+              type="submit"
+              value="Save"
+            />
+            <input
+              className="btn btn-danger float-left"
+              name="submit"
+              onClick={[Function]}
+              type="button"
+              value="Cancel"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AddEditBedTag Should display add edit bed tag form properly 2`] = `
+<div
+  className="form-container"
+>
+  <div
+    className="bed-tag-form"
+  >
+    <div
+      className="block"
+    >
+      <div
+        className="block-title"
+      >
+        Edit
+         Bed Tag
+        <a
+          className="back-link"
+          href="javascript:void(0);"
+          onClick={[Function]}
+          title="back"
+        >
+          &lt;&lt; Back
+        </a>
+      </div>
+      <div
+        className="block-content"
+      >
+        <form
+          onSubmit={[Function]}
+        >
+          <div
+            className="form-block"
+          >
+            <label
+              className="form-title"
+            >
+              Name
+            </label>
+            <input
+              id="name-field"
+              onChange={[Function]}
+              required={true}
+              type="text"
+              value="Isolation"
+            />
+          </div>
+          <div
+            className="form-block"
+          >
+            <input
+              className="btn btn-primary float-left margin-right"
+              disabled={false}
+              name="submit"
+              type="submit"
+              value="Save"
+            />
+            <input
+              className="btn btn-danger float-left"
+              name="submit"
+              onClick={[Function]}
+              type="button"
+              value="Cancel"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+`;

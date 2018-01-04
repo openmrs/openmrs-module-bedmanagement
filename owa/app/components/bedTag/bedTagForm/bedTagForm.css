@@ -1,0 +1,56 @@
+.form-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.bed-tag-form {
+    box-shadow: 1px 1px 3px #ccc;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.bed-tag-form .block-title {
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+.bed-tag-form .block-title .back-link {
+    float: right;
+}
+
+.bed-tag-form .block-content {
+    padding: 10px;
+}
+
+.bed-tag-form .form-block {
+    margin-bottom: 10px;
+}
+
+.bed-tag-form .form-block input[type="text"],
+.bed-tag-form .form-block input[type="number"],
+.bed-tag-form .form-block select,
+.bed-tag-form .form-block textarea {
+    border-radius: 4px;
+    float: left;
+    width: calc(100% - 500px);
+}
+
+.bed-tag-form .form-block input[type="button"] {
+    border-radius: 4px;
+}
+
+.bed-tag-form label.form-title {
+    width: 15%;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: #454e59;
+    float: left;
+}
+
+.bed-tag-form .btn-primary:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}
