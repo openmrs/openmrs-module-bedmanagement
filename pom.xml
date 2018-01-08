@@ -30,6 +30,7 @@
 
 	<modules>
 		<module>api</module>
+		<module>owa</module>
 		<module>omod</module>
     </modules>
 	
@@ -39,6 +40,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <webservicesRestModuleVersion>2.16</webservicesRestModuleVersion>
         <openmrsAtomfeedVersion>2.5.0</openmrsAtomfeedVersion>
+        <openmrsOwaVersion>1.7.0</openmrsOwaVersion>
         <atomfeed.version>1.9.1</atomfeed.version>
     </properties>
 

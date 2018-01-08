@@ -213,6 +213,25 @@
 							<outputDirectory>${project.build.directory}/classes</outputDirectory>
 						</configuration>
 					</execution>
+					<execution>
+						<id>include-owa</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.parent.groupId}</groupId>
+									<artifactId>${project.parent.artifactId}-owa</artifactId>
+									<version>${project.parent.version}</version>
+									<type>zip</type>
+									<destFileName>bedmanagement.owa</destFileName>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/classes/web/module/owas</outputDirectory>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
