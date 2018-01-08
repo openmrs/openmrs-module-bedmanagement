@@ -10,10 +10,13 @@ const config = {
             'react',
             'react-dom',
             'react-router-dom',
+            'react-intl',
+            'react-cookie',
             'prop-types',
             'axios',
+            'lodash',
             'babel-polyfill',
-            'lodash.pickby'
+            'react-notify'
         ],
         app: ['./app/index.js']
     },

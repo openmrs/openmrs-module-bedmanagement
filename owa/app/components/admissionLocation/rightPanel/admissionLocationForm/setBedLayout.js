@@ -209,6 +209,8 @@ export default class SetBedLayout extends React.Component {
 }
 
 SetBedLayout.propTypes = {
+    row: PropTypes.number,
+    column: PropTypes.number,
     activeUuid: PropTypes.string,
     admissionLocationFunctions: PropTypes.object.isRequired
 };

@@ -1,96 +1,87 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Header renders correctly 1`] = `
-<StaticRouter
-  basename=""
-  context={Object {}}
-  location="/"
+<Header
+  path="/owa/bedmanagement/admissionLocations.html"
 >
-  <Router
-    history={
-      Object {
-        "action": "POP",
-        "block": [Function],
-        "createHref": [Function],
-        "go": [Function],
-        "goBack": [Function],
-        "goForward": [Function],
-        "listen": [Function],
-        "location": Object {
-          "hash": "",
-          "pathname": "/",
-          "search": "",
-        },
-        "push": [Function],
-        "replace": [Function],
-      }
-    }
-  >
-    <Header
-      path="/owa/bedmanagement/admissionLocations.html"
+  <nav>
+    <ul
+      className="title-section"
     >
-      <nav>
-        <ul
-          className="title-section"
+      <li>
+        <a
+          href="/openmrs"
         >
-          <li>
-            <a
-              href="/openmrs"
+          <i
+            aria-hidden="true"
+            className="fa fa-home"
+          />
+        </a>
+      </li>
+      <li>
+        <Link
+          className="active"
+          replace={false}
+          to="/owa/bedmanagement/admissionLocations.html"
+        >
+          <a
+            className="active"
+            onClick={[Function]}
+          >
+            <FormattedMessage
+              id="ADMISSION_LOCATIONS"
+              values={Object {}}
             >
-              <i
-                aria-hidden="true"
-                className="fa fa-home"
-              />
-            </a>
-          </li>
-          <li>
-            <Link
-              className="active"
-              replace={false}
-              to="/owa/bedmanagement/admissionLocations.html"
-            >
-              <a
-                className="active"
-                href="/owa/bedmanagement/admissionLocations.html"
-                onClick={[Function]}
-              >
+              <span>
                 Admission Locations
-              </a>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className=""
-              replace={false}
-              to="/owa/bedmanagement/bedTypes.html"
+              </span>
+            </FormattedMessage>
+          </a>
+        </Link>
+      </li>
+      <li>
+        <Link
+          className=""
+          replace={false}
+          to="/owa/bedmanagement/bedTypes.html"
+        >
+          <a
+            className=""
+            onClick={[Function]}
+          >
+            <FormattedMessage
+              id="BED_TYPES"
+              values={Object {}}
             >
-              <a
-                className=""
-                href="/owa/bedmanagement/bedTypes.html"
-                onClick={[Function]}
-              >
+              <span>
                 Bed Types
-              </a>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className=""
-              replace={false}
-              to="/owa/bedmanagement/bedTags.html"
+              </span>
+            </FormattedMessage>
+          </a>
+        </Link>
+      </li>
+      <li>
+        <Link
+          className=""
+          replace={false}
+          to="/owa/bedmanagement/bedTags.html"
+        >
+          <a
+            className=""
+            onClick={[Function]}
+          >
+            <FormattedMessage
+              id="BED_TAGS"
+              values={Object {}}
             >
-              <a
-                className=""
-                href="/owa/bedmanagement/bedTags.html"
-                onClick={[Function]}
-              >
+              <span>
                 Bed Tags
-              </a>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </Header>
-  </Router>
-</StaticRouter>
+              </span>
+            </FormattedMessage>
+          </a>
+        </Link>
+      </li>
+    </ul>
+  </nav>
+</Header>
 `;
