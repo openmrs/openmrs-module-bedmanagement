@@ -45,3 +45,6 @@ $ yarn test --u
 ```bash
 $ yarn test <regexForTestFiles>
 ```
+
+##Production
+- Upon Installing bedmanagement omod it will automatically deploy owa.

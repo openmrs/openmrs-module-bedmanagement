@@ -6,3 +6,5 @@
 /app/build/
 /package-lock.json
 /yarn-error.log
+/node/
+/target/

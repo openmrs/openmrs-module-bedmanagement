@@ -21,6 +21,7 @@
     <require_modules>
         <require_module version="${webservicesRestModuleVersion}">org.openmrs.module.webservices.rest</require_module>
         <require_module version="${openmrsAtomfeedVersion}">org.ict4h.openmrs.openmrs-atomfeed</require_module>
+        <require_module version="${openmrsOwaVersion}">org.openmrs.module.owa</require_module>
     </require_modules>
     <!-- / Required Modules -->
 
