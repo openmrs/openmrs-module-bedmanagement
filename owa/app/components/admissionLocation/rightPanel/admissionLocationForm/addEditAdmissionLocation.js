@@ -111,16 +111,13 @@ export default class AddEditAdmissionLocation extends React.Component {
 
     render() {
         return <div className="main-container">
-            <div className="admission-location-form">
-                <div className="block-title">{this.props.operation == 'add' ? 'Add' : 'Edit'} Ward
-                    <a href="javascript:void(0);" className="back-link" title="back" onClick={this.cancelEventHandler}>
-                        &lt;&lt; Back
-                    </a>
-                </div>
+            <fieldset className="admission-location-form">
+                <legend>&nbsp; {this.props.operation == 'add' ? 'Add' : 'Edit'} Ward &nbsp;</legend>
                 <div className="block-content">
                     <form onSubmit={this.onSubmitHandler}>
                         <div className="form-block">
-                            <label className="form-title">Parent Location</label>
+                            {this.parentAdmissionLocation != null ? <label className="form-title inline">Parent Location:</label>:
+                                <label className="form-title">Parent Location:</label>}
                             {this.parentAdmissionLocation != null ? <span>{this.parentAdmissionLocation.name}</span> :
                                 <select name="parent-location" onChange={this.onSelectParentLocation}
                                     ref={(dropDown) => this.parentSelector = dropDown}
@@ -133,24 +130,24 @@ export default class AddEditAdmissionLocation extends React.Component {
                                 </select>}
                         </div>
                         <div className="form-block">
-                            <label className="form-title">Name</label>
+                            <label className="form-title">Name:</label>
                             <input type="text" onChange={this.onChangeNameField} value={this.state.name} required={true}
                                 ref={(input) => {this.nameField = input;}}/>
                         </div>
                         <div className="form-block">
-                            <label className="form-title">Description</label>
+                            <label className="form-title">Description:</label>
                             <textarea name="description" rows="4" cols="50" onChange={this.onChangeDescriptionField}
                                 value={this.state.description} ref={(textArea) => this.descriptionField = textArea}></textarea>
                         </div>
                         <div className="form-block">
                             <input type="submit" name="submit" value={this.state.disableSubmit ? 'Saving...' : 'Save'}
-                                disabled={this.state.disableSubmit} className="btn btn-primary float-left margin-right"/>
-                            <input type="button" onClick={this.cancelEventHandler} name="submit" value="Cancel"
-                                className="btn btn-danger float-left"/>
+                                disabled={this.state.disableSubmit} className="form-btn float-left margin-right"/>
+                            <input type="button" onClick={this.cancelEventHandler} name="cancel" value="Cancel"
+                                className="form-btn float-left"/>
                         </div>
                     </form>
                 </div>
-            </div>
+            </fieldset>
         </div>;
     }
 }

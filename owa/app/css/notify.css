@@ -23,7 +23,7 @@
 }
 
 .notify-item > p {
-    font-family: 'Lora', serif;
+    font-family: OpenSans, Arial, sans-serif;
     margin: 10px;
     opacity: .8;
 }

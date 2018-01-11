@@ -93,7 +93,7 @@ describe('SetBedLayout', () => {
         setLayoutForm.find('#column-field').simulate('change');
         expect(spyOnChangeColumnField).toHaveBeenCalled();
 
-        setLayoutForm.find('.btn-danger').simulate('click');
+        setLayoutForm.find('input[name=\'cancel\']').simulate('click');
         expect(spyOnCancelEventHandler).toHaveBeenCalled();
         expect(spySetState).toHaveBeenCalledWith({
             activePage: 'listing',

@@ -72,7 +72,7 @@ describe('AddEditAdmissionLocation', () => {
         editTopLevelAdmissionLocationForm.find('select').simulate('change');
         expect(spyOnSelectParentLocation).toHaveBeenCalled();
 
-        editTopLevelAdmissionLocationForm.find('.btn-danger').simulate('click');
+        editTopLevelAdmissionLocationForm.find('input[name=\'cancel\']').simulate('click');
         expect(spyOnCancelEventHandler).toHaveBeenCalled();
         expect(spySetState).toHaveBeenCalledWith({
             activePage: 'listing',

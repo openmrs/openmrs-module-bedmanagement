@@ -15,6 +15,11 @@ class Header extends React.PureComponent {
         return <nav>
             <ul className="title-section">
                 <li>
+                    <a href={this.urlHelper.originPath() + '/openmrs'}>
+                        <i className="fa fa-home" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li>
                     <Link to={this.urlHelper.owaPath() + '/admissionLocations.html'}
                         className={this.linkClass(this.urlHelper.owaPath() + '/admissionLocations.html')}>
                         Admission Locations

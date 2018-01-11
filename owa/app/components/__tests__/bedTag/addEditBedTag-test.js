@@ -49,7 +49,7 @@ describe('AddEditBedTag', () => {
         editBedForm.find('#name-field').simulate('change');
         expect(spyOnChangeNameField).toHaveBeenCalled();
 
-        editBedForm.find('.btn-danger').simulate('click');
+        editBedForm.find('input[name=\'cancel\']').simulate('click');
         expect(spyOnCancelEventHandler).toHaveBeenCalled();
         expect(spySetState).toHaveBeenCalledWith({
             activePage: 'listing',

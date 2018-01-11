@@ -59,6 +59,7 @@ export default class SetBedLayout extends React.Component{
     onChangeColumnField() {
         if (this.columnField.value >= 1 && this.columnField.value <= 8) {
             this.setState({
+                columnFieldError: '',
                 column: Number(this.columnField.value)
             });
         } else {
@@ -130,42 +131,35 @@ export default class SetBedLayout extends React.Component{
 
     render(){
         return <div className="main-container">
-            <div className="admission-location-form">
-                <div className="block">
-                    <div className="block-title">
-                        Set Layout
-                        <a href="javascript:void(0);" className="back-link" title="back" onClick={this.cancelEventHandler}>
-                            &lt;&lt; Back
-                        </a>
-                    </div>
-                    <div className="block-content">
-                        <form onSubmit={this.onSubmitHandler}>
-                            <div className="form-block">
-                                <label className="form-title">Location</label>
-                                <span>{this.admissionLocation.name}</span>
-                            </div>
-                            <div className="form-block">
-                                <label className="form-title">Rows</label>
-                                <input type="number" value={this.state.row} ref={(input) => {this.rowField = input;}}
-                                    required={true} onChange={this.onChangeRowField} id="row-field"/>
-                                {this.state.rowFieldError != '' ? <p className="error">{this.state.rowFieldError}</p> : ''}
-                            </div>
-                            <div className="form-block">
-                                <label className="form-title">Column</label>
-                                <input type="number" value={this.state.column} ref={(input) => {this.columnField = input;}}
-                                    required={true} onChange={this.onChangeColumnField} id="column-field"/>
-                                {this.state.columnFieldError != '' ? <p className="error">{this.state.columnFieldError}</p> : ''}
-                            </div>
-                            <div className="form-block">
-                                <input type="submit" name="submit" value={this.state.disableSubmit ? 'Saving...' : 'Save'}
-                                    disabled={this.state.disableSubmit} className="btn btn-primary float-left margin-right"/>
-                                <input type="button" onClick={this.cancelEventHandler}
-                                    name="submit" value="Cancel" className="btn btn-danger float-left"/>
-                            </div>
-                        </form>
-                    </div>
+            <fieldset className="admission-location-form">
+                <legend>&nbsp; Set Layout &nbsp;</legend>
+                <div className="block-content">
+                    <form onSubmit={this.onSubmitHandler}>
+                        <div className="form-block">
+                            <label className="form-title inline">Location:</label>
+                            <span>{this.admissionLocation.name}</span>
+                        </div>
+                        <div className="form-block">
+                            <label className="form-title">Rows:</label>
+                            <input type="number" value={this.state.row} ref={(input) => {this.rowField = input;}}
+                                required={true} onChange={this.onChangeRowField} id="row-field"/>
+                            {this.state.rowFieldError != '' ? <p className="error">{this.state.rowFieldError}</p> : ''}
+                        </div>
+                        <div className="form-block">
+                            <label className="form-title">Column:</label>
+                            <input type="number" value={this.state.column} ref={(input) => {this.columnField = input;}}
+                                required={true} onChange={this.onChangeColumnField} id="column-field"/>
+                            {this.state.columnFieldError != '' ? <p className="error">{this.state.columnFieldError}</p> : ''}
+                        </div>
+                        <div className="form-block">
+                            <input type="submit" name="submit" value={this.state.disableSubmit ? 'Saving...' : 'Save'}
+                                disabled={this.state.disableSubmit} className="form-btn float-left margin-right"/>
+                            <input type="button" onClick={this.cancelEventHandler}
+                                name="cancel" value="Cancel" className="form-btn float-left"/>
+                        </div>
+                    </form>
                 </div>
-            </div>
+            </fieldset>
         </div>;
     }
 }

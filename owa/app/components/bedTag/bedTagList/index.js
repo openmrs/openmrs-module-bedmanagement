@@ -23,10 +23,8 @@ export default class BedTagList extends React.Component {
     }
 
     render() {
-        return <div className="bed-Tag-listing">
-            <div className="block-title">
-                Existing Bed Tags
-            </div>
+        return <fieldset className="bed-Tag-listing">
+            <legend>&nbsp; Existing Bed Tags &nbsp;</legend>
             <table>
                 <thead>
                     <tr>
@@ -40,8 +38,8 @@ export default class BedTagList extends React.Component {
                         bedTagFunctions={this.props.bedTagFunctions}/>)}
                 </tbody>
             </table>
-            <button onClick={this.addNewHandler} value="Add New" className="btn btn-primary"> Add New </button>
-        </div>;
+            <button onClick={this.addNewHandler} value="Add New" className="list-btn"> Add New </button>
+        </fieldset>;
     }
 
 }

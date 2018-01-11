@@ -1,14 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`BedTypeList Should render bed Type list properly 1`] = `
-<div
+<fieldset
   className="bed-type-listing"
 >
-  <div
-    className="block-title"
-  >
-    Existing Bed Types
-  </div>
+  <legend>
+      Existing Bed Types  
+  </legend>
   <table>
     <thead>
       <tr>
@@ -95,11 +93,11 @@ exports[`BedTypeList Should render bed Type list properly 1`] = `
     </tbody>
   </table>
   <button
-    className="btn btn-primary"
+    className="list-btn"
     onClick={[Function]}
     value="Add New"
   >
      Add New 
   </button>
-</div>
+</fieldset>
 `;

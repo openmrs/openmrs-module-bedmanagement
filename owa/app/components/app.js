@@ -9,6 +9,7 @@ import StateApi from 'utilities/stateApi';
 import UrlHelper from 'utilities/urlHelper';
 
 const urlHelper = new UrlHelper();
+require('./app.css');
 class App extends React.Component {
     static childContextTypes = {
         store: PropTypes.object
@@ -27,21 +28,24 @@ class App extends React.Component {
         };
     }
 
-    style = {
-        boxContainer : {
-            width: 1240,
-            margin: '0 auto',
-            height: '100%'
-        }
-    };
-
     render() {
-        return <div style={this.style.boxContainer}>
+        return <div>
+            <div className="openmrs-header">
+                <span className="logo">
+                    <img src="img/openmrs.png" alt="logo"/>
+                </span>
+                <a href={urlHelper.originPath()+'/openmrs/logout'} className="logout">
+                    Logout <i className="fa fa-sign-out" aria-hidden="true"></i>
+                </a>
+            </div>
             <Switch>
                 <Route path={urlHelper.owaPath() +'/admissionLocations.html'} component={AdmissionLocationWrapper}/>
                 <Route path={urlHelper.owaPath() +'/bedTypes.html'} component={BedTypeWrapper}/>
                 <Route path={urlHelper.owaPath() +'/bedTags.html'} component={BedTagWrapper}/>
             </Switch>
+            <div>
+                <small> Choose language: <a href="#">English</a>, <a href="#">Spanish</a> </small>
+            </div>
         </div>;
     }
 }

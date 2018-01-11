@@ -4,96 +4,82 @@ exports[`SetBedLayout Should display set layout form properly 1`] = `
 <div
   className="main-container"
 >
-  <div
+  <fieldset
     className="admission-location-form"
   >
+    <legend>
+        Set Layout  
+    </legend>
     <div
-      className="block"
+      className="block-content"
     >
-      <div
-        className="block-title"
+      <form
+        onSubmit={[Function]}
       >
-        Set Layout
-        <a
-          className="back-link"
-          href="javascript:void(0);"
-          onClick={[Function]}
-          title="back"
+        <div
+          className="form-block"
         >
-          &lt;&lt; Back
-        </a>
-      </div>
-      <div
-        className="block-content"
-      >
-        <form
-          onSubmit={[Function]}
+          <label
+            className="form-title inline"
+          >
+            Location:
+          </label>
+          <span>
+            General Ward
+          </span>
+        </div>
+        <div
+          className="form-block"
         >
-          <div
-            className="form-block"
+          <label
+            className="form-title"
           >
-            <label
-              className="form-title"
-            >
-              Location
-            </label>
-            <span>
-              General Ward
-            </span>
-          </div>
-          <div
-            className="form-block"
+            Rows:
+          </label>
+          <input
+            id="row-field"
+            onChange={[Function]}
+            required={true}
+            type="number"
+            value={1}
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
           >
-            <label
-              className="form-title"
-            >
-              Rows
-            </label>
-            <input
-              id="row-field"
-              onChange={[Function]}
-              required={true}
-              type="number"
-              value={1}
-            />
-          </div>
-          <div
-            className="form-block"
-          >
-            <label
-              className="form-title"
-            >
-              Column
-            </label>
-            <input
-              id="column-field"
-              onChange={[Function]}
-              required={true}
-              type="number"
-              value={1}
-            />
-          </div>
-          <div
-            className="form-block"
-          >
-            <input
-              className="btn btn-primary float-left margin-right"
-              disabled={false}
-              name="submit"
-              type="submit"
-              value="Save"
-            />
-            <input
-              className="btn btn-danger float-left"
-              name="submit"
-              onClick={[Function]}
-              type="button"
-              value="Cancel"
-            />
-          </div>
-        </form>
-      </div>
+            Column:
+          </label>
+          <input
+            id="column-field"
+            onChange={[Function]}
+            required={true}
+            type="number"
+            value={1}
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <input
+            className="form-btn float-left margin-right"
+            disabled={false}
+            name="submit"
+            type="submit"
+            value="Save"
+          />
+          <input
+            className="form-btn float-left"
+            name="cancel"
+            onClick={[Function]}
+            type="button"
+            value="Cancel"
+          />
+        </div>
+      </form>
     </div>
-  </div>
+  </fieldset>
 </div>
 `;

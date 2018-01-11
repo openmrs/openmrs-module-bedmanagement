@@ -4,150 +4,138 @@ exports[`AddEditBed Should display add edit bed form properly 1`] = `
 <div
   className="main-container"
 >
-  <div
+  <fieldset
     className="admission-location-form"
   >
+    <legend>
+        
+      Add
+       Bed  
+    </legend>
     <div
-      className="block"
+      className="block-content"
     >
-      <div
-        className="block-title"
+      <form
+        onSubmit={[Function]}
       >
-        Add
-         Bed
-        <a
-          className="back-link"
-          href="javascript:void(0);"
-          onClick={[Function]}
-          title="back"
+        <div
+          className="form-block"
         >
-          &lt;&lt; Back
-        </a>
-      </div>
-      <div
-        className="block-content"
-      >
-        <form
-          onSubmit={[Function]}
+          <label
+            className="form-title inline"
+          >
+            Location:
+          </label>
+          <span
+            id="location-name"
+          >
+            General Ward
+          </span>
+        </div>
+        <div
+          className="form-block"
         >
-          <div
-            className="form-block"
+          <label
+            className="form-title"
           >
-            <label
-              className="form-title"
-            >
-              Location
-            </label>
-            <span
-              id="location-name"
-            >
-              General Ward
-            </span>
-          </div>
-          <div
-            className="form-block"
+            Row:
+          </label>
+          <input
+            id="row-field"
+            onChange={[Function]}
+            required={true}
+            type="number"
+            value={1}
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
           >
-            <label
-              className="form-title"
-            >
-              Row
-            </label>
-            <input
-              id="row-field"
-              onChange={[Function]}
-              required={true}
-              type="number"
-              value={1}
-            />
-          </div>
-          <div
-            className="form-block"
+            Column:
+          </label>
+          <input
+            id="column-field"
+            onChange={[Function]}
+            required={true}
+            type="number"
+            value={2}
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
           >
-            <label
-              className="form-title"
-            >
-              Column
-            </label>
-            <input
-              id="column-field"
-              onChange={[Function]}
-              required={true}
-              type="number"
-              value={2}
-            />
-          </div>
-          <div
-            className="form-block"
+            Bed Number:
+          </label>
+          <input
+            id="bed-number-field"
+            maxLength={10}
+            onChange={[Function]}
+            required={true}
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
           >
-            <label
-              className="form-title"
-            >
-              Bed Number
-            </label>
-            <input
-              id="bed-number-field"
-              onChange={[Function]}
-              required={true}
-              type="text"
-              value=""
-            />
-          </div>
-          <div
-            className="form-block"
+            Bed Type:
+          </label>
+          <select
+            id="bed-type"
+            onChange={[Function]}
+            required={true}
+            value="deluxe"
           >
-            <label
-              className="form-title"
-            >
-              Bed Type
-            </label>
-            <select
-              id="bed-type"
-              onChange={[Function]}
-              required={true}
+            <option
+              key="1"
               value="deluxe"
             >
-              <option
-                key="1"
-                value="deluxe"
-              >
-                deluxe
-              </option>
-              <option
-                key="2"
-                value="luxury"
-              >
-                luxury
-              </option>
-              <option
-                key="3"
-                value="dbl"
-              >
-                dbl
-              </option>
-            </select>
-          </div>
-          <div
-            className="form-block"
-          >
-            <input
-              className="btn btn-primary float-left margin-right"
-              disabled={false}
-              name="submit"
-              type="submit"
-              value="Save"
-            />
-            <input
-              className="btn btn-danger float-left"
-              name="submit"
-              onClick={[Function]}
-              type="button"
-              value="Cancel"
-            />
-          </div>
-        </form>
-      </div>
+              deluxe
+            </option>
+            <option
+              key="2"
+              value="luxury"
+            >
+              luxury
+            </option>
+            <option
+              key="3"
+              value="dbl"
+            >
+              dbl
+            </option>
+          </select>
+        </div>
+        <div
+          className="form-block"
+        >
+          <input
+            className="form-btn float-left margin-right"
+            disabled={false}
+            name="submit"
+            type="submit"
+            value="Save"
+          />
+          <input
+            className="form-btn float-left"
+            name="cancel"
+            onClick={[Function]}
+            type="button"
+            value="Cancel"
+          />
+        </div>
+      </form>
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
 
@@ -155,149 +143,137 @@ exports[`AddEditBed Should display add edit bed form properly 2`] = `
 <div
   className="main-container"
 >
-  <div
+  <fieldset
     className="admission-location-form"
   >
+    <legend>
+        
+      Edit
+       Bed  
+    </legend>
     <div
-      className="block"
+      className="block-content"
     >
-      <div
-        className="block-title"
+      <form
+        onSubmit={[Function]}
       >
-        Edit
-         Bed
-        <a
-          className="back-link"
-          href="javascript:void(0);"
-          onClick={[Function]}
-          title="back"
+        <div
+          className="form-block"
         >
-          &lt;&lt; Back
-        </a>
-      </div>
-      <div
-        className="block-content"
-      >
-        <form
-          onSubmit={[Function]}
+          <label
+            className="form-title inline"
+          >
+            Location:
+          </label>
+          <span
+            id="location-name"
+          >
+            General Ward
+          </span>
+        </div>
+        <div
+          className="form-block"
         >
-          <div
-            className="form-block"
+          <label
+            className="form-title"
           >
-            <label
-              className="form-title"
-            >
-              Location
-            </label>
-            <span
-              id="location-name"
-            >
-              General Ward
-            </span>
-          </div>
-          <div
-            className="form-block"
+            Row:
+          </label>
+          <input
+            id="row-field"
+            onChange={[Function]}
+            required={true}
+            type="number"
+            value={2}
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
           >
-            <label
-              className="form-title"
-            >
-              Row
-            </label>
-            <input
-              id="row-field"
-              onChange={[Function]}
-              required={true}
-              type="number"
-              value={2}
-            />
-          </div>
-          <div
-            className="form-block"
+            Column:
+          </label>
+          <input
+            id="column-field"
+            onChange={[Function]}
+            required={true}
+            type="number"
+            value={1}
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
           >
-            <label
-              className="form-title"
-            >
-              Column
-            </label>
-            <input
-              id="column-field"
-              onChange={[Function]}
-              required={true}
-              type="number"
-              value={1}
-            />
-          </div>
-          <div
-            className="form-block"
+            Bed Number:
+          </label>
+          <input
+            id="bed-number-field"
+            maxLength={10}
+            onChange={[Function]}
+            required={true}
+            type="text"
+            value="100-a"
+          />
+        </div>
+        <div
+          className="form-block"
+        >
+          <label
+            className="form-title"
           >
-            <label
-              className="form-title"
-            >
-              Bed Number
-            </label>
-            <input
-              id="bed-number-field"
-              onChange={[Function]}
-              required={true}
-              type="text"
-              value="100-a"
-            />
-          </div>
-          <div
-            className="form-block"
+            Bed Type:
+          </label>
+          <select
+            id="bed-type"
+            onChange={[Function]}
+            required={true}
+            value="luxury"
           >
-            <label
-              className="form-title"
+            <option
+              key="1"
+              value="deluxe"
             >
-              Bed Type
-            </label>
-            <select
-              id="bed-type"
-              onChange={[Function]}
-              required={true}
+              deluxe
+            </option>
+            <option
+              key="2"
               value="luxury"
             >
-              <option
-                key="1"
-                value="deluxe"
-              >
-                deluxe
-              </option>
-              <option
-                key="2"
-                value="luxury"
-              >
-                luxury
-              </option>
-              <option
-                key="3"
-                value="dbl"
-              >
-                dbl
-              </option>
-            </select>
-          </div>
-          <div
-            className="form-block"
-          >
-            <input
-              className="btn btn-primary float-left margin-right"
-              disabled={false}
-              name="submit"
-              type="submit"
-              value="Save"
-            />
-            <input
-              className="btn btn-danger float-left"
-              name="submit"
-              onClick={[Function]}
-              type="button"
-              value="Cancel"
-            />
-          </div>
-        </form>
-      </div>
+              luxury
+            </option>
+            <option
+              key="3"
+              value="dbl"
+            >
+              dbl
+            </option>
+          </select>
+        </div>
+        <div
+          className="form-block"
+        >
+          <input
+            className="form-btn float-left margin-right"
+            disabled={false}
+            name="submit"
+            type="submit"
+            value="Save"
+          />
+          <input
+            className="form-btn float-left"
+            name="cancel"
+            onClick={[Function]}
+            type="button"
+            value="Cancel"
+          />
+        </div>
+      </form>
     </div>
-  </div>
+  </fieldset>
 </div>
 `;

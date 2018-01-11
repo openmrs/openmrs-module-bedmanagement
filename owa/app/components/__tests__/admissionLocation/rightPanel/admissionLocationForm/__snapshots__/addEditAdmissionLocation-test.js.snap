@@ -4,23 +4,14 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
 <div
   className="main-container"
 >
-  <div
+  <fieldset
     className="admission-location-form"
   >
-    <div
-      className="block-title"
-    >
+    <legend>
+        
       Add
-       Ward
-      <a
-        className="back-link"
-        href="javascript:void(0);"
-        onClick={[Function]}
-        title="back"
-      >
-        &lt;&lt; Back
-      </a>
-    </div>
+       Ward  
+    </legend>
     <div
       className="block-content"
     >
@@ -31,9 +22,9 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           className="form-block"
         >
           <label
-            className="form-title"
+            className="form-title inline"
           >
-            Parent Location
+            Parent Location:
           </label>
           <span>
             General Ward
@@ -45,7 +36,7 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Name
+            Name:
           </label>
           <input
             onChange={[Function]}
@@ -60,7 +51,7 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Description
+            Description:
           </label>
           <textarea
             cols="50"
@@ -74,15 +65,15 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           className="form-block"
         >
           <input
-            className="btn btn-primary float-left margin-right"
+            className="form-btn float-left margin-right"
             disabled={false}
             name="submit"
             type="submit"
             value="Save"
           />
           <input
-            className="btn btn-danger float-left"
-            name="submit"
+            className="form-btn float-left"
+            name="cancel"
             onClick={[Function]}
             type="button"
             value="Cancel"
@@ -90,7 +81,7 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
         </div>
       </form>
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
 
@@ -98,23 +89,14 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
 <div
   className="main-container"
 >
-  <div
+  <fieldset
     className="admission-location-form"
   >
-    <div
-      className="block-title"
-    >
+    <legend>
+        
       Edit
-       Ward
-      <a
-        className="back-link"
-        href="javascript:void(0);"
-        onClick={[Function]}
-        title="back"
-      >
-        &lt;&lt; Back
-      </a>
-    </div>
+       Ward  
+    </legend>
     <div
       className="block-content"
     >
@@ -125,9 +107,9 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           className="form-block"
         >
           <label
-            className="form-title"
+            className="form-title inline"
           >
-            Parent Location
+            Parent Location:
           </label>
           <span>
             General Ward
@@ -139,7 +121,7 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Name
+            Name:
           </label>
           <input
             onChange={[Function]}
@@ -154,7 +136,7 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Description
+            Description:
           </label>
           <textarea
             cols="50"
@@ -168,15 +150,15 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           className="form-block"
         >
           <input
-            className="btn btn-primary float-left margin-right"
+            className="form-btn float-left margin-right"
             disabled={false}
             name="submit"
             type="submit"
             value="Save"
           />
           <input
-            className="btn btn-danger float-left"
-            name="submit"
+            className="form-btn float-left"
+            name="cancel"
             onClick={[Function]}
             type="button"
             value="Cancel"
@@ -184,7 +166,7 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
         </div>
       </form>
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
 
@@ -192,23 +174,14 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
 <div
   className="main-container"
 >
-  <div
+  <fieldset
     className="admission-location-form"
   >
-    <div
-      className="block-title"
-    >
+    <legend>
+        
       Edit
-       Ward
-      <a
-        className="back-link"
-        href="javascript:void(0);"
-        onClick={[Function]}
-        title="back"
-      >
-        &lt;&lt; Back
-      </a>
-    </div>
+       Ward  
+    </legend>
     <div
       className="block-content"
     >
@@ -221,7 +194,7 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Parent Location
+            Parent Location:
           </label>
           <select
             name="parent-location"
@@ -259,7 +232,7 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Name
+            Name:
           </label>
           <input
             onChange={[Function]}
@@ -274,7 +247,7 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Description
+            Description:
           </label>
           <textarea
             cols="50"
@@ -288,15 +261,15 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           className="form-block"
         >
           <input
-            className="btn btn-primary float-left margin-right"
+            className="form-btn float-left margin-right"
             disabled={false}
             name="submit"
             type="submit"
             value="Save"
           />
           <input
-            className="btn btn-danger float-left"
-            name="submit"
+            className="form-btn float-left"
+            name="cancel"
             onClick={[Function]}
             type="button"
             value="Cancel"
@@ -304,6 +277,6 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
         </div>
       </form>
     </div>
-  </div>
+  </fieldset>
 </div>
 `;

@@ -9,7 +9,11 @@ exports[`BedTypeWrapper Should render bed Type page properly 1`] = `
   <div
     style={
       Object {
-        "marginTop": 30,
+        "backgroundColor": "#fff",
+        "borderRadius": 5,
+        "marginTop": 10,
+        "minHeight": 500,
+        "paddingTop": 20,
       }
     }
   >
@@ -39,7 +43,11 @@ exports[`BedTypeWrapper Should render bed Type page properly 2`] = `
   <div
     style={
       Object {
-        "marginTop": 30,
+        "backgroundColor": "#fff",
+        "borderRadius": 5,
+        "marginTop": 10,
+        "minHeight": 500,
+        "paddingTop": 20,
       }
     }
   >
