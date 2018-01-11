@@ -1,5 +1,5 @@
 .main-block .bed-layout .block {
-    width: 12%;
+    width: 14%;
     padding: 0 10px 0 10px;
     float: left;
     position: relative;
@@ -37,6 +37,11 @@
     top: 50%;
     position: absolute;
     transform: translate(0, -50%);
+}
+
+.bed-layout .block .right-block {
+    position: absolute;
+    right: 10px;
 }
 
 .bed-layout .block .left-block span {

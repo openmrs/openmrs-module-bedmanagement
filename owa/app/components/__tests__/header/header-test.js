@@ -11,6 +11,9 @@ UrlHelper.mockImplementation(
     () => ({
         owaPath: () => {
             return '/owa/bedmanagement';
+        },
+        originPath: () => {
+            return '';
         }
     })
 );
@@ -23,7 +26,7 @@ describe('Header', () => {
             </StaticRouter>
         );
 
-        expect(header.find('ul').find('li').length).toBe(3);
+        expect(header.find('ul').find('li').length).toBe(4);
         expect(header.find('a.active').text().trim()).toBe('Admission Locations');
         expect(shallowToJson(header)).toMatchSnapshot();
     });

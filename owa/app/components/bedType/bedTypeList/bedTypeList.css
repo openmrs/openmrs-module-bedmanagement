@@ -1,9 +1,6 @@
 .bed-type-listing {
     width: 80%;
-    margin: 0 auto;
-    box-shadow: 1px 1px 3px #ccc;
-    border: 1px solid #ccc;
-    margin-top: 20px;
+    margin: 10px auto;
     padding: 20px;
 }
 
@@ -22,6 +19,7 @@
     border: none;
     border-collapse: collapse;
     background-color: transparent;
+    margin-bottom: 10px;
 }
 
 .bed-type-listing table tr th {
@@ -37,5 +35,27 @@
 
 .bed-type-listing table th.description{
     width: 50%;
+}
+
+.bed-type-listing .list-btn {
+    background: -owg-linear-gradient(top,#fff,#ddd);
+    background: -webkit-linear-gradient(top,#fff,#ddd);
+    background: linear-gradient(top,#fff,#ddd);
+    border: 1px solid #ddd;
+    padding: 8px 20px;
+    display: inline-block;
+    line-height: 1.2em;
+    color: #363463;
+    cursor: pointer;
+    min-width: 0;
+    max-width: 300px;
+    text-decoration: none;
+    width: auto;
+    border-radius: 4px;
+}
+
+.bed-type-listing .list-btn:hover {
+    background: #e2e2e2;
+    border-color: #d0d0d0;
 }
 

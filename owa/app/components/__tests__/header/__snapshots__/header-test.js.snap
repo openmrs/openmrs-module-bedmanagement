@@ -34,6 +34,16 @@ exports[`Header renders correctly 1`] = `
           className="title-section"
         >
           <li>
+            <a
+              href="/openmrs"
+            >
+              <i
+                aria-hidden="true"
+                className="fa fa-home"
+              />
+            </a>
+          </li>
+          <li>
             <Link
               className="active"
               replace={false}

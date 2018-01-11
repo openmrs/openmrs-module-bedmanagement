@@ -1,0 +1,42 @@
+html {
+    background-color: #eee;
+    font-family: OpenSans, Arial, sans-serif;
+    margin: 10px auto;
+    max-width: 1000px;
+    height: 100%;
+}
+
+.openmrs-header {
+    position: relative;
+    background-color: #00463f;
+    line-height: 1em;
+    border-radius: 5px;
+    display: block;
+    height: 52px;
+}
+
+.openmrs-header .logo {
+    float: left;
+    margin: 4px;
+}
+
+.openmrs-header .logo img {
+    height: 42px;
+}
+
+.openmrs-header .logout {
+    float: right;
+    color: #fff;
+    margin: 14px 7px;
+    font-size: 18px;
+    font-family: OpenSans, Arial, sans-serif;
+}
+
+.openmrs-header .logout:hover {
+    text-decoration: underline;
+}
+
+.openmrs-header .logout i {
+    padding-left: 5px;
+    font-size: 20px;
+}

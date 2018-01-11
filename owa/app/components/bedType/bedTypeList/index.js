@@ -23,10 +23,8 @@ export default class BedTypeList extends React.Component {
     }
 
     render() {
-        return <div className="bed-type-listing">
-            <div className="block-title">
-                Existing Bed Types
-            </div>
+        return <fieldset className="bed-type-listing">
+            <legend>&nbsp; Existing Bed Types &nbsp;</legend>
             <table>
                 <thead>
                     <tr>
@@ -41,8 +39,8 @@ export default class BedTypeList extends React.Component {
                         bedTypeFunctions={this.props.bedTypeFunctions}/>)}
                 </tbody>
             </table>
-            <button onClick={this.addNewHandler} value="Add New" className="btn btn-primary"> Add New </button>
-        </div>;
+            <button onClick={this.addNewHandler} value="Add New" className="list-btn"> Add New </button>
+        </fieldset>;
     }
 
 }

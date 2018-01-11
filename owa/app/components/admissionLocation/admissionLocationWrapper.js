@@ -156,12 +156,12 @@ export default class AdmissionLocationWrapper extends React.Component {
     };
 
     style = {
-        container: {
-            height: '100%'
-        },
         wrapper: {
-            marginTop: 30,
-            height: '100%'
+            marginTop: 10,
+            paddingTop: 20,
+            borderRadius: 5,
+            backgroundColor: '#fff',
+            minHeight: 500
         }
     };
 
@@ -183,7 +183,7 @@ export default class AdmissionLocationWrapper extends React.Component {
     }
 
     render() {
-        return <div style={this.style.container}>
+        return <div>
             <ReactNotify ref='notificator'/>
             <Header path={this.props.match.path}/>
             <div style={this.style.wrapper}>

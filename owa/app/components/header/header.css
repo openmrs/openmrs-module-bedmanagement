@@ -1,6 +1,10 @@
 ul.title-section {
     list-style: none;
     padding: 0;
+    clear: both;
+    font-size: .9em;
+    border-bottom: 1px solid #fff;
+    margin-top: 20px;
 }
 
 ul.title-section li {
@@ -21,18 +25,20 @@ ul.title-section li:not(:last-child):after {
 ul.title-section li a
 {
     display: block;
-    padding: 10px 15px;
+    padding: 5px 10px 5px 5px;
     color: #454e59;
-    border-radius: 3px;
-    font-weight: 600;
-    text-decoration: underline;
+    font-size: 14px;
+    font-family: OpenSans, Arial, sans-serif;
+}
+
+ul.title-section li a i {
+    font-size: 18px;
 }
 
 ul.title-section li a.active {
-    color:#00AEEF;
-    text-decoration: underline;
+    font-weight: 600;
 }
 
 ul.title-section li a:hover {
-    background: #f9f9f9;
+    text-decoration: underline;
 }

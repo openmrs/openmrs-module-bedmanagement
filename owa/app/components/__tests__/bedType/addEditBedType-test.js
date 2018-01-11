@@ -57,7 +57,7 @@ describe('AddEditBedType', () => {
         editBedTypeForm.find('#description-field').simulate('change');
         expect(spyOnChangeDescription).toHaveBeenCalled();
 
-        editBedTypeForm.find('.btn-danger').simulate('click');
+        editBedTypeForm.find('input[name=\'cancel\']').simulate('click');
         expect(spyOnCancelEventHandler).toHaveBeenCalled();
         expect(spySetState).toHaveBeenCalledWith({
             activePage: 'listing',

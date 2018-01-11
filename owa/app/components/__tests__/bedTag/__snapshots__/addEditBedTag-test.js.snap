@@ -4,70 +4,57 @@ exports[`AddEditBedTag Should display add edit bed tag form properly 1`] = `
 <div
   className="form-container"
 >
-  <div
+  <fieldset
     className="bed-tag-form"
   >
+    <legend>
+        
+      Add
+       Bed Tag  
+    </legend>
     <div
-      className="block"
+      className="block-content"
     >
-      <div
-        className="block-title"
+      <form
+        onSubmit={[Function]}
       >
-        Add
-         Bed Tag
-        <a
-          className="back-link"
-          href="javascript:void(0);"
-          onClick={[Function]}
-          title="back"
+        <div
+          className="form-block"
         >
-          &lt;&lt; Back
-        </a>
-      </div>
-      <div
-        className="block-content"
-      >
-        <form
-          onSubmit={[Function]}
+          <label
+            className="form-title"
+          >
+            Name:
+          </label>
+          <input
+            id="name-field"
+            onChange={[Function]}
+            required={true}
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          className="form-block"
         >
-          <div
-            className="form-block"
-          >
-            <label
-              className="form-title"
-            >
-              Name
-            </label>
-            <input
-              id="name-field"
-              onChange={[Function]}
-              required={true}
-              type="text"
-              value=""
-            />
-          </div>
-          <div
-            className="form-block"
-          >
-            <input
-              className="btn btn-primary float-left margin-right"
-              disabled={false}
-              name="submit"
-              type="submit"
-              value="Save"
-            />
-            <input
-              className="btn btn-danger float-left"
-              name="submit"
-              onClick={[Function]}
-              type="button"
-              value="Cancel"
-            />
-          </div>
-        </form>
-      </div>
+          <input
+            className="form-btn float-left margin-right"
+            disabled={false}
+            name="submit"
+            type="submit"
+            value="Save"
+          />
+          <input
+            className="form-btn float-left"
+            name="cancel"
+            onClick={[Function]}
+            type="button"
+            value="Cancel"
+          />
+        </div>
+      </form>
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
 
@@ -75,69 +62,56 @@ exports[`AddEditBedTag Should display add edit bed tag form properly 2`] = `
 <div
   className="form-container"
 >
-  <div
+  <fieldset
     className="bed-tag-form"
   >
+    <legend>
+        
+      Edit
+       Bed Tag  
+    </legend>
     <div
-      className="block"
+      className="block-content"
     >
-      <div
-        className="block-title"
+      <form
+        onSubmit={[Function]}
       >
-        Edit
-         Bed Tag
-        <a
-          className="back-link"
-          href="javascript:void(0);"
-          onClick={[Function]}
-          title="back"
+        <div
+          className="form-block"
         >
-          &lt;&lt; Back
-        </a>
-      </div>
-      <div
-        className="block-content"
-      >
-        <form
-          onSubmit={[Function]}
+          <label
+            className="form-title"
+          >
+            Name:
+          </label>
+          <input
+            id="name-field"
+            onChange={[Function]}
+            required={true}
+            type="text"
+            value="Isolation"
+          />
+        </div>
+        <div
+          className="form-block"
         >
-          <div
-            className="form-block"
-          >
-            <label
-              className="form-title"
-            >
-              Name
-            </label>
-            <input
-              id="name-field"
-              onChange={[Function]}
-              required={true}
-              type="text"
-              value="Isolation"
-            />
-          </div>
-          <div
-            className="form-block"
-          >
-            <input
-              className="btn btn-primary float-left margin-right"
-              disabled={false}
-              name="submit"
-              type="submit"
-              value="Save"
-            />
-            <input
-              className="btn btn-danger float-left"
-              name="submit"
-              onClick={[Function]}
-              type="button"
-              value="Cancel"
-            />
-          </div>
-        </form>
-      </div>
+          <input
+            className="form-btn float-left margin-right"
+            disabled={false}
+            name="submit"
+            type="submit"
+            value="Save"
+          />
+          <input
+            className="form-btn float-left"
+            name="cancel"
+            onClick={[Function]}
+            type="button"
+            value="Cancel"
+          />
+        </div>
+      </form>
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
