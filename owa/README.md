@@ -1,50 +1,63 @@
 # Bed Management OWA
-> Bed management OpenMRS OWA is a application for managing admission locations (Add/Edit/Delete/listing wards/beds).
+> An front-end React app for the _admin_ side of bed management:
+management of admisson locations, addition & removal of beds, setup of bed layouts, ... etc.
 
-## Development
-#### Local Setup Instructions
-1. Move into the owa directory
+## Developer Guide
+> This OWA uses [yarn](https://yarnpkg.com/en/) as a package manager and for its build tasks.
+#### Local dev setup
+
+##### 1. After cloning the project, move into the /owa directory:
 ```bash
 cd openmrs-module-bedmanagement/owa
 ```
 
-2. Install the dependencies
+##### 2. Install the yarn dependencies:
 ```bash
 $ yarn install
 ```
 
-3. Build & compile code
+##### 3. Compile the code and build the artifacts for 'watching':
 ```bash
 $ yarn webpack
-$ yarn build-webpack # pack with Compress for production 
 ```
-- This will create app.js & vendor.js at path owa/app/build
+The output of the build should be in
+- **owa/app/build/app.js**
+- **owa/app/build/vendor.js**
 
-4. Install open-web-apps-module module in your local OpenMRS if it not already installed.
-- You can download from : https://addons.openmrs.org/#/show/org.openmrs.module.open-web-apps-module
-- For more details: https://wiki.openmrs.org/display/docs/Open+Web+Apps+Module?src=contextnavpagetreemode
+This command also triggers the watch mode for debugging. This means that any changes will trigger an update to the main **app.js** in order to hot-deploy changes while developing.
 
-4. Deploy
-- For development it would be better to symbolic link the OWA app to the source code. 
-GoTo openmrs > amimin > Settings and check `App folder path`.
+##### 4. Deployment for runtime debugging:
+
+Start by accessing the OWA settings admin page at **/openmrs/module/owa/settings.form** on your runtime instance of OpenMRS. 
+> Note that the Open Web Apps module must be installed, see [here](https://wiki.openmrs.org/x/C4KIBQ) for more information.
+
+The key setting is the 'App Folder Path' that must point to the _enclosing_ folder of the OWA **app** folder, so the enclosing folder of the location of where **manifest.webapp** is.
+Typically the location for all OWAs of your OpenMRS instance should be in **/opt/openmrs/owa**, the idea would be to symlink the content of the Bed Management OWA to your code repo:
 ```bash
-ln -s openmrs-module-bedmanagement/owa/app [App folder path]/bedmanagement
+ln -s /path/to/../openmrs-module-bedmanagement/owa/app /opt/openmrs/owa/bedmanagement
 ```
-- Or you can simply zip /app folder and then upload at openmrs > amimin > Manage Apps
+This is assuming that Tomcat is able to serve symlinked content. If that is not an option, then you will have to _copy_ (instead of symlinking) the content of the **app** folder of your local repository to **/opt/openmrs/owa/bedmanagement** each time you want to observe a change that you have made.
 
-5. For Testing 
+![alt tag](readme/owa-settings.png)
+
+##### 5. Running tests
+>This OWA uses [Jest](https://facebook.github.io/jest/) as a test framework.
+
 ```bash
 $ yarn test
 $ yarn test-watch  # if you want run test in watch mode
 ```
-- If you have changes in UI and render properly as expected, then you can regenerate snapshots
+If you want to run specific test only
+```bash
+$ yarn test <regex>
+```
+Where 'regex' can be used to point to certain targetted test files.
+
+>This OWA uses [snapshot testing](http://facebook.github.io/jest/docs/en/snapshot-testing.html#snapshot-testing-with-jest).
+
+When it is clear that UI changes are as wanted, the Jest snapshots should be regenerated to be part of the next commit:
 ```bash
 $ yarn test --u
 ```
-- If you want to run specific test only
-```bash
-$ yarn test <regexForTestFiles>
-```
-
 ##Production
 - Upon Installing bedmanagement omod it will automatically deploy owa.

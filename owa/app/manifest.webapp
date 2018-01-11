@@ -1,7 +1,7 @@
 {
   "version": "0.1.0",
-  "name": "Bed Management",
-  "description": "Bed Management UI",
+  "name": "Bed Management Admin UI",
+  "description": "Admin UI for the Bed Management module",
   "launch_path": "admissionLocations.html",
   "icons": {
     "48": "/img/omrs-button.png"
