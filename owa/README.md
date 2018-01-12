@@ -2,6 +2,9 @@
 > An front-end React app for the _admin_ side of bed management:
 management of admisson locations, addition & removal of beds, setup of bed layouts, ... etc.
 
+## Installation / Production Use
+The Bed Management UI OWA will be automatically deployed upon installing the Bed Management module.
+
 ## Developer Guide
 > This OWA uses [yarn](https://yarnpkg.com/en/) as a package manager and for its build tasks.
 #### Local dev setup
@@ -59,5 +62,3 @@ When it is clear that UI changes are as wanted, the Jest snapshots should be reg
 ```bash
 $ yarn test --u
 ```
-##Production
-- Upon Installing bedmanagement omod it will automatically deploy owa.
