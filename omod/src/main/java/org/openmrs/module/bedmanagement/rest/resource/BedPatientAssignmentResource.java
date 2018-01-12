@@ -31,63 +31,67 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import java.util.Arrays;
 import java.util.List;
 
-@Resource(name = RestConstants.VERSION_1 + "/bedPatientAssignment", supportedClass = BedPatientAssignment.class, supportedOpenmrsVersions = {"1.9.*", "1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*"})
+@Resource(name = RestConstants.VERSION_1
+        + "/bedPatientAssignment", supportedClass = BedPatientAssignment.class, supportedOpenmrsVersions = { "1.9.*",
+                "1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*" })
 public class BedPatientAssignmentResource extends DelegatingCrudResource<BedPatientAssignment> {
-
-    @Override
-    public List<Representation> getAvailableRepresentations() {
-        return Arrays.asList(Representation.DEFAULT, Representation.FULL);
-    }
-
-    @Override
-    public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
-        if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
-            DelegatingResourceDescription description = new DelegatingResourceDescription();
-            description.addProperty("bed", Representation.DEFAULT);
-            description.addProperty("patient", Representation.REF);
-            description.addProperty("encounter", Representation.REF);
-            return description;
-        }
-
-        if ((rep instanceof FullRepresentation)) {
-            DelegatingResourceDescription description = new DelegatingResourceDescription();
-            description.addProperty("bed", Representation.DEFAULT);
-            description.addProperty("patient", Representation.REF);
-            description.addProperty("encounter", Representation.FULL);
-            return description;
-        }
-        return null;
-
-    }
-
-    @Override
-    public BedPatientAssignment getByUniqueId(String uuid) {
-        BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        return bedManagementService.getBedPatientAssignmentByUuid(uuid);
-    }
-
-    @Override
-    protected void delete(BedPatientAssignment bedPatientAssignment, String s, RequestContext requestContext) throws ResponseException {
-        throw new ResourceDoesNotSupportOperationException("delete of bed patient assignment not supported");
-    }
-
-    @Override
-    public void purge(BedPatientAssignment bedPatientAssignment, RequestContext requestContext) throws ResponseException {
-        throw new ResourceDoesNotSupportOperationException("purge of bed patient assignment not supported");
-    }
-
-    @Override
-    public DelegatingResourceDescription getCreatableProperties() throws ResourceDoesNotSupportOperationException {
-        throw new ResourceDoesNotSupportOperationException("create of bed patient assignment not supported");
-    }
-
-    @Override
-    public BedPatientAssignment newDelegate() {
-        return new BedPatientAssignment();
-    }
-
-    @Override
-    public BedPatientAssignment save(BedPatientAssignment bedPatientAssignment) {
-        throw new ResourceDoesNotSupportOperationException("save of bed patient assignment not supported");
-    }
+	
+	@Override
+	public List<Representation> getAvailableRepresentations() {
+		return Arrays.asList(Representation.DEFAULT, Representation.FULL);
+	}
+	
+	@Override
+	public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
+		if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
+			DelegatingResourceDescription description = new DelegatingResourceDescription();
+			description.addProperty("bed", Representation.DEFAULT);
+			description.addProperty("patient", Representation.REF);
+			description.addProperty("encounter", Representation.REF);
+			return description;
+		}
+		
+		if ((rep instanceof FullRepresentation)) {
+			DelegatingResourceDescription description = new DelegatingResourceDescription();
+			description.addProperty("bed", Representation.DEFAULT);
+			description.addProperty("patient", Representation.REF);
+			description.addProperty("encounter", Representation.FULL);
+			return description;
+		}
+		return null;
+		
+	}
+	
+	@Override
+	public BedPatientAssignment getByUniqueId(String uuid) {
+		BedManagementService bedManagementService = (BedManagementService) Context
+		        .getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
+		return bedManagementService.getBedPatientAssignmentByUuid(uuid);
+	}
+	
+	@Override
+	protected void delete(BedPatientAssignment bedPatientAssignment, String s, RequestContext requestContext)
+	        throws ResponseException {
+		throw new ResourceDoesNotSupportOperationException("delete of bed patient assignment not supported");
+	}
+	
+	@Override
+	public void purge(BedPatientAssignment bedPatientAssignment, RequestContext requestContext) throws ResponseException {
+		throw new ResourceDoesNotSupportOperationException("purge of bed patient assignment not supported");
+	}
+	
+	@Override
+	public DelegatingResourceDescription getCreatableProperties() throws ResourceDoesNotSupportOperationException {
+		throw new ResourceDoesNotSupportOperationException("create of bed patient assignment not supported");
+	}
+	
+	@Override
+	public BedPatientAssignment newDelegate() {
+		return new BedPatientAssignment();
+	}
+	
+	@Override
+	public BedPatientAssignment save(BedPatientAssignment bedPatientAssignment) {
+		throw new ResourceDoesNotSupportOperationException("save of bed patient assignment not supported");
+	}
 }

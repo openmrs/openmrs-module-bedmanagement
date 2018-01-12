@@ -27,51 +27,52 @@ import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceD
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-@Resource(name = RestConstants.VERSION_1 + "/bedTagMap", supportedClass = BedTagMap.class, supportedOpenmrsVersions = {"1.9.*", "1.10.*", "1.11.*", "1.12.*", "2.*"})
+@Resource(name = RestConstants.VERSION_1 + "/bedTagMap", supportedClass = BedTagMap.class, supportedOpenmrsVersions = {
+        "1.9.*", "1.10.*", "1.11.*", "1.12.*", "2.*" })
 public class BedTagMapResource extends DataDelegatingCrudResource<BedTagMap> {
-
-    @Override
-    public BedTagMap getByUniqueId(String uniqueId) {
-        BedTagMapService bedTagMapService = Context.getService(BedTagMapService.class);
-        return bedTagMapService.getBedTagMapByUuid(uniqueId);
-    }
-
-    @Override
-    protected void delete(BedTagMap delegate, String reason, RequestContext context) throws ResponseException {
-        BedTagMapService bedTagMapService = Context.getService(BedTagMapService.class);
-        bedTagMapService.delete(delegate, reason);
-    }
-
-    @Override
-    public BedTagMap newDelegate() {
-        return new BedTagMap();
-    }
-
-    @Override
-    public BedTagMap save(BedTagMap delegate) {
-        return Context.getService(BedTagMapService.class).save(delegate);
-    }
-
-    @Override
-    public void purge(BedTagMap delegate, RequestContext context) throws ResponseException {
-        throw new ResourceDoesNotSupportOperationException("purge not allowed on bedTagMap resource");
-    }
-
-    @Override
-    public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
-        if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
-            DelegatingResourceDescription description = new DelegatingResourceDescription();
-            description.addProperty("uuid");
-            return description;
-        }
-        return null;
-    }
-
-    @Override
-    public DelegatingResourceDescription getCreatableProperties() {
-        DelegatingResourceDescription delegatingResourceDescription = new DelegatingResourceDescription();
-        delegatingResourceDescription.addRequiredProperty("bed");
-        delegatingResourceDescription.addRequiredProperty("bedTag");
-        return delegatingResourceDescription;
-    }
+	
+	@Override
+	public BedTagMap getByUniqueId(String uniqueId) {
+		BedTagMapService bedTagMapService = Context.getService(BedTagMapService.class);
+		return bedTagMapService.getBedTagMapByUuid(uniqueId);
+	}
+	
+	@Override
+	protected void delete(BedTagMap delegate, String reason, RequestContext context) throws ResponseException {
+		BedTagMapService bedTagMapService = Context.getService(BedTagMapService.class);
+		bedTagMapService.delete(delegate, reason);
+	}
+	
+	@Override
+	public BedTagMap newDelegate() {
+		return new BedTagMap();
+	}
+	
+	@Override
+	public BedTagMap save(BedTagMap delegate) {
+		return Context.getService(BedTagMapService.class).save(delegate);
+	}
+	
+	@Override
+	public void purge(BedTagMap delegate, RequestContext context) throws ResponseException {
+		throw new ResourceDoesNotSupportOperationException("purge not allowed on bedTagMap resource");
+	}
+	
+	@Override
+	public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
+		if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
+			DelegatingResourceDescription description = new DelegatingResourceDescription();
+			description.addProperty("uuid");
+			return description;
+		}
+		return null;
+	}
+	
+	@Override
+	public DelegatingResourceDescription getCreatableProperties() {
+		DelegatingResourceDescription delegatingResourceDescription = new DelegatingResourceDescription();
+		delegatingResourceDescription.addRequiredProperty("bed");
+		delegatingResourceDescription.addRequiredProperty("bedTag");
+		return delegatingResourceDescription;
+	}
 }

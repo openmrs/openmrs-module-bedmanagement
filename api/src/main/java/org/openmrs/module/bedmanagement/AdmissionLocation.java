@@ -18,54 +18,54 @@ import org.openmrs.Location;
 import java.util.List;
 
 /**
- * Maps to resource for location table in openmrs database. Essentially
- * a delegate for the AdmissionLocationResource
+ * Maps to resource for location table in openmrs database. Essentially a delegate for the
+ * AdmissionLocationResource
  */
 
 public class AdmissionLocation {
-    private long totalBeds;
-    private long occupiedBeds;
-    private Location ward;
-    private List<BedLayout> bedLayouts;
-
-    public Location getWard() {
-        return ward;
-    }
-
-    public void setWard(Location ward) {
-        this.ward = ward;
-    }
-
-    public long getTotalBeds() {
-        return totalBeds;
-    }
-
-    public long getOccupiedBeds() {
-        return occupiedBeds;
-    }
-
-    public void setTotalBeds(long totalBeds) {
-        this.totalBeds = totalBeds;
-    }
-
-    public void setOccupiedBeds(long occupiedBeds) {
-        this.occupiedBeds = occupiedBeds;
-    }
-
-    public void setBedLayouts(List<BedLayout> bedLayouts) {
-        this.bedLayouts = bedLayouts;
-    }
-
-    public List<BedLayout> getBedLayouts() {
-        return bedLayouts;
-    }
-
-    @Override
-    public String toString() {
-        return "AdmissionLocation{" +
-                "totalBeds=" + totalBeds +
-                ", occupiedBeds=" + occupiedBeds +
-                ", ward=" + ward +
-                '}';
-    }
+	
+	private long totalBeds;
+	
+	private long occupiedBeds;
+	
+	private Location ward;
+	
+	private List<BedLayout> bedLayouts;
+	
+	public Location getWard() {
+		return ward;
+	}
+	
+	public void setWard(Location ward) {
+		this.ward = ward;
+	}
+	
+	public long getTotalBeds() {
+		return totalBeds;
+	}
+	
+	public long getOccupiedBeds() {
+		return occupiedBeds;
+	}
+	
+	public void setTotalBeds(long totalBeds) {
+		this.totalBeds = totalBeds;
+	}
+	
+	public void setOccupiedBeds(long occupiedBeds) {
+		this.occupiedBeds = occupiedBeds;
+	}
+	
+	public void setBedLayouts(List<BedLayout> bedLayouts) {
+		this.bedLayouts = bedLayouts;
+	}
+	
+	public List<BedLayout> getBedLayouts() {
+		return bedLayouts;
+	}
+	
+	@Override
+	public String toString() {
+		return "AdmissionLocation{" + "totalBeds=" + totalBeds + ", occupiedBeds=" + occupiedBeds + ", ward=" + ward + '}';
+	}
 }

@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.bedmanagement.service.impl;
 
-
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import java.util.Date;
@@ -25,44 +24,43 @@ import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.service.BedTagMapService;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 
-
 public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMapService {
-
-    BedTagMapDao bedTagMapDao;
-
-    public void setDao(BedTagMapDao dao) {
-        this.bedTagMapDao = dao;
-    }
-
-    @Override
-    public BedTagMap save(BedTagMap bedTagMap) throws IllegalPropertyException{
-        if (getBedTagMapWithBedAndTag(bedTagMap.getBed(), bedTagMap.getBedTag()) != null) {
-            throw new IllegalPropertyException("Tag Already Present For Bed");
-        }
-        return bedTagMapDao.saveOrUpdate(bedTagMap);
-    }
-
-    @Override
-    public void delete(BedTagMap bedTagMap, String reason) {
-        bedTagMap.setVoided(true);
-        bedTagMap.setDateVoided(new Date());
-        bedTagMap.setVoidReason(reason);
-        bedTagMap.setVoidedBy(Context.getAuthenticatedUser());
-        bedTagMapDao.saveOrUpdate(bedTagMap);
-    }
-
-    @Override
-    public BedTagMap getBedTagMapByUuid(String bedTagMapUuid) {
-        return bedTagMapDao.getBedTagMapByUuid(bedTagMapUuid);
-    }
-
-    @Override
-    public BedTagMap getBedTagMapWithBedAndTag(Bed bed, BedTag bedTag) {
-        return bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag);
-    }
-
-    @Override
-    public BedTag getBedTagByUuid(String bedTagUuid) {
-        return bedTagMapDao.getBedTagByUuid(bedTagUuid);
-    }
+	
+	BedTagMapDao bedTagMapDao;
+	
+	public void setDao(BedTagMapDao dao) {
+		this.bedTagMapDao = dao;
+	}
+	
+	@Override
+	public BedTagMap save(BedTagMap bedTagMap) throws IllegalPropertyException {
+		if (getBedTagMapWithBedAndTag(bedTagMap.getBed(), bedTagMap.getBedTag()) != null) {
+			throw new IllegalPropertyException("Tag Already Present For Bed");
+		}
+		return bedTagMapDao.saveOrUpdate(bedTagMap);
+	}
+	
+	@Override
+	public void delete(BedTagMap bedTagMap, String reason) {
+		bedTagMap.setVoided(true);
+		bedTagMap.setDateVoided(new Date());
+		bedTagMap.setVoidReason(reason);
+		bedTagMap.setVoidedBy(Context.getAuthenticatedUser());
+		bedTagMapDao.saveOrUpdate(bedTagMap);
+	}
+	
+	@Override
+	public BedTagMap getBedTagMapByUuid(String bedTagMapUuid) {
+		return bedTagMapDao.getBedTagMapByUuid(bedTagMapUuid);
+	}
+	
+	@Override
+	public BedTagMap getBedTagMapWithBedAndTag(Bed bed, BedTag bedTag) {
+		return bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag);
+	}
+	
+	@Override
+	public BedTag getBedTagByUuid(String bedTagUuid) {
+		return bedTagMapDao.getBedTagByUuid(bedTagUuid);
+	}
 }

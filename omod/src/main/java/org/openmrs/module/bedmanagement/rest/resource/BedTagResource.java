@@ -34,89 +34,92 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.util.List;
 
-@Resource(name = RestConstants.VERSION_1 + "/bedTag", supportedClass = BedTag.class, supportedOpenmrsVersions = {"1.9.*", "1.10.*", "1.11.*", "1.12.*", "2.*"})
+@Resource(name = RestConstants.VERSION_1 + "/bedTag", supportedClass = BedTag.class, supportedOpenmrsVersions = { "1.9.*",
+        "1.10.*", "1.11.*", "1.12.*", "2.*" })
 public class BedTagResource extends DelegatingCrudResource<BedTag> {
-
-    @Override
-    public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
-        DelegatingResourceDescription description = new DelegatingResourceDescription();
-        description.addProperty("id");
-        description.addProperty("name");
-        description.addProperty("uuid");
-        return description;
-    }
-
-    @Override
-    public BedTag newDelegate() {
-        return new BedTag();
-    }
-
-    @Override
-    protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-        List<BedTag> bedTags = Context.getService(BedManagementService.class).getBedTags(null, context.getLimit(), context.getStartIndex());
-        return new AlreadyPaged<BedTag>(context, bedTags, false);
-    }
-
-    @Override
-    protected PageableResult doSearch(RequestContext context) {
-        String name = context.getParameter("name");
-        List<BedTag> bedTags = Context.getService(BedManagementService.class).getBedTags(name, context.getLimit(), context.getStartIndex());
-        return new AlreadyPaged<BedTag>(context, bedTags, false);
-    }
-
-    @Override
-    public BedTag getByUniqueId(String uniqueId) {
-        return Context.getService(BedManagementService.class).getBedTagByUuid(uniqueId);
-    }
-
-    @Override
-    public BedTag save(BedTag bedTag) {
-        return Context.getService(BedManagementService.class).saveBedTag(bedTag);
-    }
-
-    @Override
-    public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
-        if (propertiesToCreate.get("name") == null )
-            throw new ConversionException("Required properties: name");
-
-        BedTag bedTag = this.constructBedTag(null, propertiesToCreate);
-        Context.getService(BedManagementService.class).saveBedTag(bedTag);
-        return ConversionUtil.convertToRepresentation(bedTag, context.getRepresentation());
-    }
-
-    @Override
-    public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-        BedTag bedTag = this.constructBedTag(uuid, propertiesToUpdate);
-        Context.getService(BedManagementService.class).saveBedTag(bedTag);
-        return ConversionUtil.convertToRepresentation(bedTag, context.getRepresentation());
-    }
-
-    @Override
-    protected void delete(BedTag bedTag, String reason, RequestContext context) throws ResponseException {
-        Context.getService(BedManagementService.class).deleteBedTag(bedTag, reason);
-    }
-
-    @Override
-    public void purge(BedTag bedTag, RequestContext context) throws ResponseException {
-        throw new ResourceDoesNotSupportOperationException("purge not allowed on bed tag resource");
-    }
-
-    private BedTag constructBedTag(String uuid, SimpleObject properties){
-        BedTag bedTag;
-        if (uuid != null) {
-            bedTag = Context.getService(BedManagementService.class).getBedTagByUuid(uuid);
-            if (bedTag == null)
-                throw new IllegalPropertyException("Bed Tag not exist");
-
-            if (properties.get("name") != null)
-                bedTag.setName((String) properties.get("name"));
-        } else {
-            bedTag = new BedTag();
-            if (properties.get("name") == null)
-                throw new IllegalPropertyException("Required parameters: name");
-            bedTag.setName((String) properties.get("name"));
-        }
-
-        return bedTag;
-    }
+	
+	@Override
+	public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
+		DelegatingResourceDescription description = new DelegatingResourceDescription();
+		description.addProperty("id");
+		description.addProperty("name");
+		description.addProperty("uuid");
+		return description;
+	}
+	
+	@Override
+	public BedTag newDelegate() {
+		return new BedTag();
+	}
+	
+	@Override
+	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
+		List<BedTag> bedTags = Context.getService(BedManagementService.class).getBedTags(null, context.getLimit(),
+		    context.getStartIndex());
+		return new AlreadyPaged<BedTag>(context, bedTags, false);
+	}
+	
+	@Override
+	protected PageableResult doSearch(RequestContext context) {
+		String name = context.getParameter("name");
+		List<BedTag> bedTags = Context.getService(BedManagementService.class).getBedTags(name, context.getLimit(),
+		    context.getStartIndex());
+		return new AlreadyPaged<BedTag>(context, bedTags, false);
+	}
+	
+	@Override
+	public BedTag getByUniqueId(String uniqueId) {
+		return Context.getService(BedManagementService.class).getBedTagByUuid(uniqueId);
+	}
+	
+	@Override
+	public BedTag save(BedTag bedTag) {
+		return Context.getService(BedManagementService.class).saveBedTag(bedTag);
+	}
+	
+	@Override
+	public Object create(SimpleObject propertiesToCreate, RequestContext context) throws ResponseException {
+		if (propertiesToCreate.get("name") == null)
+			throw new ConversionException("Required properties: name");
+		
+		BedTag bedTag = this.constructBedTag(null, propertiesToCreate);
+		Context.getService(BedManagementService.class).saveBedTag(bedTag);
+		return ConversionUtil.convertToRepresentation(bedTag, context.getRepresentation());
+	}
+	
+	@Override
+	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
+		BedTag bedTag = this.constructBedTag(uuid, propertiesToUpdate);
+		Context.getService(BedManagementService.class).saveBedTag(bedTag);
+		return ConversionUtil.convertToRepresentation(bedTag, context.getRepresentation());
+	}
+	
+	@Override
+	protected void delete(BedTag bedTag, String reason, RequestContext context) throws ResponseException {
+		Context.getService(BedManagementService.class).deleteBedTag(bedTag, reason);
+	}
+	
+	@Override
+	public void purge(BedTag bedTag, RequestContext context) throws ResponseException {
+		throw new ResourceDoesNotSupportOperationException("purge not allowed on bed tag resource");
+	}
+	
+	private BedTag constructBedTag(String uuid, SimpleObject properties) {
+		BedTag bedTag;
+		if (uuid != null) {
+			bedTag = Context.getService(BedManagementService.class).getBedTagByUuid(uuid);
+			if (bedTag == null)
+				throw new IllegalPropertyException("Bed Tag not exist");
+			
+			if (properties.get("name") != null)
+				bedTag.setName((String) properties.get("name"));
+		} else {
+			bedTag = new BedTag();
+			if (properties.get("name") == null)
+				throw new IllegalPropertyException("Required parameters: name");
+			bedTag.setName((String) properties.get("name"));
+		}
+		
+		return bedTag;
+	}
 }

@@ -32,20 +32,25 @@ import java.util.Collections;
 
 @Component
 public class BedDetailsResourceSearchHandler implements SearchHandler {
-
-    @Override
-    public SearchConfig getSearchConfig() {
-        SearchQuery searchQuery = new SearchQuery.Builder("Allows you to fetch bed details of a patient by visit uuid, even if the patient is discharged").withRequiredParameters("visitUuid").build();
-        return new SearchConfig("bedDetailsFromVisit", RestConstants.VERSION_1 + "/beds", Arrays.asList("1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*"), searchQuery);
-    }
-
-    @Override
-    public PageableResult search(RequestContext requestContext) throws ResponseException {
-        BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        String visitUuid = requestContext.getRequest().getParameter("visitUuid");
-        BedDetails bedDetails = bedManagementService.getLatestBedDetailsByVisit(visitUuid);
-        AlreadyPaged<BedDetails> alreadyPaged = new AlreadyPaged<BedDetails>(requestContext, Collections.singletonList(bedDetails), false);
-        return bedDetails == null ? new EmptySearchResult() : alreadyPaged;
-    }
-
+	
+	@Override
+	public SearchConfig getSearchConfig() {
+		SearchQuery searchQuery = new SearchQuery.Builder(
+		        "Allows you to fetch bed details of a patient by visit uuid, even if the patient is discharged")
+		                .withRequiredParameters("visitUuid").build();
+		return new SearchConfig("bedDetailsFromVisit", RestConstants.VERSION_1 + "/beds",
+		        Arrays.asList("1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*"), searchQuery);
+	}
+	
+	@Override
+	public PageableResult search(RequestContext requestContext) throws ResponseException {
+		BedManagementService bedManagementService = (BedManagementService) Context
+		        .getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
+		String visitUuid = requestContext.getRequest().getParameter("visitUuid");
+		BedDetails bedDetails = bedManagementService.getLatestBedDetailsByVisit(visitUuid);
+		AlreadyPaged<BedDetails> alreadyPaged = new AlreadyPaged<BedDetails>(requestContext,
+		        Collections.singletonList(bedDetails), false);
+		return bedDetails == null ? new EmptySearchResult() : alreadyPaged;
+	}
+	
 }

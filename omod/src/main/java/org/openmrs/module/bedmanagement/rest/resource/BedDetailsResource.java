@@ -36,82 +36,88 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.util.Arrays;
 
-@Resource(name = RestConstants.VERSION_1 + "/beds", supportedClass = BedDetails.class, supportedOpenmrsVersions = {"1.9.*", "1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*"})
+@Resource(name = RestConstants.VERSION_1 + "/beds", supportedClass = BedDetails.class, supportedOpenmrsVersions = { "1.9.*",
+        "1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*" })
 public class BedDetailsResource extends DelegatingCrudResource<BedDetails> {
-    @Override
-    public BedDetails getByUniqueId(String id) {
-        BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        BedDetails bedDetails = bedManagementService.getBedDetailsById(id);
-        if (bedDetails == null)
-            bedDetails = bedManagementService.getBedDetailsByUuid(id);
-        return bedDetails;
-    }
-
-    @Override
-    protected void delete(BedDetails bedDetails, String reason, RequestContext requestContext) throws ResponseException {
-        String patientUuid = requestContext.getParameter("patientUuid");
-        BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        bedManagementService.unAssignPatientFromBed(Context.getPatientService().getPatientByUuid(patientUuid));
-    }
-
-    @Override
-    public BedDetails newDelegate() {
-        return new BedDetails();
-    }
-
-    @Override
-    public BedDetails save(BedDetails bedDetails) {
-        throw new ResourceDoesNotSupportOperationException("save of bed not supported");
-    }
-
-    @Override
-    public void purge(BedDetails bedDetails, RequestContext requestContext) throws ResponseException {
-        throw new ResourceDoesNotSupportOperationException("purge of bed not supported");
-    }
-
-    @Override
-    public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
-        if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
-            DelegatingResourceDescription description = new DelegatingResourceDescription();
-            description.addProperty("bedId", "bedId");
-            description.addProperty("bedNumber", "bedNumber");
-            description.addProperty("bedType");
-            description.addProperty("physicalLocation", Representation.DEFAULT);
-            description.addProperty("patients", Representation.DEFAULT);
-            return description;
-        }
-        if ((rep instanceof FullRepresentation)) {
-            DelegatingResourceDescription description = new DelegatingResourceDescription();
-            description.addProperty("bedId", Representation.FULL);
-            description.addProperty("bedNumber", Representation.FULL);
-            description.addProperty("bedType");
-            description.addProperty("physicalLocation", Representation.FULL);
-            description.addProperty("patients", Representation.FULL);
-            return description;
-        }
-        return null;
-    }
-
-    @Override
-    public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-        BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        Patient patient = Context.getPatientService().getPatientByUuid((String) propertiesToUpdate.get("patientUuid"));
-        Object encounterUuid = propertiesToUpdate.get("encounterUuid");
-        Encounter encounter = null;
-        if (encounterUuid != null) {
-            encounter = Context.getEncounterService().getEncounterByUuid((String) encounterUuid);
-        }
-        BedDetails bedRes = bedManagementService.assignPatientToBed(patient, encounter, uuid);
-        return ConversionUtil.convertToRepresentation(bedRes, Representation.DEFAULT);
-    }
-
-    @Override
-    protected PageableResult doSearch(RequestContext context) {
-        BedManagementService bedManagementService = (BedManagementService) Context.getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
-        String patientUuid = context.getParameter("patientUuid");
-        Patient patient = Context.getPatientService().getPatientByUuid(patientUuid);
-        BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
-        AlreadyPaged<BedDetails> alreadyPaged = new AlreadyPaged<BedDetails>(context, Arrays.asList(bedDetails), false);
-        return bedDetails == null || bedDetails.getBedId() == 0 ? super.doSearch(context) : alreadyPaged;
-    }
+	
+	@Override
+	public BedDetails getByUniqueId(String id) {
+		BedManagementService bedManagementService = (BedManagementService) Context
+		        .getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
+		BedDetails bedDetails = bedManagementService.getBedDetailsById(id);
+		if (bedDetails == null)
+			bedDetails = bedManagementService.getBedDetailsByUuid(id);
+		return bedDetails;
+	}
+	
+	@Override
+	protected void delete(BedDetails bedDetails, String reason, RequestContext requestContext) throws ResponseException {
+		String patientUuid = requestContext.getParameter("patientUuid");
+		BedManagementService bedManagementService = (BedManagementService) Context
+		        .getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
+		bedManagementService.unAssignPatientFromBed(Context.getPatientService().getPatientByUuid(patientUuid));
+	}
+	
+	@Override
+	public BedDetails newDelegate() {
+		return new BedDetails();
+	}
+	
+	@Override
+	public BedDetails save(BedDetails bedDetails) {
+		throw new ResourceDoesNotSupportOperationException("save of bed not supported");
+	}
+	
+	@Override
+	public void purge(BedDetails bedDetails, RequestContext requestContext) throws ResponseException {
+		throw new ResourceDoesNotSupportOperationException("purge of bed not supported");
+	}
+	
+	@Override
+	public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
+		if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
+			DelegatingResourceDescription description = new DelegatingResourceDescription();
+			description.addProperty("bedId", "bedId");
+			description.addProperty("bedNumber", "bedNumber");
+			description.addProperty("bedType");
+			description.addProperty("physicalLocation", Representation.DEFAULT);
+			description.addProperty("patients", Representation.DEFAULT);
+			return description;
+		}
+		if ((rep instanceof FullRepresentation)) {
+			DelegatingResourceDescription description = new DelegatingResourceDescription();
+			description.addProperty("bedId", Representation.FULL);
+			description.addProperty("bedNumber", Representation.FULL);
+			description.addProperty("bedType");
+			description.addProperty("physicalLocation", Representation.FULL);
+			description.addProperty("patients", Representation.FULL);
+			return description;
+		}
+		return null;
+	}
+	
+	@Override
+	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
+		BedManagementService bedManagementService = (BedManagementService) Context
+		        .getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
+		Patient patient = Context.getPatientService().getPatientByUuid((String) propertiesToUpdate.get("patientUuid"));
+		Object encounterUuid = propertiesToUpdate.get("encounterUuid");
+		Encounter encounter = null;
+		if (encounterUuid != null) {
+			encounter = Context.getEncounterService().getEncounterByUuid((String) encounterUuid);
+		}
+		BedDetails bedRes = bedManagementService.assignPatientToBed(patient, encounter, uuid);
+		return ConversionUtil.convertToRepresentation(bedRes, Representation.DEFAULT);
+	}
+	
+	@Override
+	protected PageableResult doSearch(RequestContext context) {
+		BedManagementService bedManagementService = (BedManagementService) Context
+		        .getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
+		String patientUuid = context.getParameter("patientUuid");
+		Patient patient = Context.getPatientService().getPatientByUuid(patientUuid);
+		BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
+		AlreadyPaged<BedDetails> alreadyPaged = new AlreadyPaged<BedDetails>(context, Arrays.asList(bedDetails), false);
+		return bedDetails == null || bedDetails.getBedId() == 0 ? super.doSearch(context) : alreadyPaged;
+	}
 }

@@ -63,8 +63,8 @@ public abstract class MainResourceControllerTest extends BaseModuleWebContextSen
 	 * @return
 	 */
 	public MockHttpServletRequest request(RequestMethod method, String requestURI) {
-		MockHttpServletRequest request = new MockHttpServletRequest(method.toString(), "/rest/" + getNamespace() + "/"
-		        + requestURI);
+		MockHttpServletRequest request = new MockHttpServletRequest(method.toString(),
+		        "/rest/" + getNamespace() + "/" + requestURI);
 		request.addHeader("content-type", "application/json");
 		return request;
 	}
@@ -163,7 +163,6 @@ public abstract class MainResourceControllerTest extends BaseModuleWebContextSen
 	public SimpleObject deserialize(MockHttpServletResponse response) throws Exception {
 		return new ObjectMapper().readValue(response.getContentAsString(), SimpleObject.class);
 	}
-	
 	
 	/**
 	 * @return the URI of the resource
