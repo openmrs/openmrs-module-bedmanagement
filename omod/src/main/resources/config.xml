@@ -43,6 +43,12 @@
         BedType.hbm.xml
 	</mappingFiles>
 
+	<!-- Adds link to admin page -->
+	<extension>
+		<point>org.openmrs.admin.list</point>
+		<class>org.openmrs.module.bedmanagement.extension.html.AdminList</class>
+	</extension>
+
 	<!-- Internationalization -->
 	<!-- All message codes should start with ${project.parent.artifactId}. -->
 	<messages>

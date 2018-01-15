@@ -43,6 +43,7 @@
     <openmrsAtomfeedVersion>2.5.0</openmrsAtomfeedVersion>
     <openmrsOwaVersion>1.7.0</openmrsOwaVersion>
     <atomfeed.version>1.9.1</atomfeed.version>
+    <legacyuiVersion>1.0</legacyuiVersion>
   </properties>
   
   <dependencyManagement>
@@ -101,6 +102,14 @@
         <scope>provided</scope>
       </dependency>
       <!-- End OpenMRS core -->
+
+      <dependency>
+        <groupId>org.openmrs.module</groupId>
+        <artifactId>legacyui-omod</artifactId>
+        <version>${legacyuiVersion}</version>
+        <scope>provided</scope>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
   
