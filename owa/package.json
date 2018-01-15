@@ -7,6 +7,7 @@
     "NODE_PATH": "./app",
     "scripts": {
         "webpack": "webpack -wd",
+        "code-format": "prettier --find-config-path --write  'app/**/*.js'",
         "build": "webpack -p",
         "test": "NODE_PATH=./app jest --notify",
         "test-watch": "NODE_PATH=./app jest --watch",
@@ -44,6 +45,7 @@
         "eslint-plugin-react": "^7.5.1",
         "jest": "^21.2.1",
         "jest-css-modules": "^1.1.0",
+        "prettier": "1.10.2",
         "react-test-renderer": "^16.2.0"
     },
     "dependencies": {

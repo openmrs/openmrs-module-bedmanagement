@@ -62,3 +62,9 @@ When it is clear that UI changes are as wanted, the Jest snapshots should be reg
 ```bash
 $ yarn test --u
 ```
+
+##### 5. Running Code formatter
+> This use prettier code formatter. Before pushing any code, you should run code formatter.
+```bash
+$ yarn code-format
+```
