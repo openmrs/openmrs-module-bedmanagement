@@ -8,11 +8,11 @@ import BedTypeWrapper from 'components/bedType/bedTypeWrapper';
 require('components/__mocks__/location-mock');
 require('babel-polyfill');
 const testProps = {
-    match:{
+    match: {
         isExact: true,
-        params:{},
-        path:'/owa/bedmanagement/bedTypes.html',
-        url:'/owa/bedmanagement/bedTypes.html'
+        params: {},
+        path: '/owa/bedmanagement/bedTypes.html',
+        url: '/owa/bedmanagement/bedTypes.html'
     },
     sleep: (milisec) => {
         return new Promise((resolve, reject) => {
@@ -29,32 +29,33 @@ describe('BedTypeWrapper', () => {
 
         var mock = new MockAdapter(axios);
         const data = {
-            results: [{
-                'id': 1,
-                'name': 'deluxe',
-                'displayName': 'deluxe bed',
-                'description': 'DLX'
-            },
-            {
-                'id': 2,
-                'name': 'luxury',
-                'displayName': 'luxury bed',
-                'description': 'LXY'
-            },
-            {
-                'id': 3,
-                'name': 'dbl',
-                'displayName': 'double bed',
-                'description': 'deluxe'
-            }]
+            results: [
+                {
+                    id: 1,
+                    name: 'deluxe',
+                    displayName: 'deluxe bed',
+                    description: 'DLX'
+                },
+                {
+                    id: 2,
+                    name: 'luxury',
+                    displayName: 'luxury bed',
+                    description: 'LXY'
+                },
+                {
+                    id: 3,
+                    name: 'dbl',
+                    displayName: 'double bed',
+                    description: 'deluxe'
+                }
+            ]
         };
 
-        mock.onGet('https://192.168.33.10/openmrs/ws/rest/v1/bedtype')
-            .reply(200, data);
+        mock.onGet('https://192.168.33.10/openmrs/ws/rest/v1/bedtype').reply(200, data);
     });
 
-    it('Should render bed Type page properly', async () =>{
-        let bedTypeWrapper = shallow(<BedTypeWrapper match={testProps.match}/>);
+    it('Should render bed Type page properly', async () => {
+        let bedTypeWrapper = shallow(<BedTypeWrapper match={testProps.match} />);
         const bedTypeFunctions = bedTypeWrapper.instance().bedTypeFunctions;
 
         await testProps.sleep(100);
@@ -74,26 +75,32 @@ describe('BedTypeWrapper', () => {
         expect(shallowToJson(bedTypeWrapper)).toMatchSnapshot();
     });
 
-    it('Should work functions properly', async () =>{
-        const bedTypeWrapper = shallow(<BedTypeWrapper match={testProps.match}/>);
+    it('Should work functions properly', async () => {
+        const bedTypeWrapper = shallow(<BedTypeWrapper match={testProps.match} />);
         const bedTypeFunctions = bedTypeWrapper.instance().bedTypeFunctions;
 
         expect(bedTypeFunctions.getBedTypes()).toEqual([]);
 
         await testProps.sleep(100);
         expect(bedTypeFunctions.getBedTypes()).toEqual([
-            { id: 1,
+            {
+                id: 1,
                 name: 'deluxe',
                 displayName: 'deluxe bed',
-                description: 'DLX' },
-            { id: 2,
+                description: 'DLX'
+            },
+            {
+                id: 2,
                 name: 'luxury',
                 displayName: 'luxury bed',
-                description: 'LXY' },
-            { id: 3,
+                description: 'LXY'
+            },
+            {
+                id: 3,
                 name: 'dbl',
                 displayName: 'double bed',
-                description: 'deluxe' }
+                description: 'deluxe'
+            }
         ]);
 
         expect(bedTypeFunctions.getBedTypeById(2)).toEqual({
@@ -110,7 +117,6 @@ describe('BedTypeWrapper', () => {
             name: 'deluxe'
         });
 
-
         bedTypeFunctions.setState({
             activePage: 'addEdit',
             pageData: {
@@ -125,5 +131,4 @@ describe('BedTypeWrapper', () => {
             bedTypeId: null
         });
     });
-
 });

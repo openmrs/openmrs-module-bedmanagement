@@ -11,7 +11,8 @@ export default class LocationHierarchy extends React.Component {
 
         this.admissionLocationHelper = new AdmissionLocationHelper();
         this.higherLevelAdmissionLocations = this.admissionLocationHelper.getHigherLevelAdmissionLocations(
-            props.admissionLocationFunctions.getAdmissionLocations());
+            props.admissionLocationFunctions.getAdmissionLocations()
+        );
         this.onClickTitle = this.onClickTitle.bind(this);
         this.onClickIcon = this.onClickIcon.bind(this);
     }
@@ -68,32 +69,38 @@ export default class LocationHierarchy extends React.Component {
         });
     }
 
-    componentWillUpdate(nextProps, nextState){
+    componentWillUpdate(nextProps, nextState) {
         this.higherLevelAdmissionLocations = this.admissionLocationHelper.getHigherLevelAdmissionLocations(
-            this.props.admissionLocationFunctions.getAdmissionLocations());
+            this.props.admissionLocationFunctions.getAdmissionLocations()
+        );
     }
 
     render() {
-        return <div className="left-container">
-            <ul>
-                <li className="title">
-                    <i className="fa fa-minus-square" onClick={this.onClickIcon} aria-hidden="true"></i>
-                    <span className={this.cssClass.getTitleClass()}
-                        onClick={this.onClickTitle}> Admission Locations </span>
-                </li>
-                {
-                    Object.keys(this.higherLevelAdmissionLocations)
-                        .map((uuid) => <HierarchyItem key={uuid}
+        return (
+            <div className="left-container">
+                <ul>
+                    <li className="title">
+                        <i className="fa fa-minus-square" onClick={this.onClickIcon} aria-hidden="true" />
+                        <span className={this.cssClass.getTitleClass()} onClick={this.onClickTitle}>
+                            {' '}
+                            Admission Locations{' '}
+                        </span>
+                    </li>
+                    {Object.keys(this.higherLevelAdmissionLocations).map((uuid) => (
+                        <HierarchyItem
+                            key={uuid}
                             isParentOpen={this.props.isOpen}
                             hierarchyFunction={this.hierarchyFunction}
-                            admissionLocation={this.higherLevelAdmissionLocations[uuid]}/>)
-                }
-            </ul>
-        </div>;
+                            admissionLocation={this.higherLevelAdmissionLocations[uuid]}
+                        />
+                    ))}
+                </ul>
+            </div>
+        );
     }
 }
 
 LocationHierarchy.propTypes = {
     isOpen: PropTypes.bool.isRequired,
-    admissionLocationFunctions : PropTypes.object.isRequired
+    admissionLocationFunctions: PropTypes.object.isRequired
 };

@@ -107,7 +107,9 @@ exports[`BedTagList Should render bed tag list properly 1`] = `
     onClick={[Function]}
     value="Add New"
   >
-     Add New 
+     
+    Add New
+     
   </button>
 </fieldset>
 `;

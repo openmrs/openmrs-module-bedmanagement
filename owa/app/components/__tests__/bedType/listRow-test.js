@@ -10,11 +10,25 @@ const testProps = {
 };
 
 describe('BedTypeListRow', () => {
-    it('Should render bed Type list properly', () =>{
-        const bedTypeListRow = mount(<table><tbody><BedTypeListRow bedType={testProps.bedTypeFunctions.getBedTypeById(2)}
-            bedTypeFunctions={testProps.bedTypeFunctions}/></tbody></table>);
+    it('Should render bed Type list properly', () => {
+        const bedTypeListRow = mount(
+            <table>
+                <tbody>
+                    <BedTypeListRow
+                        bedType={testProps.bedTypeFunctions.getBedTypeById(2)}
+                        bedTypeFunctions={testProps.bedTypeFunctions}
+                    />
+                </tbody>
+            </table>
+        );
 
-        expect(bedTypeListRow.find('td').at(0).text().trim()).toBe('luxury');
+        expect(
+            bedTypeListRow
+                .find('td')
+                .at(0)
+                .text()
+                .trim()
+        ).toBe('luxury');
         expect(shallowToJson(bedTypeListRow)).toMatchSnapshot();
     });
 
@@ -22,8 +36,16 @@ describe('BedTypeListRow', () => {
         const spyOnDeleteHandler = jest.spyOn(BedTypeListRow.prototype, 'deleteHandler');
         const spyOnEditHandler = jest.spyOn(BedTypeListRow.prototype, 'editHandler');
         const spyOnSetState = jest.spyOn(testProps.bedTypeFunctions, 'setState');
-        const bedTypeList = mount(<table><tbody><BedTypeListRow bedType={testProps.bedTypeFunctions.getBedTypeById(2)}
-            bedTypeFunctions={testProps.bedTypeFunctions}/></tbody></table>);
+        const bedTypeList = mount(
+            <table>
+                <tbody>
+                    <BedTypeListRow
+                        bedType={testProps.bedTypeFunctions.getBedTypeById(2)}
+                        bedTypeFunctions={testProps.bedTypeFunctions}
+                    />
+                </tbody>
+            </table>
+        );
 
         bedTypeList.find('.fa-edit').simulate('click');
         expect(spyOnEditHandler).toHaveBeenCalled();

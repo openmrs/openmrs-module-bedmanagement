@@ -16,7 +16,10 @@ export default class AddEditAdmissionLocation extends React.Component {
         this.state = {
             uuid: this.admissionLocation != null ? this.admissionLocation.uuid : null,
             name: this.admissionLocation != null ? this.admissionLocation.name : '',
-            description: this.admissionLocation != null && this.admissionLocation.description != null ? this.admissionLocation.description : '',
+            description:
+                this.admissionLocation != null && this.admissionLocation.description != null
+                    ? this.admissionLocation.description
+                    : '',
             parentAdmissionLocationUuid: this.parentAdmissionLocationUuid,
             disableSubmit: false
         };
@@ -29,13 +32,19 @@ export default class AddEditAdmissionLocation extends React.Component {
     }
 
     initData() {
-        this.admissionLocation = this.props.operation == 'add' ? null :
-            this.props.admissionLocationFunctions.getAdmissionLocationByUuid(this.props.activeUuid);
-        this.parentAdmissionLocationUuid = this.props.operation == 'add' ? this.props.activeUuid
-            : (this.admissionLocation != null ? this.admissionLocation.parentAdmissionLocationUuid : null);
+        this.admissionLocation =
+            this.props.operation == 'add'
+                ? null
+                : this.props.admissionLocationFunctions.getAdmissionLocationByUuid(this.props.activeUuid);
+        this.parentAdmissionLocationUuid =
+            this.props.operation == 'add'
+                ? this.props.activeUuid
+                : this.admissionLocation != null ? this.admissionLocation.parentAdmissionLocationUuid : null;
         this.visitLocations = this.props.admissionLocationFunctions.getVisitLocations();
-        this.parentAdmissionLocation = this.parentAdmissionLocationUuid != null ?
-            this.props.admissionLocationFunctions.getAdmissionLocationByUuid(this.parentAdmissionLocationUuid) : null;
+        this.parentAdmissionLocation =
+            this.parentAdmissionLocationUuid != null
+                ? this.props.admissionLocationFunctions.getAdmissionLocationByUuid(this.parentAdmissionLocationUuid)
+                : null;
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -83,72 +92,114 @@ export default class AddEditAdmissionLocation extends React.Component {
 
         axios({
             method: 'post',
-            url: this.urlHelper.apiBaseUrl() + (this.state.uuid != null ? '/admissionLocation/' + this.state.uuid : '/admissionLocation'),
+            url:
+                this.urlHelper.apiBaseUrl() +
+                (this.state.uuid != null ? '/admissionLocation/' + this.state.uuid : '/admissionLocation'),
             headers: {'Content-Type': 'application/json'},
-            data: parameters,
-        }).then(function (response) {
-            self.setState({
-                disableSubmit: false
-            });
-            self.props.admissionLocationFunctions.setState({
-                activeUuid: response.data.ward.uuid
-            });
+            data: parameters
+        })
+            .then(function(response) {
+                self.setState({
+                    disableSubmit: false
+                });
+                self.props.admissionLocationFunctions.setState({
+                    activeUuid: response.data.ward.uuid
+                });
 
-            self.props.admissionLocationFunctions.notify('success', 'Admission location save successfully');
-            self.props.admissionLocationFunctions.reFetchAllAdmissionLocations();
-            self.props.admissionLocationFunctions.setState({
-                activePage: 'listing',
-                pageData: {},
-                activeUuid: self.parentAdmissionLocation != null ? self.parentAdmissionLocation.uuid : null
+                self.props.admissionLocationFunctions.notify('success', 'Admission location save successfully');
+                self.props.admissionLocationFunctions.reFetchAllAdmissionLocations();
+                self.props.admissionLocationFunctions.setState({
+                    activePage: 'listing',
+                    pageData: {},
+                    activeUuid: self.parentAdmissionLocation != null ? self.parentAdmissionLocation.uuid : null
+                });
+            })
+            .catch(function(error) {
+                this.setState({
+                    disableSubmit: false
+                });
+                self.props.admissionLocationFunctions.notify('error', error.message);
             });
-        }).catch(function (error) {
-            this.setState({
-                disableSubmit: false
-            });
-            self.props.admissionLocationFunctions.notify('error', error.message);
-        });
     }
 
     render() {
-        return <div className="main-container">
-            <fieldset className="admission-location-form">
-                <legend>&nbsp; {this.props.operation == 'add' ? 'Add' : 'Edit'} Ward &nbsp;</legend>
-                <div className="block-content">
-                    <form onSubmit={this.onSubmitHandler}>
-                        <div className="form-block">
-                            {this.parentAdmissionLocation != null ? <label className="form-title inline">Parent Location:</label>:
-                                <label className="form-title">Parent Location:</label>}
-                            {this.parentAdmissionLocation != null ? <span>{this.parentAdmissionLocation.name}</span> :
-                                <select name="parent-location" onChange={this.onSelectParentLocation}
-                                    ref={(dropDown) => this.parentSelector = dropDown}
-                                    value={this.state.parentAdmissionLocationUuid != null ? this.state.parentAdmissionLocationUuid : ''}>
-                                    <option value="">None</option>
-                                    {Object.keys(this.visitLocations).map((key) =>
-                                        <option key={key} value={this.visitLocations[key].uuid}>
-                                            {this.visitLocations[key].name}
-                                        </option>)}
-                                </select>}
-                        </div>
-                        <div className="form-block">
-                            <label className="form-title">Name:</label>
-                            <input type="text" onChange={this.onChangeNameField} value={this.state.name} required={true}
-                                ref={(input) => {this.nameField = input;}}/>
-                        </div>
-                        <div className="form-block">
-                            <label className="form-title">Description:</label>
-                            <textarea name="description" rows="4" cols="50" onChange={this.onChangeDescriptionField}
-                                value={this.state.description} ref={(textArea) => this.descriptionField = textArea}></textarea>
-                        </div>
-                        <div className="form-block">
-                            <input type="submit" name="submit" value={this.state.disableSubmit ? 'Saving...' : 'Save'}
-                                disabled={this.state.disableSubmit} className="form-btn float-left margin-right"/>
-                            <input type="button" onClick={this.cancelEventHandler} name="cancel" value="Cancel"
-                                className="form-btn float-left"/>
-                        </div>
-                    </form>
-                </div>
-            </fieldset>
-        </div>;
+        return (
+            <div className="main-container">
+                <fieldset className="admission-location-form">
+                    <legend>&nbsp; {this.props.operation == 'add' ? 'Add' : 'Edit'} Ward &nbsp;</legend>
+                    <div className="block-content">
+                        <form onSubmit={this.onSubmitHandler}>
+                            <div className="form-block">
+                                {this.parentAdmissionLocation != null ? (
+                                    <label className="form-title inline">Parent Location:</label>
+                                ) : (
+                                    <label className="form-title">Parent Location:</label>
+                                )}
+                                {this.parentAdmissionLocation != null ? (
+                                    <span>{this.parentAdmissionLocation.name}</span>
+                                ) : (
+                                    <select
+                                        name="parent-location"
+                                        onChange={this.onSelectParentLocation}
+                                        ref={(dropDown) => (this.parentSelector = dropDown)}
+                                        value={
+                                            this.state.parentAdmissionLocationUuid != null
+                                                ? this.state.parentAdmissionLocationUuid
+                                                : ''
+                                        }>
+                                        <option value="">None</option>
+                                        {Object.keys(this.visitLocations).map((key) => (
+                                            <option key={key} value={this.visitLocations[key].uuid}>
+                                                {this.visitLocations[key].name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+                            </div>
+                            <div className="form-block">
+                                <label className="form-title">Name:</label>
+                                <input
+                                    type="text"
+                                    onChange={this.onChangeNameField}
+                                    value={this.state.name}
+                                    required={true}
+                                    ref={(input) => {
+                                        this.nameField = input;
+                                    }}
+                                />
+                            </div>
+                            <div className="form-block">
+                                <label className="form-title">Description:</label>
+                                <textarea
+                                    name="description"
+                                    rows="4"
+                                    cols="50"
+                                    onChange={this.onChangeDescriptionField}
+                                    value={this.state.description}
+                                    ref={(textArea) => (this.descriptionField = textArea)}
+                                />
+                            </div>
+                            <div className="form-block">
+                                <input
+                                    type="submit"
+                                    name="submit"
+                                    value={this.state.disableSubmit ? 'Saving...' : 'Save'}
+                                    disabled={this.state.disableSubmit}
+                                    className="form-btn float-left margin-right"
+                                />
+                                <input
+                                    type="button"
+                                    onClick={this.cancelEventHandler}
+                                    name="cancel"
+                                    value="Cancel"
+                                    className="form-btn float-left"
+                                />
+                            </div>
+                        </form>
+                    </div>
+                </fieldset>
+            </div>
+        );
     }
 }
 

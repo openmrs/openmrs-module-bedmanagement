@@ -18,24 +18,42 @@ describe('LocationBlock', () => {
         var mock = new MockAdapter(axios);
         const data = {};
 
-        mock.onDelete('https://192.168.33.10/openmrs/ws/rest/v1/admissionLocation/baf7bd38-d225-11e4-9c67-080027b662ec')
+        mock
+            .onDelete('https://192.168.33.10/openmrs/ws/rest/v1/admissionLocation/baf7bd38-d225-11e4-9c67-080027b662ec')
             .reply(200, data);
-
     });
 
     it('Should display location block properly', () => {
-        const generalWardLocationBlock = shallow(<LocationBlock activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-            admissionLocation={testProps.admissionLocations['baf7bd38-d225-11e4-9c67-080027b662ec']}
-            admissionLocationFunctions={testProps.admissionLocationFunctions} />);
+        const generalWardLocationBlock = shallow(
+            <LocationBlock
+                activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
+                admissionLocation={testProps.admissionLocations['baf7bd38-d225-11e4-9c67-080027b662ec']}
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
 
-        expect(generalWardLocationBlock.find('span').text().trim()).toBe('General Ward');
+        expect(
+            generalWardLocationBlock
+                .find('span')
+                .text()
+                .trim()
+        ).toBe('General Ward');
         expect(shallowToJson(generalWardLocationBlock)).toMatchSnapshot();
 
-        const labourWardLocationBlock = shallow(<LocationBlock activeUuid="bb0e512e-d225-11e4-9c67-080027b662ec"
-            admissionLocation={testProps.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
-            admissionLocationFunctions={testProps.admissionLocationFunctions} />);
+        const labourWardLocationBlock = shallow(
+            <LocationBlock
+                activeUuid="bb0e512e-d225-11e4-9c67-080027b662ec"
+                admissionLocation={testProps.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
 
-        expect(labourWardLocationBlock.find('span').text().trim()).toBe('Labour Ward');
+        expect(
+            labourWardLocationBlock
+                .find('span')
+                .text()
+                .trim()
+        ).toBe('Labour Ward');
         expect(shallowToJson(labourWardLocationBlock)).toMatchSnapshot();
     });
 
@@ -44,9 +62,13 @@ describe('LocationBlock', () => {
         const spyOnEditWardClickHandler = jest.spyOn(LocationBlock.prototype, 'editWardClickHandler');
         const spyOnDeleteHandler = jest.spyOn(LocationBlock.prototype, 'onDeleteHandler');
         const spySetState = jest.spyOn(testProps.admissionLocationFunctions, 'setState');
-        const generalWardLocationBlock = mount(<LocationBlock activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-            admissionLocation={testProps.admissionLocations['baf7bd38-d225-11e4-9c67-080027b662ec']}
-            admissionLocationFunctions={testProps.admissionLocationFunctions} />);
+        const generalWardLocationBlock = mount(
+            <LocationBlock
+                activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
+                admissionLocation={testProps.admissionLocations['baf7bd38-d225-11e4-9c67-080027b662ec']}
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
 
         generalWardLocationBlock.find('.location.block').simulate('click');
         expect(spyOnClickHandler).toHaveBeenCalled();
@@ -66,11 +88,14 @@ describe('LocationBlock', () => {
             activeUuid: 'baf7bd38-d225-11e4-9c67-080027b662ec'
         });
 
-        const labourWardLocationBlock = mount(<LocationBlock activeUuid="bb0e512e-d225-11e4-9c67-080027b662ec"
-            admissionLocation={testProps.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
-            admissionLocationFunctions={testProps.admissionLocationFunctions} />);
+        const labourWardLocationBlock = mount(
+            <LocationBlock
+                activeUuid="bb0e512e-d225-11e4-9c67-080027b662ec"
+                admissionLocation={testProps.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
         labourWardLocationBlock.find('.fa-trash').simulate('click');
         expect(spyOnDeleteHandler).toHaveBeenCalled();
     });
-
 });

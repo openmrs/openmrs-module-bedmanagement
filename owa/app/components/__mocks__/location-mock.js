@@ -1,29 +1,29 @@
 Object.defineProperties(window.location, {
-    host : {
+    host: {
         writable: true,
         value: '192.168.33.10'
     },
-    hostname : {
+    hostname: {
         writable: true,
         value: '192.168.33.10'
     },
-    href :{
+    href: {
         writable: true,
         value: 'https://192.168.33.10/openmrs/owa/bedmanagement/admissionLocations.html'
     },
-    origin :{
+    origin: {
         writable: true,
         value: 'https://192.168.33.10'
     },
-    pathname :{
+    pathname: {
         writable: true,
         value: '/openmrs/owa/bedmanagement/admissionLocations.html'
     },
-    port :{
+    port: {
         writable: true,
         value: ''
     },
-    protocol :{
+    protocol: {
         writable: true,
         value: 'https:'
     }

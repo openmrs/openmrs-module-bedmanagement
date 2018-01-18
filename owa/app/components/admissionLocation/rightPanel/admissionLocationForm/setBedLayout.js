@@ -5,7 +5,7 @@ import axios from 'axios';
 import UrlHelper from 'utilities/urlHelper';
 
 require('./admissionLocationForm.css');
-export default class SetBedLayout extends React.Component{
+export default class SetBedLayout extends React.Component {
     constructor(props) {
         super(props);
         this.initData = this.initData.bind(this);
@@ -32,7 +32,9 @@ export default class SetBedLayout extends React.Component{
     }
 
     initData() {
-        this.admissionLocation = this.props.admissionLocationFunctions.getAdmissionLocationByUuid(this.props.activeUuid);
+        this.admissionLocation = this.props.admissionLocationFunctions.getAdmissionLocationByUuid(
+            this.props.activeUuid
+        );
     }
 
     onChangeRowField() {
@@ -88,7 +90,7 @@ export default class SetBedLayout extends React.Component{
 
     onSubmitHandler(event) {
         event.preventDefault();
-        if(this.state.rowFieldError != '' || this.state.columnFieldError != ''){
+        if (this.state.rowFieldError != '' || this.state.columnFieldError != '') {
             this.props.admissionLocationFunctions.notify('error', 'Fix error before submit');
             return;
         }
@@ -111,56 +113,97 @@ export default class SetBedLayout extends React.Component{
                 v: 'layout'
             },
             headers: {'Content-Type': 'application/json'},
-            data: parameters,
-        }).then(function (response) {
-            self.setState({
-                disableSubmit: false
+            data: parameters
+        })
+            .then(function(response) {
+                self.setState({
+                    disableSubmit: false
+                });
+                self.props.admissionLocationFunctions.notify(
+                    'success',
+                    'Admission location bed layout save successfully'
+                );
+                self.props.admissionLocationFunctions.setState({
+                    activePage: 'listing',
+                    activeUuid: self.props.activeUuid
+                });
+            })
+            .catch(function(error) {
+                self.setState({
+                    disableSubmit: false
+                });
+                self.props.admissionLocationFunctions.notify('error', error.message);
             });
-            self.props.admissionLocationFunctions.notify('success', 'Admission location bed layout save successfully');
-            self.props.admissionLocationFunctions.setState({
-                activePage: 'listing',
-                activeUuid: self.props.activeUuid
-            });
-        }).catch(function (error) {
-            self.setState({
-                disableSubmit: false
-            });
-            self.props.admissionLocationFunctions.notify('error', error.message);
-        });
     }
 
-    render(){
-        return <div className="main-container">
-            <fieldset className="admission-location-form">
-                <legend>&nbsp; Set Layout &nbsp;</legend>
-                <div className="block-content">
-                    <form onSubmit={this.onSubmitHandler}>
-                        <div className="form-block">
-                            <label className="form-title inline">Location:</label>
-                            <span>{this.admissionLocation.name}</span>
-                        </div>
-                        <div className="form-block">
-                            <label className="form-title">Rows:</label>
-                            <input type="number" value={this.state.row} ref={(input) => {this.rowField = input;}}
-                                required={true} onChange={this.onChangeRowField} id="row-field"/>
-                            {this.state.rowFieldError != '' ? <p className="error">{this.state.rowFieldError}</p> : ''}
-                        </div>
-                        <div className="form-block">
-                            <label className="form-title">Column:</label>
-                            <input type="number" value={this.state.column} ref={(input) => {this.columnField = input;}}
-                                required={true} onChange={this.onChangeColumnField} id="column-field"/>
-                            {this.state.columnFieldError != '' ? <p className="error">{this.state.columnFieldError}</p> : ''}
-                        </div>
-                        <div className="form-block">
-                            <input type="submit" name="submit" value={this.state.disableSubmit ? 'Saving...' : 'Save'}
-                                disabled={this.state.disableSubmit} className="form-btn float-left margin-right"/>
-                            <input type="button" onClick={this.cancelEventHandler}
-                                name="cancel" value="Cancel" className="form-btn float-left"/>
-                        </div>
-                    </form>
-                </div>
-            </fieldset>
-        </div>;
+    render() {
+        return (
+            <div className="main-container">
+                <fieldset className="admission-location-form">
+                    <legend>&nbsp; Set Layout &nbsp;</legend>
+                    <div className="block-content">
+                        <form onSubmit={this.onSubmitHandler}>
+                            <div className="form-block">
+                                <label className="form-title inline">Location:</label>
+                                <span>{this.admissionLocation.name}</span>
+                            </div>
+                            <div className="form-block">
+                                <label className="form-title">Rows:</label>
+                                <input
+                                    type="number"
+                                    value={this.state.row}
+                                    ref={(input) => {
+                                        this.rowField = input;
+                                    }}
+                                    required={true}
+                                    onChange={this.onChangeRowField}
+                                    id="row-field"
+                                />
+                                {this.state.rowFieldError != '' ? (
+                                    <p className="error">{this.state.rowFieldError}</p>
+                                ) : (
+                                    ''
+                                )}
+                            </div>
+                            <div className="form-block">
+                                <label className="form-title">Column:</label>
+                                <input
+                                    type="number"
+                                    value={this.state.column}
+                                    ref={(input) => {
+                                        this.columnField = input;
+                                    }}
+                                    required={true}
+                                    onChange={this.onChangeColumnField}
+                                    id="column-field"
+                                />
+                                {this.state.columnFieldError != '' ? (
+                                    <p className="error">{this.state.columnFieldError}</p>
+                                ) : (
+                                    ''
+                                )}
+                            </div>
+                            <div className="form-block">
+                                <input
+                                    type="submit"
+                                    name="submit"
+                                    value={this.state.disableSubmit ? 'Saving...' : 'Save'}
+                                    disabled={this.state.disableSubmit}
+                                    className="form-btn float-left margin-right"
+                                />
+                                <input
+                                    type="button"
+                                    onClick={this.cancelEventHandler}
+                                    name="cancel"
+                                    value="Cancel"
+                                    className="form-btn float-left"
+                                />
+                            </div>
+                        </form>
+                    </div>
+                </fieldset>
+            </div>
+        );
     }
 }
 

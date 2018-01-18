@@ -11,8 +11,10 @@ const testProps = {
 };
 
 describe('BedTypeList', () => {
-    it('Should render bed Type list properly', () =>{
-        const bedTypeList = shallow(<BedTypeList bedTypes={testProps.bedTypes} bedTypeFunctions={testProps.bedTypeFunctions}/>);
+    it('Should render bed Type list properly', () => {
+        const bedTypeList = shallow(
+            <BedTypeList bedTypes={testProps.bedTypes} bedTypeFunctions={testProps.bedTypeFunctions} />
+        );
 
         expect(bedTypeList.find('BedTypeListRow').length).toBe(3);
         expect(shallowToJson(bedTypeList)).toMatchSnapshot();
@@ -21,9 +23,11 @@ describe('BedTypeList', () => {
     it('Should trigger event handler', () => {
         const spyOnAddNewHandler = jest.spyOn(BedTypeList.prototype, 'addNewHandler');
         const spyOnSetState = jest.spyOn(testProps.bedTypeFunctions, 'setState');
-        const bedTypeList = mount(<BedTypeList bedTypes={testProps.bedTypes} bedTypeFunctions={testProps.bedTypeFunctions}/>);
+        const bedTypeList = mount(
+            <BedTypeList bedTypes={testProps.bedTypes} bedTypeFunctions={testProps.bedTypeFunctions} />
+        );
 
-        bedTypeList.find('button[value=\'Add New\']').simulate('click');
+        bedTypeList.find("button[value='Add New']").simulate('click');
         expect(spyOnAddNewHandler).toHaveBeenCalled();
         expect(spyOnSetState).toHaveBeenCalledWith({
             activePage: 'addEdit',

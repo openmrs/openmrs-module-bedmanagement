@@ -35,11 +35,21 @@ export default class BedLayoutRow extends React.Component {
     }
 
     render() {
-        return <div className="bed-layout-row"> {this.rowBeds.map((bed, key) =>
-            <BedBlock key={key} bed={bed} layoutRow={this.props.layoutColumn} layoutColumn={this.props.layoutColumn}
-                admissionLocationFunctions={this.props.admissionLocationFunctions}
-                loadAdmissionLocationLayout={this.props.loadAdmissionLocationLayout}/>)}
-        </div>;
+        return (
+            <div className="bed-layout-row">
+                {' '}
+                {this.rowBeds.map((bed, key) => (
+                    <BedBlock
+                        key={key}
+                        bed={bed}
+                        layoutRow={this.props.layoutColumn}
+                        layoutColumn={this.props.layoutColumn}
+                        admissionLocationFunctions={this.props.admissionLocationFunctions}
+                        loadAdmissionLocationLayout={this.props.loadAdmissionLocationLayout}
+                    />
+                ))}
+            </div>
+        );
     }
 }
 

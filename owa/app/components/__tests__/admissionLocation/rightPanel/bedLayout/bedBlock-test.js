@@ -36,16 +36,40 @@ const testProps = {
 
 describe('BedBlock', () => {
     it('Should render bed block properly', () => {
-        const bedBlock = shallow(<BedBlock bed={testProps.bed} admissionLocationFunctions={testProps.admissionLocationFunctions}
-            layoutRow={3} layoutColumn={3} loadAdmissionLocationLayout={testProps.loadAdmissionLocationLayout}/>);
+        const bedBlock = shallow(
+            <BedBlock
+                bed={testProps.bed}
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+                layoutRow={3}
+                layoutColumn={3}
+                loadAdmissionLocationLayout={testProps.loadAdmissionLocationLayout}
+            />
+        );
 
-        expect(bedBlock.find('span').text().trim()).toBe('306-a');
+        expect(
+            bedBlock
+                .find('span')
+                .text()
+                .trim()
+        ).toBe('306-a');
         expect(shallowToJson(bedBlock)).toMatchSnapshot();
 
-        const noBedBlock = shallow(<BedBlock bed={testProps.nullBed} admissionLocationFunctions={testProps.admissionLocationFunctions}
-            layoutRow={3} layoutColumn={3} loadAdmissionLocationLayout={testProps.loadAdmissionLocationLayout}/>);
+        const noBedBlock = shallow(
+            <BedBlock
+                bed={testProps.nullBed}
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+                layoutRow={3}
+                layoutColumn={3}
+                loadAdmissionLocationLayout={testProps.loadAdmissionLocationLayout}
+            />
+        );
 
-        expect(noBedBlock.find('span').text().trim()).toBe('Add Bed');
+        expect(
+            noBedBlock
+                .find('span')
+                .text()
+                .trim()
+        ).toBe('Add Bed');
         expect(shallowToJson(noBedBlock)).toMatchSnapshot();
     });
 
@@ -53,8 +77,15 @@ describe('BedBlock', () => {
         const sypOnAddEditBedHandler = jest.spyOn(BedBlock.prototype, 'addEditBedHandler');
         const sypOnDeleteHandler = jest.spyOn(BedBlock.prototype, 'onDeleteHandler');
         const spyOnSetState = jest.spyOn(testProps.admissionLocationFunctions, 'setState');
-        const bedBlock = mount(<BedBlock bed={testProps.bed} admissionLocationFunctions={testProps.admissionLocationFunctions}
-            layoutRow={3} layoutColumn={3} loadAdmissionLocationLayout={testProps.loadAdmissionLocationLayout}/>);
+        const bedBlock = mount(
+            <BedBlock
+                bed={testProps.bed}
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+                layoutRow={3}
+                layoutColumn={3}
+                loadAdmissionLocationLayout={testProps.loadAdmissionLocationLayout}
+            />
+        );
 
         bedBlock.find('.fa-trash').simulate('click');
         expect(sypOnDeleteHandler).toHaveBeenCalled();

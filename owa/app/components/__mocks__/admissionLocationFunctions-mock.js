@@ -18,20 +18,21 @@ const admissionLocationFunctionsMock = {
         return bedTypes;
     },
     getAdmissionLocationByUuid: (admissionLocationUuid) => {
-        return typeof admissionLocations[admissionLocationUuid] !== 'undefined' ?
-            admissionLocations[admissionLocationUuid] : null;
+        return typeof admissionLocations[admissionLocationUuid] !== 'undefined'
+            ? admissionLocations[admissionLocationUuid]
+            : null;
     },
     getParentAdmissionLocation: (admissionLocationUuid) => {
         const parentAdmissionLocationUuid = admissionLocations[admissionLocationUuid].parentAdmissionLocationUuid;
         return parentAdmissionLocationUuid != null ? admissionLocations[parentAdmissionLocationUuid] : null;
     },
-    getChildAdmissionLocations : (admissionLocationUuid) => {
-        return  pickBy(admissionLocations, (admissionLocation) => {
+    getChildAdmissionLocations: (admissionLocationUuid) => {
+        return pickBy(admissionLocations, (admissionLocation) => {
             return admissionLocation.parentAdmissionLocationUuid == admissionLocationUuid;
         });
     },
-    reFetchAllAdmissionLocations : () => jest.fn(),
-    notify : (notifyType, message) => jest.fn()
+    reFetchAllAdmissionLocations: () => jest.fn(),
+    notify: (notifyType, message) => jest.fn()
 };
 
 export default admissionLocationFunctionsMock;

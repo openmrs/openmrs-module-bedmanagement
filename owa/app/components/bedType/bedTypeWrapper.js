@@ -38,28 +38,31 @@ export default class BedTypeWrapper extends React.Component {
             return this.state.bedTypes;
         },
         getBedTypeById: (bedTypeId) => {
-            return _.find(this.state.bedTypes, function (bedType) {
+            return _.find(this.state.bedTypes, function(bedType) {
                 return bedType.id == bedTypeId;
             });
         },
         getBedTypeName: (bedTypeName) => {
-            return _.find(this.state.bedTypes, function (bedType) {
+            return _.find(this.state.bedTypes, function(bedType) {
                 return bedType.name == bedTypeName;
             });
         },
         fetchBedTypes: () => {
             const self = this;
-            axios.get(this.urlHelper.apiBaseUrl() + '/bedtype', {
-                params: {
-                    v: 'full'
-                }
-            }).then(function (response) {
-                self.setState({
-                    bedTypes: response.data.results
+            axios
+                .get(this.urlHelper.apiBaseUrl() + '/bedtype', {
+                    params: {
+                        v: 'full'
+                    }
+                })
+                .then(function(response) {
+                    self.setState({
+                        bedTypes: response.data.results
+                    });
+                })
+                .catch(function(error) {
+                    self.admissionLocationFunctions.notify('error', error.message);
                 });
-            }).catch(function (error) {
-                self.admissionLocationFunctions.notify('error', error.message);
-            });
         },
         notify: (notifyType, message) => {
             const self = this;
@@ -84,17 +87,23 @@ export default class BedTypeWrapper extends React.Component {
     };
 
     render() {
-        return <div>
-            <ReactNotify ref='notificator'/>
-            <Header path={this.props.match.path}/>
-            <div style={this.style.wrapper}>
-                {this.state.activePage == 'listing' ?
-                    <BedTypeList bedTypes={this.state.bedTypes} bedTypeFunctions={this.bedTypeFunctions}/> :
-                    <AddEditBedType bedTypeFunctions={this.bedTypeFunctions} bedTypeId={this.state.pageData.bedTypeId}
-                        operation={this.state.pageData.operation}/>
-                }
+        return (
+            <div>
+                <ReactNotify ref="notificator" />
+                <Header path={this.props.match.path} />
+                <div style={this.style.wrapper}>
+                    {this.state.activePage == 'listing' ? (
+                        <BedTypeList bedTypes={this.state.bedTypes} bedTypeFunctions={this.bedTypeFunctions} />
+                    ) : (
+                        <AddEditBedType
+                            bedTypeFunctions={this.bedTypeFunctions}
+                            bedTypeId={this.state.pageData.bedTypeId}
+                            operation={this.state.pageData.operation}
+                        />
+                    )}
+                </div>
             </div>
-        </div>;
+        );
     }
 }
 
