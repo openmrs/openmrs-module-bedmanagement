@@ -14,7 +14,7 @@ const testProps = {
     addBedData: {
         bedId: null,
         bedNumber: null,
-        bedType:null,
+        bedType: null,
         bedUuid: null,
         columnNumber: 2,
         rowNumber: 1,
@@ -25,7 +25,7 @@ const testProps = {
     editBedData: {
         bedId: 42,
         bedNumber: '100-a',
-        bedType:{
+        bedType: {
             description: 'LXY',
             displayName: 'luxury bed',
             id: 2,
@@ -44,43 +44,67 @@ describe('AddEditBed', () => {
     beforeAll(() => {
         var mock = new MockAdapter(axios);
         const data = {
-            'id': 53,
-            'uuid': 'a3e42812-a4c1-4453-96cf-d45578d0fea9',
-            'bedNumber': '100-A',
-            'bedType': {
-                'id': 1,
-                'name': 'deluxe',
-                'displayName': 'deluxe bed',
-                'description': 'DLX'
+            id: 53,
+            uuid: 'a3e42812-a4c1-4453-96cf-d45578d0fea9',
+            bedNumber: '100-A',
+            bedType: {
+                id: 1,
+                name: 'deluxe',
+                displayName: 'deluxe bed',
+                description: 'DLX'
             },
-            'row': 2,
-            'column': 1,
-            'status': 'AVAILABLE'
+            row: 2,
+            column: 1,
+            status: 'AVAILABLE'
         };
 
-        mock.onPost('https://192.168.33.10/openmrs/ws/rest/v1/bed/a3e42812-a4c1-4453-96cf-d45578d0fea9')
+        mock
+            .onPost('https://192.168.33.10/openmrs/ws/rest/v1/bed/a3e42812-a4c1-4453-96cf-d45578d0fea9')
             .reply(200, data);
     });
 
     it('Should display add edit bed form properly', () => {
-        const addBedForm = shallow(<AddEditBed operation='add' layoutColumn={4} layoutRow={3}
-            activeUuid='baf7bd38-d225-11e4-9c67-080027b662ec' bed={testProps.addBedData}
-            bedTypes={testProps.admissionLocationFunctions.getBedTypes()}
-            admissionLocationFunctions={testProps.admissionLocationFunctions}/>);
+        const addBedForm = shallow(
+            <AddEditBed
+                operation="add"
+                layoutColumn={4}
+                layoutRow={3}
+                activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
+                bed={testProps.addBedData}
+                bedTypes={testProps.admissionLocationFunctions.getBedTypes()}
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
 
-        expect(addBedForm.find('#location-name').text().trim()).toBe('General Ward');
+        expect(
+            addBedForm
+                .find('#location-name')
+                .text()
+                .trim()
+        ).toBe('General Ward');
         expect(addBedForm.find('#row-field').props().value).toBe(1);
         expect(addBedForm.find('#column-field').props().value).toBe(2);
         expect(addBedForm.find('#bed-number-field').props().value).toBe('');
         expect(shallowToJson(addBedForm)).toMatchSnapshot();
 
+        const editBedForm = shallow(
+            <AddEditBed
+                operation="edit"
+                layoutColumn={4}
+                layoutRow={3}
+                activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
+                bed={testProps.editBedData}
+                bedTypes={testProps.admissionLocationFunctions.getBedTypes()}
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
 
-        const editBedForm = shallow(<AddEditBed operation='edit' layoutColumn={4} layoutRow={3}
-            activeUuid='baf7bd38-d225-11e4-9c67-080027b662ec' bed={testProps.editBedData}
-            bedTypes={testProps.admissionLocationFunctions.getBedTypes()}
-            admissionLocationFunctions={testProps.admissionLocationFunctions}/>);
-
-        expect(editBedForm.find('#location-name').text().trim()).toBe('General Ward');
+        expect(
+            editBedForm
+                .find('#location-name')
+                .text()
+                .trim()
+        ).toBe('General Ward');
         expect(editBedForm.find('#row-field').props().value).toBe(2);
         expect(editBedForm.find('#column-field').props().value).toBe(1);
         expect(editBedForm.find('#bed-number-field').props().value).toBe('100-a');
@@ -96,10 +120,17 @@ describe('AddEditBed', () => {
         const spnOnChangeBedNumberField = jest.spyOn(AddEditBed.prototype, 'onChangeBedNumberField');
         const spyOnChangeBedType = jest.spyOn(AddEditBed.prototype, 'onChangeBedType');
         const spySetState = jest.spyOn(testProps.admissionLocationFunctions, 'setState');
-        const editBedForm = mount(<AddEditBed operation='edit' layoutColumn={4} layoutRow={3}
-            activeUuid='baf7bd38-d225-11e4-9c67-080027b662ec' bed={testProps.editBedData}
-            bedTypes={testProps.admissionLocationFunctions.getBedTypes()}
-            admissionLocationFunctions={testProps.admissionLocationFunctions}/>);
+        const editBedForm = mount(
+            <AddEditBed
+                operation="edit"
+                layoutColumn={4}
+                layoutRow={3}
+                activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
+                bed={testProps.editBedData}
+                bedTypes={testProps.admissionLocationFunctions.getBedTypes()}
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
 
         editBedForm.find('#row-field').simulate('change');
         expect(spyOnChangeRowField).toHaveBeenCalled();
@@ -110,7 +141,7 @@ describe('AddEditBed', () => {
         editBedForm.find('#bed-type').simulate('change');
         expect(spyOnChangeBedType).toHaveBeenCalled();
 
-        editBedForm.find('input[name=\'cancel\']').simulate('click');
+        editBedForm.find("input[name='cancel']").simulate('click');
         expect(spyOnCancelEventHandler).toHaveBeenCalled();
         expect(spySetState).toHaveBeenCalledWith({
             activePage: 'listing',
@@ -118,8 +149,7 @@ describe('AddEditBed', () => {
             activeUuid: 'baf7bd38-d225-11e4-9c67-080027b662ec'
         });
 
-        editBedForm.find('input[type=\'submit\']').simulate('submit');
+        editBedForm.find("input[type='submit']").simulate('submit');
         expect(spyOnSubmitHandler).toHaveBeenCalled();
-
     });
 });

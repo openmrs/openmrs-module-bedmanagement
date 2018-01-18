@@ -9,8 +9,9 @@ export default class AdmissionLocationHelper {
      * @returns {object}
      */
     getAdmissionLocation = (admissionLocations, admissionLocationUuid) => {
-        return typeof admissionLocations[admissionLocationUuid] !== 'undefined' ?
-            admissionLocations[admissionLocationUuid] : null;
+        return typeof admissionLocations[admissionLocationUuid] !== 'undefined'
+            ? admissionLocations[admissionLocationUuid]
+            : null;
     };
 
     /**
@@ -33,7 +34,7 @@ export default class AdmissionLocationHelper {
      * @returns {object}
      */
     getChildAdmissionLocations = (admissionLocations, parentUuid) => {
-        if(parentUuid == null){
+        if (parentUuid == null) {
             return this.getHigherLevelAdmissionLocations(admissionLocations);
         }
 
@@ -51,7 +52,9 @@ export default class AdmissionLocationHelper {
      */
     getParentAdmissionLocation = (admissionLocations, admissionLocationUuid) => {
         const parentAdmissionLocationUuid = admissionLocations[admissionLocationUuid].parentAdmissionLocationUuid;
-        return typeof admissionLocations[parentAdmissionLocationUuid] != 'undefined' ? admissionLocations[parentAdmissionLocationUuid] : null;
+        return typeof admissionLocations[parentAdmissionLocationUuid] != 'undefined'
+            ? admissionLocations[parentAdmissionLocationUuid]
+            : null;
     };
 
     /**
@@ -66,7 +69,11 @@ export default class AdmissionLocationHelper {
         if (admissionLocationUuid != null && typeof admissionLocations[admissionLocationUuid] != 'undefined') {
             const admissionLocation = admissionLocations[admissionLocationUuid];
             navigateLocations.unshift(admissionLocation);
-            return this.navigateUpToHigherLevel(admissionLocations, navigateLocations, admissionLocation.parentAdmissionLocationUuid);
+            return this.navigateUpToHigherLevel(
+                admissionLocations,
+                navigateLocations,
+                admissionLocation.parentAdmissionLocationUuid
+            );
         } else {
             return navigateLocations;
         }

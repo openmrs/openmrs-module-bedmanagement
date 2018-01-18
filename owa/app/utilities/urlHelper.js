@@ -1,5 +1,5 @@
 export default class UrlHelper {
-    originPath = ()=> {
+    originPath = () => {
         return window.location.origin;
     };
 

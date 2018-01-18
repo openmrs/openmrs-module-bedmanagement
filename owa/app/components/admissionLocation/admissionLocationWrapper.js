@@ -21,12 +21,12 @@ export default class AdmissionLocationWrapper extends React.Component {
         this.urlHelper = new UrlHelper();
         this.state = {
             admissionLocations: {},
-            visitLocations : {},
+            visitLocations: {},
             bedTypes: [],
             isOpen: true,
             activeUuid: null,
             activePage: 'listing',
-            pageData:{}
+            pageData: {}
         };
 
         this.fetchAllAdmissionLocations = this.fetchAllAdmissionLocations.bind(this);
@@ -37,72 +37,93 @@ export default class AdmissionLocationWrapper extends React.Component {
     }
 
     fetchAllAdmissionLocations(self) {
-        axios.get(this.urlHelper.apiBaseUrl() + '/location', {
-            params: {
-                v: 'full'
-            }
-        }).then(function (response) {
-            const admissionLocationUuidList = [];
-            const visitLocationUuidList = [];
-            _.forEach(response.data.results, (location) => {
-                _.each(location.tags, (tag) => {
-                    if(tag.display == 'Admission Location'){
-                        admissionLocationUuidList.push(location.uuid);
-                    } else if(tag.display == 'Visit Location'){
-                        visitLocationUuidList.push(location.uuid);
-                    }
+        axios
+            .get(this.urlHelper.apiBaseUrl() + '/location', {
+                params: {
+                    v: 'full'
+                }
+            })
+            .then(function(response) {
+                const admissionLocationUuidList = [];
+                const visitLocationUuidList = [];
+                _.forEach(response.data.results, (location) => {
+                    _.each(location.tags, (tag) => {
+                        if (tag.display == 'Admission Location') {
+                            admissionLocationUuidList.push(location.uuid);
+                        } else if (tag.display == 'Visit Location') {
+                            visitLocationUuidList.push(location.uuid);
+                        }
+                    });
                 });
+
+                const admissionLocations = _.reduce(
+                    response.data.results,
+                    (acc, curr) => {
+                        if (_.includes(admissionLocationUuidList, curr.uuid)) {
+                            acc[curr.uuid] = {
+                                uuid: curr.uuid,
+                                name: curr.name,
+                                description: curr.description,
+                                parentAdmissionLocationUuid:
+                                    curr.parentLocation != null ? curr.parentLocation.uuid : null,
+                                isOpen:
+                                    typeof self.state.admissionLocations[curr.uuid] != 'undefined'
+                                        ? self.state.admissionLocations[curr.uuid].isOpen
+                                        : false,
+                                isHigherLevel:
+                                    curr.parentLocation != null
+                                        ? !_.includes(admissionLocationUuidList, curr.parentLocation.uuid)
+                                        : true
+                            };
+                        }
+
+                        return acc;
+                    },
+                    {}
+                );
+
+                const visitLocations = _.reduce(
+                    response.data.results,
+                    (acc, curr) => {
+                        if (_.includes(visitLocationUuidList, curr.uuid)) {
+                            acc[curr.uuid] = {
+                                uuid: curr.uuid,
+                                name: curr.name,
+                                description: curr.description
+                            };
+                        }
+
+                        return acc;
+                    },
+                    {}
+                );
+
+                self.setState({
+                    admissionLocations: admissionLocations,
+                    visitLocations: visitLocations
+                });
+            })
+            .catch(function(error) {
+                self.admissionLocationFunctions.notify('error', error.message);
             });
-
-            const admissionLocations = _.reduce(response.data.results, (acc, curr) => {
-                if(_.includes(admissionLocationUuidList, curr.uuid)){
-                    acc[curr.uuid] = {
-                        uuid: curr.uuid,
-                        name: curr.name,
-                        description: curr.description,
-                        parentAdmissionLocationUuid: curr.parentLocation != null ? curr.parentLocation.uuid : null,
-                        isOpen: typeof self.state.admissionLocations[curr.uuid] != 'undefined' ? self.state.admissionLocations[curr.uuid].isOpen : false,
-                        isHigherLevel: curr.parentLocation != null ? !_.includes(admissionLocationUuidList, curr.parentLocation.uuid) : true
-                    };
-                }
-
-                return acc;
-            }, {});
-
-            const visitLocations = _.reduce(response.data.results, (acc, curr) => {
-                if(_.includes(visitLocationUuidList, curr.uuid)){
-                    acc[curr.uuid] = {
-                        uuid: curr.uuid,
-                        name: curr.name,
-                        description: curr.description
-                    };
-                }
-
-                return acc;
-            }, {});
-
-            self.setState({
-                admissionLocations: admissionLocations,
-                visitLocations : visitLocations
-            });
-        }).catch(function (error) {
-            self.admissionLocationFunctions.notify('error', error.message);
-        });
     }
 
     fetchBedTypes() {
         const self = this;
-        axios.get(this.urlHelper.apiBaseUrl() + '/bedtype', {
-            params: {
-                v: 'full'
-            }
-        }).then(function (response) {
-            self.setState({
-                bedTypes: response.data.results
+        axios
+            .get(this.urlHelper.apiBaseUrl() + '/bedtype', {
+                params: {
+                    v: 'full'
+                }
+            })
+            .then(function(response) {
+                self.setState({
+                    bedTypes: response.data.results
+                });
+            })
+            .catch(function(error) {
+                self.props.admissionLocationFunctions.notify('error', error.message);
             });
-        }).catch(function (error) {
-            self.props.admissionLocationFunctions.notify('error', error.message);
-        });
     }
 
     admissionLocationFunctions = {
@@ -122,7 +143,7 @@ export default class AdmissionLocationWrapper extends React.Component {
         getState: () => {
             return this.state;
         },
-        reFetchAllAdmissionLocations : () => {
+        reFetchAllAdmissionLocations: () => {
             this.fetchAllAdmissionLocations(this);
         },
         getAdmissionLocations: () => {
@@ -135,13 +156,22 @@ export default class AdmissionLocationWrapper extends React.Component {
             return this.state.bedTypes;
         },
         getAdmissionLocationByUuid: (admissionLocationUuid) => {
-            return this.admissionLocationHelper.getAdmissionLocation(this.state.admissionLocations, admissionLocationUuid);
+            return this.admissionLocationHelper.getAdmissionLocation(
+                this.state.admissionLocations,
+                admissionLocationUuid
+            );
         },
         getParentAdmissionLocation: (admissionLocationUuid) => {
-            return this.admissionLocationHelper.getParentAdmissionLocation(this.state.admissionLocations, admissionLocationUuid);
+            return this.admissionLocationHelper.getParentAdmissionLocation(
+                this.state.admissionLocations,
+                admissionLocationUuid
+            );
         },
-        getChildAdmissionLocations : (admissionLocationUuid) => {
-            return this.admissionLocationHelper.getChildAdmissionLocations(this.state.admissionLocations, admissionLocationUuid);
+        getChildAdmissionLocations: (admissionLocationUuid) => {
+            return this.admissionLocationHelper.getChildAdmissionLocations(
+                this.state.admissionLocations,
+                admissionLocationUuid
+            );
         },
         notify: (notifyType, message) => {
             const self = this;
@@ -167,31 +197,56 @@ export default class AdmissionLocationWrapper extends React.Component {
 
     getBody() {
         if (this.state.activePage == 'listing') {
-            return <AdmissionLocationList activeUuid={this.state.activeUuid}
-                admissionLocationFunctions={this.admissionLocationFunctions}/>;
+            return (
+                <AdmissionLocationList
+                    activeUuid={this.state.activeUuid}
+                    admissionLocationFunctions={this.admissionLocationFunctions}
+                />
+            );
         } else if (this.state.activePage == 'addEditLocation') {
-            return <AddEditAdmissionLocation operation={this.state.pageData.operation}
-                activeUuid={this.state.activeUuid} admissionLocationFunctions={this.admissionLocationFunctions}/>;
-        } else if(this.state.activePage == 'set-layout'){
-            return <SetBedLayout activeUuid={this.state.activeUuid}
-                admissionLocationFunctions={this.admissionLocationFunctions}/>;
+            return (
+                <AddEditAdmissionLocation
+                    operation={this.state.pageData.operation}
+                    activeUuid={this.state.activeUuid}
+                    admissionLocationFunctions={this.admissionLocationFunctions}
+                />
+            );
+        } else if (this.state.activePage == 'set-layout') {
+            return (
+                <SetBedLayout
+                    activeUuid={this.state.activeUuid}
+                    admissionLocationFunctions={this.admissionLocationFunctions}
+                />
+            );
         } else if (this.state.activePage == 'addEditBed') {
-            return <AddEditBed operation={this.state.pageData.operation} layoutColumn={this.state.pageData.layoutColumn}
-                layoutRow={this.state.pageData.layoutRow} bed={this.state.pageData.bed} bedTypes={this.state.bedTypes}
-                activeUuid={this.state.activeUuid} admissionLocationFunctions={this.admissionLocationFunctions}/>;
+            return (
+                <AddEditBed
+                    operation={this.state.pageData.operation}
+                    layoutColumn={this.state.pageData.layoutColumn}
+                    layoutRow={this.state.pageData.layoutRow}
+                    bed={this.state.pageData.bed}
+                    bedTypes={this.state.bedTypes}
+                    activeUuid={this.state.activeUuid}
+                    admissionLocationFunctions={this.admissionLocationFunctions}
+                />
+            );
         }
     }
 
     render() {
-        return <div>
-            <ReactNotify ref='notificator'/>
-            <Header path={this.props.match.path}/>
-            <div style={this.style.wrapper}>
-                <LocationHierarchy admissionLocationFunctions={this.admissionLocationFunctions}
-                    isOpen={this.state.isOpen} />
-                {this.getBody()}
+        return (
+            <div>
+                <ReactNotify ref="notificator" />
+                <Header path={this.props.match.path} />
+                <div style={this.style.wrapper}>
+                    <LocationHierarchy
+                        admissionLocationFunctions={this.admissionLocationFunctions}
+                        isOpen={this.state.isOpen}
+                    />
+                    {this.getBody()}
+                </div>
             </div>
-        </div>;
+        );
     }
 }
 

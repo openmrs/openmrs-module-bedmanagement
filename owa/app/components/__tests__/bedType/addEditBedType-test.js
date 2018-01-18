@@ -16,24 +16,25 @@ describe('AddEditBedType', () => {
     beforeAll(() => {
         var mock = new MockAdapter(axios);
         const data = {
-            'id':2,
-            'name':'luxury',
-            'displayName': 'luxury bed',
-            'description': 'LXY'
+            id: 2,
+            name: 'luxury',
+            displayName: 'luxury bed',
+            description: 'LXY'
         };
 
-        mock.onPost('https://192.168.33.10/openmrs/ws/rest/v1/bedtype/2')
-            .reply(200, data);
+        mock.onPost('https://192.168.33.10/openmrs/ws/rest/v1/bedtype/2').reply(200, data);
     });
 
     it('Should display add edit bed type form properly', () => {
-        const addBedTypeForm = shallow(<AddEditBedType bedTypeFunctions={testProps.bedTypeFunctions} bedTypeId={null} operation='add'/>);
+        const addBedTypeForm = shallow(
+            <AddEditBedType bedTypeFunctions={testProps.bedTypeFunctions} bedTypeId={null} operation="add" />
+        );
         expect(addBedTypeForm.find('#name-field').props().value).toBe('');
         expect(shallowToJson(addBedTypeForm)).toMatchSnapshot();
 
-
-        const editBedTypeForm = shallow(<AddEditBedType bedTypeFunctions={testProps.bedTypeFunctions} operation='edit'
-            bedTypeId={2} />);
+        const editBedTypeForm = shallow(
+            <AddEditBedType bedTypeFunctions={testProps.bedTypeFunctions} operation="edit" bedTypeId={2} />
+        );
 
         expect(editBedTypeForm.find('#name-field').props().value).toBe('luxury');
         expect(editBedTypeForm.find('#display-name-field').props().value).toBe('luxury bed');
@@ -48,7 +49,9 @@ describe('AddEditBedType', () => {
         const spyOnChangeDisplayNameField = jest.spyOn(AddEditBedType.prototype, 'onChangeDisplayNameField');
         const spyOnChangeDescription = jest.spyOn(AddEditBedType.prototype, 'onChangeDescription');
         const spySetState = jest.spyOn(testProps.bedTypeFunctions, 'setState');
-        const editBedTypeForm = mount(<AddEditBedType bedTypeFunctions={testProps.bedTypeFunctions} operation='edit' bedTypeId={2}/>);
+        const editBedTypeForm = mount(
+            <AddEditBedType bedTypeFunctions={testProps.bedTypeFunctions} operation="edit" bedTypeId={2} />
+        );
 
         editBedTypeForm.find('#name-field').simulate('change');
         expect(spyOnChangeNameField).toHaveBeenCalled();
@@ -57,14 +60,14 @@ describe('AddEditBedType', () => {
         editBedTypeForm.find('#description-field').simulate('change');
         expect(spyOnChangeDescription).toHaveBeenCalled();
 
-        editBedTypeForm.find('input[name=\'cancel\']').simulate('click');
+        editBedTypeForm.find("input[name='cancel']").simulate('click');
         expect(spyOnCancelEventHandler).toHaveBeenCalled();
         expect(spySetState).toHaveBeenCalledWith({
             activePage: 'listing',
             pageData: {}
         });
 
-        editBedTypeForm.find('input[type=\'submit\']').simulate('submit');
+        editBedTypeForm.find("input[type='submit']").simulate('submit');
         expect(spyOnSubmitHandler).toHaveBeenCalled();
     });
 });

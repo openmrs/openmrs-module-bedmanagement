@@ -13,14 +13,18 @@ export default class AdmissionLocationList extends React.Component {
 
         this.admissionLocationHelper = new AdmissionLocationHelper();
         this.childAdmissionLocations = this.admissionLocationHelper.getChildAdmissionLocations(
-            props.admissionLocationFunctions.getAdmissionLocations(), props.activeUuid);
+            props.admissionLocationFunctions.getAdmissionLocations(),
+            props.activeUuid
+        );
         this.addWardClickHandler = this.addWardClickHandler.bind(this);
         this.getBody = this.getBody.bind(this);
     }
 
     componentWillUpdate(nextProps, nextState) {
         this.childAdmissionLocations = this.admissionLocationHelper.getChildAdmissionLocations(
-            this.props.admissionLocationFunctions.getAdmissionLocations(), nextProps.activeUuid);
+            this.props.admissionLocationFunctions.getAdmissionLocations(),
+            nextProps.activeUuid
+        );
     }
 
     addWardClickHandler() {
@@ -34,33 +38,47 @@ export default class AdmissionLocationList extends React.Component {
     }
 
     getBody() {
-        if(Object.keys(this.childAdmissionLocations).length == 0 && this.props.activeUuid == null){
-            return <span className="btn btn-primary" onClick={this.addWardClickHandler}>
-                <i className="icon fa fa-plus" aria-hidden="true"></i> Add Ward
-            </span>;
-        } else if (Object.keys(this.childAdmissionLocations).length == 0) {
-            return <BedLayout activeUuid={this.props.activeUuid}
-                admissionLocationFunctions={this.props.admissionLocationFunctions}/>;
-        } else {
-            return <div>
-                {Object.keys(this.childAdmissionLocations).map((key) => <LocationBlock key={key}
-                    admissionLocation={this.props.admissionLocationFunctions.getAdmissionLocationByUuid(key)}
-                    admissionLocationFunctions={this.props.admissionLocationFunctions}/>)}
+        if (Object.keys(this.childAdmissionLocations).length == 0 && this.props.activeUuid == null) {
+            return (
                 <span className="btn btn-primary" onClick={this.addWardClickHandler}>
-                    <i className="icon fa fa-plus" aria-hidden="true"></i> Add Ward
+                    <i className="icon fa fa-plus" aria-hidden="true" /> Add Ward
                 </span>
-            </div>;
+            );
+        } else if (Object.keys(this.childAdmissionLocations).length == 0) {
+            return (
+                <BedLayout
+                    activeUuid={this.props.activeUuid}
+                    admissionLocationFunctions={this.props.admissionLocationFunctions}
+                />
+            );
+        } else {
+            return (
+                <div>
+                    {Object.keys(this.childAdmissionLocations).map((key) => (
+                        <LocationBlock
+                            key={key}
+                            admissionLocation={this.props.admissionLocationFunctions.getAdmissionLocationByUuid(key)}
+                            admissionLocationFunctions={this.props.admissionLocationFunctions}
+                        />
+                    ))}
+                    <span className="btn btn-primary" onClick={this.addWardClickHandler}>
+                        <i className="icon fa fa-plus" aria-hidden="true" /> Add Ward
+                    </span>
+                </div>
+            );
         }
     }
 
     render() {
-        return <div className="main-container">
-            <Breadcrumb activeUuid={this.props.activeUuid}
-                admissionLocationFunctions={this.props.admissionLocationFunctions}/>
-            <div className="main-block">
-                {this.getBody()}
+        return (
+            <div className="main-container">
+                <Breadcrumb
+                    activeUuid={this.props.activeUuid}
+                    admissionLocationFunctions={this.props.admissionLocationFunctions}
+                />
+                <div className="main-block">{this.getBody()}</div>
             </div>
-        </div>;
+        );
     }
 }
 
@@ -70,5 +88,5 @@ AdmissionLocationList.contextTypes = {
 
 AdmissionLocationList.propTypes = {
     activeUuid: PropTypes.string,
-    admissionLocationFunctions : PropTypes.object.isRequired
+    admissionLocationFunctions: PropTypes.object.isRequired
 };

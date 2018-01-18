@@ -8,7 +8,8 @@ import admissionLocationFunctions from 'components/__mocks__/admissionLocationFu
 const testProps = {
     admissionLocationFunctions: admissionLocationFunctions,
     loadAdmissionLocationLayout: (locationUuid) => jest.fn(),
-    rowBeds: [null,
+    rowBeds: [
+        null,
         {
             bedId: 9,
             bedNumber: '306-a',
@@ -50,9 +51,17 @@ const testProps = {
 };
 
 describe('BedLayoutRow', () => {
-    it('Should render bed layout properly', () =>{
-        const bedLayoutRow = shallow(<BedLayoutRow admissionLocationFunctions={testProps.admissionLocationFunctions}
-            row={2} layoutRow={3} layoutColumn={3} rowBeds={testProps.rowBeds} loadAdmissionLocationLayout={testProps.loadAdmissionLocationLayout} />);
+    it('Should render bed layout properly', () => {
+        const bedLayoutRow = shallow(
+            <BedLayoutRow
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+                row={2}
+                layoutRow={3}
+                layoutColumn={3}
+                rowBeds={testProps.rowBeds}
+                loadAdmissionLocationLayout={testProps.loadAdmissionLocationLayout}
+            />
+        );
 
         expect(bedLayoutRow.find('BedBlock').length).toBe(3);
         expect(shallowToJson(bedLayoutRow)).toMatchSnapshot();

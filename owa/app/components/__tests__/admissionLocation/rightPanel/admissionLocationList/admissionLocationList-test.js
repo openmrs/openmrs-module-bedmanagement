@@ -11,15 +11,23 @@ const testProps = {
 };
 
 describe('AdmissionLocationList', () => {
-    it('Should render location list properly', () =>{
-        const generalWardLocationList = shallow(<AdmissionLocationList activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-            admissionLocationFunctions={testProps.admissionLocationFunctions}/>);
+    it('Should render location list properly', () => {
+        const generalWardLocationList = shallow(
+            <AdmissionLocationList
+                activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
 
         expect(generalWardLocationList.find('LocationBlock').length).toBe(2);
         expect(shallowToJson(generalWardLocationList)).toMatchSnapshot();
 
-        const labourWardLocationList = shallow(<AdmissionLocationList activeUuid="bb0e512e-d225-11e4-9c67-080027b662ec"
-            admissionLocationFunctions={testProps.admissionLocationFunctions}/>);
+        const labourWardLocationList = shallow(
+            <AdmissionLocationList
+                activeUuid="bb0e512e-d225-11e4-9c67-080027b662ec"
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
 
         expect(labourWardLocationList.find('LocationBlock').length).toBe(0);
         expect(shallowToJson(labourWardLocationList)).toMatchSnapshot();
@@ -28,8 +36,12 @@ describe('AdmissionLocationList', () => {
     it('Should trigger event handler', () => {
         const spyOnAddWardClickHandler = jest.spyOn(AdmissionLocationList.prototype, 'addWardClickHandler');
         const spyOnSetState = jest.spyOn(testProps.admissionLocationFunctions, 'setState');
-        const generalWardLocationList = mount(<AdmissionLocationList activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-            admissionLocationFunctions={testProps.admissionLocationFunctions}/>);
+        const generalWardLocationList = mount(
+            <AdmissionLocationList
+                activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
 
         generalWardLocationList.find('.fa-plus').simulate('click');
         expect(spyOnAddWardClickHandler).toHaveBeenCalled();
@@ -42,5 +54,3 @@ describe('AdmissionLocationList', () => {
         });
     });
 });
-
-

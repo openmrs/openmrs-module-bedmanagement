@@ -34,43 +34,55 @@ export default class BedBlock extends React.PureComponent {
         if (confirmation) {
             axios({
                 method: 'delete',
-                url: this.urlHelper.apiBaseUrl() + '/bed/' + this.props.bed.bedUuid,
-            }).then(function () {
-                self.props.admissionLocationFunctions.notify('success', 'Delete successfully');
-                self.props.loadAdmissionLocationLayout(self.props.admissionLocationFunctions.getActiveLocationUuid());
-            }).catch(function (error) {
-                self.props.admissionLocationFunctions.notify('error', error.message);
-            });
+                url: this.urlHelper.apiBaseUrl() + '/bed/' + this.props.bed.bedUuid
+            })
+                .then(function() {
+                    self.props.admissionLocationFunctions.notify('success', 'Delete successfully');
+                    self.props.loadAdmissionLocationLayout(
+                        self.props.admissionLocationFunctions.getActiveLocationUuid()
+                    );
+                })
+                .catch(function(error) {
+                    self.props.admissionLocationFunctions.notify('error', error.message);
+                });
         }
     }
 
     getBlock() {
         if (this.props.bed.bedUuid == null) {
-            return <div className="block add-block" onClick={this.addEditBedHandler}>
-                <div className="left-block">
-                    <i className="fa fa-plus-circle" aria-hidden="true">&nbsp;</i>
-                    <span>Add Bed</span>
+            return (
+                <div className="block add-block" onClick={this.addEditBedHandler}>
+                    <div className="left-block">
+                        <i className="fa fa-plus-circle" aria-hidden="true">
+                            &nbsp;
+                        </i>
+                        <span>Add Bed</span>
+                    </div>
                 </div>
-            </div>;
+            );
         } else {
-            return <div className="block">
-                <div className="left-block">
-                    <i className="fa fa-bed" aria-hidden="true">&nbsp;</i>
-                    <span>{this.props.bed.bedNumber}</span>
+            return (
+                <div className="block">
+                    <div className="left-block">
+                        <i className="fa fa-bed" aria-hidden="true">
+                            &nbsp;
+                        </i>
+                        <span>{this.props.bed.bedNumber}</span>
+                    </div>
+                    <ul className="right-block">
+                        <li>
+                            <a href="javascript:void(0);" title="edit" onClick={this.addEditBedHandler}>
+                                <i className="fa fa-pencil" aria-hidden="true" />
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" title="delete" onClick={this.onDeleteHandler}>
+                                <i className="fa fa-trash" aria-hidden="true" />
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-                <ul className="right-block">
-                    <li>
-                        <a href="javascript:void(0);" title="edit" onClick={this.addEditBedHandler}>
-                            <i className="fa fa-pencil" aria-hidden="true"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" title="delete" onClick={this.onDeleteHandler}>
-                            <i className="fa fa-trash" aria-hidden="true"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>;
+            );
         }
     }
 

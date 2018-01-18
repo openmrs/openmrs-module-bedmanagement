@@ -38,23 +38,26 @@ export default class BedTagWrapper extends React.Component {
             return this.state.bedTags;
         },
         getBedTagByUuid: (bedTagUuid) => {
-            return _.find(this.state.bedTags, function (bedTag) {
+            return _.find(this.state.bedTags, function(bedTag) {
                 return bedTag.uuid == bedTagUuid;
             });
         },
         fetchBedTags: () => {
             const self = this;
-            axios.get(this.urlHelper.apiBaseUrl() + '/bedTag', {
-                params: {
-                    v: 'full'
-                }
-            }).then(function (response) {
-                self.setState({
-                    bedTags: response.data.results
+            axios
+                .get(this.urlHelper.apiBaseUrl() + '/bedTag', {
+                    params: {
+                        v: 'full'
+                    }
+                })
+                .then(function(response) {
+                    self.setState({
+                        bedTags: response.data.results
+                    });
+                })
+                .catch(function(error) {
+                    self.admissionLocationFunctions.notify('error', error.message);
                 });
-            }).catch(function (error) {
-                self.admissionLocationFunctions.notify('error', error.message);
-            });
         },
         notify: (notifyTag, message) => {
             const self = this;
@@ -79,17 +82,23 @@ export default class BedTagWrapper extends React.Component {
     };
 
     render() {
-        return <div>
-            <ReactNotify ref='notificator'/>
-            <Header path={this.props.match.path}/>
-            <div style={this.style.wrapper}>
-                {this.state.activePage == 'listing' ?
-                    <BedTagList bedTags={this.state.bedTags} bedTagFunctions={this.bedTagFunctions}/> :
-                    <AddEditBedTag bedTagFunctions={this.bedTagFunctions} bedTagUuid={this.state.pageData.bedTagUuid}
-                        operation={this.state.pageData.operation}/>
-                }
+        return (
+            <div>
+                <ReactNotify ref="notificator" />
+                <Header path={this.props.match.path} />
+                <div style={this.style.wrapper}>
+                    {this.state.activePage == 'listing' ? (
+                        <BedTagList bedTags={this.state.bedTags} bedTagFunctions={this.bedTagFunctions} />
+                    ) : (
+                        <AddEditBedTag
+                            bedTagFunctions={this.bedTagFunctions}
+                            bedTagUuid={this.state.pageData.bedTagUuid}
+                            operation={this.state.pageData.operation}
+                        />
+                    )}
+                </div>
             </div>
-        </div>;
+        );
     }
 }
 

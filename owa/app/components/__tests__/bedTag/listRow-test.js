@@ -10,11 +10,25 @@ const testProps = {
 };
 
 describe('BedTagListRow', () => {
-    it('Should render bed tag list properly', () =>{
-        const bedTagListRow = mount(<table><tbody><BedTagListRow bedTag={testProps.bedTagFunctions.getBedTagByUuid('ff7ed494-7b9c-4478-812a-5187e297f94c')}
-            bedTagFunctions={testProps.bedTagFunctions}/></tbody></table>);
+    it('Should render bed tag list properly', () => {
+        const bedTagListRow = mount(
+            <table>
+                <tbody>
+                    <BedTagListRow
+                        bedTag={testProps.bedTagFunctions.getBedTagByUuid('ff7ed494-7b9c-4478-812a-5187e297f94c')}
+                        bedTagFunctions={testProps.bedTagFunctions}
+                    />
+                </tbody>
+            </table>
+        );
 
-        expect(bedTagListRow.find('td').at(0).text().trim()).toBe('Isolation');
+        expect(
+            bedTagListRow
+                .find('td')
+                .at(0)
+                .text()
+                .trim()
+        ).toBe('Isolation');
         expect(shallowToJson(bedTagListRow)).toMatchSnapshot();
     });
 
@@ -22,8 +36,16 @@ describe('BedTagListRow', () => {
         const spyOnDeleteHandler = jest.spyOn(BedTagListRow.prototype, 'deleteHandler');
         const spyOnEditHandler = jest.spyOn(BedTagListRow.prototype, 'editHandler');
         const spyOnSetState = jest.spyOn(testProps.bedTagFunctions, 'setState');
-        const bedTagList = mount(<table><tbody><BedTagListRow bedTag={testProps.bedTagFunctions.getBedTagByUuid('ff7ed494-7b9c-4478-812a-5187e297f94c')}
-            bedTagFunctions={testProps.bedTagFunctions}/></tbody></table>);
+        const bedTagList = mount(
+            <table>
+                <tbody>
+                    <BedTagListRow
+                        bedTag={testProps.bedTagFunctions.getBedTagByUuid('ff7ed494-7b9c-4478-812a-5187e297f94c')}
+                        bedTagFunctions={testProps.bedTagFunctions}
+                    />
+                </tbody>
+            </table>
+        );
 
         bedTagList.find('.fa-edit').simulate('click');
         expect(spyOnEditHandler).toHaveBeenCalled();

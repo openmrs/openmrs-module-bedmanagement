@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import App from './components/app';
 import {BrowserRouter} from 'react-router-dom';
 
-ReactDOM.render((
+ReactDOM.render(
     <BrowserRouter>
         <App />
-    </BrowserRouter>
-), document.getElementById('app'));
+    </BrowserRouter>,
+    document.getElementById('app')
+);

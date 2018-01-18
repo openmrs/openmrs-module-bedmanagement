@@ -5,13 +5,13 @@ import BedTypeListRow from 'components/bedType/bedTypeList/bedTypelistRow';
 
 require('./bedTypeList.css');
 export default class BedTypeList extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.addNewHandler = this.addNewHandler.bind(this);
     }
 
-    addNewHandler(event){
+    addNewHandler(event) {
         event.preventDefault();
         this.props.bedTypeFunctions.setState({
             activePage: 'addEdit',
@@ -23,26 +23,35 @@ export default class BedTypeList extends React.Component {
     }
 
     render() {
-        return <fieldset className="bed-type-listing">
-            <legend>&nbsp; Existing Bed Types &nbsp;</legend>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Display Name</th>
-                        <th className="description">Description</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.props.bedTypes.map((bedType, key) => <BedTypeListRow key={key} bedType={bedType}
-                        bedTypeFunctions={this.props.bedTypeFunctions}/>)}
-                </tbody>
-            </table>
-            <button onClick={this.addNewHandler} value="Add New" className="list-btn"> Add New </button>
-        </fieldset>;
+        return (
+            <fieldset className="bed-type-listing">
+                <legend>&nbsp; Existing Bed Types &nbsp;</legend>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Display Name</th>
+                            <th className="description">Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.props.bedTypes.map((bedType, key) => (
+                            <BedTypeListRow
+                                key={key}
+                                bedType={bedType}
+                                bedTypeFunctions={this.props.bedTypeFunctions}
+                            />
+                        ))}
+                    </tbody>
+                </table>
+                <button onClick={this.addNewHandler} value="Add New" className="list-btn">
+                    {' '}
+                    Add New{' '}
+                </button>
+            </fieldset>
+        );
     }
-
 }
 
 BedTypeList.propTypes = {

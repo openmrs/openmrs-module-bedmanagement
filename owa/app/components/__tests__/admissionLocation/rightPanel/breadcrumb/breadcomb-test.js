@@ -12,28 +12,50 @@ const testProps = {
 
 describe('Breadcomb', () => {
     it('Should render properly', () => {
-        const breadcomb = shallow(<Breadcomb activeUuid="e48fb2b3-d490-11e5-b193-0800270d80ce"
-            admissionLocationFunctions={testProps.admissionLocationFunctions}/>);
+        const breadcomb = shallow(
+            <Breadcomb
+                activeUuid="e48fb2b3-d490-11e5-b193-0800270d80ce"
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
 
         expect(breadcomb.find('ul li').length).toBe(3);
-        expect(breadcomb.find('ul li').at(1).find('a').text()).toBe('General Ward');
+        expect(
+            breadcomb
+                .find('ul li')
+                .at(1)
+                .find('a')
+                .text()
+        ).toBe('General Ward');
         expect(shallowToJson(breadcomb)).toMatchSnapshot();
     });
 
     it('Should trigger event handler', () => {
         const spyOnClickHandler = jest.spyOn(Breadcomb.prototype, 'clickHandler');
         const spyOnSetActiveLocationUuid = jest.spyOn(testProps.admissionLocationFunctions, 'setActiveLocationUuid');
-        const breadcomb = mount(<Breadcomb activeUuid="e48fb2b3-d490-11e5-b193-0800270d80ce"
-            admissionLocationFunctions={testProps.admissionLocationFunctions}/>);
+        const breadcomb = mount(
+            <Breadcomb
+                activeUuid="e48fb2b3-d490-11e5-b193-0800270d80ce"
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
 
-        breadcomb.find('ul li').at(1).find('a').simulate('click');
+        breadcomb
+            .find('ul li')
+            .at(1)
+            .find('a')
+            .simulate('click');
         expect(spyOnClickHandler).toHaveBeenCalled();
         expect(spyOnSetActiveLocationUuid).toHaveBeenCalledWith('baf7bd38-d225-11e4-9c67-080027b662ec');
     });
 
     it('Should return breadcrumb locations', () => {
-        const breadcomb = mount(<Breadcomb activeUuid="e48fb2b3-d490-11e5-b193-0800270d80ce"
-            admissionLocationFunctions={testProps.admissionLocationFunctions}/>);
+        const breadcomb = mount(
+            <Breadcomb
+                activeUuid="e48fb2b3-d490-11e5-b193-0800270d80ce"
+                admissionLocationFunctions={testProps.admissionLocationFunctions}
+            />
+        );
 
         const expectedBreadcrumbLocations = [
             {
@@ -51,7 +73,8 @@ describe('Breadcomb', () => {
                 parentAdmissionLocationUuid: 'baf7bd38-d225-11e4-9c67-080027b662ec',
                 isOpen: false,
                 isHigherLevel: false
-            }];
+            }
+        ];
 
         expect(_.isEqual(breadcomb.instance().breadcrumbLocations(), expectedBreadcrumbLocations)).toEqual(true);
     });

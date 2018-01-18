@@ -1,22 +1,24 @@
 import React from 'react';
-import { shallowToJson } from 'enzyme-to-json';
+import {shallowToJson} from 'enzyme-to-json';
 import {shallow, mount} from 'enzyme';
 
 import HierarchyItem from 'components/admissionLocation/leftPanel/hierarchyItem';
 import hierarchyFunctionMock from 'components/__mocks__/hierarchyFunctions-mock';
 
 const testProp = {
-    hierarchyFunction : hierarchyFunctionMock,
-    admissionLocations : hierarchyFunctionMock.getAdmissionLocations()
+    hierarchyFunction: hierarchyFunctionMock,
+    admissionLocations: hierarchyFunctionMock.getAdmissionLocations()
 };
 
 describe('HierarchyItem', () => {
     it('Renders correctly General ward hierarchy', () => {
         const hierarchyItem = shallow(
-            <HierarchyItem key="baf7bd38-d225-11e4-9c67-080027b662ec"
+            <HierarchyItem
+                key="baf7bd38-d225-11e4-9c67-080027b662ec"
                 isParentOpen={true}
                 hierarchyFunction={testProp.hierarchyFunction}
-                admissionLocation={testProp.admissionLocations['baf7bd38-d225-11e4-9c67-080027b662ec']}/>
+                admissionLocation={testProp.admissionLocations['baf7bd38-d225-11e4-9c67-080027b662ec']}
+            />
         );
 
         expect(shallowToJson(hierarchyItem)).toMatchSnapshot();
@@ -27,9 +29,16 @@ describe('HierarchyItem', () => {
             <HierarchyItem
                 isParentOpen={true}
                 hierarchyFunction={testProp.hierarchyFunction}
-                admissionLocation={testProp.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}/>);
+                admissionLocation={testProp.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
+            />
+        );
 
-        expect(hierarchyItem.find('ul').text().trim()).toBe('Labour Ward');
+        expect(
+            hierarchyItem
+                .find('ul')
+                .text()
+                .trim()
+        ).toBe('Labour Ward');
         expect(shallowToJson(hierarchyItem)).toMatchSnapshot();
     });
 
@@ -44,13 +53,15 @@ describe('HierarchyItem', () => {
             <HierarchyItem
                 isParentOpen={true}
                 hierarchyFunction={testProp.hierarchyFunction}
-                admissionLocation={testProp.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}/>);
+                admissionLocation={testProp.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
+            />
+        );
 
         hierarchyItem.find('span').simulate('click');
         expect(spyOnClickTitle).toHaveBeenCalled();
         expect(spySetAdmissionLocationIsOpen).toHaveBeenCalledWith('bb0e512e-d225-11e4-9c67-080027b662ec', true);
         expect(spySetState).toHaveBeenCalledWith({
-            activeUuid : 'bb0e512e-d225-11e4-9c67-080027b662ec',
+            activeUuid: 'bb0e512e-d225-11e4-9c67-080027b662ec',
             activePage: 'listing',
             pageData: {}
         });

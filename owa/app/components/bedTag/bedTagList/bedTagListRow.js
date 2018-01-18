@@ -5,8 +5,7 @@ import axios from 'axios';
 import UrlHelper from 'utilities/urlHelper';
 
 export default class BedTagListRow extends React.Component {
-
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.urlHelper = new UrlHelper();
@@ -22,13 +21,15 @@ export default class BedTagListRow extends React.Component {
         if (confirmation) {
             axios({
                 method: 'delete',
-                url: this.urlHelper.apiBaseUrl() + '/bedTag/' + this.props.bedTag.uuid,
-            }).then(function () {
-                self.props.bedTagFunctions.notify('success', 'Delete successfully');
-                self.props.bedTagFunctions.fetchBedTags();
-            }).catch(function (error) {
-                self.props.bedTagFunctions.notify('error', error.message);
-            });
+                url: this.urlHelper.apiBaseUrl() + '/bedTag/' + this.props.bedTag.uuid
+            })
+                .then(function() {
+                    self.props.bedTagFunctions.notify('success', 'Delete successfully');
+                    self.props.bedTagFunctions.fetchBedTags();
+                })
+                .catch(function(error) {
+                    self.props.bedTagFunctions.notify('error', error.message);
+                });
         }
     }
 
@@ -45,19 +46,21 @@ export default class BedTagListRow extends React.Component {
     }
 
     render() {
-        return <tr>
-            <td>{this.props.bedTag.name}</td>
-            <td></td>
-            <td>
-                <a href="javascript:void(0);" onClick={this.editHandler}>
-                    <i className="icon fa fa-edit" aria-hidden="true"></i> Edit
-                </a>
-                &nbsp; | &nbsp;
-                <a href="javascript:void(0);" onClick={this.deleteHandler}>
-                    <i className="icon fa fa-trash" aria-hidden="true"></i> Delete
-                </a>
-            </td>
-        </tr>;
+        return (
+            <tr>
+                <td>{this.props.bedTag.name}</td>
+                <td />
+                <td>
+                    <a href="javascript:void(0);" onClick={this.editHandler}>
+                        <i className="icon fa fa-edit" aria-hidden="true" /> Edit
+                    </a>
+                    &nbsp; | &nbsp;
+                    <a href="javascript:void(0);" onClick={this.deleteHandler}>
+                        <i className="icon fa fa-trash" aria-hidden="true" /> Delete
+                    </a>
+                </td>
+            </tr>
+        );
     }
 }
 

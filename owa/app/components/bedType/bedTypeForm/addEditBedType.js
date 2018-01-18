@@ -68,60 +68,96 @@ export default class AddEditBedType extends React.Component {
 
         axios({
             method: 'post',
-            url: this.urlHelper.apiBaseUrl() + (this.state.id != null ? ('/bedtype/' + this.state.id) : '/bedtype'),
+            url: this.urlHelper.apiBaseUrl() + (this.state.id != null ? '/bedtype/' + this.state.id : '/bedtype'),
             headers: {'Content-Type': 'application/json'},
-            data: parameters,
-        }).then(function (response) {
-            self.setState({
-                id: response.data.id,
-                disableSubmit: false
-            });
+            data: parameters
+        })
+            .then(function(response) {
+                self.setState({
+                    id: response.data.id,
+                    disableSubmit: false
+                });
 
-            self.props.bedTypeFunctions.fetchBedTypes();
-            self.props.bedTypeFunctions.notify('success', 'Bed Type save successfully');
-            self.props.bedTypeFunctions.setState({
-                activePage: 'listing',
-                pageData: {}
+                self.props.bedTypeFunctions.fetchBedTypes();
+                self.props.bedTypeFunctions.notify('success', 'Bed Type save successfully');
+                self.props.bedTypeFunctions.setState({
+                    activePage: 'listing',
+                    pageData: {}
+                });
+            })
+            .catch(function(error) {
+                self.setState({
+                    disableSubmit: false
+                });
+                self.props.bedTypeFunctions.notify('error', error.message);
             });
-        }).catch(function (error) {
-            self.setState({
-                disableSubmit: false
-            });
-            self.props.bedTypeFunctions.notify('error', error.message);
-        });
     }
 
     render() {
-        return <div className="form-container">
-            <fieldset className="bed-type-form">
-                <legend>&nbsp; {this.props.operation == 'add' ? 'Add' : 'Edit'} Bed Type &nbsp;</legend>
-                <div className="block-content">
-                    <form onSubmit={this.onSubmitHandler}>
-                        <div className="form-block">
-                            <label className="form-title">Name:</label>
-                            <input type="text" value={this.state.name} ref={(input) => {this.nameField = input;}}
-                                required={true} onChange={this.onChangeNameField} id="name-field"/>
-                        </div>
-                        <div className="form-block">
-                            <label className="form-title">Display Name:</label>
-                            <input type="text" value={this.state.displayName} ref={(input) => {this.displayNameField = input;}}
-                                required={true} onChange={this.onChangeDisplayNameField} id="display-name-field"/>
-                        </div>
-                        <div className="form-block">
-                            <label className="form-title">Description:</label>
-                            <textarea value={this.state.description} ref={(input) => {this.descriptionField = input;}}
-                                onChange={this.onChangeDescription} id="description-field"></textarea>
-                        </div>
-                        <div className="form-block">
-                            <input type="submit" name="submit" value={this.state.disableSubmit ? 'Saving...' : 'Save'}
-                                disabled={this.state.disableSubmit} className="form-btn float-left margin-right"/>
-                            <input type="button" onClick={this.cancelEventHandler}
-                                name="cancel" value="Cancel" className="form-btn float-left"/>
-                        </div>
-                    </form>
-                </div>
-            </fieldset>
-        </div>;
+        return (
+            <div className="form-container">
+                <fieldset className="bed-type-form">
+                    <legend>&nbsp; {this.props.operation == 'add' ? 'Add' : 'Edit'} Bed Type &nbsp;</legend>
+                    <div className="block-content">
+                        <form onSubmit={this.onSubmitHandler}>
+                            <div className="form-block">
+                                <label className="form-title">Name:</label>
+                                <input
+                                    type="text"
+                                    value={this.state.name}
+                                    ref={(input) => {
+                                        this.nameField = input;
+                                    }}
+                                    required={true}
+                                    onChange={this.onChangeNameField}
+                                    id="name-field"
+                                />
+                            </div>
+                            <div className="form-block">
+                                <label className="form-title">Display Name:</label>
+                                <input
+                                    type="text"
+                                    value={this.state.displayName}
+                                    ref={(input) => {
+                                        this.displayNameField = input;
+                                    }}
+                                    required={true}
+                                    onChange={this.onChangeDisplayNameField}
+                                    id="display-name-field"
+                                />
+                            </div>
+                            <div className="form-block">
+                                <label className="form-title">Description:</label>
+                                <textarea
+                                    value={this.state.description}
+                                    ref={(input) => {
+                                        this.descriptionField = input;
+                                    }}
+                                    onChange={this.onChangeDescription}
+                                    id="description-field"
+                                />
+                            </div>
+                            <div className="form-block">
+                                <input
+                                    type="submit"
+                                    name="submit"
+                                    value={this.state.disableSubmit ? 'Saving...' : 'Save'}
+                                    disabled={this.state.disableSubmit}
+                                    className="form-btn float-left margin-right"
+                                />
+                                <input
+                                    type="button"
+                                    onClick={this.cancelEventHandler}
+                                    name="cancel"
+                                    value="Cancel"
+                                    className="form-btn float-left"
+                                />
+                            </div>
+                        </form>
+                    </div>
+                </fieldset>
+            </div>
+        );
     }
 }
 

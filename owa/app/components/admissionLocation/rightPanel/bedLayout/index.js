@@ -23,8 +23,7 @@ export default class BedLayout extends React.Component {
         this.setBedLayoutClickHandler = this.setBedLayoutClickHandler.bind(this);
         this.addWardClickHandler = this.addWardClickHandler.bind(this);
         this.loadAdmissionLocationLayout = this.loadAdmissionLocationLayout.bind(this);
-        if (props.activeUuid != null)
-            this.loadAdmissionLocationLayout(props.activeUuid);
+        if (props.activeUuid != null) this.loadAdmissionLocationLayout(props.activeUuid);
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -39,7 +38,6 @@ export default class BedLayout extends React.Component {
                     loadingData: false
                 });
             }
-
         }
     }
 
@@ -63,53 +61,71 @@ export default class BedLayout extends React.Component {
 
     loadAdmissionLocationLayout(locationUuid) {
         const self = this;
-        axios.get(this.urlHelper.apiBaseUrl() + '/admissionLocation/' + locationUuid, {
-            params: {
-                v: 'layout'
-            }
-        }).then(function (response) {
-            let layoutRow = 0;
-            let layoutColumn = 0;
-            const bedlayouts = _.reduce(response.data.bedLocationMappings, (bedlayouts, curr) => {
-                if (typeof bedlayouts[curr.rowNumber] == 'undefined')
-                    bedlayouts[curr.rowNumber] = [];
-                if (curr.rowNumber > layoutRow)
-                    layoutRow = curr.rowNumber;
-                if (curr.columnNumber > layoutColumn)
-                    layoutColumn = curr.columnNumber;
+        axios
+            .get(this.urlHelper.apiBaseUrl() + '/admissionLocation/' + locationUuid, {
+                params: {
+                    v: 'layout'
+                }
+            })
+            .then(function(response) {
+                let layoutRow = 0;
+                let layoutColumn = 0;
+                const bedlayouts = _.reduce(
+                    response.data.bedLocationMappings,
+                    (bedlayouts, curr) => {
+                        if (typeof bedlayouts[curr.rowNumber] == 'undefined') bedlayouts[curr.rowNumber] = [];
+                        if (curr.rowNumber > layoutRow) layoutRow = curr.rowNumber;
+                        if (curr.columnNumber > layoutColumn) layoutColumn = curr.columnNumber;
 
-                bedlayouts[curr.rowNumber][curr.columnNumber] = curr;
-                return bedlayouts;
-            }, []);
+                        bedlayouts[curr.rowNumber][curr.columnNumber] = curr;
+                        return bedlayouts;
+                    },
+                    []
+                );
 
-            self.setState({
-                layoutRow: layoutRow,
-                layoutColumn: layoutColumn,
-                bedlayouts: bedlayouts,
-                loadingData: false
+                self.setState({
+                    layoutRow: layoutRow,
+                    layoutColumn: layoutColumn,
+                    bedlayouts: bedlayouts,
+                    loadingData: false
+                });
+            })
+            .catch(function(error) {
+                self.setState({
+                    loadingData: false
+                });
+                self.props.admissionLocationFunctions.notify('error', error.message);
             });
-        }).catch(function (error) {
-            self.setState({
-                loadingData: false
-            });
-            self.props.admissionLocationFunctions.notify('error', error.message);
-        });
     }
 
     getBody() {
         if (this.state.loadingData == false && this.state.bedlayouts.length == 0) {
-            return <div className="location option">
-                <label className="btn btn-primary" onClick={this.addWardClickHandler}>Add Child Admission
-                    Location</label>
-                <label className="btn btn-primary" onClick={this.setBedLayoutClickHandler}>Set Bed Layout</label>
-            </div>;
+            return (
+                <div className="location option">
+                    <label className="btn btn-primary" onClick={this.addWardClickHandler}>
+                        Add Child Admission Location
+                    </label>
+                    <label className="btn btn-primary" onClick={this.setBedLayoutClickHandler}>
+                        Set Bed Layout
+                    </label>
+                </div>
+            );
         } else {
-            return <div className="bed-layout">
-                {this.state.bedlayouts.map((rowBeds, row) =>
-                    <BedLayoutRow key={row} layoutRow={this.state.layoutRow} layoutColumn={this.state.layoutColumn}
-                        row={row} rowBeds={rowBeds} admissionLocationFunctions={this.props.admissionLocationFunctions}
-                        loadAdmissionLocationLayout={this.loadAdmissionLocationLayout}/>)}
-            </div>;
+            return (
+                <div className="bed-layout">
+                    {this.state.bedlayouts.map((rowBeds, row) => (
+                        <BedLayoutRow
+                            key={row}
+                            layoutRow={this.state.layoutRow}
+                            layoutColumn={this.state.layoutColumn}
+                            row={row}
+                            rowBeds={rowBeds}
+                            admissionLocationFunctions={this.props.admissionLocationFunctions}
+                            loadAdmissionLocationLayout={this.loadAdmissionLocationLayout}
+                        />
+                    ))}
+                </div>
+            );
         }
     }
 

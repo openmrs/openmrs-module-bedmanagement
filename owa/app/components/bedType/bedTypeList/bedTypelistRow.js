@@ -5,8 +5,7 @@ import axios from 'axios';
 import UrlHelper from 'utilities/urlHelper';
 
 export default class BedTypeListRow extends React.Component {
-
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.urlHelper = new UrlHelper();
@@ -22,13 +21,15 @@ export default class BedTypeListRow extends React.Component {
         if (confirmation) {
             axios({
                 method: 'delete',
-                url: this.urlHelper.apiBaseUrl() + '/bedtype/' + this.props.bedType.id,
-            }).then(function () {
-                self.props.bedTypeFunctions.notify('success', 'Delete successfully');
-                self.props.bedTypeFunctions.fetchBedTypes();
-            }).catch(function (error) {
-                self.props.bedTypeFunctions.notify('error', error.message);
-            });
+                url: this.urlHelper.apiBaseUrl() + '/bedtype/' + this.props.bedType.id
+            })
+                .then(function() {
+                    self.props.bedTypeFunctions.notify('success', 'Delete successfully');
+                    self.props.bedTypeFunctions.fetchBedTypes();
+                })
+                .catch(function(error) {
+                    self.props.bedTypeFunctions.notify('error', error.message);
+                });
         }
     }
 
@@ -45,20 +46,22 @@ export default class BedTypeListRow extends React.Component {
     }
 
     render() {
-        return <tr>
-            <td>{this.props.bedType.name}</td>
-            <td>{this.props.bedType.displayName}</td>
-            <td>{this.props.bedType.description}</td>
-            <td>
-                <a href="javascript:void(0);" onClick={this.editHandler}>
-                    <i className="icon fa fa-edit" aria-hidden="true"></i> Edit
-                </a>
-                &nbsp; | &nbsp;
-                <a href="javascript:void(0);" onClick={this.deleteHandler}>
-                    <i className="icon fa fa-trash" aria-hidden="true"></i> Delete
-                </a>
-            </td>
-        </tr>;
+        return (
+            <tr>
+                <td>{this.props.bedType.name}</td>
+                <td>{this.props.bedType.displayName}</td>
+                <td>{this.props.bedType.description}</td>
+                <td>
+                    <a href="javascript:void(0);" onClick={this.editHandler}>
+                        <i className="icon fa fa-edit" aria-hidden="true" /> Edit
+                    </a>
+                    &nbsp; | &nbsp;
+                    <a href="javascript:void(0);" onClick={this.deleteHandler}>
+                        <i className="icon fa fa-trash" aria-hidden="true" /> Delete
+                    </a>
+                </td>
+            </tr>
+        );
     }
 }
 
