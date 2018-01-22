@@ -59,8 +59,8 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	}
 	
 	@Override
-	public List<BedLocationMapping> getBedLocationMappingByLocation(Location location) {
-		return bedManagementDao.getBedLocationMappingByLocation(location);
+	public List<BedLocationMapping> getBedLocationMappingsByLocation(Location location) {
+		return bedManagementDao.getBedLocationMappingsByLocation(location);
 	}
 	
 	@Override
@@ -90,6 +90,19 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 					bedLocationMapping.setRow(i);
 					bedLocationMapping.setColumn(j);
 					bedManagementDao.saveBedLocationMapping(bedLocationMapping);
+				}
+			}
+		}
+		
+		List<BedLocationMapping> bedLocationMappings = bedManagementDao
+		        .getBedLocationMappingsByLocation(admissionLocation.getWard());
+		for (BedLocationMapping bedlocationMapping : bedLocationMappings) {
+			if (bedlocationMapping.getRow() > row || bedlocationMapping.getColumn() > column) {
+				if (bedlocationMapping.getBed() == null) {
+					bedManagementDao.deleteBedLocationMapping(bedlocationMapping);
+				} else {
+					throw new IllegalPropertyException("Cannot downsize bed layout with existing bed in the way at row "
+					        + bedlocationMapping.getRow() + " and column " + bedlocationMapping.getColumn());
 				}
 			}
 		}

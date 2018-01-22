@@ -27,8 +27,9 @@ export default class BedTagListRow extends React.Component {
                     self.props.bedTagFunctions.notify('success', 'Delete successfully');
                     self.props.bedTagFunctions.fetchBedTags();
                 })
-                .catch(function(error) {
-                    self.props.bedTagFunctions.notify('error', error.message);
+                .catch(function(errorResponse) {
+                    const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                    self.props.bedTagFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
                 });
         }
     }

@@ -85,11 +85,13 @@ export default class AddEditBedType extends React.Component {
                     pageData: {}
                 });
             })
-            .catch(function(error) {
+            .catch(function(errorResponse) {
                 self.setState({
                     disableSubmit: false
                 });
-                self.props.bedTypeFunctions.notify('error', error.message);
+
+                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                self.props.bedTypeFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }
 

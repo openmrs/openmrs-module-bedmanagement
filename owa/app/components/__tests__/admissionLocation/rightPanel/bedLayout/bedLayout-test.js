@@ -175,7 +175,7 @@ describe('BedLayout', () => {
         expect(sypSetBedLayoutClickHandler).toHaveBeenCalled();
         expect(spyOnSetState).toHaveBeenCalledWith({
             activePage: 'set-layout',
-            pageData: {},
+            pageData: {column: 1, row: 1},
             activeUuid: 'baf83667-d225-11e4-as58-080027b662ec'
         });
     });

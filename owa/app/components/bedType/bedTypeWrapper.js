@@ -60,8 +60,9 @@ export default class BedTypeWrapper extends React.Component {
                         bedTypes: response.data.results
                     });
                 })
-                .catch(function(error) {
-                    self.admissionLocationFunctions.notify('error', error.message);
+                .catch(function(errorResponse) {
+                    const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                    self.props.bedTypeFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
                 });
         },
         notify: (notifyType, message) => {

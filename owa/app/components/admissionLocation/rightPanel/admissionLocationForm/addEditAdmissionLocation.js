@@ -114,11 +114,13 @@ export default class AddEditAdmissionLocation extends React.Component {
                     activeUuid: self.parentAdmissionLocation != null ? self.parentAdmissionLocation.uuid : null
                 });
             })
-            .catch(function(error) {
+            .catch(function(errorResponse) {
                 this.setState({
                     disableSubmit: false
                 });
-                self.props.admissionLocationFunctions.notify('error', error.message);
+
+                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                self.props.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }
 

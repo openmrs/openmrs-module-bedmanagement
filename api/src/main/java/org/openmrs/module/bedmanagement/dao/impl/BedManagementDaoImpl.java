@@ -211,7 +211,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
 		AdmissionLocation admissionLocation = (AdmissionLocation) session.createQuery(hql)
 		        .setParameterList("locations", locations).setParameter("occupied", BedStatus.OCCUPIED.toString())
 		        .setResultTransformer(Transformers.aliasToBean(AdmissionLocation.class)).uniqueResult();
-		List<BedLayout> bedLayouts = getBedLayoutByLocation(location);
+		List<BedLayout> bedLayouts = getBedLayoutsByLocation(location);
 		
 		admissionLocation.setWard(location);
 		admissionLocation.setBedLayouts(bedLayouts);
@@ -219,7 +219,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	}
 	
 	@Override
-	public List<BedLocationMapping> getBedLocationMappingByLocation(Location location) {
+	public List<BedLocationMapping> getBedLocationMappingsByLocation(Location location) {
 		String hql = "select blm " + "from BedLocationMapping blm " + "where blm.location=:location";
 		
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
@@ -249,7 +249,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	}
 	
 	@Override
-	public List<BedLayout> getBedLayoutByLocation(Location location) {
+	public List<BedLayout> getBedLayoutsByLocation(Location location) {
 		Set<Location> locations = new HashSet<Location>(Arrays.asList(location));
 		Set<Location> childLocations = location.getChildLocations();
 		if (!CollectionUtils.isEmpty(childLocations)) {
@@ -414,6 +414,13 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	public void deleteBedType(BedType bedType) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.delete(bedType);
+		session.flush();
+	}
+	
+	@Override
+	public void deleteBedLocationMapping(BedLocationMapping bedLocationMapping) {
+		Session session = this.sessionFactory.getCurrentSession();
+		session.delete(bedLocationMapping);
 		session.flush();
 	}
 }

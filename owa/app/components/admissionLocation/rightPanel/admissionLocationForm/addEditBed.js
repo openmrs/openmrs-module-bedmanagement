@@ -133,11 +133,13 @@ export default class AddEditBed extends React.Component {
                     activeUuid: self.props.activeUuid
                 });
             })
-            .catch(function(error) {
+            .catch(function(errorResponse) {
                 self.setState({
                     disableSubmit: false
                 });
-                self.props.admissionLocationFunctions.notify('error', error.message);
+
+                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                self.props.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }
 

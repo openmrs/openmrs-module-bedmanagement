@@ -34,8 +34,9 @@ export default class LocationBlock extends React.PureComponent {
                     self.props.admissionLocationFunctions.notify('success', 'Delete successfully');
                     self.props.admissionLocationFunctions.reFetchAllAdmissionLocations();
                 })
-                .catch(function(error) {
-                    self.props.admissionLocationFunctions.notify('error', error.message);
+                .catch(function(errorResponse) {
+                    const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                    self.props.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
                 });
         }
     }

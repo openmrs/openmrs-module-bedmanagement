@@ -19,6 +19,7 @@ import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl;
+import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -143,7 +144,7 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
 		        .getAdmissionLocationByLocation(location);
 		Context.getService(BedManagementService.class).setBedLayoutForAdmissionLocation(admissionLocation, 2, 3);
 		List<BedLocationMapping> bedLocationMappings = Context.getService(BedManagementService.class)
-		        .getBedLocationMappingByLocation(admissionLocation.getWard());
+		        .getBedLocationMappingsByLocation(admissionLocation.getWard());
 		
 		Assert.assertEquals(6, bedLocationMappings.size());
 		Assert.assertEquals(1, bedLocationMappings.get(0).getRow());
@@ -159,7 +160,7 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
 		Location location = Context.getService(LocationService.class)
 		        .getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b56");
 		List<BedLocationMapping> bedLocationMappingList = Context.getService(BedManagementService.class)
-		        .getBedLocationMappingByLocation(location);
+		        .getBedLocationMappingsByLocation(location);
 		
 		Assert.assertEquals(6, bedLocationMappingList.size());
 		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b56", bedLocationMappingList.get(0).getLocation().getUuid());
@@ -168,7 +169,7 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
 		Location location2 = Context.getService(LocationService.class)
 		        .getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
 		List<BedLocationMapping> bedLocationMappingList2 = Context.getService(BedManagementService.class)
-		        .getBedLocationMappingByLocation(location2);
+		        .getBedLocationMappingsByLocation(location2);
 		Assert.assertEquals(18, bedLocationMappingList2.size());
 		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMappingList2.get(0).getLocation().getUuid());
 		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMappingList2.get(5).getLocation().getUuid());
@@ -374,5 +375,34 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
 		
 		Assert.assertEquals("Not needed more", bedTag.getVoidReason());
 		Assert.assertTrue(bedTag.getVoided());
+	}
+	
+	@Test
+	public void shouldResizeAdmissionLocationBedLayoutIfUserHasPrivileges() {
+		Context.authenticate(superUser, superUserPassword);
+		
+		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
+		Location location = Context.getService(LocationService.class)
+		        .getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
+		AdmissionLocation admissionLocation = bedManagementService.getAdmissionLocationByLocation(location);
+		bedManagementService.setBedLayoutForAdmissionLocation(admissionLocation, 3, 5);
+		List<BedLocationMapping> bedLocationMappings = bedManagementService.getBedLocationMappingsByLocation(location);
+		
+		Assert.assertEquals(15, bedLocationMappings.size());
+		Assert.assertEquals(1, bedLocationMappings.get(0).getRow());
+		Assert.assertEquals(1, bedLocationMappings.get(0).getColumn());
+		Assert.assertEquals(3, bedLocationMappings.get(14).getRow());
+		Assert.assertEquals(5, bedLocationMappings.get(14).getColumn());
+	}
+	
+	@Test(expected = IllegalPropertyException.class)
+	public void shouldThrowExceptionOnResizeBedLayoutIfBlockByExistingBeds() {
+		Context.authenticate(superUser, superUserPassword);
+		
+		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
+		Location location = Context.getService(LocationService.class)
+		        .getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
+		AdmissionLocation admissionLocation = bedManagementService.getAdmissionLocationByLocation(location);
+		bedManagementService.setBedLayoutForAdmissionLocation(admissionLocation, 3, 4);
 	}
 }

@@ -13,8 +13,8 @@ export default class SetBedLayout extends React.Component {
 
         this.state = {
             locationUuid: this.admissionLocation.uuid,
-            row: 1,
-            column: 1,
+            row: props.row,
+            column: props.column,
             disableSubmit: false,
             rowFieldError: '',
             columnFieldError: ''
@@ -128,11 +128,12 @@ export default class SetBedLayout extends React.Component {
                     activeUuid: self.props.activeUuid
                 });
             })
-            .catch(function(error) {
+            .catch(function(errorResponse) {
                 self.setState({
                     disableSubmit: false
                 });
-                self.props.admissionLocationFunctions.notify('error', error.message);
+                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                self.props.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }
 

@@ -98,7 +98,7 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 	@PropertyGetter("bedLocationMappings")
 	public Object getBedLocationMappings(AdmissionLocation admissionLocation) throws Exception {
 		List<BedLocationMapping> bedLocationMappings = Context.getService(BedManagementService.class)
-		        .getBedLocationMappingByLocation(admissionLocation.getWard());
+		        .getBedLocationMappingsByLocation(admissionLocation.getWard());
 		
 		List<SimpleObject> ret = new ArrayList<SimpleObject>();
 		for (BedLocationMapping bedLocationMapping : bedLocationMappings) {
