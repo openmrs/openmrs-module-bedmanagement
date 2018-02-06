@@ -3,14 +3,24 @@ import {shallow, mount} from 'enzyme';
 import {shallowToJson} from 'enzyme-to-json';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import {IntlProvider} from 'react-intl';
 
 import LocationBlock from 'components/admissionLocation/rightPanel/locationBlock';
 import admissionLocationFunctionsMock from 'components/__mocks__/admissionLocationFunctions-mock';
 
 require('components/__mocks__/location-mock');
-const testProps = {
-    admissionLocationFunctions: admissionLocationFunctionsMock,
-    admissionLocations: admissionLocationFunctionsMock.getAdmissionLocations()
+
+import messages from 'i18n/messages';
+const intlProvider = new IntlProvider({locale: 'en', messages: messages['en']}, {});
+const {intl} = intlProvider.getChildContext();
+const testData = {
+    props: {
+        admissionLocationFunctions: admissionLocationFunctionsMock,
+        admissionLocations: admissionLocationFunctionsMock.getAdmissionLocations()
+    },
+    context: {
+        intl: intl
+    }
 };
 
 describe('LocationBlock', () => {
@@ -27,9 +37,10 @@ describe('LocationBlock', () => {
         const generalWardLocationBlock = shallow(
             <LocationBlock
                 activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-                admissionLocation={testProps.admissionLocations['baf7bd38-d225-11e4-9c67-080027b662ec']}
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                admissionLocation={testData.props.admissionLocations['baf7bd38-d225-11e4-9c67-080027b662ec']}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
 
         expect(
@@ -43,9 +54,10 @@ describe('LocationBlock', () => {
         const labourWardLocationBlock = shallow(
             <LocationBlock
                 activeUuid="bb0e512e-d225-11e4-9c67-080027b662ec"
-                admissionLocation={testProps.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                admissionLocation={testData.props.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
 
         expect(
@@ -61,13 +73,14 @@ describe('LocationBlock', () => {
         const spyOnClickHandler = jest.spyOn(LocationBlock.prototype, 'onClickHandler');
         const spyOnEditWardClickHandler = jest.spyOn(LocationBlock.prototype, 'editWardClickHandler');
         const spyOnDeleteHandler = jest.spyOn(LocationBlock.prototype, 'onDeleteHandler');
-        const spySetState = jest.spyOn(testProps.admissionLocationFunctions, 'setState');
+        const spySetState = jest.spyOn(testData.props.admissionLocationFunctions, 'setState');
         const generalWardLocationBlock = mount(
             <LocationBlock
                 activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-                admissionLocation={testProps.admissionLocations['baf7bd38-d225-11e4-9c67-080027b662ec']}
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                admissionLocation={testData.props.admissionLocations['baf7bd38-d225-11e4-9c67-080027b662ec']}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
 
         generalWardLocationBlock.find('.location.block').simulate('click');
@@ -91,9 +104,10 @@ describe('LocationBlock', () => {
         const labourWardLocationBlock = mount(
             <LocationBlock
                 activeUuid="bb0e512e-d225-11e4-9c67-080027b662ec"
-                admissionLocation={testProps.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                admissionLocation={testData.props.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
         labourWardLocationBlock.find('.fa-trash').simulate('click');
         expect(spyOnDeleteHandler).toHaveBeenCalled();

@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import BedBlock from 'components/admissionLocation/rightPanel/bedLayout/bedBlock';
 
 export default class BedLayoutRow extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
+        this.intl = context.intl;
         this.initData = this.initData.bind(this);
         this.initData(props);
     }
@@ -60,4 +61,8 @@ BedLayoutRow.propTypes = {
     rowBeds: PropTypes.array.isRequired,
     loadAdmissionLocationLayout: PropTypes.func.isRequired,
     admissionLocationFunctions: PropTypes.object.isRequired
+};
+
+BedLayoutRow.contextTypes = {
+    intl: PropTypes.object
 };

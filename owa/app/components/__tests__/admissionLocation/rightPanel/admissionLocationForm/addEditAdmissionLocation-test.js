@@ -3,14 +3,23 @@ import {shallow, mount} from 'enzyme';
 import {shallowToJson} from 'enzyme-to-json';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import {IntlProvider} from 'react-intl';
 
 import AddEditAdmissionLocation from 'components/admissionLocation/rightPanel/admissionLocationForm/addEditAdmissionLocation';
 import admissionLocationFunctionsMock from 'components/__mocks__/admissionLocationFunctions-mock';
+import messages from 'i18n/messages';
 
 require('components/__mocks__/location-mock');
-const testProps = {
-    admissionLocationFunctions: admissionLocationFunctionsMock,
-    admissionLocations: admissionLocationFunctionsMock.getAdmissionLocations()
+const intlProvider = new IntlProvider({locale: 'en', messages: messages['en']}, {});
+const {intl} = intlProvider.getChildContext();
+const testData = {
+    props: {
+        admissionLocationFunctions: admissionLocationFunctionsMock,
+        admissionLocations: admissionLocationFunctionsMock.getAdmissionLocations()
+    },
+    context: {
+        intl: intl
+    }
 };
 
 describe('AddEditAdmissionLocation', () => {
@@ -34,9 +43,10 @@ describe('AddEditAdmissionLocation', () => {
         const addAdmissionLocationForm = shallow(
             <AddEditAdmissionLocation
                 activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
                 operation="add"
-            />
+            />,
+            {context: testData.context}
         );
         expect(
             addAdmissionLocationForm
@@ -51,9 +61,10 @@ describe('AddEditAdmissionLocation', () => {
         const editAdmissionLocationForm = shallow(
             <AddEditAdmissionLocation
                 activeUuid="e48fb2b3-d490-11e5-b193-0800270d80ce"
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
                 operation="edit"
-            />
+            />,
+            {context: testData.context}
         );
         expect(
             editAdmissionLocationForm
@@ -68,9 +79,10 @@ describe('AddEditAdmissionLocation', () => {
         const editTopLevelAdmissionLocationForm = shallow(
             <AddEditAdmissionLocation
                 activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
                 operation="edit"
-            />
+            />,
+            {context: testData.context}
         );
         expect(editTopLevelAdmissionLocationForm.find('select').props().value).toBe(
             'c1e42932-3f10-11e4-adec-0800271c1b75'
@@ -86,13 +98,14 @@ describe('AddEditAdmissionLocation', () => {
         const spyOnSelectParentLocation = jest.spyOn(AddEditAdmissionLocation.prototype, 'onSelectParentLocation');
         const spyOnChangeDescriptionField = jest.spyOn(AddEditAdmissionLocation.prototype, 'onChangeDescriptionField');
         const spyOnChangeNameField = jest.spyOn(AddEditAdmissionLocation.prototype, 'onChangeNameField');
-        const spySetState = jest.spyOn(testProps.admissionLocationFunctions, 'setState');
+        const spySetState = jest.spyOn(testData.props.admissionLocationFunctions, 'setState');
         const editTopLevelAdmissionLocationForm = mount(
             <AddEditAdmissionLocation
                 activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
                 operation="edit"
-            />
+            />,
+            {context: testData.context}
         );
 
         editTopLevelAdmissionLocationForm.find("input[type='text']").simulate('change');

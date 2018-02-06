@@ -3,13 +3,23 @@ import {shallow, mount} from 'enzyme';
 import {shallowToJson} from 'enzyme-to-json';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import {IntlProvider} from 'react-intl';
 
 import admissionLocationFunctionsMock from 'components/__mocks__/admissionLocationFunctions-mock';
 import SetBedLayout from '../../../../admissionLocation/rightPanel/admissionLocationForm/setBedLayout';
+import messages from 'i18n/messages';
 
 require('components/__mocks__/location-mock');
-const testProps = {
-    admissionLocationFunctions: admissionLocationFunctionsMock
+
+const intlProvider = new IntlProvider({locale: 'en', messages: messages['en']}, {});
+const {intl} = intlProvider.getChildContext();
+const testData = {
+    props: {
+        admissionLocationFunctions: admissionLocationFunctionsMock
+    },
+    context: {
+        intl: intl
+    }
 };
 
 describe('SetBedLayout', () => {
@@ -87,10 +97,11 @@ describe('SetBedLayout', () => {
         const setLayoutForm = shallow(
             <SetBedLayout
                 activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
                 row={1}
                 column={1}
-            />
+            />,
+            {context: testData.context}
         );
 
         expect(shallowToJson(setLayoutForm)).toMatchSnapshot();
@@ -102,14 +113,15 @@ describe('SetBedLayout', () => {
         const spyOnChangeRowField = jest.spyOn(SetBedLayout.prototype, 'onChangeRowField');
         const spyOnChangeColumnField = jest.spyOn(SetBedLayout.prototype, 'onChangeColumnField');
 
-        const spySetState = jest.spyOn(testProps.admissionLocationFunctions, 'setState');
+        const spySetState = jest.spyOn(testData.props.admissionLocationFunctions, 'setState');
         const setLayoutForm = mount(
             <SetBedLayout
                 activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
                 row={1}
                 column={1}
-            />
+            />,
+            {context: testData.context}
         );
 
         setLayoutForm.find('#row-field').simulate('change');

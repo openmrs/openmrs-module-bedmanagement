@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import AdmissionLocationHelper from 'utilities/admissionLocationHelper';
 
 export default class HierarchyItem extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.admissionLocationHelper = new AdmissionLocationHelper();
 
@@ -90,4 +90,8 @@ HierarchyItem.propTypes = {
         isOpen: PropTypes.bool.isRequired,
         isHigherLevel: PropTypes.bool.isRequired
     })
+};
+
+HierarchyItem.contextTypes = {
+    intl: PropTypes.object
 };

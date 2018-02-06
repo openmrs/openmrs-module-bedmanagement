@@ -83,7 +83,8 @@ export default class AdmissionLocationList extends React.Component {
 }
 
 AdmissionLocationList.contextTypes = {
-    store: PropTypes.object
+    store: PropTypes.object,
+    intl: PropTypes.object
 };
 
 AdmissionLocationList.propTypes = {

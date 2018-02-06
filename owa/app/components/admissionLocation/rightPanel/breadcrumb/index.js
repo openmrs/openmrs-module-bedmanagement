@@ -5,9 +5,9 @@ import AdmissionLocationHelper from 'utilities/admissionLocationHelper';
 
 require('./breadcrumb.css');
 export default class Breadcrumb extends React.PureComponent {
-    constructor() {
-        super();
-
+    constructor(props, context) {
+        super(props, context);
+        this.intl = context.intl;
         this.admissionLocationHelper = new AdmissionLocationHelper();
         this.breadcrumbLocations = this.breadcrumbLocations.bind(this);
         this.clickHandler = this.clickHandler.bind(this);
@@ -34,7 +34,7 @@ export default class Breadcrumb extends React.PureComponent {
                         href="javascript:void(0)"
                         onClick={(e) => this.clickHandler(e, null)}
                         title="Admission Locations">
-                        Admission Locations
+                        {this.intl.formatMessage({id: 'ADMISSION_LOCATIONS'})}
                     </a>
                 </li>
                 {this.breadcrumbLocations().map((admissionLocation, key) => (
@@ -55,4 +55,8 @@ export default class Breadcrumb extends React.PureComponent {
 Breadcrumb.propTypes = {
     activeUuid: PropTypes.string,
     admissionLocationFunctions: PropTypes.object.isRequired
+};
+
+Breadcrumb.contextTypes = {
+    intl: PropTypes.object
 };

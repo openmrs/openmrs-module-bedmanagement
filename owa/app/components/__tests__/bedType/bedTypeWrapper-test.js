@@ -3,16 +3,27 @@ import {shallow} from 'enzyme';
 import {shallowToJson} from 'enzyme-to-json';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import {IntlProvider} from 'react-intl';
 
 import BedTypeWrapper from 'components/bedType/bedTypeWrapper';
+import messages from 'i18n/messages';
+
 require('components/__mocks__/location-mock');
 require('babel-polyfill');
-const testProps = {
-    match: {
-        isExact: true,
-        params: {},
-        path: '/owa/bedmanagement/bedTypes.html',
-        url: '/owa/bedmanagement/bedTypes.html'
+
+const intlProvider = new IntlProvider({locale: 'en', messages: messages['en']}, {});
+const {intl} = intlProvider.getChildContext();
+const testData = {
+    props: {
+        match: {
+            isExact: true,
+            params: {},
+            path: '/owa/bedmanagement/bedTypes.html',
+            url: '/owa/bedmanagement/bedTypes.html'
+        }
+    },
+    context: {
+        intl: intl
     },
     sleep: (milisec) => {
         return new Promise((resolve, reject) => {
@@ -25,8 +36,6 @@ const testProps = {
 
 describe('BedTypeWrapper', () => {
     beforeAll(() => {
-        //jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-
         var mock = new MockAdapter(axios);
         const data = {
             results: [
@@ -55,10 +64,10 @@ describe('BedTypeWrapper', () => {
     });
 
     it('Should render bed Type page properly', async () => {
-        let bedTypeWrapper = shallow(<BedTypeWrapper match={testProps.match} />);
+        let bedTypeWrapper = shallow(<BedTypeWrapper match={testData.props.match} />, {context: testData.context});
         const bedTypeFunctions = bedTypeWrapper.instance().bedTypeFunctions;
 
-        await testProps.sleep(100);
+        await testData.sleep(100);
         expect(bedTypeWrapper.find('BedTypeList').length).toBe(1);
         expect(shallowToJson(bedTypeWrapper)).toMatchSnapshot();
 
@@ -76,12 +85,12 @@ describe('BedTypeWrapper', () => {
     });
 
     it('Should work functions properly', async () => {
-        const bedTypeWrapper = shallow(<BedTypeWrapper match={testProps.match} />);
+        const bedTypeWrapper = shallow(<BedTypeWrapper match={testData.props.match} />, {context: testData.context});
         const bedTypeFunctions = bedTypeWrapper.instance().bedTypeFunctions;
 
         expect(bedTypeFunctions.getBedTypes()).toEqual([]);
 
-        await testProps.sleep(100);
+        await testData.sleep(100);
         expect(bedTypeFunctions.getBedTypes()).toEqual([
             {
                 uuid: '6f9faf08-0fd5-11e8-adb7-080027b38971',

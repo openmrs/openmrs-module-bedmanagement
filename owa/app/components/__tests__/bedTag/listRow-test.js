@@ -1,25 +1,32 @@
 import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {shallowToJson} from 'enzyme-to-json';
+import {IntlProvider} from 'react-intl';
+import PropTypes from 'prop-types';
 
 import BedTagListRow from 'components/bedTag/bedTagList/bedTagListRow';
 import bedTagFunctionsMock from 'components/__mocks__/bedTagFunctions-mock';
+import messages from 'i18n/messages';
 
-const testProps = {
-    bedTagFunctions: bedTagFunctionsMock
+const intlProvider = new IntlProvider({locale: 'en', messages: messages['en']}, {});
+const {intl} = intlProvider.getChildContext();
+const testData = {
+    props: {
+        bedTagFunctions: bedTagFunctionsMock
+    },
+    context: {
+        intl: intl
+    }
 };
 
 describe('BedTagListRow', () => {
     it('Should render bed tag list properly', () => {
-        const bedTagListRow = mount(
-            <table>
-                <tbody>
-                    <BedTagListRow
-                        bedTag={testProps.bedTagFunctions.getBedTagByUuid('ff7ed494-7b9c-4478-812a-5187e297f94c')}
-                        bedTagFunctions={testProps.bedTagFunctions}
-                    />
-                </tbody>
-            </table>
+        const bedTagListRow = shallow(
+            <BedTagListRow
+                bedTag={testData.props.bedTagFunctions.getBedTagByUuid('ff7ed494-7b9c-4478-812a-5187e297f94c')}
+                bedTagFunctions={testData.props.bedTagFunctions}
+            />,
+            {context: testData.context}
         );
 
         expect(
@@ -35,16 +42,32 @@ describe('BedTagListRow', () => {
     it('Should trigger event handler', () => {
         const spyOnDeleteHandler = jest.spyOn(BedTagListRow.prototype, 'deleteHandler');
         const spyOnEditHandler = jest.spyOn(BedTagListRow.prototype, 'editHandler');
-        const spyOnSetState = jest.spyOn(testProps.bedTagFunctions, 'setState');
+        const spyOnSetState = jest.spyOn(testData.props.bedTagFunctions, 'setState');
+        const WrapperBedTagListRow = () => {
+            return (
+                <table>
+                    <tbody>
+                        <BedTagListRow
+                            bedTag={testData.props.bedTagFunctions.getBedTagByUuid(
+                                'ff7ed494-7b9c-4478-812a-5187e297f94c'
+                            )}
+                            bedTagFunctions={testData.props.bedTagFunctions}
+                        />
+                    </tbody>
+                </table>
+            );
+        };
+
+        WrapperBedTagListRow.contextTypes = {
+            intl: PropTypes.object
+        };
+
         const bedTagList = mount(
-            <table>
-                <tbody>
-                    <BedTagListRow
-                        bedTag={testProps.bedTagFunctions.getBedTagByUuid('ff7ed494-7b9c-4478-812a-5187e297f94c')}
-                        bedTagFunctions={testProps.bedTagFunctions}
-                    />
-                </tbody>
-            </table>
+            <WrapperBedTagListRow
+                bedTag={testData.props.bedTagFunctions.getBedTagByUuid('ff7ed494-7b9c-4478-812a-5187e297f94c')}
+                bedTagFunctions={testData.props.bedTagFunctions}
+            />,
+            {context: testData.context}
         );
 
         bedTagList.find('.fa-edit').simulate('click');

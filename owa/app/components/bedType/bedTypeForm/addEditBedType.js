@@ -6,8 +6,8 @@ import UrlHelper from 'utilities/urlHelper';
 
 require('./bedTypeForm.css');
 export default class AddEditBedType extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.bedType = props.bedTypeFunctions.getBedTypeByUuid(props.bedTypeUuid);
         this.state = {
@@ -18,6 +18,7 @@ export default class AddEditBedType extends React.Component {
             disableSubmit: false
         };
 
+        this.intl = context.intl;
         this.urlHelper = new UrlHelper();
         this.onChangeNameField = this.onChangeNameField.bind(this);
         this.onChangeDisplayNameField = this.onChangeDisplayNameField.bind(this);
@@ -79,7 +80,8 @@ export default class AddEditBedType extends React.Component {
                 });
 
                 self.props.bedTypeFunctions.fetchBedTypes();
-                self.props.bedTypeFunctions.notify('success', 'Bed Type save successfully');
+                const saveSuccessMsg = self.intl.formatMessage({id: 'BED_TYPE_SAVE_MSG'});
+                self.props.bedTypeFunctions.notify('success', saveSuccessMsg);
                 self.props.bedTypeFunctions.setState({
                     activePage: 'listing',
                     pageData: {}
@@ -99,11 +101,17 @@ export default class AddEditBedType extends React.Component {
         return (
             <div className="form-container">
                 <fieldset className="bed-type-form">
-                    <legend>&nbsp; {this.props.operation == 'add' ? 'Add' : 'Edit'} Bed Type &nbsp;</legend>
+                    <legend>
+                        &nbsp;{' '}
+                        {this.props.operation == 'add'
+                            ? this.intl.formatMessage({id: 'ADD'})
+                            : this.intl.formatMessage({id: 'EDIT'})}{' '}
+                        {this.intl.formatMessage({id: 'BED_TYPE'})} &nbsp;
+                    </legend>
                     <div className="block-content">
                         <form onSubmit={this.onSubmitHandler}>
                             <div className="form-block">
-                                <label className="form-title">Name:</label>
+                                <label className="form-title">{this.intl.formatMessage({id: 'BED_TYPE'})}:</label>
                                 <input
                                     type="text"
                                     value={this.state.name}
@@ -116,7 +124,7 @@ export default class AddEditBedType extends React.Component {
                                 />
                             </div>
                             <div className="form-block">
-                                <label className="form-title">Display Name:</label>
+                                <label className="form-title">{this.intl.formatMessage({id: 'DISPLAY_NAME'})}:</label>
                                 <input
                                     type="text"
                                     value={this.state.displayName}
@@ -129,7 +137,7 @@ export default class AddEditBedType extends React.Component {
                                 />
                             </div>
                             <div className="form-block">
-                                <label className="form-title">Description:</label>
+                                <label className="form-title">{this.intl.formatMessage({id: 'DESCRIPTION'})}:</label>
                                 <textarea
                                     value={this.state.description}
                                     ref={(input) => {
@@ -143,7 +151,11 @@ export default class AddEditBedType extends React.Component {
                                 <input
                                     type="submit"
                                     name="submit"
-                                    value={this.state.disableSubmit ? 'Saving...' : 'Save'}
+                                    value={
+                                        this.state.disableSubmit
+                                            ? this.intl.formatMessage({id: 'SAVING'})
+                                            : this.intl.formatMessage({id: 'SAVE'})
+                                    }
                                     disabled={this.state.disableSubmit}
                                     className="form-btn float-left margin-right"
                                 />
@@ -151,7 +163,7 @@ export default class AddEditBedType extends React.Component {
                                     type="button"
                                     onClick={this.cancelEventHandler}
                                     name="cancel"
-                                    value="Cancel"
+                                    value={this.intl.formatMessage({id: 'CANCEL'})}
                                     className="form-btn float-left"
                                 />
                             </div>
@@ -166,4 +178,8 @@ export default class AddEditBedType extends React.Component {
 AddEditBedType.propTypes = {
     bedTypeUuid: PropTypes.string,
     bedTypeFunctions: PropTypes.object.isRequired
+};
+
+AddEditBedType.contextTypes = {
+    intl: PropTypes.object
 };

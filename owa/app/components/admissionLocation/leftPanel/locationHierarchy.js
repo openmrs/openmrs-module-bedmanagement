@@ -6,9 +6,10 @@ import HierarchyItem from 'components/admissionLocation/leftPanel/hierarchyItem'
 
 require('./hierarchy.css');
 export default class LocationHierarchy extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
+        this.intl = context.intl;
         this.admissionLocationHelper = new AdmissionLocationHelper();
         this.higherLevelAdmissionLocations = this.admissionLocationHelper.getHigherLevelAdmissionLocations(
             props.admissionLocationFunctions.getAdmissionLocations()
@@ -82,8 +83,7 @@ export default class LocationHierarchy extends React.Component {
                     <li className="title">
                         <i className="fa fa-minus-square" onClick={this.onClickIcon} aria-hidden="true" />
                         <span className={this.cssClass.getTitleClass()} onClick={this.onClickTitle}>
-                            {' '}
-                            Admission Locations{' '}
+                            {this.intl.formatMessage({id: 'ADMISSION_LOCATIONS'})}
                         </span>
                     </li>
                     {Object.keys(this.higherLevelAdmissionLocations).map((uuid) => (
@@ -103,4 +103,8 @@ export default class LocationHierarchy extends React.Component {
 LocationHierarchy.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     admissionLocationFunctions: PropTypes.object.isRequired
+};
+
+LocationHierarchy.contextTypes = {
+    intl: PropTypes.object
 };

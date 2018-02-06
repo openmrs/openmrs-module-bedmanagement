@@ -6,9 +6,10 @@ import UrlHelper from 'utilities/urlHelper';
 
 require('./locationBlock.css');
 export default class LocationBlock extends React.PureComponent {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
+        this.intl = context.intl;
         this.urlHelper = new UrlHelper();
         this.childLocations = this.props.admissionLocationFunctions.getChildAdmissionLocations(
             this.props.admissionLocation.uuid
@@ -22,16 +23,21 @@ export default class LocationBlock extends React.PureComponent {
         event.preventDefault();
         event.stopPropagation();
         const self = this;
-        const confirmation = confirm(
-            'Are you sure you want to delete admission location ' + this.props.admissionLocation.name + '?'
+        const confirmationMsg = this.intl.formatMessage(
+            {
+                id: 'DELETE_ADMISSION_LOCATION_CONFIRM_MESSAGE'
+            },
+            {location_name: this.props.admissionLocation.name}
         );
+        const deleteSuccessMsg = this.intl.formatMessage({id: 'DELETE_SUCCESSFULLY'});
+        const confirmation = confirm(confirmationMsg);
         if (confirmation) {
             axios({
                 method: 'delete',
                 url: this.urlHelper.apiBaseUrl() + '/admissionLocation/' + this.props.admissionLocation.uuid
             })
                 .then(function() {
-                    self.props.admissionLocationFunctions.notify('success', 'Delete successfully');
+                    self.props.admissionLocationFunctions.notify('success', deleteSuccessMsg);
                     self.props.admissionLocationFunctions.reFetchAllAdmissionLocations();
                 })
                 .catch(function(errorResponse) {
@@ -92,4 +98,8 @@ export default class LocationBlock extends React.PureComponent {
 LocationBlock.propTypes = {
     admissionLocation: PropTypes.object.isRequired,
     admissionLocationFunctions: PropTypes.object.isRequired
+};
+
+LocationBlock.contextTypes = {
+    intl: PropTypes.object
 };

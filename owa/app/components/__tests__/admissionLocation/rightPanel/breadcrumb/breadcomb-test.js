@@ -2,12 +2,21 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {shallowToJson} from 'enzyme-to-json';
 import _ from 'lodash';
+import {IntlProvider} from 'react-intl';
 
 import Breadcomb from 'components/admissionLocation/rightPanel/breadcrumb';
 import admissionLocationFunctionsMock from 'components/__mocks__/admissionLocationFunctions-mock';
+import messages from 'i18n/messages';
 
-const testProps = {
-    admissionLocationFunctions: admissionLocationFunctionsMock
+const intlProvider = new IntlProvider({locale: 'en', messages: messages['en']}, {});
+const {intl} = intlProvider.getChildContext();
+const testData = {
+    props: {
+        admissionLocationFunctions: admissionLocationFunctionsMock
+    },
+    context: {
+        intl: intl
+    }
 };
 
 describe('Breadcomb', () => {
@@ -15,8 +24,9 @@ describe('Breadcomb', () => {
         const breadcomb = shallow(
             <Breadcomb
                 activeUuid="e48fb2b3-d490-11e5-b193-0800270d80ce"
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
 
         expect(breadcomb.find('ul li').length).toBe(3);
@@ -32,12 +42,16 @@ describe('Breadcomb', () => {
 
     it('Should trigger event handler', () => {
         const spyOnClickHandler = jest.spyOn(Breadcomb.prototype, 'clickHandler');
-        const spyOnSetActiveLocationUuid = jest.spyOn(testProps.admissionLocationFunctions, 'setActiveLocationUuid');
+        const spyOnSetActiveLocationUuid = jest.spyOn(
+            testData.props.admissionLocationFunctions,
+            'setActiveLocationUuid'
+        );
         const breadcomb = mount(
             <Breadcomb
                 activeUuid="e48fb2b3-d490-11e5-b193-0800270d80ce"
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
 
         breadcomb
@@ -53,8 +67,9 @@ describe('Breadcomb', () => {
         const breadcomb = mount(
             <Breadcomb
                 activeUuid="e48fb2b3-d490-11e5-b193-0800270d80ce"
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
 
         const expectedBreadcrumbLocations = [

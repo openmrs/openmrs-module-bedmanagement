@@ -1,13 +1,22 @@
 import React from 'react';
 import {shallowToJson} from 'enzyme-to-json';
 import {shallow, mount} from 'enzyme';
+import {IntlProvider} from 'react-intl';
 
 import HierarchyItem from 'components/admissionLocation/leftPanel/hierarchyItem';
 import hierarchyFunctionMock from 'components/__mocks__/hierarchyFunctions-mock';
+import messages from 'i18n/messages';
 
-const testProp = {
-    hierarchyFunction: hierarchyFunctionMock,
-    admissionLocations: hierarchyFunctionMock.getAdmissionLocations()
+const intlProvider = new IntlProvider({locale: 'en', messages: messages['en']}, {});
+const {intl} = intlProvider.getChildContext();
+const testData = {
+    props: {
+        hierarchyFunction: hierarchyFunctionMock,
+        admissionLocations: hierarchyFunctionMock.getAdmissionLocations()
+    },
+    context: {
+        intl: intl
+    }
 };
 
 describe('HierarchyItem', () => {
@@ -16,9 +25,10 @@ describe('HierarchyItem', () => {
             <HierarchyItem
                 key="baf7bd38-d225-11e4-9c67-080027b662ec"
                 isParentOpen={true}
-                hierarchyFunction={testProp.hierarchyFunction}
-                admissionLocation={testProp.admissionLocations['baf7bd38-d225-11e4-9c67-080027b662ec']}
-            />
+                hierarchyFunction={testData.props.hierarchyFunction}
+                admissionLocation={testData.props.admissionLocations['baf7bd38-d225-11e4-9c67-080027b662ec']}
+            />,
+            {context: testData.context}
         );
 
         expect(shallowToJson(hierarchyItem)).toMatchSnapshot();
@@ -28,9 +38,10 @@ describe('HierarchyItem', () => {
         const hierarchyItem = shallow(
             <HierarchyItem
                 isParentOpen={true}
-                hierarchyFunction={testProp.hierarchyFunction}
-                admissionLocation={testProp.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
-            />
+                hierarchyFunction={testData.props.hierarchyFunction}
+                admissionLocation={testData.props.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
+            />,
+            {context: testData.context}
         );
 
         expect(
@@ -45,16 +56,20 @@ describe('HierarchyItem', () => {
     it('Should trigger event handler', () => {
         const spyOnClickTitle = jest.spyOn(HierarchyItem.prototype, 'onClickTitle');
         const spyOnClickIcon = jest.spyOn(HierarchyItem.prototype, 'onClickIcon');
-        const spySetState = jest.spyOn(testProp.hierarchyFunction, 'setState');
-        const spySetAdmissionLocationIsOpen = jest.spyOn(testProp.hierarchyFunction, 'setAdmissionLocationIsOpen');
-        const spyToggleIsOpen = jest.spyOn(testProp.hierarchyFunction, 'toggleIsOpen');
+        const spySetState = jest.spyOn(testData.props.hierarchyFunction, 'setState');
+        const spySetAdmissionLocationIsOpen = jest.spyOn(
+            testData.props.hierarchyFunction,
+            'setAdmissionLocationIsOpen'
+        );
+        const spyToggleIsOpen = jest.spyOn(testData.props.hierarchyFunction, 'toggleIsOpen');
 
         const hierarchyItem = mount(
             <HierarchyItem
                 isParentOpen={true}
-                hierarchyFunction={testProp.hierarchyFunction}
-                admissionLocation={testProp.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
-            />
+                hierarchyFunction={testData.props.hierarchyFunction}
+                admissionLocation={testData.props.admissionLocations['bb0e512e-d225-11e4-9c67-080027b662ec']}
+            />,
+            {context: testData.context}
         );
 
         hierarchyItem.find('span').simulate('click');

@@ -6,8 +6,8 @@ import UrlHelper from 'utilities/urlHelper';
 
 require('./admissionLocationForm.css');
 export default class AddEditAdmissionLocation extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.urlHelper = new UrlHelper();
         this.initData = this.initData.bind(this);
@@ -24,6 +24,7 @@ export default class AddEditAdmissionLocation extends React.Component {
             disableSubmit: false
         };
 
+        this.intl = context.intl;
         this.onChangeNameField = this.onChangeNameField.bind(this);
         this.onChangeDescriptionField = this.onChangeDescriptionField.bind(this);
         this.onSelectParentLocation = this.onSelectParentLocation.bind(this);
@@ -106,7 +107,8 @@ export default class AddEditAdmissionLocation extends React.Component {
                     activeUuid: response.data.ward.uuid
                 });
 
-                self.props.admissionLocationFunctions.notify('success', 'Admission location save successfully');
+                const successMsg = self.intl.formatMessage({id: 'ADMISSION_LOCATION_SAVE_MSG'});
+                self.props.admissionLocationFunctions.notify('success', successMsg);
                 self.props.admissionLocationFunctions.reFetchAllAdmissionLocations();
                 self.props.admissionLocationFunctions.setState({
                     activePage: 'listing',
@@ -128,14 +130,24 @@ export default class AddEditAdmissionLocation extends React.Component {
         return (
             <div className="main-container">
                 <fieldset className="admission-location-form">
-                    <legend>&nbsp; {this.props.operation == 'add' ? 'Add' : 'Edit'} Ward &nbsp;</legend>
+                    <legend>
+                        &nbsp;{' '}
+                        {this.props.operation == 'add'
+                            ? this.intl.formatMessage({id: 'ADD'})
+                            : this.intl.formatMessage({id: 'EDIT'})}{' '}
+                        {this.intl.formatMessage({id: 'WARD'})} &nbsp;
+                    </legend>
                     <div className="block-content">
                         <form onSubmit={this.onSubmitHandler}>
                             <div className="form-block">
                                 {this.parentAdmissionLocation != null ? (
-                                    <label className="form-title inline">Parent Location:</label>
+                                    <label className="form-title inline">
+                                        {this.intl.formatMessage({id: 'PARENT_LOCATION'})}:
+                                    </label>
                                 ) : (
-                                    <label className="form-title">Parent Location:</label>
+                                    <label className="form-title">
+                                        {this.intl.formatMessage({id: 'PARENT_LOCATION'})}:
+                                    </label>
                                 )}
                                 {this.parentAdmissionLocation != null ? (
                                     <span>{this.parentAdmissionLocation.name}</span>
@@ -149,7 +161,7 @@ export default class AddEditAdmissionLocation extends React.Component {
                                                 ? this.state.parentAdmissionLocationUuid
                                                 : ''
                                         }>
-                                        <option value="">None</option>
+                                        <option value="">{this.intl.formatMessage({id: 'NONE'})}</option>
                                         {Object.keys(this.visitLocations).map((key) => (
                                             <option key={key} value={this.visitLocations[key].uuid}>
                                                 {this.visitLocations[key].name}
@@ -159,7 +171,7 @@ export default class AddEditAdmissionLocation extends React.Component {
                                 )}
                             </div>
                             <div className="form-block">
-                                <label className="form-title">Name:</label>
+                                <label className="form-title">{this.intl.formatMessage({id: 'NAME'})}:</label>
                                 <input
                                     type="text"
                                     onChange={this.onChangeNameField}
@@ -171,7 +183,7 @@ export default class AddEditAdmissionLocation extends React.Component {
                                 />
                             </div>
                             <div className="form-block">
-                                <label className="form-title">Description:</label>
+                                <label className="form-title">{this.intl.formatMessage({id: 'DESCRIPTION'})}:</label>
                                 <textarea
                                     name="description"
                                     rows="4"
@@ -185,7 +197,11 @@ export default class AddEditAdmissionLocation extends React.Component {
                                 <input
                                     type="submit"
                                     name="submit"
-                                    value={this.state.disableSubmit ? 'Saving...' : 'Save'}
+                                    value={
+                                        this.state.disableSubmit
+                                            ? this.intl.formatMessage({id: 'SAVING'})
+                                            : this.intl.formatMessage({id: 'SAVE'})
+                                    }
                                     disabled={this.state.disableSubmit}
                                     className="form-btn float-left margin-right"
                                 />
@@ -193,7 +209,7 @@ export default class AddEditAdmissionLocation extends React.Component {
                                     type="button"
                                     onClick={this.cancelEventHandler}
                                     name="cancel"
-                                    value="Cancel"
+                                    value={this.intl.formatMessage({id: 'CANCEL'})}
                                     className="form-btn float-left"
                                 />
                             </div>
@@ -214,4 +230,8 @@ AddEditAdmissionLocation.propTypes = {
     activeUuid: PropTypes.string,
     operation: PropTypes.string,
     admissionLocationFunctions: PropTypes.object.isRequired
+};
+
+AddEditAdmissionLocation.contextTypes = {
+    intl: PropTypes.object
 };

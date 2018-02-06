@@ -8,9 +8,12 @@ exports[`AddEditBedType Should display add edit bed type form properly 1`] = `
     className="bed-type-form"
   >
     <legend>
-        
+       
+       
       Add
-       Bed Type  
+       
+      Bed Type
+        
     </legend>
     <div
       className="block-content"
@@ -24,7 +27,8 @@ exports[`AddEditBedType Should display add edit bed type form properly 1`] = `
           <label
             className="form-title"
           >
-            Name:
+            Bed Type
+            :
           </label>
           <input
             id="name-field"
@@ -40,7 +44,8 @@ exports[`AddEditBedType Should display add edit bed type form properly 1`] = `
           <label
             className="form-title"
           >
-            Display Name:
+            Display Name
+            :
           </label>
           <input
             id="display-name-field"
@@ -56,7 +61,8 @@ exports[`AddEditBedType Should display add edit bed type form properly 1`] = `
           <label
             className="form-title"
           >
-            Description:
+            Description
+            :
           </label>
           <textarea
             id="description-field"
@@ -96,9 +102,12 @@ exports[`AddEditBedType Should display add edit bed type form properly 2`] = `
     className="bed-type-form"
   >
     <legend>
-        
+       
+       
       Edit
-       Bed Type  
+       
+      Bed Type
+        
     </legend>
     <div
       className="block-content"
@@ -112,7 +121,8 @@ exports[`AddEditBedType Should display add edit bed type form properly 2`] = `
           <label
             className="form-title"
           >
-            Name:
+            Bed Type
+            :
           </label>
           <input
             id="name-field"
@@ -128,7 +138,8 @@ exports[`AddEditBedType Should display add edit bed type form properly 2`] = `
           <label
             className="form-title"
           >
-            Display Name:
+            Display Name
+            :
           </label>
           <input
             id="display-name-field"
@@ -144,7 +155,8 @@ exports[`AddEditBedType Should display add edit bed type form properly 2`] = `
           <label
             className="form-title"
           >
-            Description:
+            Description
+            :
           </label>
           <textarea
             id="description-field"

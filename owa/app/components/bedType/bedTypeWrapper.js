@@ -19,6 +19,7 @@ export default class BedTypeWrapper extends React.Component {
             pageData: {}
         };
 
+        this.intl = context.intl;
         this.urlHelper = new UrlHelper();
         this.initData = this.initData.bind(this);
         this.initData();
@@ -67,12 +68,15 @@ export default class BedTypeWrapper extends React.Component {
         },
         notify: (notifyType, message) => {
             const self = this;
+            const successText = this.intl.formatMessage({id: 'SUCCESS'});
+            const errorText = this.intl.formatMessage({id: 'ERROR'});
+            const infoText = this.intl.formatMessage({id: 'INFO'});
             if (notifyType == 'success') {
-                self.refs.notificator.success('Success', message, 5000);
+                self.refs.notificator.success(successText, message, 5000);
             } else if (notifyType == 'error') {
-                self.refs.notificator.error('Error', message, 5000);
+                self.refs.notificator.error(errorText, message, 5000);
             } else {
-                self.refs.notificator.error('Info', message, 5000);
+                self.refs.notificator.error(infoText, message, 5000);
             }
         }
     };
@@ -109,5 +113,6 @@ export default class BedTypeWrapper extends React.Component {
 }
 
 BedTypeWrapper.contextTypes = {
-    store: PropTypes.object
+    store: PropTypes.object,
+    intl: PropTypes.object
 };

@@ -5,9 +5,10 @@ import BedTagListRow from 'components/bedTag/bedTagList/bedTagListRow';
 
 require('./bedTagList.css');
 export default class BedTagList extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
+        this.intl = context.intl;
         this.addNewHandler = this.addNewHandler.bind(this);
     }
 
@@ -25,13 +26,13 @@ export default class BedTagList extends React.Component {
     render() {
         return (
             <fieldset className="bed-Tag-listing">
-                <legend>&nbsp; Existing Bed Tags &nbsp;</legend>
+                <legend>&nbsp; {this.intl.formatMessage({id: 'EXISTING_BED_TAGS'})} &nbsp;</legend>
                 <table>
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th className="description">Description</th>
-                            <th>Action</th>
+                            <th>{this.intl.formatMessage({id: 'NAME'})}</th>
+                            <th className="description">{this.intl.formatMessage({id: 'DESCRIPTION'})}</th>
+                            <th>{this.intl.formatMessage({id: 'ACTION'})}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,9 +41,11 @@ export default class BedTagList extends React.Component {
                         ))}
                     </tbody>
                 </table>
-                <button onClick={this.addNewHandler} value="Add New" className="list-btn">
-                    {' '}
-                    Add New{' '}
+                <button
+                    onClick={this.addNewHandler}
+                    value={this.intl.formatMessage({id: 'ADD_NEW'})}
+                    className="list-btn">
+                    {this.intl.formatMessage({id: 'ADD_NEW'})}
                 </button>
             </fieldset>
         );
@@ -52,4 +55,8 @@ export default class BedTagList extends React.Component {
 BedTagList.propTags = {
     bedTags: PropTypes.array.isRequired,
     bedTagFunctions: PropTypes.object.isRequired
+};
+
+BedTagList.contextTypes = {
+    intl: PropTypes.object
 };
