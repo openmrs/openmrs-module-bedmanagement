@@ -28,7 +28,7 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 	
 	@Override
 	public String getUuid() {
-		return "1";
+		return "6f9faf08-0fd5-11e8-adb7-080027b38971";
 	}
 	
 	@Override
@@ -53,7 +53,7 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 		MockHttpServletRequest request = request(RequestMethod.GET, getURI() + "/" + getUuid());
 		SimpleObject bedType = deserialize(handle(request));
 		
-		Assert.assertEquals(1, bedType.get("id"));
+		Assert.assertEquals("6f9faf08-0fd5-11e8-adb7-080027b38971", bedType.get("uuid"));
 		Assert.assertEquals("deluxe", bedType.get("name"));
 	}
 	
@@ -65,7 +65,7 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 		List results = (ArrayList) object.get("results");
 		
 		Assert.assertEquals(1, results.size());
-		Assert.assertEquals(2, PropertyUtils.getProperty(results.get(0), "id"));
+		Assert.assertEquals("6f9fb240-0fd5-11e8-adb7-080027b38971", PropertyUtils.getProperty(results.get(0), "uuid"));
 		Assert.assertEquals("luxury", PropertyUtils.getProperty(results.get(0), "name"));
 	}
 	
@@ -80,7 +80,7 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 		request.setContent(json.getBytes());
 		SimpleObject bedType = deserialize(handle(request));
 		
-		Assert.assertNotNull(bedType.get("id"));
+		Assert.assertNotNull(bedType.get("uuid"));
 		Assert.assertEquals("Large Bed", bedType.get("name"));
 	}
 	
@@ -95,14 +95,14 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 		request.setContent(json.getBytes());
 		SimpleObject bedType = deserialize(handle(request));
 		
-		Assert.assertEquals(1, bedType.get("id"));
+		Assert.assertEquals("6f9faf08-0fd5-11e8-adb7-080027b38971", bedType.get("uuid"));
 		Assert.assertEquals("Vip Bed", bedType.get("name"));
 		Assert.assertEquals("VIP", bedType.get("displayName"));
 	}
 	
 	@Test(expected = ConstraintViolationException.class)
 	public void onDeleteBedTypeByIdShouldThrowException() throws Exception {
-		MockHttpServletRequest request = request(RequestMethod.DELETE, getURI() + "/2");
+		MockHttpServletRequest request = request(RequestMethod.DELETE, getURI() + "/6f9fb240-0fd5-11e8-adb7-080027b38971");
 		handle(request);
 	}
 	

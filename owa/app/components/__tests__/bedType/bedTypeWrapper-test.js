@@ -31,19 +31,19 @@ describe('BedTypeWrapper', () => {
         const data = {
             results: [
                 {
-                    id: 1,
+                    uuid: '6f9faf08-0fd5-11e8-adb7-080027b38971',
                     name: 'deluxe',
                     displayName: 'deluxe bed',
                     description: 'DLX'
                 },
                 {
-                    id: 2,
+                    uuid: '6f9fb240-0fd5-11e8-adb7-080027b38971',
                     name: 'luxury',
                     displayName: 'luxury bed',
                     description: 'LXY'
                 },
                 {
-                    id: 3,
+                    uuid: '6f9fb341-0fd5-11e8-adb7-080027b38971',
                     name: 'dbl',
                     displayName: 'double bed',
                     description: 'deluxe'
@@ -66,7 +66,7 @@ describe('BedTypeWrapper', () => {
             activePage: 'addEdit',
             pageData: {
                 operation: 'add',
-                bedTypeId: null
+                bedTypeUuid: null
             }
         });
 
@@ -84,27 +84,27 @@ describe('BedTypeWrapper', () => {
         await testProps.sleep(100);
         expect(bedTypeFunctions.getBedTypes()).toEqual([
             {
-                id: 1,
+                uuid: '6f9faf08-0fd5-11e8-adb7-080027b38971',
                 name: 'deluxe',
                 displayName: 'deluxe bed',
                 description: 'DLX'
             },
             {
-                id: 2,
+                uuid: '6f9fb240-0fd5-11e8-adb7-080027b38971',
                 name: 'luxury',
                 displayName: 'luxury bed',
                 description: 'LXY'
             },
             {
-                id: 3,
+                uuid: '6f9fb341-0fd5-11e8-adb7-080027b38971',
                 name: 'dbl',
                 displayName: 'double bed',
                 description: 'deluxe'
             }
         ]);
 
-        expect(bedTypeFunctions.getBedTypeById(2)).toEqual({
-            id: 2,
+        expect(bedTypeFunctions.getBedTypeByUuid('6f9fb240-0fd5-11e8-adb7-080027b38971')).toEqual({
+            uuid: '6f9fb240-0fd5-11e8-adb7-080027b38971',
             name: 'luxury',
             displayName: 'luxury bed',
             description: 'LXY'
@@ -113,7 +113,7 @@ describe('BedTypeWrapper', () => {
         expect(bedTypeFunctions.getBedTypeName('deluxe')).toEqual({
             description: 'DLX',
             displayName: 'deluxe bed',
-            id: 1,
+            uuid: '6f9faf08-0fd5-11e8-adb7-080027b38971',
             name: 'deluxe'
         });
 
@@ -121,14 +121,14 @@ describe('BedTypeWrapper', () => {
             activePage: 'addEdit',
             pageData: {
                 operation: 'add',
-                bedTypeId: null
+                bedTypeUuid: null
             }
         });
 
         expect(bedTypeWrapper.state().activePage).toEqual('addEdit');
         expect(bedTypeWrapper.state().pageData).toEqual({
             operation: 'add',
-            bedTypeId: null
+            bedTypeUuid: null
         });
     });
 });

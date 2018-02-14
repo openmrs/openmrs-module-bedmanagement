@@ -220,7 +220,7 @@ export default class AddEditBed extends React.Component {
                                     ref={(dropDown) => (this.bedTypeSelector = dropDown)}
                                     value={this.state.bedTypeName != null ? this.state.bedTypeName : ''}>
                                     {this.props.bedTypes.map((bedType) => (
-                                        <option key={bedType.id} value={bedType.name}>
+                                        <option key={bedType.uuid} value={bedType.name}>
                                             {bedType.name}
                                         </option>
                                     ))}

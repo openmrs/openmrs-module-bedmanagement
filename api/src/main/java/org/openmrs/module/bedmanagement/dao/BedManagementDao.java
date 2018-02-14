@@ -177,6 +177,14 @@ public interface BedManagementDao {
 	BedType getBedTypeById(Integer id);
 	
 	/**
+	 * Get bed type by Uuid
+	 *
+	 * @param uuid {@link String} bed Uuid
+	 * @return {@link BedType}
+	 */
+	BedType getBedTypeByUuid(String uuid);
+	
+	/**
 	 * Get bed sypes
 	 *
 	 * @param name {@link String} bed type name, if null filter by name criteria will not applied

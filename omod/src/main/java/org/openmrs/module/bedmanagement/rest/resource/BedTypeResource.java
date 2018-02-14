@@ -32,7 +32,7 @@ public class BedTypeResource extends DelegatingCrudResource<BedType> {
 	@Override
 	public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
 		DelegatingResourceDescription description = new DelegatingResourceDescription();
-		description.addProperty("id");
+		description.addProperty("uuid");
 		description.addProperty("name");
 		description.addProperty("displayName");
 		description.addProperty("description");
@@ -55,8 +55,8 @@ public class BedTypeResource extends DelegatingCrudResource<BedType> {
 	}
 	
 	@Override
-	public BedType getByUniqueId(String id) {
-		return Context.getService(BedManagementService.class).getBedTypeById(Integer.parseInt(id));
+	public BedType getByUniqueId(String uuid) {
+		return Context.getService(BedManagementService.class).getBedTypeByUuid(uuid);
 	}
 	
 	@Override
@@ -75,8 +75,8 @@ public class BedTypeResource extends DelegatingCrudResource<BedType> {
 	}
 	
 	@Override
-	public Object update(String id, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-		BedType bedType = this.constructBedType(Integer.parseInt(id), propertiesToUpdate);
+	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
+		BedType bedType = this.constructBedType(uuid, propertiesToUpdate);
 		Context.getService(BedManagementService.class).saveBedType(bedType);
 		return ConversionUtil.convertToRepresentation(bedType, context.getRepresentation());
 	}
@@ -91,10 +91,10 @@ public class BedTypeResource extends DelegatingCrudResource<BedType> {
 		Context.getService(BedManagementService.class).deleteBedType(bedType);
 	}
 	
-	private BedType constructBedType(Integer id, SimpleObject properties) {
+	private BedType constructBedType(String uuid, SimpleObject properties) {
 		BedType bedType;
-		if (id != null) {
-			bedType = Context.getService(BedManagementService.class).getBedTypeById(id);
+		if (uuid != null) {
+			bedType = Context.getService(BedManagementService.class).getBedTypeByUuid(uuid);
 			if (bedType == null)
 				throw new IllegalPropertyException("Bed Type not exist");
 			

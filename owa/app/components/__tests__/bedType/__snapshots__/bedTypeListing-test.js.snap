@@ -32,14 +32,14 @@ exports[`BedTypeList Should render bed Type list properly 1`] = `
           Object {
             "description": "DLX",
             "displayName": "deluxe bed",
-            "id": 1,
             "name": "deluxe",
+            "uuid": "6f9faf08-0fd5-11e8-adb7-080027b38971",
           }
         }
         bedTypeFunctions={
           Object {
             "fetchBedTypes": [Function],
-            "getBedTypeById": [Function],
+            "getBedTypeByUuid": [Function],
             "getBedTypeName": [Function],
             "getBedTypes": [Function],
             "notify": [Function],
@@ -53,14 +53,14 @@ exports[`BedTypeList Should render bed Type list properly 1`] = `
           Object {
             "description": "LXY",
             "displayName": "luxury bed",
-            "id": 2,
             "name": "luxury",
+            "uuid": "6f9fb240-0fd5-11e8-adb7-080027b38971",
           }
         }
         bedTypeFunctions={
           Object {
             "fetchBedTypes": [Function],
-            "getBedTypeById": [Function],
+            "getBedTypeByUuid": [Function],
             "getBedTypeName": [Function],
             "getBedTypes": [Function],
             "notify": [Function],
@@ -74,14 +74,14 @@ exports[`BedTypeList Should render bed Type list properly 1`] = `
           Object {
             "description": "deluxe",
             "displayName": "double bed",
-            "id": 3,
             "name": "dbl",
+            "uuid": "6f9fb341-0fd5-11e8-adb7-080027b38971",
           }
         }
         bedTypeFunctions={
           Object {
             "fetchBedTypes": [Function],
-            "getBedTypeById": [Function],
+            "getBedTypeByUuid": [Function],
             "getBedTypeName": [Function],
             "getBedTypes": [Function],
             "notify": [Function],

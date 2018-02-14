@@ -390,8 +390,17 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	}
 	
 	@Override
+	public BedType getBedTypeByUuid(String uuid) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedType.class);
+		criteria.add(Restrictions.eq("uuid", uuid));
+		criteria.add(Restrictions.eq("retired", false));
+		return (BedType) criteria.uniqueResult();
+	}
+	
+	@Override
 	public List<BedType> getBedTypes(String name, Integer limit, Integer offset) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedType.class);
+		criteria.add(Restrictions.eq("retired", false));
 		if (name != null)
 			criteria.add(Restrictions.eq("name", name));
 		if (limit != null) {

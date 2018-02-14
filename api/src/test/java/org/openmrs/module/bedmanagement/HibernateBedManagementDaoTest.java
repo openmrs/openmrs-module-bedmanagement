@@ -337,6 +337,15 @@ public class HibernateBedManagementDaoTest extends BaseModuleWebContextSensitive
 	}
 	
 	@Test
+	public void shouldGetBedTypeByUuid() throws Exception {
+		BedType bedType = bedManagementDao.getBedTypeByUuid("6f9fb240-0fd5-11e8-adb7-080027b38971");
+		assertThat(bedType.getName(), is(equalTo("luxury")));
+		
+		BedType bedType2 = bedManagementDao.getBedTypeByUuid("6f9fb341-0fd5-11e8-adb7-080027b38971");
+		assertThat(bedType2.getName(), is(equalTo("normal")));
+	}
+	
+	@Test
 	public void shouldListBedTypes() throws Exception {
 		List<BedType> bedTypeList = bedManagementDao.getBedTypes(null, 3, 0);
 		

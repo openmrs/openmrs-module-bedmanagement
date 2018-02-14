@@ -37,9 +37,9 @@ export default class BedTypeWrapper extends React.Component {
         getBedTypes: () => {
             return this.state.bedTypes;
         },
-        getBedTypeById: (bedTypeId) => {
+        getBedTypeByUuid: (bedTypeUuid) => {
             return _.find(this.state.bedTypes, function(bedType) {
-                return bedType.id == bedTypeId;
+                return bedType.uuid == bedTypeUuid;
             });
         },
         getBedTypeName: (bedTypeName) => {
@@ -97,7 +97,7 @@ export default class BedTypeWrapper extends React.Component {
                     ) : (
                         <AddEditBedType
                             bedTypeFunctions={this.bedTypeFunctions}
-                            bedTypeId={this.state.pageData.bedTypeId}
+                            bedTypeUuid={this.state.pageData.bedTypeUuid}
                             operation={this.state.pageData.operation}
                         />
                     )}

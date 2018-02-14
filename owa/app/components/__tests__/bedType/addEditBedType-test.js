@@ -16,7 +16,7 @@ describe('AddEditBedType', () => {
     beforeAll(() => {
         var mock = new MockAdapter(axios);
         const data = {
-            id: 2,
+            uuid: '6f9fb240-0fd5-11e8-adb7-080027b38971',
             name: 'luxury',
             displayName: 'luxury bed',
             description: 'LXY'
@@ -27,13 +27,17 @@ describe('AddEditBedType', () => {
 
     it('Should display add edit bed type form properly', () => {
         const addBedTypeForm = shallow(
-            <AddEditBedType bedTypeFunctions={testProps.bedTypeFunctions} bedTypeId={null} operation="add" />
+            <AddEditBedType bedTypeFunctions={testProps.bedTypeFunctions} bedTypeUuid={null} operation="add" />
         );
         expect(addBedTypeForm.find('#name-field').props().value).toBe('');
         expect(shallowToJson(addBedTypeForm)).toMatchSnapshot();
 
         const editBedTypeForm = shallow(
-            <AddEditBedType bedTypeFunctions={testProps.bedTypeFunctions} operation="edit" bedTypeId={2} />
+            <AddEditBedType
+                bedTypeFunctions={testProps.bedTypeFunctions}
+                operation="edit"
+                bedTypeUuid="6f9fb240-0fd5-11e8-adb7-080027b38971"
+            />
         );
 
         expect(editBedTypeForm.find('#name-field').props().value).toBe('luxury');
@@ -50,7 +54,11 @@ describe('AddEditBedType', () => {
         const spyOnChangeDescription = jest.spyOn(AddEditBedType.prototype, 'onChangeDescription');
         const spySetState = jest.spyOn(testProps.bedTypeFunctions, 'setState');
         const editBedTypeForm = mount(
-            <AddEditBedType bedTypeFunctions={testProps.bedTypeFunctions} operation="edit" bedTypeId={2} />
+            <AddEditBedType
+                bedTypeFunctions={testProps.bedTypeFunctions}
+                operation="edit"
+                bedTypeUuid="6f9fb240-0fd5-11e8-adb7-080027b38971"
+            />
         );
 
         editBedTypeForm.find('#name-field').simulate('change');
