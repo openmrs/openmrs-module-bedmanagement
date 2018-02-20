@@ -67,11 +67,13 @@ export default class AddEditBedTag extends React.Component {
                     pageData: {}
                 });
             })
-            .catch(function(error) {
+            .catch(function(errorResponse) {
                 self.setState({
                     disableSubmit: false
                 });
-                self.props.bedTagFunctions.notify('error', error.message);
+
+                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                self.props.bedTagFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }
 

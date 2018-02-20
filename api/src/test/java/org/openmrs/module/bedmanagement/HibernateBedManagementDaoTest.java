@@ -86,7 +86,7 @@ public class HibernateBedManagementDaoTest extends BaseModuleWebContextSensitive
 	@Test
 	public void shouldReturnAdmissionLocationLayoutByLocation() throws Exception {
 		Location location = locationDao.getLocationByUuid("19e023e8-20ee-4237-ade6-9e68f897b7a9");
-		List<BedLayout> bedLayouts = bedManagementDao.getBedLayoutByLocation(location);
+		List<BedLayout> bedLayouts = bedManagementDao.getBedLayoutsByLocation(location);
 		
 		Assert.assertEquals(6, bedLayouts.size());
 		Assert.assertEquals("307-a", bedLayouts.get(0).getBedNumber());
@@ -97,7 +97,7 @@ public class HibernateBedManagementDaoTest extends BaseModuleWebContextSensitive
 		Assert.assertEquals("Physical Location for Orthopaedic ward", bedLayouts.get(5).getLocation());
 		
 		Location location2 = locationDao.getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
-		List<BedLayout> locationBedLayouts = bedManagementDao.getBedLayoutByLocation(location2);
+		List<BedLayout> locationBedLayouts = bedManagementDao.getBedLayoutsByLocation(location2);
 		Assert.assertEquals(18, locationBedLayouts.size());
 		Assert.assertEquals("304-a", locationBedLayouts.get(0).getBedNumber());
 		Assert.assertEquals("OCCUPIED", locationBedLayouts.get(0).getStatus());
@@ -177,14 +177,14 @@ public class HibernateBedManagementDaoTest extends BaseModuleWebContextSensitive
 	@Test
 	public void shouldReturnBedLocationMappingByLocation() throws Exception {
 		Location location = locationDao.getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b56");
-		List<BedLocationMapping> bedLocationMappingList = bedManagementDao.getBedLocationMappingByLocation(location);
+		List<BedLocationMapping> bedLocationMappingList = bedManagementDao.getBedLocationMappingsByLocation(location);
 		
 		Assert.assertEquals(6, bedLocationMappingList.size());
 		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b56", bedLocationMappingList.get(0).getLocation().getUuid());
 		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b56", bedLocationMappingList.get(5).getLocation().getUuid());
 		
 		Location location2 = locationDao.getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
-		List<BedLocationMapping> bedLocationMappingList2 = bedManagementDao.getBedLocationMappingByLocation(location2);
+		List<BedLocationMapping> bedLocationMappingList2 = bedManagementDao.getBedLocationMappingsByLocation(location2);
 		Assert.assertEquals(18, bedLocationMappingList2.size());
 		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMappingList2.get(0).getLocation().getUuid());
 		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMappingList2.get(5).getLocation().getUuid());
@@ -437,6 +437,19 @@ public class HibernateBedManagementDaoTest extends BaseModuleWebContextSensitive
 		
 		bedTag = bedManagementDao.getBedTagByUuid("73e846d6-ed5f-44e6-a3c9-0800274a5156");
 		Assert.assertNull(bedTag);
+	}
+	
+	@Test
+	public void shouldDeleteBedLocationMapping() throws Exception {
+		Location location = locationDao.getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b56");
+		List<BedLocationMapping> beforeDeleteBedLocationMappings = bedManagementDao
+		        .getBedLocationMappingsByLocation(location);
+		
+		bedManagementDao.deleteBedLocationMapping(beforeDeleteBedLocationMappings.get(0));
+		List<BedLocationMapping> afterDeleteBedLocationMappings = bedManagementDao
+		        .getBedLocationMappingsByLocation(location);
+		Assert.assertEquals(beforeDeleteBedLocationMappings.size() - 1, afterDeleteBedLocationMappings.size());
+		Assert.assertFalse(afterDeleteBedLocationMappings.contains(beforeDeleteBedLocationMappings.get(0)));
 	}
 	
 }

@@ -22,6 +22,7 @@ export default class BedLayout extends React.Component {
         this.getBody = this.getBody.bind(this);
         this.setBedLayoutClickHandler = this.setBedLayoutClickHandler.bind(this);
         this.addWardClickHandler = this.addWardClickHandler.bind(this);
+        this.deleteBedLayoutClickHandler = this.deleteBedLayoutClickHandler.bind(this);
         this.loadAdmissionLocationLayout = this.loadAdmissionLocationLayout.bind(this);
         if (props.activeUuid != null) this.loadAdmissionLocationLayout(props.activeUuid);
     }
@@ -54,9 +55,43 @@ export default class BedLayout extends React.Component {
     setBedLayoutClickHandler() {
         this.props.admissionLocationFunctions.setState({
             activePage: 'set-layout',
-            pageData: {},
+            pageData: {
+                row: this.state.layoutRow != 0 ? this.state.layoutRow : 1,
+                column: this.state.layoutColumn != 0 ? this.state.layoutColumn : 1
+            },
             activeUuid: this.props.activeUuid
         });
+    }
+
+    deleteBedLayoutClickHandler() {
+        const self = this;
+        const parameters = {
+            bedLayout: {
+                row: 0,
+                column: 0
+            }
+        };
+        const confirmation = confirm('Are you sure you want to delete bed layout?');
+        if (confirmation) {
+            axios({
+                method: 'post',
+                url: this.urlHelper.apiBaseUrl() + '/admissionLocation/' + this.props.activeUuid,
+                params: {
+                    v: 'layout'
+                },
+                headers: {'Content-Type': 'application/json'},
+                data: parameters
+            })
+                .then(function(response) {
+                    self.props.admissionLocationFunctions.notify('success', 'Admission location bed layout deleted');
+
+                    self.loadAdmissionLocationLayout(self.props.activeUuid);
+                })
+                .catch(function(errorResponse) {
+                    const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                    self.props.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
+                });
+        }
     }
 
     loadAdmissionLocationLayout(locationUuid) {
@@ -90,11 +125,13 @@ export default class BedLayout extends React.Component {
                     loadingData: false
                 });
             })
-            .catch(function(error) {
+            .catch(function(errorResponse) {
                 self.setState({
                     loadingData: false
                 });
-                self.props.admissionLocationFunctions.notify('error', error.message);
+
+                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                self.props.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }
 
@@ -102,10 +139,10 @@ export default class BedLayout extends React.Component {
         if (this.state.loadingData == false && this.state.bedlayouts.length == 0) {
             return (
                 <div className="location option">
-                    <label className="btn btn-primary" onClick={this.addWardClickHandler}>
+                    <label className="button" onClick={this.addWardClickHandler}>
                         Add Child Admission Location
                     </label>
-                    <label className="btn btn-primary" onClick={this.setBedLayoutClickHandler}>
+                    <label className="button" onClick={this.setBedLayoutClickHandler}>
                         Set Bed Layout
                     </label>
                 </div>
@@ -113,6 +150,14 @@ export default class BedLayout extends React.Component {
         } else {
             return (
                 <div className="bed-layout">
+                    <div className="location option">
+                        <label className="button" onClick={this.setBedLayoutClickHandler}>
+                            Edit Bed Layout
+                        </label>
+                        <label className="button" onClick={this.deleteBedLayoutClickHandler}>
+                            Delete Bed Layout
+                        </label>
+                    </div>
                     {this.state.bedlayouts.map((rowBeds, row) => (
                         <BedLayoutRow
                             key={row}

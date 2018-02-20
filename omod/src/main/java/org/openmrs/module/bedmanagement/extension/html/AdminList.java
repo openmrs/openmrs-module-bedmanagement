@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Extension;
+import org.openmrs.module.bedmanagement.constants.BedManagementProperties;
 import org.openmrs.module.web.extension.AdministrationSectionExt;
 
 /**
@@ -28,7 +29,7 @@ public class AdminList extends AdministrationSectionExt {
 	 */
 	public Map<String, String> getLinks() {
 		LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
-		String appBaseUrl = Context.getAdministrationService().getGlobalProperty(KEY_APP_BASE_URL);
+		String appBaseUrl = BedManagementProperties.getProperty("appBaseUrl");
 		map.put(appBaseUrl + "/bedmanagement/admissionLocations.html", "bedmanagement.admissionLocations");
 		map.put(appBaseUrl + "/bedmanagement/bedTypes.html", "bedmanagement.bedTypes");
 		map.put(appBaseUrl + "/bedmanagement/bedTags.html", "bedmanagement.bedTags");

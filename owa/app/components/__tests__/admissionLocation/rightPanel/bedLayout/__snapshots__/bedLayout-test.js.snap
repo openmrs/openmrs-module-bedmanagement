@@ -4,6 +4,22 @@ exports[`BedLayout Should render bed block properly 1`] = `
 <div
   className="bed-layout"
 >
+  <div
+    className="location option"
+  >
+    <label
+      className="button"
+      onClick={[Function]}
+    >
+      Edit Bed Layout
+    </label>
+    <label
+      className="button"
+      onClick={[Function]}
+    >
+      Delete Bed Layout
+    </label>
+  </div>
   <BedLayoutRow
     admissionLocationFunctions={
       Object {
@@ -100,13 +116,13 @@ exports[`BedLayout Should render bed block properly 2`] = `
   className="location option"
 >
   <label
-    className="btn btn-primary"
+    className="button"
     onClick={[Function]}
   >
     Add Child Admission Location
   </label>
   <label
-    className="btn btn-primary"
+    className="button"
     onClick={[Function]}
   >
     Set Bed Layout

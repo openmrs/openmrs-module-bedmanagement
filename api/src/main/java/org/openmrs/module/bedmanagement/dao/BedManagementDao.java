@@ -70,7 +70,7 @@ public interface BedManagementDao {
 	 * @param location {@link Location}
 	 * @return {@link List< BedLocationMapping >}
 	 */
-	List<BedLocationMapping> getBedLocationMappingByLocation(Location location);
+	List<BedLocationMapping> getBedLocationMappingsByLocation(Location location);
 	
 	/**
 	 * Get bed location mapping by location and row and column
@@ -96,7 +96,7 @@ public interface BedManagementDao {
 	 * @param location {@link Location}
 	 * @return {@link List<BedLayout>}
 	 */
-	List<BedLayout> getBedLayoutByLocation(Location location);
+	List<BedLayout> getBedLayoutsByLocation(Location location);
 	
 	/**
 	 * Get bed location mapping {@link BedLocationMapping} by bed
@@ -208,4 +208,11 @@ public interface BedManagementDao {
 	 * @param bedType {@link BedType}
 	 */
 	void deleteBedType(BedType bedType);
+	
+	/**
+	 * Delete Bed location mapping
+	 *
+	 * @param bedLocationMapping
+	 */
+	void deleteBedLocationMapping(BedLocationMapping bedLocationMapping);
 }

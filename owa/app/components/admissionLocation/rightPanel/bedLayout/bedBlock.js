@@ -42,8 +42,9 @@ export default class BedBlock extends React.PureComponent {
                         self.props.admissionLocationFunctions.getActiveLocationUuid()
                     );
                 })
-                .catch(function(error) {
-                    self.props.admissionLocationFunctions.notify('error', error.message);
+                .catch(function(errorResponse) {
+                    const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                    self.props.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
                 });
         }
     }

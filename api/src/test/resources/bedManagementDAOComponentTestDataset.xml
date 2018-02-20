@@ -39,12 +39,12 @@
     <bed_location_map bed_location_map_id="10" location_id="123451" row_number="3" column_number="2" bed_id="6"/>
     <bed_location_map bed_location_map_id="11" location_id="123451" row_number="3" column_number="3" bed_id="7"/>
     <bed_location_map bed_location_map_id="12" location_id="123451" row_number="3" column_number="4" bed_id="8"/>
-    <bed_location_map bed_location_map_id="13" location_id="123451" row_number="1" column_number="5" />
-    <bed_location_map bed_location_map_id="14" location_id="123451" row_number="1" column_number="6" bed_id="9" />
+    <bed_location_map bed_location_map_id="13" location_id="123451" row_number="1" column_number="5" bed_id="9"/>
+    <bed_location_map bed_location_map_id="14" location_id="123451" row_number="1" column_number="6"  />
     <bed_location_map bed_location_map_id="15" location_id="123451" row_number="2" column_number="5" />
     <bed_location_map bed_location_map_id="16" location_id="123451" row_number="2" column_number="6" />
-    <bed_location_map bed_location_map_id="17" location_id="123451" row_number="3" column_number="5" />
-    <bed_location_map bed_location_map_id="18" location_id="123451" row_number="3" column_number="6" bed_id="10" />
+    <bed_location_map bed_location_map_id="17" location_id="123451" row_number="3" column_number="5" bed_id="10"/>
+    <bed_location_map bed_location_map_id="18" location_id="123451" row_number="3" column_number="6" />
 
 
     <!--second ward-->

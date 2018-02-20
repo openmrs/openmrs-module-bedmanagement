@@ -103,8 +103,9 @@ export default class AdmissionLocationWrapper extends React.Component {
                     visitLocations: visitLocations
                 });
             })
-            .catch(function(error) {
-                self.admissionLocationFunctions.notify('error', error.message);
+            .catch(function(errorResponse) {
+                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                self.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }
 
@@ -121,8 +122,9 @@ export default class AdmissionLocationWrapper extends React.Component {
                     bedTypes: response.data.results
                 });
             })
-            .catch(function(error) {
-                self.props.admissionLocationFunctions.notify('error', error.message);
+            .catch(function(errorResponse) {
+                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                self.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }
 
@@ -215,6 +217,8 @@ export default class AdmissionLocationWrapper extends React.Component {
             return (
                 <SetBedLayout
                     activeUuid={this.state.activeUuid}
+                    row={this.state.pageData.row}
+                    column={this.state.pageData.column}
                     admissionLocationFunctions={this.admissionLocationFunctions}
                 />
             );

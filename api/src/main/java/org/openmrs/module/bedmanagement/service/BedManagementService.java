@@ -44,7 +44,7 @@ public interface BedManagementService extends OpenmrsService {
 	 * @return {@link List< BedLocationMapping >}
 	 */
 	@Authorized({ "Get Admission Locations", "Get Beds" })
-	List<BedLocationMapping> getBedLocationMappingByLocation(Location location);
+	List<BedLocationMapping> getBedLocationMappingsByLocation(Location location);
 	
 	/**
 	 * Get admission location by location
