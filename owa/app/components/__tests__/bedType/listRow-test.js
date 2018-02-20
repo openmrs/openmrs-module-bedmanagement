@@ -15,7 +15,7 @@ describe('BedTypeListRow', () => {
             <table>
                 <tbody>
                     <BedTypeListRow
-                        bedType={testProps.bedTypeFunctions.getBedTypeById(2)}
+                        bedType={testProps.bedTypeFunctions.getBedTypeByUuid('6f9fb240-0fd5-11e8-adb7-080027b38971')}
                         bedTypeFunctions={testProps.bedTypeFunctions}
                     />
                 </tbody>
@@ -40,7 +40,7 @@ describe('BedTypeListRow', () => {
             <table>
                 <tbody>
                     <BedTypeListRow
-                        bedType={testProps.bedTypeFunctions.getBedTypeById(2)}
+                        bedType={testProps.bedTypeFunctions.getBedTypeByUuid('6f9fb240-0fd5-11e8-adb7-080027b38971')}
                         bedTypeFunctions={testProps.bedTypeFunctions}
                     />
                 </tbody>
@@ -53,7 +53,7 @@ describe('BedTypeListRow', () => {
             activePage: 'addEdit',
             pageData: {
                 operation: 'edit',
-                bedTypeId: 2
+                bedTypeUuid: '6f9fb240-0fd5-11e8-adb7-080027b38971'
             }
         });
 

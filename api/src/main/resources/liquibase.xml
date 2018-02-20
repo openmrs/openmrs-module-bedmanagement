@@ -508,4 +508,39 @@
             <column name="uuid" valueComputed="uuid()"/>
         </insert>
     </changeSet>
+    <changeSet author="SanishMaharjan" id="bedmanagement-201802121200">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="bed_type"/>
+        </preConditions>
+        <comment>
+            Add bed type additional columns
+        </comment>
+        <addColumn tableName="bed_type">
+            <column name="uuid" type="char(38)" valueComputed="uuid()"/>
+            <column name="creator" type="int" valueNumeric="1"/>
+            <column name="date_created" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="retired" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retire_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="retired_by" type="int"/>
+            <column name="date_retired" type="datetime"/>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="bed_type_creator_fk"
+                                 baseTableName="bed_type" baseColumnNames="creator"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="bed_type_changed_by_fk"
+                                 baseTableName="bed_type" baseColumnNames="changed_by"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="bed_type_retired_by_fk"
+                                 baseTableName="bed_type" baseColumnNames="retired_by"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"/>
+    </changeSet>
 </databaseChangeLog>

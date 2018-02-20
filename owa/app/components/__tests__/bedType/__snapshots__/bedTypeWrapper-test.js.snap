@@ -21,7 +21,7 @@ exports[`BedTypeWrapper Should render bed Type page properly 1`] = `
       bedTypeFunctions={
         Object {
           "fetchBedTypes": [Function],
-          "getBedTypeById": [Function],
+          "getBedTypeByUuid": [Function],
           "getBedTypeName": [Function],
           "getBedTypes": [Function],
           "notify": [Function],
@@ -55,14 +55,14 @@ exports[`BedTypeWrapper Should render bed Type page properly 2`] = `
       bedTypeFunctions={
         Object {
           "fetchBedTypes": [Function],
-          "getBedTypeById": [Function],
+          "getBedTypeByUuid": [Function],
           "getBedTypeName": [Function],
           "getBedTypes": [Function],
           "notify": [Function],
           "setState": [Function],
         }
       }
-      bedTypeId={null}
+      bedTypeUuid={null}
       operation="add"
     />
   </div>

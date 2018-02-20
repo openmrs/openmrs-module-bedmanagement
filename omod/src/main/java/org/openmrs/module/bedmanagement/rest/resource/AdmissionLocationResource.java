@@ -22,6 +22,7 @@ import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
 import org.openmrs.module.bedmanagement.BedLayout;
+import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
@@ -109,7 +110,8 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 			object.put("bedId", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getId() : null);
 			object.put("bedUuid", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getUuid() : null);
 			object.put("status", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getStatus() : null);
-			object.put("bedType", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getBedType() : null);
+			object.put("bedType",
+			    bedLocationMapping.getBed() != null ? this.getBedType(bedLocationMapping.getBed().getBedType()) : null);
 			ret.add(object);
 		}
 		return ret;
@@ -123,10 +125,19 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 		ret.put("bedId", bedLayout.getBedId());
 		ret.put("bedUuid", bedLayout.getBedUuid());
 		ret.put("status", bedLayout.getStatus());
-		ret.put("bedType", bedLayout.getBedType());
+		ret.put("bedType", bedLayout.getBedType() != null ? this.getBedType(bedLayout.getBedType()) : null);
 		ret.put("location", bedLayout.getLocation());
 		ret.put("bedTagMaps", getCustomRepresentationForBedTagMaps(bedLayout));
 		ret.put("patient", getCustomRepresentationForPatient(bedLayout));
+		return ret;
+	}
+	
+	private SimpleObject getBedType(BedType bedType) {
+		SimpleObject ret = new SimpleObject();
+		ret.put("uuid", bedType.getUuid());
+		ret.put("name", bedType.getName());
+		ret.put("displayName", bedType.getDisplayName());
+		ret.put("description", bedType.getDescription());
 		return ret;
 	}
 	

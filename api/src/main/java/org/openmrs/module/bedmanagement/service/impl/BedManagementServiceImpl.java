@@ -283,8 +283,8 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	}
 	
 	@Override
-	public BedType getBedTypeById(Integer id) {
-		return bedManagementDao.getBedTypeById(id);
+	public BedType getBedTypeByUuid(String uuid) {
+		return bedManagementDao.getBedTypeByUuid(uuid);
 	}
 	
 	@Override

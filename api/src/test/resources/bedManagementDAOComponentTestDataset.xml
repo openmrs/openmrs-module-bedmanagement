@@ -12,9 +12,9 @@
     <location_tag_map location_id="123451" location_tag_id="12" />
     <!--<location_tag_map location_id="123451" location_tag_id="12" />-->
 
-    <bed_type bed_type_id="1" name="deluxe" description="deluxe bed" display_name="DLX"/>
-    <bed_type bed_type_id="2" name="luxury" description="luxury bed" display_name="LXY"/>
-    <bed_type bed_type_id="3" name="normal" description="normal bed" display_name="NRM"/>
+    <bed_type bed_type_id="1" name="deluxe" description="deluxe bed" display_name="DLX" date_created="2005-01-01 00:00:00.0" retired="false" uuid="6f9faf08-0fd5-11e8-adb7-080027b38971"/>
+    <bed_type bed_type_id="2" name="luxury" description="luxury bed" display_name="LXY" date_created="2005-01-01 00:00:00.0" retired="false" uuid="6f9fb240-0fd5-11e8-adb7-080027b38971"/>
+    <bed_type bed_type_id="3" name="normal" description="normal bed" display_name="NRM" date_created="2005-01-01 00:00:00.0" retired="false" uuid="6f9fb341-0fd5-11e8-adb7-080027b38971"/>
 
     <bed bed_id="1" uuid="bb02b84b-d225-11e4-9c67-080027b662ec" bed_number="304-a" status="OCCUPIED" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed bed_id="2" uuid="bb049d6d-d225-11e4-9c67-080027b662fc" bed_number="304-b" status="AVAILABLE" bed_type_id="2" date_created="2005-01-01 00:00:00.0" voided="false"/>

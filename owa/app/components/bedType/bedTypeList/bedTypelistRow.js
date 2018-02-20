@@ -21,7 +21,7 @@ export default class BedTypeListRow extends React.Component {
         if (confirmation) {
             axios({
                 method: 'delete',
-                url: this.urlHelper.apiBaseUrl() + '/bedtype/' + this.props.bedType.id
+                url: this.urlHelper.apiBaseUrl() + '/bedtype/' + this.props.bedType.uuid
             })
                 .then(function() {
                     self.props.bedTypeFunctions.notify('success', 'Delete successfully');
@@ -40,7 +40,7 @@ export default class BedTypeListRow extends React.Component {
             activePage: 'addEdit',
             pageData: {
                 operation: 'edit',
-                bedTypeId: this.props.bedType.id
+                bedTypeUuid: this.props.bedType.uuid
             }
         });
     }

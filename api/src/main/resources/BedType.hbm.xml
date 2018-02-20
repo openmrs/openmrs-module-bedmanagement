@@ -9,9 +9,18 @@
             <generator class="native"/>
         </id>
 
+        <property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true"/>
         <property name="name" type="java.lang.String" column="name" length="255"/>
         <property name="displayName" type="java.lang.String" column="display_name" length="10"/>
         <property name="description" type="java.lang.String" column="description" length="255"/>
+        <many-to-one name="creator" class="org.openmrs.User" lazy="no-proxy" />
+        <property name="dateCreated" type="java.util.Date" column="date_created" not-null="true" length="19" />
+        <many-to-one name="changedBy" class="org.openmrs.User" column="changed_by" />
+        <property name="dateChanged" type="java.util.Date" column="date_changed" length="19" />
+        <property name="retired" type="boolean" not-null="true" />
+        <many-to-one name="retiredBy" class="org.openmrs.User" column="retired_by" />
+        <property name="dateRetired" type="java.util.Date" column="date_retired" length="19" />
+        <property name="retireReason" type="java.lang.String" column="retire_reason" length="255" />
 
     </class>
 </hibernate-mapping>

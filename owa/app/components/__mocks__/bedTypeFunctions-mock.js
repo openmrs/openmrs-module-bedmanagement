@@ -7,9 +7,9 @@ const bedTypeFunctionsMock = {
     getBedTypes: () => {
         return bedTypes;
     },
-    getBedTypeById: (bedTypeId) => {
+    getBedTypeByUuid: (bedTypeUuid) => {
         return _.find(bedTypes, function(bedType) {
-            return bedType.id == bedTypeId;
+            return bedType.uuid == bedTypeUuid;
         });
     },
     getBedTypeName: (bedTypeName) => {

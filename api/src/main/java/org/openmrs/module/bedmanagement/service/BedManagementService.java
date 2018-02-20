@@ -232,11 +232,11 @@ public interface BedManagementService extends OpenmrsService {
 	/**
 	 * Get bedType by Id
 	 *
-	 * @param id {@link Integer} Bed type id
+	 * @param uuid {@link Integer} Bed type uuid
 	 * @return {@link BedType}
 	 */
 	@Authorized(value = { "Get Bed Type" }, requireAll = true)
-	BedType getBedTypeById(Integer id);
+	BedType getBedTypeByUuid(String uuid);
 	
 	/**
 	 * Save / Update bed Type

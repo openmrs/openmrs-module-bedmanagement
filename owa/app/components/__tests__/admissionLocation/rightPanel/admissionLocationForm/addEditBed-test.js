@@ -28,7 +28,7 @@ const testProps = {
         bedType: {
             description: 'LXY',
             displayName: 'luxury bed',
-            id: 2,
+            uuid: '6f9fb240-0fd5-11e8-adb7-080027b38971',
             name: 'luxury'
         },
         bedUuid: 'a3e42812-a4c1-4453-96cf-d45578d0fea9',
@@ -48,7 +48,7 @@ describe('AddEditBed', () => {
             uuid: 'a3e42812-a4c1-4453-96cf-d45578d0fea9',
             bedNumber: '100-A',
             bedType: {
-                id: 1,
+                uuid: '6f9fb240-0fd5-11e8-adb7-080027b38971',
                 name: 'deluxe',
                 displayName: 'deluxe bed',
                 description: 'DLX'

@@ -9,9 +9,9 @@ export default class AddEditBedType extends React.Component {
     constructor(props) {
         super(props);
 
-        this.bedType = props.bedTypeFunctions.getBedTypeById(props.bedTypeId);
+        this.bedType = props.bedTypeFunctions.getBedTypeByUuid(props.bedTypeUuid);
         this.state = {
-            id: this.bedType != null ? this.bedType.id : null,
+            uuid: this.bedType != null ? this.bedType.uuid : null,
             name: this.bedType != null ? this.bedType.name : '',
             displayName: this.bedType != null ? this.bedType.displayName : '',
             description: this.bedType != null && this.bedType.description != null ? this.bedType.description : '',
@@ -68,13 +68,13 @@ export default class AddEditBedType extends React.Component {
 
         axios({
             method: 'post',
-            url: this.urlHelper.apiBaseUrl() + (this.state.id != null ? '/bedtype/' + this.state.id : '/bedtype'),
+            url: this.urlHelper.apiBaseUrl() + (this.state.uuid != null ? '/bedtype/' + this.state.uuid : '/bedtype'),
             headers: {'Content-Type': 'application/json'},
             data: parameters
         })
             .then(function(response) {
                 self.setState({
-                    id: response.data.id,
+                    uuid: response.data.uuid,
                     disableSubmit: false
                 });
 
@@ -162,6 +162,6 @@ export default class AddEditBedType extends React.Component {
 }
 
 AddEditBedType.propTypes = {
-    bedTypeId: PropTypes.number,
+    bedTypeUuid: PropTypes.string,
     bedTypeFunctions: PropTypes.object.isRequired
 };
