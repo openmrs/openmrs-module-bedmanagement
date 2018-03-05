@@ -5,11 +5,10 @@ jdk:
  - oraclejdk8
 before_script:
   - mvn test -B
-  - npm install --g yarn
+  - npm install --g yarn@1.3.2
   - cd owa/
   - yarn install
 script:
   - yarn build
-  - yarn test-coverage
 node_js:
-  - "7"
+  - "9"
