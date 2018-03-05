@@ -8,7 +8,7 @@
     "scripts": {
         "webpack": "webpack -wd",
         "code-format": "prettier --find-config-path --write  'app/**/*.js'",
-        "build": "webpack -p",
+        "build": "NODE_PATH=./app jest && webpack -p",
         "test": "NODE_PATH=./app jest --notify",
         "test-watch": "NODE_PATH=./app jest --watch",
         "test-coverage": "NODE_PATH=./app jest --coverage"

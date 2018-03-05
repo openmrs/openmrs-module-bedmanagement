@@ -42,7 +42,7 @@
     <webservicesRestModuleVersion>2.16</webservicesRestModuleVersion>
     <openmrsAtomfeedVersion>2.5.0</openmrsAtomfeedVersion>
     <openmrsOwaVersion>1.7.0</openmrsOwaVersion>
-    <atomfeed.version>1.9.1</atomfeed.version>
+    <atomfeed.version>1.9.4</atomfeed.version>
     <legacyuiVersion>1.0</legacyuiVersion>
   </properties>
   
