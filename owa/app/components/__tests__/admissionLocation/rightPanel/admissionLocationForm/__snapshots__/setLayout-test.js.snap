@@ -41,6 +41,7 @@ exports[`SetBedLayout Should display set layout form properly 1`] = `
             onChange={[Function]}
             required={true}
             type="number"
+            value={1}
           />
         </div>
         <div
@@ -56,6 +57,7 @@ exports[`SetBedLayout Should display set layout form properly 1`] = `
             onChange={[Function]}
             required={true}
             type="number"
+            value={1}
           />
         </div>
         <div

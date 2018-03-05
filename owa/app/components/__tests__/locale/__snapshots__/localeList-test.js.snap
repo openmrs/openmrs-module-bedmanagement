@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LocaleList renders correctly 1`] = `
+<div>
+  <small
+    className="language-list"
+  >
+    <FormattedMessage
+      id="CHOOSE_LANGUAGE"
+      values={Object {}}
+    />
+    :  
+    <span
+      key="en"
+    >
+      <a
+        className="active locale"
+        href="javascript:void(0)"
+        onClick={[Function]}
+      >
+        English
+      </a>
+    </span>
+    <span
+      key="es"
+    >
+       | 
+      <a
+        className="locale"
+        href="javascript:void(0)"
+        onClick={[Function]}
+      >
+        Español
+      </a>
+    </span>
+    <span
+      key="fr"
+    >
+       | 
+      <a
+        className="locale"
+        href="javascript:void(0)"
+        onClick={[Function]}
+      >
+        Français
+      </a>
+    </span>
+    <span
+      key="it"
+    >
+       | 
+      <a
+        className="locale"
+        href="javascript:void(0)"
+        onClick={[Function]}
+      >
+        Italiano
+      </a>
+    </span>
+  </small>
+</div>
+`;

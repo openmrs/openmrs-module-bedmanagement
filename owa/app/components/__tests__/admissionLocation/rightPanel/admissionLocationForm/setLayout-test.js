@@ -88,6 +88,8 @@ describe('SetBedLayout', () => {
             <SetBedLayout
                 activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
                 admissionLocationFunctions={testProps.admissionLocationFunctions}
+                row={1}
+                column={1}
             />
         );
 
@@ -105,6 +107,8 @@ describe('SetBedLayout', () => {
             <SetBedLayout
                 activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
                 admissionLocationFunctions={testProps.admissionLocationFunctions}
+                row={1}
+                column={1}
             />
         );
 

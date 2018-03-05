@@ -40,3 +40,11 @@ html {
     padding-left: 5px;
     font-size: 20px;
 }
+
+.language-list a {
+    color: #363463;
+}
+
+.language-list a.active {
+    font-weight: bold;
+}

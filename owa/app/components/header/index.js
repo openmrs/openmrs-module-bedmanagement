@@ -1,9 +1,11 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import PropTypes from 'prop-types';
+import {FormattedMessage} from 'react-intl';
 import UrlHelper from 'utilities/urlHelper';
 
 require('./header.css');
-class Header extends React.PureComponent {
+class Header extends React.Component {
     urlHelper = new UrlHelper();
 
     linkClass = (path) => {
@@ -23,21 +25,21 @@ class Header extends React.PureComponent {
                         <Link
                             to={this.urlHelper.owaPath() + '/admissionLocations.html'}
                             className={this.linkClass(this.urlHelper.owaPath() + '/admissionLocations.html')}>
-                            Admission Locations
+                            <FormattedMessage id="ADMISSION_LOCATIONS" />
                         </Link>
                     </li>
                     <li>
                         <Link
                             to={this.urlHelper.owaPath() + '/bedTypes.html'}
                             className={this.linkClass(this.urlHelper.owaPath() + '/bedTypes.html')}>
-                            Bed Types
+                            <FormattedMessage id="BED_TYPES" />
                         </Link>
                     </li>
                     <li>
                         <Link
                             to={this.urlHelper.owaPath() + '/bedTags.html'}
                             className={this.linkClass(this.urlHelper.owaPath() + '/bedTags.html')}>
-                            Bed Tags
+                            <FormattedMessage id="BED_TAGS" />
                         </Link>
                     </li>
                 </ul>
@@ -45,5 +47,10 @@ class Header extends React.PureComponent {
         );
     }
 }
+
+Header.contextTypes = {
+    router: PropTypes.object,
+    intl: PropTypes.object
+};
 
 export default Header;
