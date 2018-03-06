@@ -4,7 +4,7 @@ import UrlHelper from 'utilities/urlHelper';
 
 require('babel-polyfill');
 const urlHelper = new UrlHelper();
-const i18nIosCodes = require('i18n-iso-639-1');
+const i18nIsoCodes = require('i18n-iso-639-1');
 export default class LocaleHelper {
     fetchLocales = async () => {
         const response = await axios.get(urlHelper.apiBaseUrl() + '/session');
@@ -19,6 +19,6 @@ export default class LocaleHelper {
     };
 
     getNativeNameByLocaleCode = (locale) => {
-        return i18nIosCodes.getNativeName(locale);
+        return i18nIsoCodes.getNativeName(locale);
     };
 }
