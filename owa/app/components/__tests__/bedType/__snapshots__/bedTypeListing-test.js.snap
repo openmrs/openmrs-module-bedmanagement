@@ -5,7 +5,9 @@ exports[`BedTypeList Should render bed Type list properly 1`] = `
   className="bed-type-listing"
 >
   <legend>
-      Existing Bed Types  
+      
+    Existing Bed Types
+      
   </legend>
   <table>
     <thead>
@@ -97,9 +99,7 @@ exports[`BedTypeList Should render bed Type list properly 1`] = `
     onClick={[Function]}
     value="Add New"
   >
-     
     Add New
-     
   </button>
 </fieldset>
 `;

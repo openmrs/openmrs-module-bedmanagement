@@ -8,9 +8,12 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
     className="admission-location-form"
   >
     <legend>
-        
+       
+       
       Add
-       Ward  
+       
+      Ward
+        
     </legend>
     <div
       className="block-content"
@@ -24,7 +27,8 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title inline"
           >
-            Parent Location:
+            Parent Location
+            :
           </label>
           <span>
             General Ward
@@ -36,7 +40,8 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Name:
+            Name
+            :
           </label>
           <input
             onChange={[Function]}
@@ -51,7 +56,8 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Description:
+            Description
+            :
           </label>
           <textarea
             cols="50"
@@ -93,9 +99,12 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
     className="admission-location-form"
   >
     <legend>
-        
+       
+       
       Edit
-       Ward  
+       
+      Ward
+        
     </legend>
     <div
       className="block-content"
@@ -109,7 +118,8 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title inline"
           >
-            Parent Location:
+            Parent Location
+            :
           </label>
           <span>
             General Ward
@@ -121,7 +131,8 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Name:
+            Name
+            :
           </label>
           <input
             onChange={[Function]}
@@ -136,7 +147,8 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Description:
+            Description
+            :
           </label>
           <textarea
             cols="50"
@@ -178,9 +190,12 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
     className="admission-location-form"
   >
     <legend>
-        
+       
+       
       Edit
-       Ward  
+       
+      Ward
+        
     </legend>
     <div
       className="block-content"
@@ -194,7 +209,8 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Parent Location:
+            Parent Location
+            :
           </label>
           <select
             name="parent-location"
@@ -232,7 +248,8 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Name:
+            Name
+            :
           </label>
           <input
             onChange={[Function]}
@@ -247,7 +264,8 @@ exports[`AddEditAdmissionLocation Should display admission location form properl
           <label
             className="form-title"
           >
-            Description:
+            Description
+            :
           </label>
           <textarea
             cols="50"

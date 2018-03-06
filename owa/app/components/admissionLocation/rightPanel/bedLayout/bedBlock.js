@@ -5,9 +5,9 @@ import axios from 'axios';
 import UrlHelper from 'utilities/urlHelper';
 
 export default class BedBlock extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
+    constructor(props, context) {
+        super(props, context);
+        this.intl = context.intl;
         this.urlHelper = new UrlHelper();
         this.getBlock = this.getBlock.bind(this);
         this.addEditBedHandler = this.addEditBedHandler.bind(this);
@@ -30,14 +30,19 @@ export default class BedBlock extends React.PureComponent {
         event.preventDefault();
         event.stopPropagation();
         const self = this;
-        const confirmation = confirm('Are you sure you want to delete bed number ' + this.props.bedNumber + '?');
+        const deleteConfirmationMsg = this.intl.formatMessage(
+            {id: 'DELETE_BED_CONFIRM_MESSAGE'},
+            {bed_number: this.props.bedNumber}
+        );
+        const deleteSuccessMsg = this.intl.formatMessage({id: 'DELETE_SUCCESSFULLY'});
+        const confirmation = confirm(deleteConfirmationMsg);
         if (confirmation) {
             axios({
                 method: 'delete',
                 url: this.urlHelper.apiBaseUrl() + '/bed/' + this.props.bed.bedUuid
             })
                 .then(function() {
-                    self.props.admissionLocationFunctions.notify('success', 'Delete successfully');
+                    self.props.admissionLocationFunctions.notify('success', deleteSuccessMsg);
                     self.props.loadAdmissionLocationLayout(
                         self.props.admissionLocationFunctions.getActiveLocationUuid()
                     );
@@ -57,7 +62,7 @@ export default class BedBlock extends React.PureComponent {
                         <i className="fa fa-plus-circle" aria-hidden="true">
                             &nbsp;
                         </i>
-                        <span>Add Bed</span>
+                        <span>{this.intl.formatMessage({id: 'ADD_BED'})}</span>
                     </div>
                 </div>
             );
@@ -98,4 +103,8 @@ BedBlock.propTypes = {
     bed: PropTypes.object.isRequired,
     loadAdmissionLocationLayout: PropTypes.func.isRequired,
     admissionLocationFunctions: PropTypes.object.isRequired
+};
+
+BedBlock.contextTypes = {
+    intl: PropTypes.object
 };

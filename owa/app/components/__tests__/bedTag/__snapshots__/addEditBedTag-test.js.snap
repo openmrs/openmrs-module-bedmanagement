@@ -8,9 +8,12 @@ exports[`AddEditBedTag Should display add edit bed tag form properly 1`] = `
     className="bed-tag-form"
   >
     <legend>
-        
+       
+       
       Add
-       Bed Tag  
+       
+      Bed Tag
+        
     </legend>
     <div
       className="block-content"
@@ -24,7 +27,8 @@ exports[`AddEditBedTag Should display add edit bed tag form properly 1`] = `
           <label
             className="form-title"
           >
-            Name:
+            Name
+            :
           </label>
           <input
             id="name-field"
@@ -66,9 +70,12 @@ exports[`AddEditBedTag Should display add edit bed tag form properly 2`] = `
     className="bed-tag-form"
   >
     <legend>
-        
+       
+       
       Edit
-       Bed Tag  
+       
+      Bed Tag
+        
     </legend>
     <div
       className="block-content"
@@ -82,7 +89,8 @@ exports[`AddEditBedTag Should display add edit bed tag form properly 2`] = `
           <label
             className="form-title"
           >
-            Name:
+            Name
+            :
           </label>
           <input
             id="name-field"

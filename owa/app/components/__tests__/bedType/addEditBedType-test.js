@@ -3,12 +3,21 @@ import {shallow, mount} from 'enzyme';
 import {shallowToJson} from 'enzyme-to-json';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import {IntlProvider} from 'react-intl';
 
 import AddEditBedType from 'components/bedType/bedTypeForm/addEditBedType';
 import bedTypeFunctionsMock from 'components/__mocks__/bedTypeFunctions-mock';
+import messages from 'i18n/messages';
 
-const testProps = {
-    bedTypeFunctions: bedTypeFunctionsMock
+const intlProvider = new IntlProvider({locale: 'en', messages: messages['en']}, {});
+const {intl} = intlProvider.getChildContext();
+const testData = {
+    props: {
+        bedTypeFunctions: bedTypeFunctionsMock
+    },
+    context: {
+        intl: intl
+    }
 };
 
 require('components/__mocks__/location-mock');
@@ -27,17 +36,19 @@ describe('AddEditBedType', () => {
 
     it('Should display add edit bed type form properly', () => {
         const addBedTypeForm = shallow(
-            <AddEditBedType bedTypeFunctions={testProps.bedTypeFunctions} bedTypeUuid={null} operation="add" />
+            <AddEditBedType bedTypeFunctions={testData.props.bedTypeFunctions} bedTypeUuid={null} operation="add" />,
+            {context: testData.context}
         );
         expect(addBedTypeForm.find('#name-field').props().value).toBe('');
         expect(shallowToJson(addBedTypeForm)).toMatchSnapshot();
 
         const editBedTypeForm = shallow(
             <AddEditBedType
-                bedTypeFunctions={testProps.bedTypeFunctions}
+                bedTypeFunctions={testData.props.bedTypeFunctions}
                 operation="edit"
                 bedTypeUuid="6f9fb240-0fd5-11e8-adb7-080027b38971"
-            />
+            />,
+            {context: testData.context}
         );
 
         expect(editBedTypeForm.find('#name-field').props().value).toBe('luxury');
@@ -52,13 +63,14 @@ describe('AddEditBedType', () => {
         const spyOnChangeNameField = jest.spyOn(AddEditBedType.prototype, 'onChangeNameField');
         const spyOnChangeDisplayNameField = jest.spyOn(AddEditBedType.prototype, 'onChangeDisplayNameField');
         const spyOnChangeDescription = jest.spyOn(AddEditBedType.prototype, 'onChangeDescription');
-        const spySetState = jest.spyOn(testProps.bedTypeFunctions, 'setState');
+        const spySetState = jest.spyOn(testData.props.bedTypeFunctions, 'setState');
         const editBedTypeForm = mount(
             <AddEditBedType
-                bedTypeFunctions={testProps.bedTypeFunctions}
+                bedTypeFunctions={testData.props.bedTypeFunctions}
                 operation="edit"
                 bedTypeUuid="6f9fb240-0fd5-11e8-adb7-080027b38971"
-            />
+            />,
+            {context: testData.context}
         );
 
         editBedTypeForm.find('#name-field').simulate('change');

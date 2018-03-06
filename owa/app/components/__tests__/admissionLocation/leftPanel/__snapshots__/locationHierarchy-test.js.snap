@@ -17,9 +17,7 @@ exports[`LocationHierarchy Renders correctly Location hierarchy 1`] = `
         className=""
         onClick={[Function]}
       >
-         
         Admission Locations
-         
       </span>
     </li>
     <HierarchyItem

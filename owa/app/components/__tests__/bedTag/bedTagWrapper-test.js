@@ -3,16 +3,27 @@ import {shallow} from 'enzyme';
 import {shallowToJson} from 'enzyme-to-json';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import {IntlProvider} from 'react-intl';
 
 import BedTagWrapper from 'components/bedTag/bedTagWrapper';
+import messages from 'i18n/messages';
+
 require('components/__mocks__/location-mock');
 require('babel-polyfill');
-const testProps = {
-    match: {
-        isExact: true,
-        params: {},
-        path: '/owa/bedmanagement/bedTags.html',
-        url: '/owa/bedmanagement/bedTags.html'
+
+const intlProvider = new IntlProvider({locale: 'en', messages: messages['en']}, {});
+const {intl} = intlProvider.getChildContext();
+const testData = {
+    props: {
+        match: {
+            isExact: true,
+            params: {},
+            path: '/owa/bedmanagement/bedTags.html',
+            url: '/owa/bedmanagement/bedTags.html'
+        }
+    },
+    context: {
+        intl: intl
     },
     sleep: (milisec) => {
         return new Promise((resolve, reject) => {
@@ -55,10 +66,10 @@ describe('BedTagWrapper', () => {
     });
 
     it('Should render bed Tag page properly', async () => {
-        let bedTagWrapper = shallow(<BedTagWrapper match={testProps.match} />);
+        let bedTagWrapper = shallow(<BedTagWrapper match={testData.props.match} />, {context: testData.context});
         const bedTagFunctions = bedTagWrapper.instance().bedTagFunctions;
 
-        await testProps.sleep(100);
+        await testData.sleep(100);
         expect(bedTagWrapper.find('BedTagList').length).toBe(1);
         expect(shallowToJson(bedTagWrapper)).toMatchSnapshot();
 
@@ -76,12 +87,12 @@ describe('BedTagWrapper', () => {
     });
 
     it('Should work functions properly', async () => {
-        const bedTagWrapper = shallow(<BedTagWrapper match={testProps.match} />);
+        const bedTagWrapper = shallow(<BedTagWrapper match={testData.props.match} />, {context: testData.context});
         const bedTagFunctions = bedTagWrapper.instance().bedTagFunctions;
 
         expect(bedTagFunctions.getBedTags()).toEqual([]);
 
-        await testProps.sleep(100);
+        await testData.sleep(100);
         expect(bedTagFunctions.getBedTags()).toEqual([
             {
                 id: 2,

@@ -6,9 +6,10 @@ import UrlHelper from 'utilities/urlHelper';
 
 require('./bedTagForm.css');
 export default class AddEditBedTag extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
+        this.intl = context.intl;
         this.bedTag = props.bedTagFunctions.getBedTagByUuid(props.bedTagUuid);
         this.state = {
             uuid: this.bedTag != null ? this.bedTag.uuid : null,
@@ -61,7 +62,8 @@ export default class AddEditBedTag extends React.Component {
                 });
 
                 self.props.bedTagFunctions.fetchBedTags();
-                self.props.bedTagFunctions.notify('success', 'Bed Tag save successfully');
+                const successMsg = self.intl.formatMessage({id: 'BED_TAG_SAVE_MSG'});
+                self.props.bedTagFunctions.notify('success', successMsg);
                 self.props.bedTagFunctions.setState({
                     activePage: 'listing',
                     pageData: {}
@@ -81,11 +83,17 @@ export default class AddEditBedTag extends React.Component {
         return (
             <div className="form-container">
                 <fieldset className="bed-tag-form">
-                    <legend>&nbsp; {this.props.operation == 'add' ? 'Add' : 'Edit'} Bed Tag &nbsp;</legend>
+                    <legend>
+                        &nbsp;{' '}
+                        {this.props.operation == 'add'
+                            ? this.intl.formatMessage({id: 'ADD'})
+                            : this.intl.formatMessage({id: 'EDIT'})}{' '}
+                        {this.intl.formatMessage({id: 'BED_TAG'})} &nbsp;
+                    </legend>
                     <div className="block-content">
                         <form onSubmit={this.onSubmitHandler}>
                             <div className="form-block">
-                                <label className="form-title">Name:</label>
+                                <label className="form-title">{this.intl.formatMessage({id: 'NAME'})}:</label>
                                 <input
                                     type="text"
                                     value={this.state.name}
@@ -101,7 +109,11 @@ export default class AddEditBedTag extends React.Component {
                                 <input
                                     type="submit"
                                     name="submit"
-                                    value={this.state.disableSubmit ? 'Saving...' : 'Save'}
+                                    value={
+                                        this.state.disableSubmit
+                                            ? this.intl.formatMessage({id: 'SAVING'})
+                                            : this.intl.formatMessage({id: 'SAVE'})
+                                    }
                                     disabled={this.state.disableSubmit}
                                     className="form-btn float-left margin-right"
                                 />
@@ -109,7 +121,7 @@ export default class AddEditBedTag extends React.Component {
                                     type="button"
                                     onClick={this.cancelEventHandler}
                                     name="cancel"
-                                    value="Cancel"
+                                    value={this.intl.formatMessage({id: 'CANCEL'})}
                                     className="form-btn float-left"
                                 />
                             </div>
@@ -124,4 +136,8 @@ export default class AddEditBedTag extends React.Component {
 AddEditBedTag.propTypes = {
     bedTagUuid: PropTypes.string,
     bedTagFunctions: PropTypes.object.isRequired
+};
+
+AddEditBedTag.contextTypes = {
+    intl: PropTypes.object
 };

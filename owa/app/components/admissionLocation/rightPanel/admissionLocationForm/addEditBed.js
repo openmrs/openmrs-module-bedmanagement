@@ -5,8 +5,8 @@ import axios from 'axios';
 import UrlHelper from 'utilities/urlHelper';
 
 export default class AddEditBed extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.state = {
             bedUuid: props.bed.bedUuid != null ? props.bed.bedUuid : null,
@@ -19,6 +19,7 @@ export default class AddEditBed extends React.Component {
             columnFieldError: ''
         };
 
+        this.intl = context.intl;
         this.urlHelper = new UrlHelper();
         this.admissionLocation = props.admissionLocationFunctions.getAdmissionLocationByUuid(props.activeUuid);
         this.onChangeRowField = this.onChangeRowField.bind(this);
@@ -46,11 +47,11 @@ export default class AddEditBed extends React.Component {
         } else {
             let errorMsg = '';
             if (this.rowField.value == '') {
-                errorMsg = 'Row is required field';
+                errorMsg = this.intl.formatMessage({id: 'ROW_REQUIRED_MSG'});
             } else if (this.rowField.value <= 0) {
-                errorMsg = 'Row value should be greater than 0';
+                errorMsg = this.intl.formatMessage({id: 'ROW_SHOULD_GREATER_THAN_ZERO'});
             } else if (this.rowField.value > this.props.layoutRow) {
-                errorMsg = 'Row value should not be greater than layout row size';
+                errorMsg = this.intl.formatMessage({id: 'ROW_SHOULD_GREATER_THAN_LAYOUT_ROW'});
             }
 
             this.setState({
@@ -69,11 +70,11 @@ export default class AddEditBed extends React.Component {
         } else {
             let errorMsg = '';
             if (this.columnField.value == '') {
-                errorMsg = 'Column is required field';
+                errorMsg = this.intl.formatMessage({id: 'COLUMN_REQUIRED_MSG'});
             } else if (this.columnField.value <= 0) {
-                errorMsg = 'Column value should be greater than 0';
+                errorMsg = this.intl.formatMessage({id: 'COLUMN_SHOULD_GREATER_THAN_ZERO'});
             } else if (this.columnField.value > this.props.layoutColumn) {
-                errorMsg = 'Column value should not be greater than layout column size';
+                errorMsg = this.intl.formatMessage({id: 'COLUMN_SHOULD_GREATER_THAN_LAYOUT_COLUMN'});
             }
 
             this.setState({
@@ -98,7 +99,8 @@ export default class AddEditBed extends React.Component {
     onSubmitHandler(event) {
         event.preventDefault();
         if (this.state.rowFieldError != '' || this.state.columnFieldError != '') {
-            this.props.admissionLocationFunctions.notify('error', 'Fix error before submit');
+            const errorMsg = this.intl.formatMessage({id: 'FIX_ERROR_MSG'});
+            this.props.admissionLocationFunctions.notify(errorText, errorMsg);
             return;
         }
 
@@ -126,7 +128,8 @@ export default class AddEditBed extends React.Component {
                     disableSubmit: false
                 });
 
-                self.props.admissionLocationFunctions.notify('success', 'Bed save successfully');
+                const sussesMsg = self.intl.formatMessage({id: 'BED_SAVE_MSG'});
+                self.props.admissionLocationFunctions.notify('success', sussesMsg);
                 self.props.admissionLocationFunctions.setState({
                     activePage: 'listing',
                     pageData: {},
@@ -156,15 +159,23 @@ export default class AddEditBed extends React.Component {
         return (
             <div className="main-container">
                 <fieldset className="admission-location-form">
-                    <legend>&nbsp; {this.props.operation == 'add' ? 'Add' : 'Edit'} Bed &nbsp;</legend>
+                    <legend>
+                        &nbsp;{' '}
+                        {this.props.operation == 'add'
+                            ? this.intl.formatMessage({id: 'ADD'})
+                            : this.intl.formatMessage({id: 'EDIT'})}{' '}
+                        {this.intl.formatMessage({id: 'BED'})} &nbsp;
+                    </legend>
                     <div className="block-content">
                         <form onSubmit={this.onSubmitHandler}>
                             <div className="form-block">
-                                <label className="form-title inline">Location:</label>
+                                <label className="form-title inline">
+                                    {this.intl.formatMessage({id: 'LOCATION'})}:
+                                </label>
                                 <span id="location-name">{this.admissionLocation.name}</span>
                             </div>
                             <div className="form-block">
-                                <label className="form-title">Row:</label>
+                                <label className="form-title">{this.intl.formatMessage({id: 'ROW'})}:</label>
                                 <input
                                     type="number"
                                     value={this.state.row}
@@ -182,7 +193,7 @@ export default class AddEditBed extends React.Component {
                                 )}
                             </div>
                             <div className="form-block">
-                                <label className="form-title">Column:</label>
+                                <label className="form-title">{this.intl.formatMessage({id: 'COLUMN'})}:</label>
                                 <input
                                     type="number"
                                     value={this.state.column}
@@ -200,7 +211,7 @@ export default class AddEditBed extends React.Component {
                                 )}
                             </div>
                             <div className="form-block">
-                                <label className="form-title">Bed Number:</label>
+                                <label className="form-title">{this.intl.formatMessage({id: 'BED_NUMBER'})}:</label>
                                 <input
                                     type="text"
                                     value={this.state.bedNumber}
@@ -214,7 +225,7 @@ export default class AddEditBed extends React.Component {
                                 />
                             </div>
                             <div className="form-block">
-                                <label className="form-title">Bed Type:</label>
+                                <label className="form-title">{this.intl.formatMessage({id: 'BED_TYPE'})}:</label>
                                 <select
                                     onChange={this.onChangeBedType}
                                     required={true}
@@ -233,7 +244,11 @@ export default class AddEditBed extends React.Component {
                                 <input
                                     type="submit"
                                     name="submit"
-                                    value={this.state.disableSubmit ? 'Saving...' : 'Save'}
+                                    value={
+                                        this.state.disableSubmit
+                                            ? this.intl.formatMessage({id: 'SAVING'})
+                                            : this.intl.formatMessage({id: 'SAVE'})
+                                    }
                                     disabled={this.state.disableSubmit}
                                     className="form-btn float-left margin-right"
                                 />
@@ -241,7 +256,7 @@ export default class AddEditBed extends React.Component {
                                     type="button"
                                     onClick={this.cancelEventHandler}
                                     name="cancel"
-                                    value="Cancel"
+                                    value={this.intl.formatMessage({id: 'CANCEL'})}
                                     className="form-btn float-left"
                                 />
                             </div>
@@ -268,4 +283,8 @@ AddEditBed.propTypes = {
     bedTypes: PropTypes.array.isRequired,
     operation: PropTypes.string.isRequired,
     admissionLocationFunctions: PropTypes.object.isRequired
+};
+
+AddEditBed.contextTypes = {
+    intl: PropTypes.object
 };

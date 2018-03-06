@@ -3,12 +3,21 @@ import {shallow, mount} from 'enzyme';
 import {shallowToJson} from 'enzyme-to-json';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import {IntlProvider} from 'react-intl';
 
 import AddEditBedTag from 'components/bedTag/bedTagForm/addEditBedTag';
 import bedTagFunctionsMock from 'components/__mocks__/bedTagFunctions-mock';
+import messages from 'i18n/messages';
 
-const testProps = {
-    bedTagFunctions: bedTagFunctionsMock
+const intlProvider = new IntlProvider({locale: 'en', messages: messages['en']}, {});
+const {intl} = intlProvider.getChildContext();
+const testData = {
+    props: {
+        bedTagFunctions: bedTagFunctionsMock
+    },
+    context: {
+        intl: intl
+    }
 };
 
 require('components/__mocks__/location-mock');
@@ -28,17 +37,19 @@ describe('AddEditBedTag', () => {
 
     it('Should display add edit bed tag form properly', () => {
         const addBedTagForm = shallow(
-            <AddEditBedTag bedTagFunctions={testProps.bedTagFunctions} bedTagUuid={null} operation="add" />
+            <AddEditBedTag bedTagFunctions={testData.props.bedTagFunctions} bedTagUuid={null} operation="add" />,
+            {context: testData.context}
         );
         expect(addBedTagForm.find('#name-field').props().value).toBe('');
         expect(shallowToJson(addBedTagForm)).toMatchSnapshot();
 
         const editBedTagForm = shallow(
             <AddEditBedTag
-                bedTagFunctions={testProps.bedTagFunctions}
+                bedTagFunctions={testData.props.bedTagFunctions}
                 operation="edit"
                 bedTagUuid="ff7ed494-7b9c-4478-812a-5187e297f94c"
-            />
+            />,
+            {context: testData.context}
         );
 
         expect(editBedTagForm.find('#name-field').props().value).toBe('Isolation');
@@ -49,13 +60,14 @@ describe('AddEditBedTag', () => {
         const spyOnCancelEventHandler = jest.spyOn(AddEditBedTag.prototype, 'cancelEventHandler');
         const spyOnSubmitHandler = jest.spyOn(AddEditBedTag.prototype, 'onSubmitHandler');
         const spyOnChangeNameField = jest.spyOn(AddEditBedTag.prototype, 'onChangeNameField');
-        const spySetState = jest.spyOn(testProps.bedTagFunctions, 'setState');
+        const spySetState = jest.spyOn(testData.props.bedTagFunctions, 'setState');
         const editBedForm = mount(
             <AddEditBedTag
-                bedTagFunctions={testProps.bedTagFunctions}
+                bedTagFunctions={testData.props.bedTagFunctions}
                 operation="edit"
                 bedTagUuid="ff7ed494-7b9c-4478-812a-5187e297f94c"
-            />
+            />,
+            {context: testData.context}
         );
 
         editBedForm.find('#name-field').simulate('change');

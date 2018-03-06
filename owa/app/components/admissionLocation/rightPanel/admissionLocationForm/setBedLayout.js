@@ -6,8 +6,8 @@ import UrlHelper from 'utilities/urlHelper';
 
 require('./admissionLocationForm.css');
 export default class SetBedLayout extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
         this.initData = this.initData.bind(this);
         this.initData();
 
@@ -20,6 +20,7 @@ export default class SetBedLayout extends React.Component {
             columnFieldError: ''
         };
 
+        this.intl = context.intl;
         this.urlHelper = new UrlHelper();
         this.onChangeColumnField = this.onChangeColumnField.bind(this);
         this.onChangeRowField = this.onChangeRowField.bind(this);
@@ -46,9 +47,9 @@ export default class SetBedLayout extends React.Component {
         } else {
             let errorMsg = '';
             if (this.rowField.value == '') {
-                errorMsg = 'Row is required field';
+                errorMsg = this.intl.formatMessage({id: 'ROW_REQUIRED_MSG'});
             } else if (this.rowField.value <= 0) {
-                errorMsg = 'Row value should be greater than 0';
+                errorMsg = this.intl.formatMessage({id: 'ROW_SHOULD_GREATER_THAN_ZERO'});
             }
 
             this.setState({
@@ -59,7 +60,7 @@ export default class SetBedLayout extends React.Component {
     }
 
     onChangeColumnField() {
-        if (this.columnField.value >= 1 && this.columnField.value <= 8) {
+        if (this.columnField.value >= 1 && this.columnField.value <= 10) {
             this.setState({
                 columnFieldError: '',
                 column: Number(this.columnField.value)
@@ -67,9 +68,9 @@ export default class SetBedLayout extends React.Component {
         } else {
             let errorMsg = '';
             if (this.columnField.value == '') {
-                errorMsg = 'Column is required field';
-            } else if (this.columnField.value <= 0 || this.columnField.value > 8) {
-                errorMsg = 'Column value should be greater than 0 and less than 9';
+                errorMsg = this.intl.formatMessage({id: 'COLUMN_REQUIRED_MSG'});
+            } else if (this.columnField.value <= 0 || this.columnField.value > 10) {
+                errorMsg = this.intl.formatMessage({id: 'COLUMN_SHOULD_GREATER_THAN_ZERO'});
             }
 
             this.setState({
@@ -91,7 +92,8 @@ export default class SetBedLayout extends React.Component {
     onSubmitHandler(event) {
         event.preventDefault();
         if (this.state.rowFieldError != '' || this.state.columnFieldError != '') {
-            this.props.admissionLocationFunctions.notify('error', 'Fix error before submit');
+            const errorMsg = this.intl.formatMessage({id: 'FIX_ERROR_MSG'});
+            this.props.admissionLocationFunctions.notify('error', errorMsg);
             return;
         }
 
@@ -119,10 +121,8 @@ export default class SetBedLayout extends React.Component {
                 self.setState({
                     disableSubmit: false
                 });
-                self.props.admissionLocationFunctions.notify(
-                    'success',
-                    'Admission location bed layout save successfully'
-                );
+                const sussessMsg = self.intl.formatMessage({id: 'BED_LAYOUT_SAVE_MSG'});
+                self.props.admissionLocationFunctions.notify('success', sussessMsg);
                 self.props.admissionLocationFunctions.setState({
                     activePage: 'listing',
                     activeUuid: self.props.activeUuid
@@ -132,6 +132,7 @@ export default class SetBedLayout extends React.Component {
                 self.setState({
                     disableSubmit: false
                 });
+                console.log(errorResponse);
                 const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                 self.props.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
@@ -141,15 +142,17 @@ export default class SetBedLayout extends React.Component {
         return (
             <div className="main-container">
                 <fieldset className="admission-location-form">
-                    <legend>&nbsp; Set Layout &nbsp;</legend>
+                    <legend>&nbsp; {this.intl.formatMessage({id: 'SET_LAYOUT'})} &nbsp;</legend>
                     <div className="block-content">
                         <form onSubmit={this.onSubmitHandler}>
                             <div className="form-block">
-                                <label className="form-title inline">Location:</label>
+                                <label className="form-title inline">
+                                    {this.intl.formatMessage({id: 'LOCATION'})}:
+                                </label>
                                 <span>{this.admissionLocation.name}</span>
                             </div>
                             <div className="form-block">
-                                <label className="form-title">Rows:</label>
+                                <label className="form-title">{this.intl.formatMessage({id: 'ROWS'})}:</label>
                                 <input
                                     type="number"
                                     value={this.state.row}
@@ -167,7 +170,7 @@ export default class SetBedLayout extends React.Component {
                                 )}
                             </div>
                             <div className="form-block">
-                                <label className="form-title">Column:</label>
+                                <label className="form-title">{this.intl.formatMessage({id: 'COLUMNS'})}:</label>
                                 <input
                                     type="number"
                                     value={this.state.column}
@@ -188,7 +191,11 @@ export default class SetBedLayout extends React.Component {
                                 <input
                                     type="submit"
                                     name="submit"
-                                    value={this.state.disableSubmit ? 'Saving...' : 'Save'}
+                                    value={
+                                        this.state.disableSubmit
+                                            ? this.intl.formatMessage({id: 'SAVING'})
+                                            : this.intl.formatMessage({id: 'SAVE'})
+                                    }
                                     disabled={this.state.disableSubmit}
                                     className="form-btn float-left margin-right"
                                 />
@@ -196,7 +203,7 @@ export default class SetBedLayout extends React.Component {
                                     type="button"
                                     onClick={this.cancelEventHandler}
                                     name="cancel"
-                                    value="Cancel"
+                                    value={this.intl.formatMessage({id: 'CANCEL'})}
                                     className="form-btn float-left"
                                 />
                             </div>
@@ -213,4 +220,8 @@ SetBedLayout.propTypes = {
     column: PropTypes.number,
     activeUuid: PropTypes.string,
     admissionLocationFunctions: PropTypes.object.isRequired
+};
+
+SetBedLayout.contextTypes = {
+    intl: PropTypes.object
 };

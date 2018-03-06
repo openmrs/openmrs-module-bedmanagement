@@ -8,9 +8,12 @@ exports[`AddEditBed Should display add edit bed form properly 1`] = `
     className="admission-location-form"
   >
     <legend>
-        
+       
+       
       Add
-       Bed  
+       
+      Bed
+        
     </legend>
     <div
       className="block-content"
@@ -24,7 +27,8 @@ exports[`AddEditBed Should display add edit bed form properly 1`] = `
           <label
             className="form-title inline"
           >
-            Location:
+            Location
+            :
           </label>
           <span
             id="location-name"
@@ -38,7 +42,8 @@ exports[`AddEditBed Should display add edit bed form properly 1`] = `
           <label
             className="form-title"
           >
-            Row:
+            Row
+            :
           </label>
           <input
             id="row-field"
@@ -54,7 +59,8 @@ exports[`AddEditBed Should display add edit bed form properly 1`] = `
           <label
             className="form-title"
           >
-            Column:
+            Column
+            :
           </label>
           <input
             id="column-field"
@@ -70,7 +76,8 @@ exports[`AddEditBed Should display add edit bed form properly 1`] = `
           <label
             className="form-title"
           >
-            Bed Number:
+            Bed Number
+            :
           </label>
           <input
             id="bed-number-field"
@@ -87,7 +94,8 @@ exports[`AddEditBed Should display add edit bed form properly 1`] = `
           <label
             className="form-title"
           >
-            Bed Type:
+            Bed Type
+            :
           </label>
           <select
             id="bed-type"
@@ -147,9 +155,12 @@ exports[`AddEditBed Should display add edit bed form properly 2`] = `
     className="admission-location-form"
   >
     <legend>
-        
+       
+       
       Edit
-       Bed  
+       
+      Bed
+        
     </legend>
     <div
       className="block-content"
@@ -163,7 +174,8 @@ exports[`AddEditBed Should display add edit bed form properly 2`] = `
           <label
             className="form-title inline"
           >
-            Location:
+            Location
+            :
           </label>
           <span
             id="location-name"
@@ -177,7 +189,8 @@ exports[`AddEditBed Should display add edit bed form properly 2`] = `
           <label
             className="form-title"
           >
-            Row:
+            Row
+            :
           </label>
           <input
             id="row-field"
@@ -193,7 +206,8 @@ exports[`AddEditBed Should display add edit bed form properly 2`] = `
           <label
             className="form-title"
           >
-            Column:
+            Column
+            :
           </label>
           <input
             id="column-field"
@@ -209,7 +223,8 @@ exports[`AddEditBed Should display add edit bed form properly 2`] = `
           <label
             className="form-title"
           >
-            Bed Number:
+            Bed Number
+            :
           </label>
           <input
             id="bed-number-field"
@@ -226,7 +241,8 @@ exports[`AddEditBed Should display add edit bed form properly 2`] = `
           <label
             className="form-title"
           >
-            Bed Type:
+            Bed Type
+            :
           </label>
           <select
             id="bed-type"

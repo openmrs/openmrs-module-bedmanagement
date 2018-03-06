@@ -8,8 +8,8 @@ import BedLayoutRow from 'components/admissionLocation/rightPanel/bedLayout/bedL
 
 require('./bedlayout.css');
 export default class BedLayout extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.state = {
             layoutRow: 0,
@@ -18,6 +18,7 @@ export default class BedLayout extends React.Component {
             loadingData: true
         };
 
+        this.intl = context.intl;
         this.urlHelper = new UrlHelper();
         this.getBody = this.getBody.bind(this);
         this.setBedLayoutClickHandler = this.setBedLayoutClickHandler.bind(this);
@@ -182,4 +183,8 @@ export default class BedLayout extends React.Component {
 BedLayout.propTypes = {
     activeUuid: PropTypes.string,
     admissionLocationFunctions: PropTypes.object.isRequired
+};
+
+BedLayout.contextTypes = {
+    intl: PropTypes.object
 };

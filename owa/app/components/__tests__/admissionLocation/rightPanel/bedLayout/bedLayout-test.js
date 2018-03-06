@@ -3,14 +3,24 @@ import {shallow, mount} from 'enzyme';
 import {shallowToJson} from 'enzyme-to-json';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import {IntlProvider} from 'react-intl';
+import messages from 'i18n/messages';
 
 import BedLayout from 'components/admissionLocation/rightPanel/bedLayout';
 import admissionLocationFunctions from 'components/__mocks__/admissionLocationFunctions-mock';
 
 require('babel-polyfill');
 require('components/__mocks__/location-mock');
-const testProps = {
-    admissionLocationFunctions: admissionLocationFunctions,
+
+const intlProvider = new IntlProvider({locale: 'en', messages: messages['en']}, {});
+const {intl} = intlProvider.getChildContext();
+const testData = {
+    props: {
+        admissionLocationFunctions: admissionLocationFunctions
+    },
+    context: {
+        intl: intl
+    },
     sleep: (milliSec) => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -75,10 +85,11 @@ describe('BedLayout', () => {
         const bedLayout = shallow(
             <BedLayout
                 activeUuid="bb0e512e-d225-11e4-9c67-080027b662ec"
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
-        await testProps.sleep(100);
+        await testData.sleep(100);
         bedLayout.update();
 
         expect(bedLayout.find('BedLayoutRow').length).toBe(2);
@@ -133,10 +144,11 @@ describe('BedLayout', () => {
         const notYetSetBedLayout = shallow(
             <BedLayout
                 activeUuid="baf83667-d225-11e4-as58-080027b662ec"
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
-        await testProps.sleep(100);
+        await testData.sleep(100);
         notYetSetBedLayout.update();
 
         expect(shallowToJson(notYetSetBedLayout)).toMatchSnapshot();
@@ -145,14 +157,15 @@ describe('BedLayout', () => {
     it('Should trigger event handler', async () => {
         const sypAddWardClickHandler = jest.spyOn(BedLayout.prototype, 'addWardClickHandler');
         const sypSetBedLayoutClickHandler = jest.spyOn(BedLayout.prototype, 'setBedLayoutClickHandler');
-        const spyOnSetState = jest.spyOn(testProps.admissionLocationFunctions, 'setState');
+        const spyOnSetState = jest.spyOn(testData.props.admissionLocationFunctions, 'setState');
         const notYetSetBedLayout = mount(
             <BedLayout
                 activeUuid="baf83667-d225-11e4-as58-080027b662ec"
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
-        await testProps.sleep(100);
+        await testData.sleep(100);
         notYetSetBedLayout.update();
 
         notYetSetBedLayout

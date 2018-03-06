@@ -3,40 +3,49 @@ import {shallow, mount} from 'enzyme';
 import {shallowToJson} from 'enzyme-to-json';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import {IntlProvider} from 'react-intl';
 
 import AddEditBed from 'components/admissionLocation/rightPanel/admissionLocationForm/addEditBed';
 import admissionLocationFunctionsMock from 'components/__mocks__/admissionLocationFunctions-mock';
+import messages from 'i18n/messages';
 
 require('components/__mocks__/location-mock');
-const testProps = {
-    admissionLocationFunctions: admissionLocationFunctionsMock,
-    admissionLocations: admissionLocationFunctionsMock.getAdmissionLocations(),
-    addBedData: {
-        bedId: null,
-        bedNumber: null,
-        bedType: null,
-        bedUuid: null,
-        columnNumber: 2,
-        rowNumber: 1,
-        status: null,
-        layoutColumn: 4,
-        layoutRow: 3
-    },
-    editBedData: {
-        bedId: 42,
-        bedNumber: '100-a',
-        bedType: {
-            description: 'LXY',
-            displayName: 'luxury bed',
-            uuid: '6f9fb240-0fd5-11e8-adb7-080027b38971',
-            name: 'luxury'
+const intlProvider = new IntlProvider({locale: 'en', messages: messages['en']}, {});
+const {intl} = intlProvider.getChildContext();
+const testData = {
+    props: {
+        admissionLocationFunctions: admissionLocationFunctionsMock,
+        admissionLocations: admissionLocationFunctionsMock.getAdmissionLocations(),
+        addBedData: {
+            bedId: null,
+            bedNumber: null,
+            bedType: null,
+            bedUuid: null,
+            columnNumber: 2,
+            rowNumber: 1,
+            status: null,
+            layoutColumn: 4,
+            layoutRow: 3
         },
-        bedUuid: 'a3e42812-a4c1-4453-96cf-d45578d0fea9',
-        columnNumber: 1,
-        rowNumber: 2,
-        status: 'AVAILABLE',
-        layoutColumn: 3,
-        layoutRow: 4
+        editBedData: {
+            bedId: 42,
+            bedNumber: '100-a',
+            bedType: {
+                description: 'LXY',
+                displayName: 'luxury bed',
+                id: 2,
+                name: 'luxury'
+            },
+            bedUuid: 'a3e42812-a4c1-4453-96cf-d45578d0fea9',
+            columnNumber: 1,
+            rowNumber: 2,
+            status: 'AVAILABLE',
+            layoutColumn: 3,
+            layoutRow: 4
+        }
+    },
+    context: {
+        intl: intl
     }
 };
 
@@ -70,10 +79,11 @@ describe('AddEditBed', () => {
                 layoutColumn={4}
                 layoutRow={3}
                 activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-                bed={testProps.addBedData}
-                bedTypes={testProps.admissionLocationFunctions.getBedTypes()}
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                bed={testData.props.addBedData}
+                bedTypes={testData.props.admissionLocationFunctions.getBedTypes()}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
 
         expect(
@@ -93,10 +103,11 @@ describe('AddEditBed', () => {
                 layoutColumn={4}
                 layoutRow={3}
                 activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-                bed={testProps.editBedData}
-                bedTypes={testProps.admissionLocationFunctions.getBedTypes()}
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                bed={testData.props.editBedData}
+                bedTypes={testData.props.admissionLocationFunctions.getBedTypes()}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
 
         expect(
@@ -119,17 +130,18 @@ describe('AddEditBed', () => {
         const spyOnChangeColumnField = jest.spyOn(AddEditBed.prototype, 'onChangeColumnField');
         const spnOnChangeBedNumberField = jest.spyOn(AddEditBed.prototype, 'onChangeBedNumberField');
         const spyOnChangeBedType = jest.spyOn(AddEditBed.prototype, 'onChangeBedType');
-        const spySetState = jest.spyOn(testProps.admissionLocationFunctions, 'setState');
+        const spySetState = jest.spyOn(testData.props.admissionLocationFunctions, 'setState');
         const editBedForm = mount(
             <AddEditBed
                 operation="edit"
                 layoutColumn={4}
                 layoutRow={3}
                 activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-                bed={testProps.editBedData}
-                bedTypes={testProps.admissionLocationFunctions.getBedTypes()}
-                admissionLocationFunctions={testProps.admissionLocationFunctions}
-            />
+                bed={testData.props.editBedData}
+                bedTypes={testData.props.admissionLocationFunctions.getBedTypes()}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
 
         editBedForm.find('#row-field').simulate('change');

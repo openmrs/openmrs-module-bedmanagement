@@ -5,9 +5,10 @@ import BedTypeListRow from 'components/bedType/bedTypeList/bedTypelistRow';
 
 require('./bedTypeList.css');
 export default class BedTypeList extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
+        this.intl = context.intl;
         this.addNewHandler = this.addNewHandler.bind(this);
     }
 
@@ -25,14 +26,14 @@ export default class BedTypeList extends React.Component {
     render() {
         return (
             <fieldset className="bed-type-listing">
-                <legend>&nbsp; Existing Bed Types &nbsp;</legend>
+                <legend>&nbsp; {this.intl.formatMessage({id: 'EXISTING_BED_TYPES'})} &nbsp;</legend>
                 <table>
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Display Name</th>
-                            <th className="description">Description</th>
-                            <th>Action</th>
+                            <th>{this.intl.formatMessage({id: 'NAME'})}</th>
+                            <th>{this.intl.formatMessage({id: 'DISPLAY_NAME'})}</th>
+                            <th className="description">{this.intl.formatMessage({id: 'DESCRIPTION'})}</th>
+                            <th>{this.intl.formatMessage({id: 'ACTION'})}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,9 +46,11 @@ export default class BedTypeList extends React.Component {
                         ))}
                     </tbody>
                 </table>
-                <button onClick={this.addNewHandler} value="Add New" className="list-btn">
-                    {' '}
-                    Add New{' '}
+                <button
+                    onClick={this.addNewHandler}
+                    value={this.intl.formatMessage({id: 'ADD_NEW'})}
+                    className="list-btn">
+                    {this.intl.formatMessage({id: 'ADD_NEW'})}
                 </button>
             </fieldset>
         );
@@ -57,4 +60,8 @@ export default class BedTypeList extends React.Component {
 BedTypeList.propTypes = {
     bedTypes: PropTypes.array.isRequired,
     bedTypeFunctions: PropTypes.object.isRequired
+};
+
+BedTypeList.contextTypes = {
+    intl: PropTypes.object
 };

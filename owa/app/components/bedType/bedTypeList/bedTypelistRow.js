@@ -5,9 +5,10 @@ import axios from 'axios';
 import UrlHelper from 'utilities/urlHelper';
 
 export default class BedTypeListRow extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
+        this.intl = context.intl;
         this.urlHelper = new UrlHelper();
         this.deleteHandler = this.deleteHandler.bind(this);
         this.editHandler = this.editHandler.bind(this);
@@ -17,14 +18,19 @@ export default class BedTypeListRow extends React.Component {
         event.preventDefault();
 
         const self = this;
-        const confirmation = confirm('Are you sure you want to delete bed type ' + this.props.bedType.name + '?');
+        const deleteConfirmationMsg = this.intl.formatMessage(
+            {id: 'DELETE_BED_TYPE_CONFIRM_MSG'},
+            {bed_type_name: this.props.bedType.name}
+        );
+        const confirmation = confirm(deleteConfirmationMsg);
         if (confirmation) {
             axios({
                 method: 'delete',
                 url: this.urlHelper.apiBaseUrl() + '/bedtype/' + this.props.bedType.uuid
             })
                 .then(function() {
-                    self.props.bedTypeFunctions.notify('success', 'Delete successfully');
+                    const deleteSuccessMsg = self.intl.formatMessage({id: 'DELETE_SUCCESSFULLY'});
+                    self.props.bedTypeFunctions.notify('success', deleteSuccessMsg);
                     self.props.bedTypeFunctions.fetchBedTypes();
                 })
                 .catch(function(errorResponse) {
@@ -54,11 +60,11 @@ export default class BedTypeListRow extends React.Component {
                 <td>{this.props.bedType.description}</td>
                 <td>
                     <a href="javascript:void(0);" onClick={this.editHandler}>
-                        <i className="icon fa fa-edit" aria-hidden="true" /> Edit
+                        <i className="icon fa fa-edit" aria-hidden="true" /> {this.intl.formatMessage({id: 'EDIT'})}
                     </a>
                     &nbsp; | &nbsp;
                     <a href="javascript:void(0);" onClick={this.deleteHandler}>
-                        <i className="icon fa fa-trash" aria-hidden="true" /> Delete
+                        <i className="icon fa fa-trash" aria-hidden="true" /> {this.intl.formatMessage({id: 'DELETE'})}
                     </a>
                 </td>
             </tr>
@@ -69,4 +75,8 @@ export default class BedTypeListRow extends React.Component {
 BedTypeListRow.propTypes = {
     bedType: PropTypes.object.isRequired,
     bedTypeFunctions: PropTypes.object.isRequired
+};
+
+BedTypeListRow.contextTypes = {
+    intl: PropTypes.object
 };

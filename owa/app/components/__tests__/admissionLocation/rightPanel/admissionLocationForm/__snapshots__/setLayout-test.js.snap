@@ -8,7 +8,9 @@ exports[`SetBedLayout Should display set layout form properly 1`] = `
     className="admission-location-form"
   >
     <legend>
-        Set Layout  
+        
+      Set Layout
+        
     </legend>
     <div
       className="block-content"
@@ -22,7 +24,8 @@ exports[`SetBedLayout Should display set layout form properly 1`] = `
           <label
             className="form-title inline"
           >
-            Location:
+            Location
+            :
           </label>
           <span>
             General Ward
@@ -34,7 +37,8 @@ exports[`SetBedLayout Should display set layout form properly 1`] = `
           <label
             className="form-title"
           >
-            Rows:
+            Rows
+            :
           </label>
           <input
             id="row-field"
@@ -50,7 +54,8 @@ exports[`SetBedLayout Should display set layout form properly 1`] = `
           <label
             className="form-title"
           >
-            Column:
+            Columns
+            :
           </label>
           <input
             id="column-field"
