@@ -9,11 +9,9 @@ import BedTagWrapper from 'components/bedTag/bedTagWrapper';
 import LocaleList from 'components/locale/localeList';
 import StateApi from 'utilities/stateApi';
 import UrlHelper from 'utilities/urlHelper';
-import LocaleHelper from 'utilities/localeHelper';
 import messages from 'i18n/messages';
 
 const urlHelper = new UrlHelper();
-const localeHelper = new LocaleHelper();
 require('./app.css');
 require('babel-polyfill');
 class App extends React.Component {
@@ -30,20 +28,13 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            localeCode: 'en',
-            allowedLocales: ['en'],
-            messages: messages['en']
-        };
-    }
-
-    async componentWillMount() {
-        const localeData = await localeHelper.fetchLocales();
-        this.setState({
-            localeCode: localeData.localeCode,
-            allowedLocales: localeData.allowedLocales,
+            localeCode: props.localeCode,
+            allowedLocales: props.allowedLocales,
             messages:
-                typeof messages[localeData.localeCode] != 'undefined' ? messages[localeData.localeCode] : messages['en']
-        });
+                typeof messages[props.localeCode] !== 'undefined'
+                    ? messages[props.localeCode]
+                    : messages[props.defaultLocale]
+        };
     }
 
     render() {
@@ -72,5 +63,11 @@ class App extends React.Component {
         );
     }
 }
+
+App.propTypes = {
+    localeCode: PropTypes.string.isRequired,
+    defaultLocale: PropTypes.string.isRequired,
+    allowedLocales: PropTypes.array.isRequired
+};
 
 export default App;

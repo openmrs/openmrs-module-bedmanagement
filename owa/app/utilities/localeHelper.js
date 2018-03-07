@@ -21,4 +21,9 @@ export default class LocaleHelper {
     getNativeNameByLocaleCode = (locale) => {
         return i18nIsoCodes.getNativeName(locale);
     };
+
+    getDefaultLocale = async () => {
+        let appConfig = await axios.get(urlHelper.owaPath() + '/manifest.webapp');
+        return appConfig.data.default_locale;
+    };
 }
