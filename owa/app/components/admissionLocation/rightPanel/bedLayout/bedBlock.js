@@ -68,7 +68,7 @@ export default class BedBlock extends React.PureComponent {
             );
         } else {
             return (
-                <div className="block">
+                <div className="block existing-bed">
                     <div className="left-block">
                         <i className="fa fa-bed" aria-hidden="true">
                             &nbsp;

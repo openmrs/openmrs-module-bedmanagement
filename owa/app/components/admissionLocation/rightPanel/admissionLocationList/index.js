@@ -8,9 +8,10 @@ import AdmissionLocationHelper from 'utilities/admissionLocationHelper';
 
 require('./admissionLocationList.css');
 export default class AdmissionLocationList extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
+        this.intl = context.intl;
         this.admissionLocationHelper = new AdmissionLocationHelper();
         this.childAdmissionLocations = this.admissionLocationHelper.getChildAdmissionLocations(
             props.admissionLocationFunctions.getAdmissionLocations(),
@@ -38,10 +39,11 @@ export default class AdmissionLocationList extends React.Component {
     }
 
     getBody() {
+        let addButtonMessage = this.intl.formatMessage({id: this.props.activeUuid == null ? 'ADD_ADMISSION_LOCATION' : 'ADD_WARD'});
         if (Object.keys(this.childAdmissionLocations).length == 0 && this.props.activeUuid == null) {
             return (
                 <span className="btn btn-primary" onClick={this.addWardClickHandler}>
-                    <i className="icon fa fa-plus" aria-hidden="true" /> Add Ward
+                    <i className="icon fa fa-plus" aria-hidden="true" /> {addButtonMessage}
                 </span>
             );
         } else if (Object.keys(this.childAdmissionLocations).length == 0) {
@@ -62,7 +64,7 @@ export default class AdmissionLocationList extends React.Component {
                         />
                     ))}
                     <span className="btn btn-primary" onClick={this.addWardClickHandler}>
-                        <i className="icon fa fa-plus" aria-hidden="true" /> Add Ward
+                        <i className="icon fa fa-plus" aria-hidden="true" /> {addButtonMessage}
                     </span>
                 </div>
             );

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AddEditBed Should display add edit bed form properly 1`] = `
+exports[`AddEditBed Should display add bed form properly 1`] = `
 <div
   className="main-container"
 >
@@ -147,7 +147,7 @@ exports[`AddEditBed Should display add edit bed form properly 1`] = `
 </div>
 `;
 
-exports[`AddEditBed Should display add edit bed form properly 2`] = `
+exports[`AddEditBed Should display edit bed form properly 1`] = `
 <div
   className="main-container"
 >
@@ -291,5 +291,17 @@ exports[`AddEditBed Should display add edit bed form properly 2`] = `
       </form>
     </div>
   </fieldset>
+</div>
+`;
+
+exports[`AddEditBed Should display warning if bed types not configured 1`] = `
+<div
+  className="main-container"
+>
+  <p
+    className="error"
+  >
+    Bed Types must be configured before you can add a bed
+  </p>
 </div>
 `;

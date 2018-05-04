@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AdmissionLocationList Should render location list properly 1`] = `
+exports[`AdmissionLocationList Should render location list properly for child location 1`] = `
 <div
   className="main-container"
 >
@@ -93,14 +93,15 @@ exports[`AdmissionLocationList Should render location list properly 1`] = `
           aria-hidden="true"
           className="icon fa fa-plus"
         />
-         Add Ward
+         
+        Add Ward
       </span>
     </div>
   </div>
 </div>
 `;
 
-exports[`AdmissionLocationList Should render location list properly 2`] = `
+exports[`AdmissionLocationList Should render location list properly for root location 1`] = `
 <div
   className="main-container"
 >
@@ -145,6 +146,107 @@ exports[`AdmissionLocationList Should render location list properly 2`] = `
         }
       }
     />
+  </div>
+</div>
+`;
+
+exports[`AdmissionLocationList Should render location list properly with no selection 1`] = `
+<div
+  className="main-container"
+>
+  <Breadcrumb
+    activeUuid={null}
+    admissionLocationFunctions={
+      Object {
+        "getActiveLocationUuid": [Function],
+        "getAdmissionLocationByUuid": [Function],
+        "getAdmissionLocations": [Function],
+        "getBedTypes": [Function],
+        "getChildAdmissionLocations": [Function],
+        "getParentAdmissionLocation": [Function],
+        "getState": [Function],
+        "getVisitLocations": [Function],
+        "notify": [Function],
+        "reFetchAllAdmissionLocations": [Function],
+        "setActiveLocationUuid": [Function],
+        "setState": [Function],
+      }
+    }
+  />
+  <div
+    className="main-block"
+  >
+    <div>
+      <LocationBlock
+        admissionLocation={
+          Object {
+            "description": "Hospital General Ward Section",
+            "isHigherLevel": true,
+            "isOpen": false,
+            "name": "General Ward",
+            "parentAdmissionLocationUuid": "c1e42932-3f10-11e4-adec-0800271c1b75",
+            "uuid": "baf7bd38-d225-11e4-9c67-080027b662ec",
+          }
+        }
+        admissionLocationFunctions={
+          Object {
+            "getActiveLocationUuid": [Function],
+            "getAdmissionLocationByUuid": [Function],
+            "getAdmissionLocations": [Function],
+            "getBedTypes": [Function],
+            "getChildAdmissionLocations": [Function],
+            "getParentAdmissionLocation": [Function],
+            "getState": [Function],
+            "getVisitLocations": [Function],
+            "notify": [Function],
+            "reFetchAllAdmissionLocations": [Function],
+            "setActiveLocationUuid": [Function],
+            "setState": [Function],
+          }
+        }
+        key="baf7bd38-d225-11e4-9c67-080027b662ec"
+      />
+      <LocationBlock
+        admissionLocation={
+          Object {
+            "description": "Hospital Labour Ward Section",
+            "isHigherLevel": true,
+            "isOpen": false,
+            "name": "Labour Ward",
+            "parentAdmissionLocationUuid": null,
+            "uuid": "bb0e512e-d225-11e4-9c67-080027b662ec",
+          }
+        }
+        admissionLocationFunctions={
+          Object {
+            "getActiveLocationUuid": [Function],
+            "getAdmissionLocationByUuid": [Function],
+            "getAdmissionLocations": [Function],
+            "getBedTypes": [Function],
+            "getChildAdmissionLocations": [Function],
+            "getParentAdmissionLocation": [Function],
+            "getState": [Function],
+            "getVisitLocations": [Function],
+            "notify": [Function],
+            "reFetchAllAdmissionLocations": [Function],
+            "setActiveLocationUuid": [Function],
+            "setState": [Function],
+          }
+        }
+        key="bb0e512e-d225-11e4-9c67-080027b662ec"
+      />
+      <span
+        className="btn btn-primary"
+        onClick={[Function]}
+      >
+        <i
+          aria-hidden="true"
+          className="icon fa fa-plus"
+        />
+         
+        Add Admission Location
+      </span>
+    </div>
   </div>
 </div>
 `;

@@ -2,7 +2,7 @@
 
 exports[`BedBlock Should render bed block properly 1`] = `
 <div
-  className="block"
+  className="block existing-bed"
 >
   <div
     className="left-block"

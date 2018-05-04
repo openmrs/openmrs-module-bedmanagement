@@ -1,6 +1,8 @@
 export default {
     en: {
         ADMISSION_LOCATIONS: 'Admission Locations',
+        ADD_ADMISSION_LOCATION: 'Add Admission Location',
+        ADD_WARD: 'Add Ward',
         BED_TYPES: 'Bed Types',
         BED_TAGS: 'Bed Tags',
         LOGOUT: 'Logout',
@@ -13,6 +15,7 @@ export default {
         COLUMN_SHOULD_GREATER_THAN_LAYOUT_COLUMN: 'Row value should not be greater than layout row size',
         FIX_ERROR_MSG: 'Fix error before submit',
         ADMISSION_LOCATION_SAVE_MSG: 'Admission location save successfully',
+        BED_TYPES_NOT_CONFIGURED_MSG: 'Bed Types must be configured before you can add a bed',
         BED_LAYOUT_SAVE_MSG: 'Admission location bed layout save successfully',
         BED_TAG_SAVE_MSG: 'Bed Tag save successfully',
         BED_TYPE_SAVE_MSG: 'Bed Type save successfully',
@@ -43,6 +46,7 @@ export default {
         BED_NUMBER: 'Bed Number',
         BED_TYPE: 'Bed Type',
         WARD: 'Ward',
+        ADMISSION_LOCATION: 'Admission Location',
         PARENT_LOCATION: 'Parent Location',
         NONE: 'None',
         NAME: 'Name',
