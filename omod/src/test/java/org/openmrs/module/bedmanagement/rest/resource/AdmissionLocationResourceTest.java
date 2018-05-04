@@ -239,86 +239,17 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		request.setContent(json.getBytes());
 		
 		// OpenMRS's REST framework just throws an exception here rather than actually
-		// returning a response with the real
-		// error code. It's not worth modifying the webservices.rest module just to test
-		// this case properly, so this test
-		// just expects the exception. In real life this returns status 500 with body
-		// like:
-		// > {"error":{"message":"[Server must be configured with a Location Tag named
-		// 'Admission
-		// Location'.]","code":"org.openmrs.module.bedmanagement.rest.resource.AdmissionLocationResource:179","detail":"java.lang.IllegalStateException:
-		// Server must be configured with a Location Tag named 'Admission
-		// Location'.\n\tat
+		// returning a response with the real error code. It's not worth modifying the
+		// webservices.rest module just to test this case properly, so this test just
+		// expects the exception. In real life this returns status 500 with body like:
+		// {"error":{"message":"[Server must be configured with a Location Tag named
+		// 'Admission Location'.]",
+		// "code":"org.openmrs.module.bedmanagement.rest.resource.AdmissionLocationResource:179",
+		// "detail":"java.lang.IllegalStateException: Server must be configured with a Location Tag named
+		// 'Admission Location'.\n\tat
 		// org.openmrs.module.bedmanagement.rest.resource.AdmissionLocationResource.create(AdmissionLocationResource.java:179)\n\tat
 		// org.openmrs.module.webservices.rest.web.v1_0.controller.MainResourceController.create(MainResourceController.java:92)\n\tat
-		// sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat
-		// sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat
-		// sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat
-		// java.lang.reflect.Method.invoke(Method.java:498)\n\tat
-		// org.springframework.web.bind.annotation.support.HandlerMethodInvoker.invokeHandlerMethod(HandlerMethodInvoker.java:177)\n\tat
-		// org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter.invokeHandlerMethod(AnnotationMethodHandlerAdapter.java:446)\n\tat
-		// org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter.handle(AnnotationMethodHandlerAdapter.java:434)\n\tat
-		// org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:943)\n\tat
-		// org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:877)\n\tat
-		// org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:966)\n\tat
-		// org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:868)\n\tat
-		// javax.servlet.http.HttpServlet.service(HttpServlet.java:650)\n\tat
-		// org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:842)\n\tat
-		// javax.servlet.http.HttpServlet.service(HttpServlet.java:731)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)\n\tat
-		// org.openmrs.module.web.filter.ForcePasswordChangeFilter.doFilter(ForcePasswordChangeFilter.java:60)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)\n\tat
-		// org.openmrs.module.web.filter.ModuleFilterChain.doFilter(ModuleFilterChain.java:72)\n\tat
-		// org.openmrs.web.filter.GZIPFilter.doFilterInternal(GZIPFilter.java:64)\n\tat
-		// org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)\n\tat
-		// org.openmrs.module.web.filter.ModuleFilterChain.doFilter(ModuleFilterChain.java:70)\n\tat
-		// org.openmrs.module.webservices.rest.web.filter.AuthorizationFilter.doFilter(AuthorizationFilter.java:104)\n\tat
-		// org.openmrs.module.web.filter.ModuleFilterChain.doFilter(ModuleFilterChain.java:70)\n\tat
-		// org.springframework.web.filter.ShallowEtagHeaderFilter.doFilterInternal(ShallowEtagHeaderFilter.java:82)\n\tat
-		// org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)\n\tat
-		// org.openmrs.module.web.filter.ModuleFilterChain.doFilter(ModuleFilterChain.java:70)\n\tat
-		// org.openmrs.module.owa.filter.OwaFilter.doFilter(OwaFilter.java:57)\n\tat
-		// org.openmrs.module.web.filter.ModuleFilterChain.doFilter(ModuleFilterChain.java:70)\n\tat
-		// org.openmrs.module.web.filter.ModuleFilter.doFilter(ModuleFilter.java:54)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)\n\tat
-		// org.openmrs.web.filter.OpenmrsFilter.doFilterInternal(OpenmrsFilter.java:108)\n\tat
-		// org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)\n\tat
-		// org.springframework.orm.hibernate4.support.OpenSessionInViewFilter.doFilterInternal(OpenSessionInViewFilter.java:150)\n\tat
-		// org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)\n\tat
-		// org.openmrs.web.filter.StartupFilter.doFilter(StartupFilter.java:105)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)\n\tat
-		// org.openmrs.web.filter.StartupFilter.doFilter(StartupFilter.java:105)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)\n\tat
-		// org.openmrs.web.filter.StartupFilter.doFilter(StartupFilter.java:105)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)\n\tat
-		// org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:88)\n\tat
-		// org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)\n\tat
-		// org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)\n\tat
-		// org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)\n\tat
-		// org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)\n\tat
-		// org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)\n\tat
-		// org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)\n\tat
-		// org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)\n\tat
-		// org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)\n\tat
-		// org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:423)\n\tat
-		// org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1079)\n\tat
-		// org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)\n\tat
-		// org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:318)\n\tat
-		// java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat
-		// java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat
-		// org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)\n\tat
-		// java.lang.Thread.run(Thread.java:748)\n"}}
+		// etc
 		handle(request);
 	}
 }
