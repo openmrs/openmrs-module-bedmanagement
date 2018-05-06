@@ -3,6 +3,7 @@ package org.openmrs.module.bedmanagement.rest.resource;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.openmrs.module.bedmanagement.constants.BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,11 +15,17 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.LocationTag;
+import org.openmrs.api.LocationService;
 import org.openmrs.module.webservices.rest.SimpleObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 public class AdmissionLocationResourceTest extends MainResourceControllerTest {
+	
+	@Autowired
+	private LocationService locationService;
 	
 	@Before
 	public void init() throws Exception {
@@ -229,7 +236,9 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 	
 	@Test(expected = IllegalStateException.class)
 	public void shouldGiveCorrectErrorWithNoAdmissionLocationTagDefined() throws Exception {
-		executeDataSet("removeAdmissionLocationTagTestDataset.xml");
+		LocationTag needToHide = locationService.getLocationTagByName(LOCATION_TAG_SUPPORTS_ADMISSION);
+		needToHide.setName("A different tag");
+		locationService.saveLocationTag(needToHide);
 		
 		MockHttpServletRequest request = request(RequestMethod.POST, getURI());
 		SimpleObject postParameters = new SimpleObject();
