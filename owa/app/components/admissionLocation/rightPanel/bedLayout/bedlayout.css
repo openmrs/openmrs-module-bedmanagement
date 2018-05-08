@@ -11,8 +11,12 @@
     word-wrap: break-word;
 }
 
-.bed-layout .block.add-block{
+.bed-layout .block.add-block {
     cursor: pointer;
+}
+
+.bed-layout .block.existing-bed {
+    background-color: #d3d3d3;
 }
 
 .bed-layout .block .block-title {

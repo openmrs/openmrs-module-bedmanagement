@@ -1,24 +1,31 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
-import org.apache.commons.beanutils.PropertyUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.openmrs.module.webservices.rest.SimpleObject;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.web.bind.annotation.RequestMethod;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.openmrs.module.bedmanagement.constants.BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.openmrs.LocationTag;
+import org.openmrs.api.LocationService;
+import org.openmrs.module.webservices.rest.SimpleObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 public class AdmissionLocationResourceTest extends MainResourceControllerTest {
+	
+	@Autowired
+	private LocationService locationService;
 	
 	@Before
 	public void init() throws Exception {
@@ -225,5 +232,33 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		Assert.assertEquals("e26cea2c-1b9f-666e-6511-f3ef6c88af6f",
 		    PropertyUtils.getProperty(admissionLocation.get("ward"), "uuid"));
 		Assert.assertEquals(6, bedLocationMappings.size());
+	}
+	
+	@Test(expected = IllegalStateException.class)
+	public void shouldGiveCorrectErrorWithNoAdmissionLocationTagDefined() throws Exception {
+		LocationTag needToHide = locationService.getLocationTagByName(LOCATION_TAG_SUPPORTS_ADMISSION);
+		needToHide.setName("A different tag");
+		locationService.saveLocationTag(needToHide);
+		
+		MockHttpServletRequest request = request(RequestMethod.POST, getURI());
+		SimpleObject postParameters = new SimpleObject();
+		postParameters.put("name", "VIPs Ward");
+		postParameters.put("description", "ward for vip person");
+		String json = new ObjectMapper().writeValueAsString(postParameters);
+		request.setContent(json.getBytes());
+		
+		// OpenMRS's REST framework just throws an exception here rather than actually
+		// returning a response with the real error code. It's not worth modifying the
+		// webservices.rest module just to test this case properly, so this test just
+		// expects the exception. In real life this returns status 500 with body like:
+		// {"error":{"message":"[Server must be configured with a Location Tag named
+		// 'Admission Location'.]",
+		// "code":"org.openmrs.module.bedmanagement.rest.resource.AdmissionLocationResource:179",
+		// "detail":"java.lang.IllegalStateException: Server must be configured with a Location Tag named
+		// 'Admission Location'.\n\tat
+		// org.openmrs.module.bedmanagement.rest.resource.AdmissionLocationResource.create(AdmissionLocationResource.java:179)\n\tat
+		// org.openmrs.module.webservices.rest.web.v1_0.controller.MainResourceController.create(MainResourceController.java:92)\n\tat
+		// etc
+		handle(request);
 	}
 }

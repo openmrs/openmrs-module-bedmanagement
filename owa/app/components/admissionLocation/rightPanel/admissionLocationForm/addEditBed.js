@@ -13,7 +13,7 @@ export default class AddEditBed extends React.Component {
             row: props.bed.rowNumber != null ? props.bed.rowNumber : 1,
             column: props.bed.columnNumber != null ? props.bed.columnNumber : 1,
             bedNumber: props.bed.bedNumber != null ? props.bed.bedNumber : '',
-            bedTypeName: props.bed.bedType != null ? props.bed.bedType.name : props.bedTypes[0].name,
+            bedTypeName: props.bed.bedType != null ? props.bed.bedType.name : props.bedTypes.length == 0 ? null : props.bedTypes[0].name,
             disableSubmit: false,
             rowFieldError: '',
             columnFieldError: ''
@@ -156,6 +156,13 @@ export default class AddEditBed extends React.Component {
     }
 
     render() {
+        if (this.props.bedTypes.length == 0) {
+            return (
+                    <div className="main-container">
+                        <p className="error">{this.intl.formatMessage({id:'BED_TYPES_NOT_CONFIGURED_MSG'})}</p>
+                    </div>
+            )
+        }
         return (
             <div className="main-container">
                 <fieldset className="admission-location-form">
