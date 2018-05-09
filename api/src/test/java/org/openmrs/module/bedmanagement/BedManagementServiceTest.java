@@ -1,35 +1,28 @@
 package org.openmrs.module.bedmanagement;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
-import org.openmrs.LocationTag;
 import org.openmrs.Patient;
 import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
 import org.openmrs.module.bedmanagement.constants.BedStatus;
-import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
-import org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @org.springframework.test.context.ContextConfiguration(locations = {
@@ -263,7 +256,7 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
 	public void shouldSoftDeleteBedIfUserHasEditBedsPrivileges() throws Exception {
 		Context.authenticate(superUser, superUserPassword);
 		
-		Bed bed = Context.getService(BedManagementService.class).getBedById(1);
+		Bed bed = Context.getService(BedManagementService.class).getBedById(2);
 		Context.getService(BedManagementService.class).deleteBed(bed, "remove bed form location");
 		
 		Assert.assertTrue(bed.getVoided());

@@ -13,6 +13,10 @@
  */
 package org.openmrs.module.bedmanagement.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
@@ -25,15 +29,16 @@ import org.openmrs.module.bedmanagement.BedDetails;
 import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
 import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
-import org.openmrs.module.bedmanagement.entity.*;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
+import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.entity.BedType;
+import org.openmrs.module.bedmanagement.exception.BedOccupiedException;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class BedManagementServiceImpl extends BaseOpenmrsService implements BedManagementService {
 	
@@ -224,7 +229,10 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	}
 	
 	@Override
-	public void deleteBed(Bed bed, String reason) {
+	public void deleteBed(Bed bed, String reason) throws BedOccupiedException {
+		if (BedStatus.OCCUPIED.toString().equals(bed.getStatus())) {
+			throw new BedOccupiedException(bed);
+		}
 		BedLocationMapping bedLocationMapping = bedManagementDao.getBedLocationMappingByBed(bed);
 		if (bedLocationMapping != null) {
 			bedLocationMapping.setBed(null);
