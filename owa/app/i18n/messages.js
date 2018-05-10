@@ -23,6 +23,7 @@ export default {
         DELETE_ADMISSION_LOCATION_CONFIRM_MESSAGE:
             'Are you sure you want to delete admission location {location_name}?',
         DELETE_BED_CONFIRM_MESSAGE: 'Are you sure you want to delete bed number {bed_number}?',
+        CANNOT_DELETE_OCCUPIED_BED_ERROR: 'Cannot delete a bed that is occupied',
         DELETE_BED_TAG_CONFIRM_MSG: 'Are you sure you want to delete bed Tag {bed_tag_name}?',
         DELETE_BED_TYPE_CONFIRM_MSG: 'Are you sure you want to delete bed type {bed_type_name}?',
         DELETE_SUCCESSFULLY: 'Delete successfully',

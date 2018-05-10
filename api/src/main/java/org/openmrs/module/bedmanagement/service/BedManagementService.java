@@ -13,18 +13,23 @@
  */
 package org.openmrs.module.bedmanagement.service;
 
+import java.util.List;
+
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.annotation.Authorized;
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.module.bedmanagement.constants.BedStatus;
-import org.openmrs.module.bedmanagement.entity.*;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
 import org.openmrs.module.bedmanagement.BedDetails;
+import org.openmrs.module.bedmanagement.constants.BedStatus;
+import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
+import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.entity.BedType;
+import org.openmrs.module.bedmanagement.exception.BedOccupiedException;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Transactional
 public interface BedManagementService extends OpenmrsService {
@@ -149,7 +154,7 @@ public interface BedManagementService extends OpenmrsService {
 	 * @param reason {@link String} reason of bed delete
 	 */
 	@Authorized(value = { "Edit Beds" }, requireAll = true)
-	void deleteBed(Bed bed, String reason);
+	void deleteBed(Bed bed, String reason) throws BedOccupiedException;
 	
 	/**
 	 * Save / update bed

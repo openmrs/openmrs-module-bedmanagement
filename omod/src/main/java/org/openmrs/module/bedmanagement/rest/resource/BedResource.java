@@ -13,6 +13,8 @@
  */
 package org.openmrs.module.bedmanagement.rest.resource;
 
+import java.util.List;
+
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
@@ -20,6 +22,7 @@ import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedType;
+import org.openmrs.module.bedmanagement.exception.BedOccupiedException;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
@@ -39,8 +42,6 @@ import org.openmrs.module.webservices.rest.web.response.ConversionException;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
-
-import java.util.List;
 
 @Resource(name = RestConstants.VERSION_1 + "/bed", supportedClass = Bed.class, supportedOpenmrsVersions = { "1.9.*",
         "1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*" })
@@ -113,7 +114,13 @@ public class BedResource extends DelegatingCrudResource<Bed> {
 	
 	@Override
 	protected void delete(Bed bed, String reason, RequestContext requestContext) throws ResponseException {
-		Context.getService(BedManagementService.class).deleteBed(bed, reason);
+		try {
+			Context.getService(BedManagementService.class).deleteBed(bed, reason);
+		}
+		catch (BedOccupiedException ex) {
+			// this is the best available OpenMRS REST exception to ensure this is a 4xx and not a 5xx
+			throw new IllegalPropertyException(ex);
+		}
 	}
 	
 	@Override

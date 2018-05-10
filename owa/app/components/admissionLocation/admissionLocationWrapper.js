@@ -184,7 +184,7 @@ export default class AdmissionLocationWrapper extends React.Component {
             if (notifyType == 'success') {
                 self.refs.notificator.success(successText, message, 5000);
             } else if (notifyType == 'error') {
-                self.refs.notificator.error(errorText, message, 5000);
+                self.refs.notificator.error(errorText, message, 15000);
             } else {
                 self.refs.notificator.error(infoText, message, 5000);
             }

@@ -1,5 +1,8 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Assert;
@@ -11,10 +14,9 @@ import org.openmrs.module.webservices.rest.web.response.ObjectNotFoundException;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BedResourceTest extends MainResourceControllerTest {
+	
+	private static final String AVAILABLE_BED_UUID = "bb1331bc-d225-11e4-9c67-080027b662ec";
 	
 	@Before
 	public void init() throws Exception {
@@ -193,13 +195,20 @@ public class BedResourceTest extends MainResourceControllerTest {
 		Assert.assertEquals("luxury", PropertyUtils.getProperty(bed.get("bedType"), "name"));
 	}
 	
-	@Test(expected = ObjectNotFoundException.class)
-	public void shouldDeleteBed() throws Exception {
+	@Test(expected = IllegalPropertyException.class)
+	public void shouldFailToDeleteOccupiedBed() throws Exception {
 		MockHttpServletRequest deleteRequest = request(RequestMethod.DELETE, getURI() + "/" + getUuid());
 		deleteRequest.setParameter("reason", "not needed");
 		handle(deleteRequest);
+	}
+	
+	@Test(expected = ObjectNotFoundException.class)
+	public void shouldDeleteBed() throws Exception {
+		MockHttpServletRequest deleteRequest = request(RequestMethod.DELETE, getURI() + "/" + AVAILABLE_BED_UUID);
+		deleteRequest.setParameter("reason", "not needed");
+		handle(deleteRequest);
 		
-		MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI() + "/" + getUuid());
+		MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI() + "/" + AVAILABLE_BED_UUID);
 		System.out.println(deserialize(handle(getRequest)));
 	}
 }
