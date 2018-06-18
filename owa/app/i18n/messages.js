@@ -17,8 +17,8 @@ export default {
         ADMISSION_LOCATION_SAVE_MSG: 'Admission location saved successfully',
         BED_TYPES_NOT_CONFIGURED_MSG: 'Bed Types must be configured before you can add a bed',
         BED_LAYOUT_SAVE_MSG: 'Admission location bed layout saved successfully',
-        BED_TAG_SAVE_MSG: 'Bed Tag saved successfully',
-        BED_TYPE_SAVE_MSG: 'Bed Type saved successfully',
+        BED_TAG_SAVE_MSG: 'Bed tag saved successfully',
+        BED_TYPE_SAVE_MSG: 'Bed type saved successfully',
         BED_SAVE_MSG: 'Bed saved successfully',
         DELETE_ADMISSION_LOCATION_CONFIRM_MESSAGE:
             'Are you sure you want to delete admission location {location_name}?',
