@@ -7,8 +7,63 @@
     <!-- Add here beans related to the API context -->
 
 
-    <!-- Services accessible via Context.getService() -->
 
+
+
+    <bean id="bedManagementDao" class="org.openmrs.module.bedmanagement.dao.impl.BedManagementDaoImpl">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
+    <bean id="bedTagMapDao" class="org.openmrs.module.bedmanagement.dao.impl.BedTagMapDaoImpl">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
+    <bean id="bedManagementServiceImpl" class="org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl">
+        <property name="dao">
+            <ref bean="bedManagementDao"/>
+        </property>
+    </bean>
+
+    <bean id="bedTagMapServiceImpl" class="org.openmrs.module.bedmanagement.service.impl.BedTagMapServiceImpl">
+        <property name="dao">
+            <ref bean="bedTagMapDao"/>
+        </property>
+    </bean>
+
+    <bean id="bedManagementService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <ref bean="bedManagementServiceImpl"/>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean id="bedTagMapService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <ref bean="bedTagMapServiceImpl"/>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+    <!-- Services accessible via Context.getService() -->
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">
@@ -18,98 +73,12 @@
         </property>
     </bean>
 
-    <bean id="bedManagementService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager">
-            <ref bean="transactionManager"/>
-        </property>
-        <property name="target">
-            <bean class="org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl">
-                <property name="dao">
-                    <bean class="org.openmrs.module.bedmanagement.dao.impl.BedManagementDaoImpl">
-                        <property name="sessionFactory">
-                            <ref bean="sessionFactory"/>
-                        </property>
-                    </bean>
-                </property>
-            </bean>
-        </property>
-        <property name="preInterceptors">
-            <ref bean="serviceInterceptors"/>
-        </property>
-        <property name="transactionAttributeSource">
-            <ref bean="transactionAttributeSource"/>
-        </property>
-    </bean>
-
-    <bean id="bedManagementDao"
-          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager">
-            <ref bean="transactionManager"/>
-        </property>
-        <property name="target">
-            <bean class="org.openmrs.module.bedmanagement.dao.impl.BedManagementDaoImpl">
-                <property name="sessionFactory">
-                    <ref bean="sessionFactory"/>
-                </property>
-            </bean>
-        </property>
-        <property name="preInterceptors">
-            <ref bean="serviceInterceptors"/>
-        </property>
-        <property name="transactionAttributeSource">
-            <ref bean="transactionAttributeSource"/>
-        </property>
-    </bean>
-
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.bedmanagement.service.BedTagMapService</value>
                 <ref local="bedTagMapService"/>
             </list>
-        </property>
-    </bean>
-
-    <bean id="bedTagMapService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager">
-            <ref bean="transactionManager"/>
-        </property>
-        <property name="target">
-            <bean class="org.openmrs.module.bedmanagement.service.impl.BedTagMapServiceImpl">
-                <property name="dao">
-                    <bean class="org.openmrs.module.bedmanagement.dao.impl.BedTagMapDaoImpl">
-                        <property name="sessionFactory">
-                            <ref bean="sessionFactory"/>
-                        </property>
-                    </bean>
-                </property>
-            </bean>
-        </property>
-        <property name="preInterceptors">
-            <ref bean="serviceInterceptors"/>
-        </property>
-        <property name="transactionAttributeSource">
-            <ref bean="transactionAttributeSource"/>
-        </property>
-    </bean>
-
-    <bean id="bedTagMapDao"
-          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager">
-            <ref bean="transactionManager"/>
-        </property>
-        <property name="target">
-            <bean class="org.openmrs.module.bedmanagement.dao.impl.BedTagMapDaoImpl">
-                <property name="sessionFactory">
-                    <ref bean="sessionFactory"/>
-                </property>
-            </bean>
-        </property>
-        <property name="preInterceptors">
-            <ref bean="serviceInterceptors"/>
-        </property>
-        <property name="transactionAttributeSource">
-            <ref bean="transactionAttributeSource"/>
         </property>
     </bean>
 </beans>
