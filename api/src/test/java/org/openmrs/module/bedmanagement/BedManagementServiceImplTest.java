@@ -4,17 +4,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonName;
+import org.openmrs.User;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
+import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -22,10 +26,16 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Context.class)
 public class BedManagementServiceImplTest {
 	
 	BedManagementServiceImpl bedManagementService;
@@ -135,6 +145,42 @@ public class BedManagementServiceImplTest {
 		assertEquals("GAN456", actualPatient2.getPatientIdentifier().getIdentifier());
 		assertEquals("first2 middle2 last2", actualPatient2.getPersonName().getFullName());
 		assertEquals("M", actualPatient2.getGender());
+	}
+	
+	@Test
+	public void shouldCallDeleteBedLocationMappingWhenLocationMappedBedIsDeleted() {
+		Bed bed = new Bed();
+		bed.setBedNumber("bedNumber");
+		bed.setId(1);
+		bed.setStatus(BedStatus.AVAILABLE.name());
+		BedLocationMapping bedLocationMapping = mock(BedLocationMapping.class);
+		mockStatic(Context.class);
+		User user = mock(User.class);
+		
+		when(bedManagementDao.getBedLocationMappingByBed(bed)).thenReturn(bedLocationMapping);
+		doNothing().when(bedManagementDao).deleteBedLocationMapping(bedLocationMapping);
+		when(Context.getAuthenticatedUser()).thenReturn(user);
+		
+		bedManagementService.deleteBed(bed, "test");
+		
+		verify(bedManagementDao, times(1)).deleteBedLocationMapping(bedLocationMapping);
+	}
+	
+	@Test
+	public void shouldNotCallDeleteBedLocationMappingWhenDeletedBedIsNotMappedToAnyLocation() {
+		Bed bed = new Bed();
+		bed.setBedNumber("bedNumber");
+		bed.setId(1);
+		bed.setStatus(BedStatus.AVAILABLE.name());
+		mockStatic(Context.class);
+		User user = mock(User.class);
+		
+		when(bedManagementDao.getBedLocationMappingByBed(bed)).thenReturn(null);
+		when(Context.getAuthenticatedUser()).thenReturn(user);
+		
+		bedManagementService.deleteBed(bed, "test");
+		
+		verify(bedManagementDao, times(0)).deleteBedLocationMapping(any(BedLocationMapping.class));
 	}
 	
 	private Patient createPatient(String identifierString, String patientUuid, String firstName, String middleName,

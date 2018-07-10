@@ -13,10 +13,6 @@
  */
 package org.openmrs.module.bedmanagement.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
@@ -39,6 +35,10 @@ import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class BedManagementServiceImpl extends BaseOpenmrsService implements BedManagementService {
 	
@@ -235,8 +235,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		}
 		BedLocationMapping bedLocationMapping = bedManagementDao.getBedLocationMappingByBed(bed);
 		if (bedLocationMapping != null) {
-			bedLocationMapping.setBed(null);
-			bedManagementDao.saveBedLocationMapping(bedLocationMapping);
+			bedManagementDao.deleteBedLocationMapping(bedLocationMapping);
 		}
 		
 		bed.setVoided(true);

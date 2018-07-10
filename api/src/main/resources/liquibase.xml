@@ -543,4 +543,27 @@
                                  referencedTableName="users"
                                  referencedColumnNames="user_id"/>
     </changeSet>
+    <changeSet author="Mahitha, Swathi" id="201807050219">
+        <preConditions onFailMessage="There should not be any dangling records(null values or other values which are not in bed table for bed_id) for the bed_id in bed_location_map">
+            <and>
+                <sqlCheck expectedResult="0">select count(bed_id) from bed_location_map where bed_id is null</sqlCheck>
+                <sqlCheck expectedResult="0">select count(bl.bed_id) from bed_location_map bl left join bed b on bl.bed_id = b.bed_id where b.bed_id is null</sqlCheck>
+            </and>
+        </preConditions>
+        <comment>Adds not null constraint to bed_id column in bed_location_map</comment>
+        <addNotNullConstraint tableName="bed_location_map" columnName="bed_id" columnDataType="int"/>
+    </changeSet>
+    <changeSet author="Mahitha" id="201807041155">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="bed_location_map_bed_id_fk"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adds foreign key reference on bed_id in bed_location_map table
+        </comment>
+        <addForeignKeyConstraint constraintName="bed_location_map_bed_id_fk"
+                                 baseTableName="bed_location_map" baseColumnNames="bed_id"
+                                 referencedTableName="bed" referencedColumnNames="bed_id"/>
+    </changeSet>
 </databaseChangeLog>
