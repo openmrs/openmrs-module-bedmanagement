@@ -26,6 +26,9 @@
         <property name="dao">
             <ref bean="bedManagementDao"/>
         </property>
+        <property name="locationService">
+            <ref bean="locationService"/>
+        </property>
     </bean>
 
     <bean id="bedTagMapServiceImpl" class="org.openmrs.module.bedmanagement.service.impl.BedTagMapServiceImpl">

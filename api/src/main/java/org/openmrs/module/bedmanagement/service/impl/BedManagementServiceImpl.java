@@ -50,7 +50,6 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		this.bedManagementDao = dao;
 	}
 	
-	@Autowired
 	public void setLocationService(LocationService locationService) {
 		this.locationService = locationService;
 	}
