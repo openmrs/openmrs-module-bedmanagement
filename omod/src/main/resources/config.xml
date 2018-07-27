@@ -32,6 +32,10 @@
         <point>org.openmrs.module.bedmanagement.service.BedManagementService</point>
         <class>org.openmrs.module.bedmanagement.atomfeed.BedAssignmentAdvice</class>
     </advice>
+	<advice>
+		<point>org.openmrs.module.bedmanagement.service.BedTagMapService</point>
+		<class>org.openmrs.module.bedmanagement.atomfeed.BedTagMapAdvice</class>
+	</advice>
 	
 	<!-- Maps hibernate file's, if present -->
 	<mappingFiles>

@@ -40,7 +40,7 @@
     <openMRSRuntimeVersion>1.9.3</openMRSRuntimeVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <webservicesRestModuleVersion>2.16</webservicesRestModuleVersion>
-    <openmrsAtomfeedVersion>2.5.0</openmrsAtomfeedVersion>
+    <openmrsAtomfeedVersion>2.5.6</openmrsAtomfeedVersion>
     <openmrsOwaVersion>1.7.0</openmrsOwaVersion>
     <atomfeed.version>1.9.4</atomfeed.version>
     <legacyuiVersion>1.0</legacyuiVersion>
