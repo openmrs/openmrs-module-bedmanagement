@@ -592,7 +592,7 @@
             <column name="property_value" value="/openmrs/ws/rest/v1/bedTagMap/{uuid}"/>
             <column name="uuid" valueComputed="UUID()"/>
             <column name="description"
-                    value="URL pattern to use for published bed tag map events. Default is /openmrs/ws/rest/v1/bedTagMap/{uuid}"/>
+                    value="URL pattern to use for published bed tag map events. Default is /openmrs/ws/rest/v1/bedTagMap/{uuid}. If you change default value, please add your custom implementation for the given URL."/>
         </insert>
     </changeSet>
 </databaseChangeLog>
