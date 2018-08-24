@@ -1,5 +1,7 @@
-OpenMRS Distro Bahmni
-Copyright 2014 ThoughtWorks, Inc
+Bed Management provides a Java and REST API to manage beds, bed types, bed tags, bed layouts, bed location mappings and admission locations.
+It also provides an admin UI manage the above entities.
+
+Copyright (C) 2014 OpenMRS, Inc
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
