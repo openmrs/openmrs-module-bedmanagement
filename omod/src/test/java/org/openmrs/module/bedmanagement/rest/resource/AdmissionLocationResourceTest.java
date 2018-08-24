@@ -254,7 +254,8 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		// {"error":{"message":"[Server must be configured with a Location Tag named
 		// 'Admission Location'.]",
 		// "code":"org.openmrs.module.bedmanagement.rest.resource.AdmissionLocationResource:179",
-		// "detail":"java.lang.IllegalStateException: Server must be configured with a Location Tag named
+		// "detail":"java.lang.IllegalStateException: Server must be configured with a
+		// Location Tag named
 		// 'Admission Location'.\n\tat
 		// org.openmrs.module.bedmanagement.rest.resource.AdmissionLocationResource.create(AdmissionLocationResource.java:179)\n\tat
 		// org.openmrs.module.webservices.rest.web.v1_0.controller.MainResourceController.create(MainResourceController.java:92)\n\tat

@@ -67,7 +67,6 @@ describe('BedTypeWrapper', () => {
         let bedTypeWrapper = shallow(<BedTypeWrapper match={testData.props.match} />, {context: testData.context});
         const bedTypeFunctions = bedTypeWrapper.instance().bedTypeFunctions;
 
-        await testData.sleep(100);
         expect(bedTypeWrapper.find('BedTypeList').length).toBe(1);
         expect(shallowToJson(bedTypeWrapper)).toMatchSnapshot();
 

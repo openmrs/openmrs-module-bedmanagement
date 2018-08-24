@@ -118,7 +118,8 @@ public class BedResource extends DelegatingCrudResource<Bed> {
 			Context.getService(BedManagementService.class).deleteBed(bed, reason);
 		}
 		catch (BedOccupiedException ex) {
-			// this is the best available OpenMRS REST exception to ensure this is a 4xx and not a 5xx
+			// this is the best available OpenMRS REST exception to ensure this is a 4xx and
+			// not a 5xx
 			throw new IllegalPropertyException(ex);
 		}
 	}

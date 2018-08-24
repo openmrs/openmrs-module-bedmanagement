@@ -69,7 +69,6 @@ describe('BedTagWrapper', () => {
         let bedTagWrapper = shallow(<BedTagWrapper match={testData.props.match} />, {context: testData.context});
         const bedTagFunctions = bedTagWrapper.instance().bedTagFunctions;
 
-        await testData.sleep(100);
         expect(bedTagWrapper.find('BedTagList').length).toBe(1);
         expect(shallowToJson(bedTagWrapper)).toMatchSnapshot();
 
