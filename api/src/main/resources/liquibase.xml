@@ -595,4 +595,13 @@
                     value="URL pattern to use for published bed tag map events. Default is /openmrs/ws/rest/v1/bedTagMap/{uuid}. If you change default value, please add your custom implementation for the given URL."/>
         </insert>
     </changeSet>
+    <changeSet id="BM-201808291611" author="Angshu" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM global_property where property = 'bedManagement.sqlGet.patientListForAdmissionLocation';
+            </sqlCheck>
+        </preConditions>
+        <comment>SQL query for Get Patient Details in Ward</comment>
+        <sqlFile splitStatements="false" path="PatientDetailsInWard.sql"/>
+    </changeSet>
 </databaseChangeLog>
