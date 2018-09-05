@@ -543,11 +543,11 @@
                                  referencedTableName="users"
                                  referencedColumnNames="user_id"/>
     </changeSet>
-    <changeSet author="Mahitha, Swathi" id="201807050219">
+    <changeSet author="Mahitha, Swathi" id="201809040219">
         <preConditions onFailMessage="There should not be any dangling records(null values or other values which are not in bed table for bed_id) for the bed_id in bed_location_map">
             <and>
                 <sqlCheck expectedResult="0">select count(bed_id) from bed_location_map where bed_id is null</sqlCheck>
-                <sqlCheck expectedResult="0">select count(bl.bed_id) from bed_location_map bl left join bed b on bl.bed_id = b.bed_id where b.bed_id is null</sqlCheck>
+                <sqlCheck expectedResult="0">select count(bed_id) from bed_location_map where bed_id not in (select distinct bed_id from bed)</sqlCheck>
             </and>
         </preConditions>
         <comment>Adds not null constraint to bed_id column in bed_location_map</comment>
