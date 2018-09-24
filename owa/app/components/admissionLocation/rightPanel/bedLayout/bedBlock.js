@@ -49,10 +49,9 @@ export default class BedBlock extends React.PureComponent {
                 })
                 .catch(function(errorResponse) {
                     const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
-                    const errorMessage = error.message.includes("BedOccupiedException") ?
-                                         self.intl.formatMessage({id: 'CANNOT_DELETE_OCCUPIED_BED_ERROR'})
-                                         :
-                                         error.message.replace(/\[|\]/g, '')
+                    const errorMessage = error.message.includes('BedOccupiedException')
+                        ? self.intl.formatMessage({id: 'CANNOT_DELETE_OCCUPIED_BED_ERROR'})
+                        : error.message.replace(/\[|\]/g, '');
                     self.props.admissionLocationFunctions.notify('error', errorMessage);
                 });
         }

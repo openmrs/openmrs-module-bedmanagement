@@ -74,42 +74,46 @@ describe('AddEditBed', () => {
 
     it('Should display warning if bed types not configured', () => {
         const addBedForm = shallow(
-                <AddEditBed
-                        operation="add"
-                        layoutColumn={4}
-                        layoutRow={3}
-                        activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-                        bed={testData.props.addBedData}
-                        bedTypes={[]}
-                        admissionLocationFunctions={testData.props.admissionLocationFunctions}
-                />,
-                {context: testData.context}
+            <AddEditBed
+                operation="add"
+                layoutColumn={4}
+                layoutRow={3}
+                activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
+                bed={testData.props.addBedData}
+                bedTypes={[]}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
 
-        expect(addBedForm.find('p.error').text().trim())
-                       .toBe('Bed Types must be configured before you can add a bed');
+        expect(
+            addBedForm
+                .find('p.error')
+                .text()
+                .trim()
+        ).toBe('Bed Types must be configured before you can add a bed');
         expect(shallowToJson(addBedForm)).toMatchSnapshot();
     });
 
     it('Should display add bed form properly', () => {
         const addBedForm = shallow(
-                <AddEditBed
-                        operation="add"
-                        layoutColumn={4}
-                        layoutRow={3}
-                        activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
-                        bed={testData.props.addBedData}
-                        bedTypes={testData.props.admissionLocationFunctions.getBedTypes()}
-                        admissionLocationFunctions={testData.props.admissionLocationFunctions}
-                />,
-                {context: testData.context}
+            <AddEditBed
+                operation="add"
+                layoutColumn={4}
+                layoutRow={3}
+                activeUuid="baf7bd38-d225-11e4-9c67-080027b662ec"
+                bed={testData.props.addBedData}
+                bedTypes={testData.props.admissionLocationFunctions.getBedTypes()}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
 
         expect(
-                addBedForm
-                        .find('#location-name')
-                        .text()
-                        .trim()
+            addBedForm
+                .find('#location-name')
+                .text()
+                .trim()
         ).toBe('General Ward');
         expect(addBedForm.find('#row-field').props().value).toBe(1);
         expect(addBedForm.find('#column-field').props().value).toBe(2);
