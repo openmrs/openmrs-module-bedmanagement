@@ -48,11 +48,11 @@ describe('AdmissionLocationList', () => {
 
     it('Should render location list properly with no selection', () => {
         const noSelectionLocationList = shallow(
-                <AdmissionLocationList
-                        activeUuid={null}
-                        admissionLocationFunctions={testData.props.admissionLocationFunctions}
-                />,
-                {context: testData.context}
+            <AdmissionLocationList
+                activeUuid={null}
+                admissionLocationFunctions={testData.props.admissionLocationFunctions}
+            />,
+            {context: testData.context}
         );
 
         expect(noSelectionLocationList.find('LocationBlock').length).toBe(2);

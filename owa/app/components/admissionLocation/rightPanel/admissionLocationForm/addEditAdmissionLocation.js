@@ -135,7 +135,10 @@ export default class AddEditAdmissionLocation extends React.Component {
                         {this.props.operation == 'add'
                             ? this.intl.formatMessage({id: 'ADD'})
                             : this.intl.formatMessage({id: 'EDIT'})}{' '}
-                        {this.intl.formatMessage({id: this.parentAdmissionLocation == null ? 'ADMISSION_LOCATION' : 'WARD'})} &nbsp;
+                        {this.intl.formatMessage({
+                            id: this.parentAdmissionLocation == null ? 'ADMISSION_LOCATION' : 'WARD'
+                        })}{' '}
+                        &nbsp;
                     </legend>
                     <div className="block-content">
                         <form onSubmit={this.onSubmitHandler}>

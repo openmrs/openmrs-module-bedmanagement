@@ -39,7 +39,9 @@ export default class AdmissionLocationList extends React.Component {
     }
 
     getBody() {
-        let addButtonMessage = this.intl.formatMessage({id: this.props.activeUuid == null ? 'ADD_ADMISSION_LOCATION' : 'ADD_WARD'});
+        let addButtonMessage = this.intl.formatMessage({
+            id: this.props.activeUuid == null ? 'ADD_ADMISSION_LOCATION' : 'ADD_WARD'
+        });
         if (Object.keys(this.childAdmissionLocations).length == 0 && this.props.activeUuid == null) {
             return (
                 <span className="btn btn-primary" onClick={this.addWardClickHandler}>
