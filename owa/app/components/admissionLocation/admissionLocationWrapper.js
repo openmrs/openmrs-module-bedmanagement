@@ -6,7 +6,8 @@ import _ from 'lodash';
 import Header from 'components/header';
 import LocationHierarchy from 'components/admissionLocation/leftPanel/locationHierarchy';
 import AdmissionLocationList from 'components/admissionLocation/rightPanel/admissionLocationList';
-import AddEditAdmissionLocation from 'components/admissionLocation/rightPanel/admissionLocationForm/addEditAdmissionLocation';
+import AddEditAdmissionLocation
+    from 'components/admissionLocation/rightPanel/admissionLocationForm/addEditAdmissionLocation';
 import SetBedLayout from 'components/admissionLocation/rightPanel/admissionLocationForm/setBedLayout';
 import AddEditBed from 'components/admissionLocation/rightPanel/admissionLocationForm/addEditBed';
 import AdmissionLocationHelper from 'utilities/admissionLocationHelper';
@@ -31,9 +32,11 @@ export default class AdmissionLocationWrapper extends React.Component {
 
         this.intl = context.intl;
         this.fetchAllAdmissionLocations = this.fetchAllAdmissionLocations.bind(this);
+        this.fetchAllVisitLocations = this.fetchAllVisitLocations.bind(this);
         this.fetchBedTypes = this.fetchBedTypes.bind(this);
         this.getBody = this.getBody.bind(this);
         this.fetchAllAdmissionLocations(this);
+        this.fetchAllVisitLocations(this);
         this.fetchBedTypes();
     }
 
@@ -41,24 +44,16 @@ export default class AdmissionLocationWrapper extends React.Component {
         axios
             .get(this.urlHelper.apiBaseUrl() + '/location', {
                 params: {
+                    tags: 'Admission Location',
                     v: 'full'
                 }
             })
-            .then(function(response) {
-                const admissionLocationUuidList = [];
-                const visitLocationUuidList = [];
-                _.forEach(response.data.results, (location) => {
-                    _.each(location.tags, (tag) => {
-                        if (tag.display == 'Admission Location') {
-                            admissionLocationUuidList.push(location.uuid);
-                        } else if (tag.display == 'Visit Location') {
-                            visitLocationUuidList.push(location.uuid);
-                        }
-                    });
-                });
+            .then(function (admissionLocationsResponse) {
+                const admissionLocationUuidList =
+                    _.map(admissionLocationsResponse.data.results, (location) => location.uuid);
 
                 const admissionLocations = _.reduce(
-                    response.data.results,
+                    admissionLocationsResponse.data.results,
                     (acc, curr) => {
                         if (_.includes(admissionLocationUuidList, curr.uuid)) {
                             acc[curr.uuid] = {
@@ -83,8 +78,27 @@ export default class AdmissionLocationWrapper extends React.Component {
                     {}
                 );
 
+                self.setState({admissionLocations: admissionLocations});
+            })
+            .catch(function (errorResponse) {
+                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                self.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
+            });
+    }
+
+    fetchAllVisitLocations(self) {
+        axios
+            .get(this.urlHelper.apiBaseUrl() + '/location', {
+                params: {
+                    tags: 'Visit Location',
+                    v: 'full'
+                }
+            })
+            .then(function (visitLocationsResponse) {
+                const visitLocationUuidList =
+                    _.map(visitLocationsResponse.data.results, (location) => location.uuid);
                 const visitLocations = _.reduce(
-                    response.data.results,
+                    visitLocationsResponse.data.results,
                     (acc, curr) => {
                         if (_.includes(visitLocationUuidList, curr.uuid)) {
                             acc[curr.uuid] = {
@@ -98,13 +112,9 @@ export default class AdmissionLocationWrapper extends React.Component {
                     },
                     {}
                 );
-
-                self.setState({
-                    admissionLocations: admissionLocations,
-                    visitLocations: visitLocations
-                });
+                self.setState({visitLocations: visitLocations});
             })
-            .catch(function(errorResponse) {
+            .catch(function (errorResponse) {
                 const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                 self.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
@@ -118,12 +128,12 @@ export default class AdmissionLocationWrapper extends React.Component {
                     v: 'full'
                 }
             })
-            .then(function(response) {
+            .then(function (response) {
                 self.setState({
                     bedTypes: response.data.results
                 });
             })
-            .catch(function(errorResponse) {
+            .catch(function (errorResponse) {
                 const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                 self.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
@@ -244,8 +254,8 @@ export default class AdmissionLocationWrapper extends React.Component {
     render() {
         return (
             <div>
-                <ReactNotify ref="notificator" />
-                <Header path={this.props.match.path} />
+                <ReactNotify ref="notificator"/>
+                <Header path={this.props.match.path}/>
                 <div style={this.style.wrapper}>
                     <LocationHierarchy
                         admissionLocationFunctions={this.admissionLocationFunctions}
