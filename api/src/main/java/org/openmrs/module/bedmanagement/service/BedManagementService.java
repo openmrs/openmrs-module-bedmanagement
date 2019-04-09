@@ -103,7 +103,7 @@ public interface BedManagementService extends OpenmrsService {
 	@Authorized(value = { "Get Beds", "Get Admission Locations" }, requireAll = true)
 	BedDetails getLatestBedDetailsByVisit(String visitUuid);
 	
-	@Authorized(value = { "Get Tags" }, requireAll = true)
+	@Authorized(value = { "Get Bed Tags" }, requireAll = true)
 	List<BedTag> getAllBedTags();
 	
 	/**
@@ -171,7 +171,7 @@ public interface BedManagementService extends OpenmrsService {
 	 * @param uuid {@link String} Bed tag uuid
 	 * @return {@link BedTag}
 	 */
-	@Authorized(value = { "Get Tags" }, requireAll = true)
+	@Authorized(value = { "Get Bed Tags" }, requireAll = true)
 	BedTag getBedTagByUuid(String uuid);
 	
 	/**
@@ -182,7 +182,7 @@ public interface BedManagementService extends OpenmrsService {
 	 * @param offset {@link Integer} specify the starting row offset into the result set
 	 * @return {@link List<BedTag>}
 	 */
-	@Authorized(value = { "Get Tags" }, requireAll = true)
+	@Authorized(value = { "Get Bed Tags" }, requireAll = true)
 	List<BedTag> getBedTags(String name, Integer limit, Integer offset);
 	
 	/**
@@ -191,7 +191,7 @@ public interface BedManagementService extends OpenmrsService {
 	 * @param bedTag {@link BedTag}
 	 * @return {@link BedTag}
 	 */
-	@Authorized(value = { "Edit Tags" }, requireAll = true)
+	@Authorized(value = { "Edit Bed Tags" }, requireAll = true)
 	BedTag saveBedTag(BedTag bedTag);
 	
 	/**
@@ -200,7 +200,7 @@ public interface BedManagementService extends OpenmrsService {
 	 * @param bedTag {@link BedTag}
 	 * @param reason {@link String}
 	 */
-	@Authorized(value = { "Edit Tags" }, requireAll = true)
+	@Authorized(value = { "Edit Bed Tags" }, requireAll = true)
 	void deleteBedTag(BedTag bedTag, String reason);
 	
 	/**
