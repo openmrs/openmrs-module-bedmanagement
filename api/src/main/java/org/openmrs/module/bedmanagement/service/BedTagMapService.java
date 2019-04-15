@@ -11,18 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface BedTagMapService extends OpenmrsService {
 	
-	@Authorized(value = { "Edit Tags", "Get Tags", "Get Beds" }, requireAll = true)
+	@Authorized(value = { "Edit Bed Tags", "Get Bed Tags", "Get Beds" }, requireAll = true)
 	BedTagMap save(BedTagMap bedTagMap) throws IllegalPropertyException;
 	
-	@Authorized(value = { "Edit Tags", "Get Tags", "Get Beds" }, requireAll = true)
+	@Authorized(value = { "Edit Bed Tags", "Get Bed Tags", "Get Beds" }, requireAll = true)
 	void delete(BedTagMap bedTagMap, String reason);
 	
-	@Authorized(value = { "Get Tags", "Get Beds" }, requireAll = true)
+	@Authorized(value = { "Get Bed Tags", "Get Beds" }, requireAll = true)
 	BedTagMap getBedTagMapByUuid(String bedTagMapUuid);
 	
-	@Authorized(value = { "Get Tags", "Get Beds" }, requireAll = true)
+	@Authorized(value = { "Get Bed Tags", "Get Beds" }, requireAll = true)
 	BedTagMap getBedTagMapWithBedAndTag(Bed bed, BedTag bedTag);
 	
-	@Authorized(value = { "Get Tags", "Get Beds" }, requireAll = true)
+	@Authorized(value = { "Get Bed Tags", "Get Beds" }, requireAll = true)
 	BedTag getBedTagByUuid(String bedTagUuid);
 }

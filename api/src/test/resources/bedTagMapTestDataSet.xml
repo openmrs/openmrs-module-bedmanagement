@@ -17,14 +17,14 @@
     <bed_tag_map bed_tag_map_id="1" bed_id="15" bed_tag_id="1" uuid="5580cddd-c290-66c8-8d3a-96dc33d199f4" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" />
 
     <privilege privilege="Get Beds" description="Able to Get bed details" uuid="5580ceed-c290-66c8-8d3a-96dc33d199fb"/>
-    <privilege privilege="Get Tags" description="Able to Get Tags details" uuid="5580ceed-1111-66c8-8d3a-96dc33d199fb"/>
-    <privilege privilege="Edit Tags" description="Able to Edit Tags for the bed" uuid="5580ceed-2222-66c8-8d3a-96dc33d199fb"/>
+    <privilege privilege="Get Bed Tags" description="Able to Get Bed Tags details" uuid="5580ceed-1111-66c8-8d3a-96dc33d199fb"/>
+    <privilege privilege="Edit Bed Tags" description="Able to Edit Tags for the bed" uuid="5580ceed-2222-66c8-8d3a-96dc33d199fb"/>
 
     <role role="Test Role" description="To View Patients" uuid="9480cddd-c291-46c8-8d3a-96dc33d109fb"/>
     <role role="InPatient-Edit-Tags" description="To be able to edit tags of bed" uuid="9400cddd-2222-46c8-8d3a-96dc33d109fb"/>
 
-    <role_privilege role="InPatient-Edit-Tags" privilege="Edit Tags"/>
-    <role_privilege role="InPatient-Edit-Tags" privilege="Get Tags"/>
+    <role_privilege role="InPatient-Edit-Tags" privilege="Edit Bed Tags"/>
+    <role_privilege role="InPatient-Edit-Tags" privilege="Get Bed Tags"/>
     <role_privilege role="InPatient-Edit-Tags" privilege="Get Beds"/>
 
     <user_role user_id="120" role="Test Role"/>

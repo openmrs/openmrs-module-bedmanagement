@@ -129,10 +129,10 @@
     <privilege privilege="Assign Beds" description="Able to assign beds" uuid="8080ceed-c291-66c8-8d3a-96dc33d199fb"/>
     <privilege privilege="Edit Admission Locations" description="Able to edit admission locations" uuid="8480ceed-c290-66c8-8d3a-96dc33d199fb"/>
     <privilege privilege="Get Beds" description="Able to Get bed details" uuid="5580ceed-c290-66c8-8d3a-96dc33d199fb"/>
-    <privilege privilege="Get Tags" description="Able to Get bed tags" uuid="5580ceed-c290-66c8-8d3a-96dc33d148hu"/>
+    <privilege privilege="Get Bed Tags" description="Able to Get bed tags" uuid="5580ceed-c290-66c8-8d3a-96dc33d148hu"/>
     <privilege privilege="Get Bed Type" description="Able to Edit bed details" uuid="5580ceed-c290-66c8-jkio-96dc33d19012"/>
     <privilege privilege="Edit Beds" description="Able to Edit bed details" uuid="5580ceed-c290-66c8-jkio-96dc33d199fb"/>
-    <privilege privilege="Edit Tags" description="Able to Edit bed tags" uuid="5580ceed-ertg-66c8-jkio-96dc33d199fb"/>
+    <privilege privilege="Edit Bed Tags" description="Able to Edit bed tags" uuid="5580ceed-ertg-66c8-jkio-96dc33d199fb"/>
     <privilege privilege="Edit Bed Type" description="Able to Edit bed type details" uuid="5580ceed-12gy-66c8-8d3a-96dc33d199fb"/>
     <privilege privilege="Get Locations" description="Able to Get location details" uuid="8480ceed-c290-66c8-uig4-96dc33d199fb"/>
     <privilege privilege="Manage Locations" description="Able to Edit location details" uuid="8480ceed-c290-dsds-uig4-96dc33d199fb"/>
@@ -145,7 +145,7 @@
 
     <role_privilege role="InPatient-Read" privilege="Get Admission Locations"/>
     <role_privilege role="InPatient-Read" privilege="Get Beds"/>
-    <role_privilege role="InPatient-Read" privilege="Get Tags"/>
+    <role_privilege role="InPatient-Read" privilege="Get Bed Tags"/>
     <role_privilege role="InPatient-Read" privilege="Get Bed Type"/>
     <role_privilege role="InPatient-Read" privilege="Get Locations"/>
     <role_privilege role="Test Role" privilege="View Locations"/>
@@ -154,7 +154,7 @@
     <role_privilege role="InPatient-Patient-Movement" privilege="Assign Beds"/>
     <role_privilege role="InPatient-Patient-Movement" privilege="Edit Admission Locations"/>
     <role_privilege role="InPatient-Admin" privilege="Edit Beds"/>
-    <role_privilege role="InPatient-Admin" privilege="Edit Tags"/>
+    <role_privilege role="InPatient-Admin" privilege="Edit Bed Tags"/>
     <role_privilege role="InPatient-Admin" privilege="Edit Bed Type"/>
     <role_privilege role="InPatient-Admin" privilege="Manage Locations"/>
 

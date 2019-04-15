@@ -608,4 +608,94 @@
         <comment>Drop not null constraint for bed_id in bed_location_map table</comment>
         <dropNotNullConstraint tableName="bed_location_map" columnName="bed_id" columnDataType="int"/>
     </changeSet>
+
+    <changeSet id="BM-201810051512" author="angshu" runOnChange="true" context="r0.92">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from privilege where privilege='Edit Beds'</sqlCheck>
+        </preConditions>
+        <comment>Create privilege - Edit Beds</comment>
+        <insert tableName="privilege">
+            <column name="privilege" value="Edit Beds"/>
+            <column name="description" value="Ability to edit bed details"/>
+            <column name="uuid" valueComputed="uuid()"/>
+        </insert>
+    </changeSet>
+    <changeSet id="BM-201810051515" author="angshu" runOnChange="true" context="r0.92">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from privilege where privilege='Get Bed Type'</sqlCheck>
+        </preConditions>
+        <comment>Create privilege - Get Bed Type</comment>
+        <insert tableName="privilege">
+            <column name="privilege" value="Get Bed Type"/>
+            <column name="description" value="Ability to view bed types"/>
+            <column name="uuid" valueComputed="uuid()"/>
+        </insert>
+    </changeSet>
+    <changeSet id="BM-201810051518" author="angshu" runOnChange="true" context="r0.92">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from privilege where privilege='Edit Bed Type'</sqlCheck>
+        </preConditions>
+        <comment>Create privilege - Edit Bed Type</comment>
+        <insert tableName="privilege">
+            <column name="privilege" value="Edit Bed Type"/>
+            <column name="description" value="Ability to edit bed types"/>
+            <column name="uuid" valueComputed="uuid()"/>
+        </insert>
+    </changeSet>
+
+    <!--
+     The privileges  - Get Tags, Edit Tags - should be renamed to Get Bed Tags, Edit Bed Tags
+     create new privileges - Get Bed Tags, Edit Bed Tags
+     update existing role-privilege association
+     delete the older Privileges - Get Tags, Edit Tags
+    -->
+
+    <changeSet id="BM-201810051531" author="angshu" runOnChange="true" context="r0.92">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from privilege where privilege='Get Bed Tags'</sqlCheck>
+        </preConditions>
+        <comment>Create privilege - Get Bed Tags</comment>
+        <insert tableName="privilege">
+            <column name="privilege" value="Get Bed Tags"/>
+            <column name="description" value="Ability to view bed tags"/>
+            <column name="uuid" valueComputed="uuid()"/>
+        </insert>
+    </changeSet>
+    <changeSet id="BM-201810051532" author="angshu" runOnChange="true" context="r0.92">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from privilege where privilege='Edit Bed Tags'</sqlCheck>
+        </preConditions>
+        <comment>Create privilege - Edit Bed Tags</comment>
+        <insert tableName="privilege">
+            <column name="privilege" value="Edit Bed Tags"/>
+            <column name="description" value="Ability to edit bed tags"/>
+            <column name="uuid" valueComputed="uuid()"/>
+        </insert>
+    </changeSet>
+    <changeSet id="BM-201810051533" author="angshu" runOnChange="true" context="r0.92">
+        <comment>Update existing role-privilege Get Tags to Get Bed Tags</comment>
+        <update tableName="role_privilege">
+            <column name="privilege" value="Get Bed Tags"/>
+            <where>privilege = 'Get Tags'</where>
+        </update>
+    </changeSet>
+    <changeSet id="BM-201810051534" author="angshu" runOnChange="true" context="r0.92">
+        <comment>Update existing role-privilege Edit Tags to Edit Bed Tags</comment>
+        <update tableName="role_privilege">
+            <column name="privilege" value="Edit Bed Tags"/>
+            <where>privilege = 'Edit Tags'</where>
+        </update>
+    </changeSet>
+    <changeSet id="BM-201810051535" author="angshu" runOnChange="true" context="r0.92">
+        <comment>Delete privilege Get Tags</comment>
+        <sql>
+            delete from privilege where privilege='Get Tags';
+        </sql>
+    </changeSet>
+    <changeSet id="BM-201810051536" author="angshu" runOnChange="true" context="r0.92">
+        <comment>Delete privilege Edit Tags</comment>
+        <sql>
+            delete from privilege where privilege='Edit Tags';
+        </sql>
+    </changeSet>
 </databaseChangeLog>
