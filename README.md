@@ -1,7 +1,7 @@
 # Bed Management module
 ## Overview
 The Bed Management module brings in the data model, DAO entities, services and REST API layers for managing beds, admission locations and all other backend entities that relates to IPD Ward Management.
-This module is primarily used in the [Bahmni distribution](https://github.com/Bahmni/openmrs-distro-bahmni) of of OpenMRS.
+This module is primarily used in the [Bahmni distribution](https://github.com/Bahmni/openmrs-distro-bahmni) of OpenMRS.
 
 > Note that its _admin_ UI is shipped as an OWA, see [here](owa/README.md) for more details about it.
 
