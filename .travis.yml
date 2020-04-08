@@ -1,8 +1,7 @@
 language:
   - java
   - node_js
-jdk:
- - oraclejdk8
+jdk: openjdk8
 before_script:
   - mvn test -B
   - npm install --g yarn@1.3.2
