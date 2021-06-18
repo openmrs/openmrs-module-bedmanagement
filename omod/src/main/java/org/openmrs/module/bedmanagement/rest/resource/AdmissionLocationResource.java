@@ -21,6 +21,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.StringProperty;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
@@ -95,6 +98,24 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public Model getGETModel(Representation rep) {
+		ModelImpl modelImpl = ((ModelImpl) super.getGETModel(rep));
+		if (rep instanceof DefaultRepresentation) {
+			modelImpl.property("ward", new StringProperty()).property("totalBeds", new StringProperty())
+			        .property("occupiedBeds", new StringProperty());
+		}
+		if (rep instanceof FullRepresentation) {
+			modelImpl.property("ward", new StringProperty()).property("totalBeds", new StringProperty())
+			        .property("occupiedBeds", new StringProperty()).property("bedLayouts", new StringProperty());
+		}
+		if (rep instanceof NamedRepresentation) {
+			modelImpl.property("ward", new StringProperty()).property("bedLocationMappings", new StringProperty());
+		}
+		
+		return modelImpl;
 	}
 	
 	@PropertyGetter("bedLayouts")
@@ -268,6 +289,12 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 		description.addProperty("description");
 		description.addProperty("parentLocationUuid");
 		return description;
+	}
+	
+	@Override
+	public Model getCREATEModel(Representation rep) {
+		return new ModelImpl().property("name", new StringProperty()).property("description", new StringProperty())
+		        .property("parentLocationUuid", new StringProperty());
 	}
 	
 	@Override

@@ -1,5 +1,8 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.StringProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedType;
@@ -37,6 +40,29 @@ public class BedTypeResource extends DelegatingCrudResource<BedType> {
 		description.addProperty("displayName");
 		description.addProperty("description");
 		return description;
+	}
+	
+	@Override
+	public Model getGETModel(Representation rep) {
+		ModelImpl modelImpl = ((ModelImpl) super.getGETModel(rep));
+		modelImpl.property("uuid", new StringProperty()).property("name", new StringProperty())
+		        .property("displayName", new StringProperty()).property("description", new StringProperty());
+		return modelImpl;
+	}
+	
+	@Override
+	public DelegatingResourceDescription getCreatableProperties() {
+		DelegatingResourceDescription delegatingResourceDescription = new DelegatingResourceDescription();
+		delegatingResourceDescription.addRequiredProperty("name");
+		delegatingResourceDescription.addRequiredProperty("displayName");
+		delegatingResourceDescription.addRequiredProperty("description");
+		return delegatingResourceDescription;
+	}
+	
+	@Override
+	public Model getCREATEModel(Representation rep) {
+		return new ModelImpl().property("name", new StringProperty()).property("displayName", new StringProperty())
+		        .property("description", new StringProperty());
 	}
 	
 	@Override

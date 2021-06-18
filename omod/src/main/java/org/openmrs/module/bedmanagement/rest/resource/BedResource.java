@@ -15,6 +15,10 @@ package org.openmrs.module.bedmanagement.rest.resource;
 
 import java.util.List;
 
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.IntegerProperty;
+import io.swagger.models.properties.StringProperty;
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
@@ -72,6 +76,43 @@ public class BedResource extends DelegatingCrudResource<Bed> {
 			return description;
 		}
 		return null;
+	}
+	
+	@Override
+	public Model getGETModel(Representation rep) {
+		ModelImpl modelImpl = ((ModelImpl) super.getGETModel(rep));
+		if (rep instanceof DefaultRepresentation || rep instanceof RefRepresentation) {
+			modelImpl.property("id", new IntegerProperty()).property("uuid", new StringProperty())
+			        .property("row", new IntegerProperty()).property("column", new IntegerProperty())
+			        .property("bedNumber", new StringProperty()).property("status", new StringProperty());
+		}
+		if (rep instanceof FullRepresentation) {
+			modelImpl.property("id", new IntegerProperty()).property("uuid", new StringProperty())
+			        .property("row", new IntegerProperty()).property("column", new IntegerProperty())
+			        .property("bedNumber", new StringProperty()).property("status", new StringProperty());
+		}
+		return modelImpl;
+	}
+	
+	@Override
+	public DelegatingResourceDescription getCreatableProperties() throws ResourceDoesNotSupportOperationException {
+		DelegatingResourceDescription description = new DelegatingResourceDescription();
+		description.addProperty("id");
+		description.addProperty("bedNumber");
+		description.addProperty("bedType");
+		description.addProperty("row");
+		description.addProperty("column");
+		description.addProperty("status", Representation.DEFAULT);
+		return description;
+	}
+	
+	@Override
+	public Model getCREATEModel(Representation rep) {
+		ModelImpl modelImpl = ((ModelImpl) super.getGETModel(rep));
+		modelImpl.property("id", new IntegerProperty()).property("uuid", new StringProperty())
+		        .property("row", new IntegerProperty()).property("column", new IntegerProperty())
+		        .property("bedNumber", new StringProperty()).property("status", new StringProperty());
+		return modelImpl;
 	}
 	
 	@PropertyGetter("row")

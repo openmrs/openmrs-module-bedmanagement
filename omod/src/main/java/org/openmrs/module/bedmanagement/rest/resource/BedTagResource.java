@@ -13,6 +13,9 @@
  */
 package org.openmrs.module.bedmanagement.rest.resource;
 
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.StringProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
@@ -45,6 +48,28 @@ public class BedTagResource extends DelegatingCrudResource<BedTag> {
 		description.addProperty("name");
 		description.addProperty("uuid");
 		return description;
+	}
+	
+	@Override
+	public Model getGETModel(Representation rep) {
+		ModelImpl modelImpl = ((ModelImpl) super.getGETModel(rep));
+		modelImpl.property("id", new StringProperty()).property("name", new StringProperty()).property("uuid",
+		    new StringProperty());
+		
+		return modelImpl;
+	}
+	
+	@Override
+	public DelegatingResourceDescription getCreatableProperties() throws ResourceDoesNotSupportOperationException {
+		DelegatingResourceDescription description = new DelegatingResourceDescription();
+		description.addProperty("id");
+		description.addProperty("name");
+		return description;
+	}
+	
+	@Override
+	public Model getCREATEModel(Representation rep) {
+		return new ModelImpl().property("id", new StringProperty()).property("name", new StringProperty());
 	}
 	
 	@Override
