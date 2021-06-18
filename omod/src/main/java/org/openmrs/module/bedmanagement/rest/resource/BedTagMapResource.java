@@ -13,6 +13,9 @@
  */
 package org.openmrs.module.bedmanagement.rest.resource;
 
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.StringProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.service.BedTagMapService;
@@ -75,4 +78,19 @@ public class BedTagMapResource extends DataDelegatingCrudResource<BedTagMap> {
 		delegatingResourceDescription.addRequiredProperty("bedTag");
 		return delegatingResourceDescription;
 	}
+	
+	@Override
+	public Model getGETModel(Representation rep) {
+		ModelImpl modelImpl = ((ModelImpl) super.getGETModel(rep));
+		if (rep instanceof DefaultRepresentation || rep instanceof RefRepresentation) {
+			modelImpl.property("uuid", new StringProperty());
+		}
+		return modelImpl;
+	}
+	
+	@Override
+	public Model getCREATEModel(Representation rep) {
+		return new ModelImpl().property("bed", new StringProperty()).property("bedTag", new StringProperty());
+	}
+	
 }
