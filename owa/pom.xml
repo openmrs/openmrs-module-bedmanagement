@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.openmrs.module</groupId>
         <artifactId>bedmanagement</artifactId>
-        <version>5.12.0</version>
+        <version>5.13.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>bedmanagement-owa</artifactId>
