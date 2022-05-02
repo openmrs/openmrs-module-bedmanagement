@@ -23,8 +23,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.HandlerExecutionChain;
-import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
-import org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.xml.sax.InputSource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,16 +48,16 @@ import java.util.List;
 public abstract class MainResourceControllerTest extends BaseModuleWebContextSensitiveTest {
 	
 	@Autowired
-	private AnnotationMethodHandlerAdapter handlerAdapter;
+	private RequestMappingHandlerAdapter handlerAdapter;
 	
 	@Autowired
-	private List<DefaultAnnotationHandlerMapping> handlerMappings;
+	private List<RequestMappingHandlerMapping> handlerMappings;
 	
 	/**
 	 * Creates a request from the given parameters.
 	 * <p>
 	 * The requestURI is automatically preceded with "/rest/" + RestConstants.VERSION_1.
-	 * 
+	 *
 	 * @param method
 	 * @param requestURI
 	 * @return
@@ -140,7 +140,7 @@ public abstract class MainResourceControllerTest extends BaseModuleWebContextSen
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		HandlerExecutionChain handlerExecutionChain = null;
-		for (DefaultAnnotationHandlerMapping handlerMapping : handlerMappings) {
+		for (RequestMappingHandlerMapping handlerMapping : handlerMappings) {
 			handlerExecutionChain = handlerMapping.getHandler(request);
 			if (handlerExecutionChain != null) {
 				break;

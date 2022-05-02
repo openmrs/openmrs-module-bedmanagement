@@ -71,7 +71,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.bedmanagement.service.BedManagementService</value>
-                <ref local="bedManagementService"/>
+                <ref bean="bedManagementService"/>
             </list>
         </property>
     </bean>
@@ -80,7 +80,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.bedmanagement.service.BedTagMapService</value>
-                <ref local="bedTagMapService"/>
+                <ref bean="bedTagMapService"/>
             </list>
         </property>
     </bean>
