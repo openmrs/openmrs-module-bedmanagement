@@ -12,6 +12,7 @@ import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -71,7 +72,7 @@ public class BedTagMapAdviceTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		mockStatic(Context.class);
+		PowerMockito.mockStatic(Context.class);
 		when(Context.getRegisteredComponents(PlatformTransactionManager.class))
 		        .thenReturn(Collections.singletonList(platformTransactionManager));
 		when(Context.getAdministrationService()).thenReturn(administrationService);
@@ -91,24 +92,24 @@ public class BedTagMapAdviceTest {
 	}
 	
 	private void verifyAssertsForRaisingEvents() throws Exception {
-		verifyStatic(times(1));
+		verifyStatic(Context.class, times(1));
 		Context.getRegisteredComponents(PlatformTransactionManager.class);
-		verifyStatic(times(2));
+		verifyStatic(Context.class, times(2));
 		Context.getAdministrationService();
 		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY));
 		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_URL_PATTERN_GLOBAL_PROPERTY),
 		    eq(DEFAULT_BED_TAG_MAP_EVENT_URL_PATTERN));
 		verify(bedTagMap, times(1)).getUuid();
-		verifyNew(Event.class, times(1)).withArguments(anyString(), eq(TITLE), any(Date.class), any(URI.class),
+		verifyNew(Event.class, times(1)).withArguments(anyString(), eq(TITLE), any(), any(),
 		    eq(DEFAULT_BED_TAG_MAP_EVENT_URL_PATTERN_AFTER_UUID_REPLACE), eq(CATEGORY));
 		verify(atomFeedSpringTransactionManager, times(1)).executeWithTransaction(any(AFTransactionWorkWithoutResult.class));
 		verify(eventService, times(1)).notify(event);
 	}
 	
 	private void verifyAssertsForNotRaisingEvents() throws Exception {
-		verifyStatic(times(1));
+		verifyStatic(Context.class, times(1));
 		Context.getRegisteredComponents(PlatformTransactionManager.class);
-		verifyStatic(times(1));
+		verifyStatic(Context.class, times(1));
 		Context.getAdministrationService();
 		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY));
 		verify(administrationService, times(0)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_URL_PATTERN_GLOBAL_PROPERTY),
