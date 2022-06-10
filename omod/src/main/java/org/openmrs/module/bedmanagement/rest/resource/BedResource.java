@@ -47,7 +47,7 @@ import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-@Resource(name = RestConstants.VERSION_1 + "/bed", supportedClass = Bed.class, supportedOpenmrsVersions = { "1.9.* - 2.4.*" })
+@Resource(name = RestConstants.VERSION_1 + "/bed", supportedClass = Bed.class, supportedOpenmrsVersions = { "1.9.* - 9.*" })
 public class BedResource extends DelegatingCrudResource<Bed> {
 	
 	@Override

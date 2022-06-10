@@ -32,7 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Resource(name = RestConstants.VERSION_1
-        + "/bedPatientAssignment", supportedClass = BedPatientAssignment.class, supportedOpenmrsVersions = { "1.9.* - 2.4.*" })
+        + "/bedPatientAssignment", supportedClass = BedPatientAssignment.class, supportedOpenmrsVersions = { "1.9.* - 9.*" })
 public class BedPatientAssignmentResource extends DelegatingCrudResource<BedPatientAssignment> {
 	
 	@Override
