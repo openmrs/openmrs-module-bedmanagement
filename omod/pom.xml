@@ -98,8 +98,15 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
+			<version>4.0.1</version>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>3.0-alpha-1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -107,6 +114,12 @@
 			<artifactId>legacyui-omod</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.ict4h</groupId>
+			<artifactId>atomfeed-server</artifactId>
+			<version>${atomfeed.version}</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

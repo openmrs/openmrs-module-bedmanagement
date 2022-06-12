@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BedTypeResourceTest extends MainResourceControllerTest {
 	
@@ -100,10 +101,15 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 		Assert.assertEquals("VIP", bedType.get("displayName"));
 	}
 	
-	@Test(expected = ConstraintViolationException.class)
-	public void onDeleteBedTypeByIdShouldThrowException() throws Exception {
-		MockHttpServletRequest request = request(RequestMethod.DELETE, getURI() + "/6f9fb240-0fd5-11e8-adb7-080027b38971");
-		handle(request);
+	@Test
+	public void onDeleteBedTypeByIdShouldThrowException() {
+		try {
+			MockHttpServletRequest request = request(RequestMethod.DELETE, getURI() + "/6f9fb240-0fd5-11e8-adb7-080027b38971");
+			handle(request);
+		} catch(Exception e) {
+			Throwable t = e.getCause();
+			assertTrue(t instanceof ConstraintViolationException);
+		}
 	}
 	
 	@Test(expected = ObjectNotFoundException.class)

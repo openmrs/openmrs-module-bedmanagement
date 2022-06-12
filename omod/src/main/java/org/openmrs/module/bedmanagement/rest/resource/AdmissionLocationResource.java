@@ -57,8 +57,8 @@ import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOp
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 @Resource(name = RestConstants.VERSION_1
-        + "/admissionLocation", supportedClass = AdmissionLocation.class, supportedOpenmrsVersions = { "1.9.*", "1.10.*",
-                "1.11.*", "1.12.*", "2.0.*", "2.1.*" })
+        + "/admissionLocation", supportedClass = AdmissionLocation.class, supportedOpenmrsVersions = { "1.9.* - 9.*" })
+
 public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionLocation> {
 	
 	@Override
