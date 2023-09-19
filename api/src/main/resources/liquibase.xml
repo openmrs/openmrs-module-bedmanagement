@@ -698,4 +698,26 @@
             delete from privilege where privilege='Edit Tags';
         </sql>
     </changeSet>
+
+    <changeSet id="BM_202308131856" author="slubwama">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="bed_location_map" />
+            <and>
+                <columnExists tableName="bed_location_map" columnName="row_number" />
+            </and>
+        </preConditions>
+        <comment>Renaming column row_number to bed_row_number in table bed_location_map because row_number is a reserved word in MySQL 8.0.2 and later</comment>
+        <renameColumn columnDataType="int" newColumnName="bed_row_number" oldColumnName="row_number" tableName="bed_location_map" />
+    </changeSet>
+
+    <changeSet id="BM_202308131857" author="slubwama">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="bed_location_map" />
+            <and>
+                <columnExists tableName="bed_location_map" columnName="column_number" />
+            </and>
+        </preConditions>
+        <comment>Renaming column column_number to bed_column_number in table bed_location_map because column_number is a reserved word in MySQL 8.0.2 and later</comment>
+        <renameColumn columnDataType="int" newColumnName="bed_column_number" oldColumnName="column_number" tableName="bed_location_map" />
+    </changeSet>
 </databaseChangeLog>
