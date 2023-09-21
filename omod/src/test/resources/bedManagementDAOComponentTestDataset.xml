@@ -27,24 +27,24 @@
     <bed bed_id="9" bed_number="306-a" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false" uuid="bb0a7ad0-d225-11e4-9c67-080027b662ec"/>
     <bed bed_id="10" bed_number="306-b" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false" uuid="bb0f8866-d225-11e4-9c67-080027b662ec"/>
 
-    <bed_location_map bed_location_map_id="1" location_id="123451" row_number="1" column_number="1" bed_id="1"/>
-    <bed_location_map bed_location_map_id="2" location_id="123451" row_number="1" column_number="2" bed_id="2"/>
-    <bed_location_map bed_location_map_id="3" location_id="123451" row_number="1" column_number="3" bed_id="3"/>
-    <bed_location_map bed_location_map_id="4" location_id="123451" row_number="1" column_number="4" bed_id="4"/>
-    <bed_location_map bed_location_map_id="5" location_id="123451" row_number="2" column_number="1"/>
-    <bed_location_map bed_location_map_id="6" location_id="123451" row_number="2" column_number="2"/>
-    <bed_location_map bed_location_map_id="7" location_id="123451" row_number="2" column_number="3"/>
-    <bed_location_map bed_location_map_id="8" location_id="123451" row_number="2" column_number="4"/>
-    <bed_location_map bed_location_map_id="9" location_id="123451" row_number="3" column_number="1" bed_id="5"/>
-    <bed_location_map bed_location_map_id="10" location_id="123451" row_number="3" column_number="2" bed_id="6"/>
-    <bed_location_map bed_location_map_id="11" location_id="123451" row_number="3" column_number="3" bed_id="7"/>
-    <bed_location_map bed_location_map_id="12" location_id="123451" row_number="3" column_number="4" bed_id="8"/>
-    <bed_location_map bed_location_map_id="13" location_id="123451" row_number="1" column_number="5" />
-    <bed_location_map bed_location_map_id="14" location_id="123451" row_number="1" column_number="6" bed_id="9" />
-    <bed_location_map bed_location_map_id="15" location_id="123451" row_number="2" column_number="5" />
-    <bed_location_map bed_location_map_id="16" location_id="123451" row_number="2" column_number="6" />
-    <bed_location_map bed_location_map_id="17" location_id="123451" row_number="3" column_number="5" />
-    <bed_location_map bed_location_map_id="18" location_id="123451" row_number="3" column_number="6" bed_id="10" />
+    <bed_location_map bed_location_map_id="1" location_id="123451" bed_row_number="1" bed_column_number="1" bed_id="1"/>
+    <bed_location_map bed_location_map_id="2" location_id="123451" bed_row_number="1" bed_column_number="2" bed_id="2"/>
+    <bed_location_map bed_location_map_id="3" location_id="123451" bed_row_number="1" bed_column_number="3" bed_id="3"/>
+    <bed_location_map bed_location_map_id="4" location_id="123451" bed_row_number="1" bed_column_number="4" bed_id="4"/>
+    <bed_location_map bed_location_map_id="5" location_id="123451" bed_row_number="2" bed_column_number="1"/>
+    <bed_location_map bed_location_map_id="6" location_id="123451" bed_row_number="2" bed_column_number="2"/>
+    <bed_location_map bed_location_map_id="7" location_id="123451" bed_row_number="2" bed_column_number="3"/>
+    <bed_location_map bed_location_map_id="8" location_id="123451" bed_row_number="2" bed_column_number="4"/>
+    <bed_location_map bed_location_map_id="9" location_id="123451" bed_row_number="3" bed_column_number="1" bed_id="5"/>
+    <bed_location_map bed_location_map_id="10" location_id="123451" bed_row_number="3" bed_column_number="2" bed_id="6"/>
+    <bed_location_map bed_location_map_id="11" location_id="123451" bed_row_number="3" bed_column_number="3" bed_id="7"/>
+    <bed_location_map bed_location_map_id="12" location_id="123451" bed_row_number="3" bed_column_number="4" bed_id="8"/>
+    <bed_location_map bed_location_map_id="13" location_id="123451" bed_row_number="1" bed_column_number="5" />
+    <bed_location_map bed_location_map_id="14" location_id="123451" bed_row_number="1" bed_column_number="6" bed_id="9" />
+    <bed_location_map bed_location_map_id="15" location_id="123451" bed_row_number="2" bed_column_number="5" />
+    <bed_location_map bed_location_map_id="16" location_id="123451" bed_row_number="2" bed_column_number="6" />
+    <bed_location_map bed_location_map_id="17" location_id="123451" bed_row_number="3" bed_column_number="5" />
+    <bed_location_map bed_location_map_id="18" location_id="123451" bed_row_number="3" bed_column_number="6" bed_id="10" />
 
 
     <!--second ward-->
@@ -58,12 +58,12 @@
     <bed bed_id="15" bed_number="307-e" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false" uuid="bb139ca8-d225-11e4-9c67-080027b662ec"/>
     <bed bed_id="16" bed_number="307-f" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false" uuid="bb13cd5e-d225-11e4-9c67-080027b662ec"/>
 
-    <bed_location_map bed_location_map_id="19" location_id="123452" row_number="1" column_number="1" bed_id="11"/>
-    <bed_location_map bed_location_map_id="20" location_id="123452" row_number="1" column_number="2" bed_id="12"/>
-    <bed_location_map bed_location_map_id="21" location_id="123452" row_number="1" column_number="3" bed_id="13"/>
-    <bed_location_map bed_location_map_id="22" location_id="123452" row_number="1" column_number="4" bed_id="14"/>
-    <bed_location_map bed_location_map_id="23" location_id="123452" row_number="2" column_number="1" bed_id="15"/>
-    <bed_location_map bed_location_map_id="24" location_id="123452" row_number="2" column_number="2" bed_id="16"/>
+    <bed_location_map bed_location_map_id="19" location_id="123452" bed_row_number="1" bed_column_number="1" bed_id="11"/>
+    <bed_location_map bed_location_map_id="20" location_id="123452" bed_row_number="1" bed_column_number="2" bed_id="12"/>
+    <bed_location_map bed_location_map_id="21" location_id="123452" bed_row_number="1" bed_column_number="3" bed_id="13"/>
+    <bed_location_map bed_location_map_id="22" location_id="123452" bed_row_number="1" bed_column_number="4" bed_id="14"/>
+    <bed_location_map bed_location_map_id="23" location_id="123452" bed_row_number="2" bed_column_number="1" bed_id="15"/>
+    <bed_location_map bed_location_map_id="24" location_id="123452" bed_row_number="2" bed_column_number="2" bed_id="16"/>
 
 
     <person person_id="3" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128762"/>
