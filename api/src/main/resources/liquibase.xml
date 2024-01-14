@@ -51,7 +51,7 @@
     <changeSet author="arathy" id="08102013_3">
         <preConditions onFail="MARK_RAN">
             <not>
-                <foreignKeyConstraintExists foreignKeyName="bed_id_fk"/>
+                <foreignKeyConstraintExists foreignKeyTableName="bed_patient_assignment_map" foreignKeyName="bed_id_fk"/>
             </not>
         </preConditions>
         <comment>
@@ -65,7 +65,7 @@
     <changeSet author="arathy" id="08102013_4">
         <preConditions onFail="MARK_RAN">
             <not>
-                <foreignKeyConstraintExists foreignKeyName="bed_patient_assignment_map_patient_fk"/>
+                <foreignKeyConstraintExists foreignKeyTableName="bed_patient_assignment_map" foreignKeyName="bed_patient_assignment_map_patient_fk"/>
             </not>
         </preConditions>
         <comment>
@@ -105,7 +105,7 @@
     <changeSet author="arathy" id="08102013_6">
         <preConditions onFail="MARK_RAN">
             <not>
-                <foreignKeyConstraintExists foreignKeyName="bed_location_map_location_fk"/>
+                <foreignKeyConstraintExists foreignKeyTableName="bed_location_map" foreignKeyName="bed_location_map_location_fk"/>
             </not>
         </preConditions>
         <comment>
@@ -172,7 +172,7 @@
     <changeSet author="Arathy,Banka" id="bed_management_module_18112013_3">
         <preConditions onFail="MARK_RAN">
             <not>
-                <foreignKeyConstraintExists foreignKeyName="bed_bed_type_fk"/>
+                <foreignKeyConstraintExists foreignKeyTableName="bed" foreignKeyName="bed_bed_type_fk"/>
             </not>
         </preConditions>
         <comment>
@@ -556,7 +556,7 @@
     <changeSet author="Mahitha" id="201807041155">
         <preConditions onFail="MARK_RAN">
             <not>
-                <foreignKeyConstraintExists foreignKeyName="bed_location_map_bed_id_fk"/>
+                <foreignKeyConstraintExists foreignKeyTableName="bed_location_map" foreignKeyName="bed_location_map_bed_id_fk"/>
             </not>
         </preConditions>
         <comment>
