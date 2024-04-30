@@ -15,27 +15,19 @@
 	<require_version>${openMRSRuntimeVersion}</require_version>
 	<!-- / Module Properties -->
 
-
+	<aware_of_modules>
+		<aware_of_module version="${openmrsAtomfeedVersion}">org.ict4h.openmrs.openmrs-atomfeed</aware_of_module>
+	</aware_of_modules>
 
     <!-- Required Modules -->
     <require_modules>
         <require_module version="${webservicesRestModuleVersion}">org.openmrs.module.webservices.rest</require_module>
-        <require_module version="${openmrsAtomfeedVersion}">org.ict4h.openmrs.openmrs-atomfeed</require_module>
         <require_module version="${openmrsOwaVersion}">org.openmrs.module.owa</require_module>
     </require_modules>
     <!-- / Required Modules -->
 
     <!-- Module Activator -->
 	<activator>${project.parent.groupId}.${project.parent.artifactId}.BedManagementActivator</activator>
-
-	<advice>
-		<point>org.openmrs.module.bedmanagement.service.BedManagementService</point>
-		<class>org.openmrs.module.bedmanagement.atomfeed.BedAssignmentAdvice</class>
-	</advice>
-	<advice>
-		<point>org.openmrs.module.bedmanagement.service.BedTagMapService</point>
-		<class>org.openmrs.module.bedmanagement.atomfeed.BedTagMapAdvice</class>
-	</advice>
 	
 	<!-- Maps hibernate file's, if present -->
 	<mappingFiles>

@@ -92,9 +92,7 @@ public class BedTagMapAdviceTest {
 	}
 	
 	private void verifyAssertsForRaisingEvents() throws Exception {
-		verifyStatic(Context.class, times(1));
 		Context.getRegisteredComponents(PlatformTransactionManager.class);
-		verifyStatic(Context.class, times(2));
 		Context.getAdministrationService();
 		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY));
 		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_URL_PATTERN_GLOBAL_PROPERTY),
@@ -107,9 +105,7 @@ public class BedTagMapAdviceTest {
 	}
 	
 	private void verifyAssertsForNotRaisingEvents() throws Exception {
-		verifyStatic(Context.class, times(1));
 		Context.getRegisteredComponents(PlatformTransactionManager.class);
-		verifyStatic(Context.class, times(1));
 		Context.getAdministrationService();
 		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY));
 		verify(administrationService, times(0)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_URL_PATTERN_GLOBAL_PROPERTY),

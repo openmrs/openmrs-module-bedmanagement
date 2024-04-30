@@ -14,9 +14,7 @@ import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.lang.reflect.Method;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,7 +34,7 @@ public class BedAssignmentAdvice implements AfterReturningAdvice {
 	
 	private EventService eventService;
 	
-	public BedAssignmentAdvice() throws SQLException {
+	public BedAssignmentAdvice() {
 		atomFeedSpringTransactionManager = new AtomFeedSpringTransactionManager(getSpringPlatformTransactionManager());
 		AllEventRecordsQueue allEventRecordsQueue = new AllEventRecordsQueueJdbcImpl(atomFeedSpringTransactionManager);
 		this.eventService = new EventServiceImpl(allEventRecordsQueue);

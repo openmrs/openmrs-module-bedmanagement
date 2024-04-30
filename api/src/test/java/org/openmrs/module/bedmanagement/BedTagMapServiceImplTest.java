@@ -15,6 +15,7 @@ import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.service.impl.BedTagMapServiceImpl;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+@PowerMockIgnore("javax.management.*")
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ Context.class })
 public class BedTagMapServiceImplTest {

@@ -132,8 +132,8 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		SimpleObject location = deserialize(handle(request));
 		
 		Assert.assertEquals("19e023e8-20ee-4237-ade6-9e68f897b7a9", PropertyUtils.getProperty(location.get("ward"), "uuid"));
-		Assert.assertEquals(6, location.get("totalBeds"));
-		Assert.assertEquals(2, location.get("occupiedBeds"));
+		Assert.assertEquals(Integer.valueOf(6), location.get("totalBeds"));
+		Assert.assertEquals(Integer.valueOf(2), location.get("occupiedBeds"));
 		Assert.assertTrue(location.containsKey("bedLayouts"));
 		List bedLayouts = (ArrayList) location.get("bedLayouts");
 		Assert.assertEquals(6, bedLayouts.size());
@@ -143,8 +143,8 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		
 		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75",
 		    PropertyUtils.getProperty(location2.get("ward"), "uuid"));
-		Assert.assertEquals(10, location2.get("totalBeds"));
-		Assert.assertEquals(1, location2.get("occupiedBeds"));
+		Assert.assertEquals(Integer.valueOf(10), location2.get("totalBeds"));
+		Assert.assertEquals(Integer.valueOf(1), location2.get("occupiedBeds"));
 		Assert.assertFalse(location2.containsKey("bedLayouts"));
 	}
 	
@@ -177,8 +177,8 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		Assert.assertNull(PropertyUtils.getProperty(admissionLocation.get("ward"), "childLocations"));
 		List tags = (ArrayList) PropertyUtils.getProperty(admissionLocation.get("ward"), "tags");
 		Assert.assertEquals("Admission Location", PropertyUtils.getProperty(tags.get(0), "display"));
-		Assert.assertEquals(0, admissionLocation.get("totalBeds"));
-		Assert.assertEquals(0, admissionLocation.get("occupiedBeds"));
+		Assert.assertEquals(Integer.valueOf(0), admissionLocation.get("totalBeds"));
+		Assert.assertEquals(Integer.valueOf(0), admissionLocation.get("occupiedBeds"));
 	}
 	
 	@Test
@@ -199,8 +199,8 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		HashMap parentAdmissionLocation = (LinkedHashMap) PropertyUtils.getProperty(admissionLocation.get("ward"),
 		    "parentLocation");
 		Assert.assertEquals("7779d653-393b-4118-9c83-a3715b82d4ac", parentAdmissionLocation.get("uuid"));
-		Assert.assertEquals(0, admissionLocation.get("totalBeds"));
-		Assert.assertEquals(0, admissionLocation.get("occupiedBeds"));
+		Assert.assertEquals(Integer.valueOf(0), admissionLocation.get("totalBeds"));
+		Assert.assertEquals(Integer.valueOf(0), admissionLocation.get("occupiedBeds"));
 	}
 	
 	@Test

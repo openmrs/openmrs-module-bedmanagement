@@ -42,12 +42,7 @@ export default class AdmissionLocationWrapper extends React.Component {
 
     fetchAllAdmissionLocations(self) {
         axios
-            .get(this.urlHelper.apiBaseUrl() + '/location', {
-                params: {
-                    tags: 'Admission Location',
-                    v: 'full'
-                }
-            })
+            .get(this.urlHelper.apiBaseUrl() + '/location?tag=Admission%20Location&v=full')
             .then(function (admissionLocationsResponse) {
                 const admissionLocationUuidList =
                     _.map(admissionLocationsResponse.data.results, (location) => location.uuid);
@@ -88,12 +83,7 @@ export default class AdmissionLocationWrapper extends React.Component {
 
     fetchAllVisitLocations(self) {
         axios
-            .get(this.urlHelper.apiBaseUrl() + '/location', {
-                params: {
-                    tags: 'Visit Location',
-                    v: 'full'
-                }
-            })
+            .get(this.urlHelper.apiBaseUrl() + '/location?tag=Visit%20Location&v=full')
             .then(function (visitLocationsResponse) {
                 const visitLocationUuidList =
                     _.map(visitLocationsResponse.data.results, (location) => location.uuid);

@@ -13,16 +13,19 @@
  */
 package org.openmrs.module.bedmanagement;
 
-import org.openmrs.module.ModuleActivator;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.BaseModuleActivator;
+import org.openmrs.module.ModuleActivator;
 import org.openmrs.module.bedmanagement.constants.BedManagementProperties;
+
+import java.util.List;
 
 /**
  * This class contains the logic that is run every time this module is either started or stopped.
  */
-public class BedManagementActivator implements ModuleActivator {
+public class BedManagementActivator extends BaseModuleActivator {
 	
 	protected Log log = LogFactory.getLog(getClass());
 	
@@ -53,6 +56,9 @@ public class BedManagementActivator implements ModuleActivator {
 	public void started() {
 		log.info("bedmanagement Module started");
 		BedManagementProperties.initalize();
+		for (BedManagementActivatorComponent c : getBedManagementActivatorComponents()) {
+			c.started();
+		}
 	}
 	
 	/**
@@ -60,6 +66,9 @@ public class BedManagementActivator implements ModuleActivator {
 	 */
 	public void willStop() {
 		log.info("Stopping bedmanagement Module");
+		for (BedManagementActivatorComponent c : getBedManagementActivatorComponents()) {
+			c.willStop();
+		}
 	}
 	
 	/**
@@ -67,6 +76,10 @@ public class BedManagementActivator implements ModuleActivator {
 	 */
 	public void stopped() {
 		log.info("bedmanagement Module stopped");
+	}
+	
+	protected List<BedManagementActivatorComponent> getBedManagementActivatorComponents() {
+		return Context.getRegisteredComponents(BedManagementActivatorComponent.class);
 	}
 	
 }

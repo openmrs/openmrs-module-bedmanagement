@@ -36,21 +36,11 @@ const testData = {
 describe('AdmissionLocationWrapper', () => {
     beforeAll(() => {
         const mock = new MockAdapter(axios);
-        mock.onGet('https://192.168.33.10/openmrs/ws/rest/v1/location', {
-                params: {
-                    tags: 'Visit Location',
-                    v: 'full'
-                }
-            }
-        ).reply(200, openmrsAPIResponse.visitLocations);
+        mock.onGet('https://192.168.33.10/openmrs/ws/rest/v1/location?tag=Visit%20Location&v=full')
+            .reply(200, openmrsAPIResponse.visitLocations);
 
-        mock.onGet('https://192.168.33.10/openmrs/ws/rest/v1/location', {
-                params: {
-                    tags: 'Admission Location',
-                    v: 'full'
-                }
-            }
-        ).reply(200, openmrsAPIResponse.admissionLocations);
+        mock.onGet('https://192.168.33.10/openmrs/ws/rest/v1/location?tag=Admission%20Location&v=full')
+            .reply(200, openmrsAPIResponse.admissionLocations);
 
         mock.onGet('https://192.168.33.10/openmrs/ws/rest/v1/bedtype').reply(200, {results: []});
 
