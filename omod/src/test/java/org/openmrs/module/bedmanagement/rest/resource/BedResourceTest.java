@@ -58,8 +58,8 @@ public class BedResourceTest extends MainResourceControllerTest {
 		
 		Assert.assertEquals("bb12c454-d225-11e4-9c67-080027b662ec", bed.get("uuid"));
 		Assert.assertEquals("307-a", bed.get("bedNumber"));
-		Assert.assertEquals(1, bed.get("row"));
-		Assert.assertEquals(1, bed.get("column"));
+		Assert.assertEquals(Integer.valueOf(1), bed.get("row"));
+		Assert.assertEquals(Integer.valueOf(1), bed.get("column"));
 	}
 	
 	@Test
@@ -137,8 +137,8 @@ public class BedResourceTest extends MainResourceControllerTest {
 		
 		Assert.assertNotNull(bed.get("id"));
 		Assert.assertEquals("110-a", bed.get("bedNumber"));
-		Assert.assertEquals(4, bed.get("row"));
-		Assert.assertEquals(1, bed.get("column"));
+		Assert.assertEquals(Integer.valueOf(4), bed.get("row"));
+		Assert.assertEquals(Integer.valueOf(1), bed.get("column"));
 		Assert.assertEquals("luxury", PropertyUtils.getProperty(bed.get("bedType"), "name"));
 	}
 	
@@ -157,8 +157,8 @@ public class BedResourceTest extends MainResourceControllerTest {
 		
 		Assert.assertNotNull(bed.get("id"));
 		Assert.assertEquals("110-a", bed.get("bedNumber"));
-		Assert.assertEquals(2, bed.get("row"));
-		Assert.assertEquals(3, bed.get("column"));
+		Assert.assertEquals(Integer.valueOf(2), bed.get("row"));
+		Assert.assertEquals(Integer.valueOf(3), bed.get("column"));
 		Assert.assertEquals("luxury", PropertyUtils.getProperty(bed.get("bedType"), "name"));
 	}
 	
@@ -190,8 +190,8 @@ public class BedResourceTest extends MainResourceControllerTest {
 		SimpleObject bed = deserialize(handle(request));
 		
 		Assert.assertEquals("307-ab", bed.get("bedNumber"));
-		Assert.assertEquals(2, bed.get("row"));
-		Assert.assertEquals(3, bed.get("column"));
+		Assert.assertEquals(Integer.valueOf(2), bed.get("row"));
+		Assert.assertEquals(Integer.valueOf(3), bed.get("column"));
 		Assert.assertEquals("luxury", PropertyUtils.getProperty(bed.get("bedType"), "name"));
 	}
 	

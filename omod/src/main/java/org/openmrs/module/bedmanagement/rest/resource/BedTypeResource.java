@@ -23,7 +23,8 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.util.List;
 
-@Resource(name = RestConstants.VERSION_1 + "/bedtype", supportedClass = BedType.class, supportedOpenmrsVersions = { "1.9.* - 9.*" })
+@Resource(name = RestConstants.VERSION_1 + "/bedtype", supportedClass = BedType.class, supportedOpenmrsVersions = {
+        "1.9.* - 9.*" })
 public class BedTypeResource extends DelegatingCrudResource<BedType> {
 	
 	@Override

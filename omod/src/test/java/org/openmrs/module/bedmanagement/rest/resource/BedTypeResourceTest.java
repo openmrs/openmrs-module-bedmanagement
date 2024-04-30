@@ -104,9 +104,11 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 	@Test
 	public void onDeleteBedTypeByIdShouldThrowException() {
 		try {
-			MockHttpServletRequest request = request(RequestMethod.DELETE, getURI() + "/6f9fb240-0fd5-11e8-adb7-080027b38971");
+			MockHttpServletRequest request = request(RequestMethod.DELETE,
+			    getURI() + "/6f9fb240-0fd5-11e8-adb7-080027b38971");
 			handle(request);
-		} catch(Exception e) {
+		}
+		catch (Exception e) {
 			Throwable t = e.getCause();
 			assertTrue(t instanceof ConstraintViolationException);
 		}
