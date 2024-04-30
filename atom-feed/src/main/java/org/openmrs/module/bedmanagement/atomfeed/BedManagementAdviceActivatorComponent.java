@@ -1,13 +1,13 @@
 package org.openmrs.module.bedmanagement.atomfeed;
 
 import org.aopalliance.aop.Advice;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.BedManagementActivatorComponent;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.bedmanagement.service.BedTagMapService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Registers AOP advice when the context starts up. This is done instead of declaring advice in
@@ -16,7 +16,7 @@ import org.openmrs.module.bedmanagement.service.BedTagMapService;
 @OpenmrsProfile(modules = { "openmrs-atomfeed:*" })
 public class BedManagementAdviceActivatorComponent implements BedManagementActivatorComponent {
 	
-	private static final Log log = LogFactory.getLog(BedManagementAdviceActivatorComponent.class);
+	private static final Logger log = LoggerFactory.getLogger(BedManagementAdviceActivatorComponent.class);
 	
 	private final BedAssignmentAdvice bedAssignmentAdvice;
 	
