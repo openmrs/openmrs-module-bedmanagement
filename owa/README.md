@@ -1,6 +1,11 @@
 # Bed Management OWA
+
 > An front-end React app for the _admin_ side of bed management:
 management of admisson locations, addition & removal of beds, setup of bed layouts, ... etc.
+
+# Dependencies
+
+To leverage the bed management owa, you must be running the OpenMRS owa module.
 
 ## Installation / Production Use
 The Bed Management UI OWA will be automatically deployed upon installing the Bed Management module.
