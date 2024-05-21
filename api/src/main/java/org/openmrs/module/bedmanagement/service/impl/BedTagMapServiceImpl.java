@@ -13,16 +13,16 @@
  */
 package org.openmrs.module.bedmanagement.service.impl;
 
+import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import java.util.Date;
-
 import org.openmrs.module.bedmanagement.dao.BedTagMapDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.service.BedTagMapService;
-import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
+
+import java.util.Date;
 
 public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMapService {
 	
@@ -33,9 +33,9 @@ public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMa
 	}
 	
 	@Override
-	public BedTagMap save(BedTagMap bedTagMap) throws IllegalPropertyException {
+	public BedTagMap save(BedTagMap bedTagMap) {
 		if (getBedTagMapWithBedAndTag(bedTagMap.getBed(), bedTagMap.getBedTag()) != null) {
-			throw new IllegalPropertyException("Tag Already Present For Bed");
+			throw new APIException("Tag Already Present For Bed");
 		}
 		return bedTagMapDao.saveOrUpdate(bedTagMap);
 	}

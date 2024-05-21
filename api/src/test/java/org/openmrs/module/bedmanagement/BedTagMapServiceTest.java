@@ -10,7 +10,6 @@ import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.bedmanagement.service.BedTagMapService;
-import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -54,8 +53,7 @@ public class BedTagMapServiceTest extends BaseModuleWebContextSensitiveTest {
 	}
 	
 	@Test
-	public void shouldAssignTheBedTagToBedIfTheUserHasTheGetTagsEditTagsAndGetBedsPrivileges()
-	        throws IllegalPropertyException {
+	public void shouldAssignTheBedTagToBedIfTheUserHasTheGetTagsEditTagsAndGetBedsPrivileges() {
 		Context.authenticate(privilegedUser, privilegedUserPassword);
 		BedTagMap savedBedTagMap = bedTagMapService.save(bedTagMap);
 		
@@ -66,8 +64,7 @@ public class BedTagMapServiceTest extends BaseModuleWebContextSensitiveTest {
 	}
 	
 	@Test(expected = APIAuthenticationException.class)
-	public void shouldThrowAuthenticationExceptionIfTheUserDoesNotHaveTheGetTagsEditTagsAndGetBedsPrivileges()
-	        throws IllegalPropertyException {
+	public void shouldThrowAuthenticationExceptionIfTheUserDoesNotHaveTheGetTagsEditTagsAndGetBedsPrivileges() {
 		Context.authenticate(normalUser, normalUserPassword);
 		bedTagMapService.save(bedTagMap);
 	}

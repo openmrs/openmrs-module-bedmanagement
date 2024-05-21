@@ -17,6 +17,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.Patient;
+import org.openmrs.api.APIException;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
@@ -32,8 +33,6 @@ import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.module.bedmanagement.exception.BedOccupiedException;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
-import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -105,7 +104,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 				if (bedlocationMapping.getBed() == null) {
 					bedManagementDao.deleteBedLocationMapping(bedlocationMapping);
 				} else {
-					throw new IllegalPropertyException("Cannot downsize bed layout with existing bed in the way at row "
+					throw new APIException("Cannot downsize bed layout with existing bed in the way at row "
 					        + bedlocationMapping.getRow() + " and column " + bedlocationMapping.getColumn());
 				}
 			}
@@ -215,7 +214,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		if (bedTypeName != null) {
 			List<BedType> bedTypes = bedManagementDao.getBedTypes(bedTypeName, 1, 0);
 			if (bedTypes.size() == 0)
-				throw new IllegalPropertyException("Invalid bed type name");
+				throw new APIException("Invalid bed type name");
 			bedType = bedTypes.get(0);
 		}
 		
@@ -283,7 +282,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 			bedLocationMapping = existingBedLocationMapping;
 		} else if (existingBedLocationMapping != null && existingBedLocationMapping.getBed() != null
 		        && !existingBedLocationMapping.getBed().getId().equals(bedLocationMapping.getBed().getId())) {
-			throw new IllegalPropertyException("Already bed assign to give row & column");
+			throw new APIException("Already bed assign to give row & column");
 		}
 		
 		return bedManagementDao.saveBedLocationMapping(bedLocationMapping);

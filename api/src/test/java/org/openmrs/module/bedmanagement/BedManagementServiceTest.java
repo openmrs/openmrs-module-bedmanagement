@@ -1,9 +1,5 @@
 package org.openmrs.module.bedmanagement;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +8,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.api.APIAuthenticationException;
+import org.openmrs.api.APIException;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.constants.BedStatus;
@@ -19,10 +16,13 @@ import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
-import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @org.springframework.test.context.ContextConfiguration(locations = {
@@ -388,7 +388,7 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
 		Assert.assertEquals(5, bedLocationMappings.get(14).getColumn());
 	}
 	
-	@Test(expected = IllegalPropertyException.class)
+	@Test(expected = APIException.class)
 	public void shouldThrowExceptionOnResizeBedLayoutIfBlockByExistingBeds() {
 		Context.authenticate(superUser, superUserPassword);
 		
