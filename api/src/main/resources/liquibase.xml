@@ -721,7 +721,7 @@
         <renameColumn columnDataType="int" newColumnName="bed_column_number" oldColumnName="column_number" tableName="bed_location_map" />
     </changeSet>
 
-    <changeSet id="BAH-3896_300520241229" author="mohankumar">
+    <changeSet id="BM_202405301229" author="mohankumar">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">select count(*) from location_tag where name='Admission Location'</sqlCheck>
         </preConditions>
