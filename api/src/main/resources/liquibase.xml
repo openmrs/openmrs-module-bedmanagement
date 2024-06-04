@@ -725,7 +725,7 @@
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">select count(*) from location_tag where name='Admission Location'</sqlCheck>
         </preConditions>
-        <comment>Adding Admission Location to loacation tag</comment>
+        <comment>Adding Admission Location to location tag</comment>
         <sql>
             INSERT INTO location_tag (name, description, creator, date_created, uuid) VALUES
             ('Admission Location',
