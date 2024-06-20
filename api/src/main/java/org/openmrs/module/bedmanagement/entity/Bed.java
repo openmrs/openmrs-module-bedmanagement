@@ -12,8 +12,6 @@ public class Bed extends BaseOpenmrsData {
 	
 	private BedType bedType;
 	
-	private Set<BedPatientAssignment> bedPatientAssignment;
-	
 	private String status;
 	
 	private Set<BedTagMap> bedTagMap;
@@ -32,14 +30,6 @@ public class Bed extends BaseOpenmrsData {
 	
 	public void setBedNumber(String number) {
 		this.bedNumber = number;
-	}
-	
-	public Set<BedPatientAssignment> getBedPatientAssignment() {
-		return bedPatientAssignment;
-	}
-	
-	public void setBedPatientAssignment(Set<BedPatientAssignment> bedPatientAssignment) {
-		this.bedPatientAssignment = bedPatientAssignment;
 	}
 	
 	public String getStatus() {

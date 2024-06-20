@@ -117,9 +117,20 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	@Override
 	@Transactional
 	public BedDetails assignPatientToBed(Patient patient, Encounter encounter, String bedId) {
-		BedDetails prev = this.unAssignPatientFromBed(patient);
+		BedDetails prev = getBedManagementService().unAssignPatientFromBed(patient);
 		Bed bed = bedManagementDao.getBedById(Integer.parseInt(bedId));
-		BedDetails current = bedManagementDao.assignPatientToBed(patient, encounter, bed);
+		
+		BedPatientAssignment bedPatientAssignment = new BedPatientAssignment();
+		bedPatientAssignment.setPatient(patient);
+		bedPatientAssignment.setEncounter(encounter);
+		bedPatientAssignment.setBed(bed);
+		bedPatientAssignment.setStartDatetime(new Date());
+		bedManagementDao.saveBedPatientAssignment(bedPatientAssignment);
+		
+		bed.setStatus(BedStatus.OCCUPIED.toString());
+		bed = bedManagementDao.saveBed(bed);
+		
+		BedDetails current = getBedDetails(bed);
 		BedPatientAssignment prevAssignment = (prev != null) ? prev.getLastAssignment() : null;
 		current.setLastAssignment(prevAssignment);
 		return current;
@@ -133,36 +144,19 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	@Override
 	public BedDetails getBedAssignmentDetailsByPatient(Patient patient) {
 		Bed bed = bedManagementDao.getBedByPatient(patient);
-		if (bed != null) {
-			List<BedPatientAssignment> currentAssignments = bedManagementDao.getCurrentAssignmentsByBed(bed);
-			Location physicalLocation = bedManagementDao.getWardForBed(bed);
-			return constructBedDetails(bed, physicalLocation, currentAssignments);
-		}
-		return null;
+		return getBedDetails(bed);
 	}
 	
 	@Override
 	public BedDetails getBedDetailsById(String id) {
 		Bed bed = bedManagementDao.getBedById(Integer.parseInt(id));
-		if (bed != null) {
-			List<BedPatientAssignment> currentAssignments = bedManagementDao.getCurrentAssignmentsByBed(bed);
-			Location location = bedManagementDao.getWardForBed(bed);
-			BedDetails bedDetails = constructBedDetails(bed, location, currentAssignments);
-			return bedDetails;
-		}
-		return null;
+		return getBedDetails(bed);
 	}
 	
 	@Override
 	public BedDetails getBedDetailsByUuid(String uuid) {
 		Bed bed = bedManagementDao.getBedByUuid(uuid);
-		if (bed != null) {
-			List<BedPatientAssignment> currentAssignment = bedManagementDao.getCurrentAssignmentsByBed(bed);
-			Location location = bedManagementDao.getWardForBed(bed);
-			BedDetails bedDetails = constructBedDetails(bed, location, currentAssignment);
-			return bedDetails;
-		}
-		return null;
+		return getBedDetails(bed);
 	}
 	
 	@Override
@@ -173,22 +167,34 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	@Override
 	@Transactional
 	public BedDetails unAssignPatientFromBed(Patient patient) {
-		Bed currentBed = bedManagementDao.getBedByPatient(patient);
-		if (currentBed != null) {
-			return bedManagementDao.unassignPatient(patient, currentBed);
+		Bed bed = bedManagementDao.getBedByPatient(patient);
+		BedPatientAssignment endedAssignment = null;
+		if (bed != null) {
+			List<BedPatientAssignment> currentAssignments = bedManagementDao.getCurrentAssignmentsByBed(bed);
+			BedStatus finalStatus = BedStatus.AVAILABLE;
+			for (BedPatientAssignment assignment : currentAssignments) {
+				if (assignment.getPatient().equals(patient)) {
+					assignment.setEndDatetime(new Date());
+					endedAssignment = bedManagementDao.saveBedPatientAssignment(assignment);
+				} else {
+					finalStatus = BedStatus.OCCUPIED;
+				}
+			}
+			bed.setStatus(finalStatus.toString());
+			bedManagementDao.saveBed(bed);
 		}
-		return null;
+		BedDetails bedDetails = getBedDetails(bed);
+		if (bedDetails != null) {
+			bedDetails.setLastAssignment(endedAssignment);
+		}
+		return bedDetails;
 	}
 	
 	@Override
 	@Transactional
 	public BedDetails getLatestBedDetailsByVisit(String visitUuid) {
 		Bed bed = bedManagementDao.getLatestBedByVisit(visitUuid);
-		if (bed != null) {
-			Location physicalLocation = bedManagementDao.getWardForBed(bed);
-			return constructBedDetails(bed, physicalLocation, new ArrayList<BedPatientAssignment>());
-		}
-		return null;
+		return getBedDetails(bed);
 	}
 	
 	@Override
@@ -315,11 +321,16 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		bedManagementDao.deleteBedType(bedType);
 	}
 	
-	private BedDetails constructBedDetails(Bed bed, Location location, List<BedPatientAssignment> currentAssignments) {
+	private BedDetails getBedDetails(Bed bed) {
+		if (bed == null) {
+			return null;
+		}
+		List<BedPatientAssignment> currentAssignments = bedManagementDao.getCurrentAssignmentsByBed(bed);
+		Location location = bedManagementDao.getWardForBed(bed);
 		BedDetails bedDetails = new BedDetails();
 		bedDetails.setBed(bed);
 		bedDetails.setBedNumber(bed.getBedNumber());
-		List<Patient> patients = new ArrayList<Patient>();
+		List<Patient> patients = new ArrayList<>();
 		for (BedPatientAssignment assignment : currentAssignments) {
 			patients.add(assignment.getPatient());
 		}
@@ -330,4 +341,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		return bedDetails;
 	}
 	
+	protected BedManagementService getBedManagementService() {
+		return Context.getService(BedManagementService.class);
+	}
 }

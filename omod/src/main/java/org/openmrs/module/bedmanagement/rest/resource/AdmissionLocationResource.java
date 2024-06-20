@@ -160,7 +160,7 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 		ret.put("bedType", bedLayout.getBedType() != null ? this.getBedType(bedLayout.getBedType()) : null);
 		ret.put("location", bedLayout.getLocation());
 		ret.put("bedTagMaps", getCustomRepresentationForBedTagMaps(bedLayout));
-		ret.put("patient", getCustomRepresentationForPatient(bedLayout));
+		ret.put("patients", getCustomRepresentationForPatient(bedLayout));
 		return ret;
 	}
 	
@@ -190,7 +190,7 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 	private Object getCustomRepresentationForPatient(BedLayout bedLayout) {
 		String specification = "(uuid,person:(gender,age,preferredName:(givenName,familyName),preferredAddress:default),identifiers:(identifier))";
 		Representation rep = new CustomRepresentation(specification);
-		return ConversionUtil.convertToRepresentation(bedLayout.getPatient(), rep);
+		return ConversionUtil.convertToRepresentation(bedLayout.getPatients(), rep);
 	}
 	
 	@Override

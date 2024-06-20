@@ -84,7 +84,6 @@ public class BedManagementServiceImplTest {
 		previousAssignment.setPatient(patient);
 		previousAssignment.setStartDatetime(new Date());
 		previousAssignment.setEndDatetime(new Date());
-		bed.setBedPatientAssignment(new HashSet<BedPatientAssignment>(Arrays.asList(currentAssignment, previousAssignment)));
 		
 		when(bedManagementDao.getBedById(bedId)).thenReturn(bed);
 		when(bedManagementDao.getWardForBed(bed)).thenReturn(ward);
@@ -127,8 +126,6 @@ public class BedManagementServiceImplTest {
 		stoppedBedAssignment.setPatient(patient1);
 		stoppedBedAssignment.setStartDatetime(new Date());
 		stoppedBedAssignment.setEndDatetime(new Date());
-		bed.setBedPatientAssignment(new LinkedHashSet<BedPatientAssignment>(
-		        Arrays.asList(currentAssignment1, currentAssignment2, stoppedBedAssignment)));
 		
 		when(bedManagementDao.getBedById(bedId)).thenReturn(bed);
 		when(bedManagementDao.getWardForBed(bed)).thenReturn(ward);

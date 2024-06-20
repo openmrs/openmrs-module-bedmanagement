@@ -88,6 +88,8 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
 		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
 		
 		assertNotNull(bedManagementService.assignPatientToBed(patient, encounter, bedNumber));
+		Context.flushSession();
+		Context.clearSession();
 		assertNotNull(bedManagementService.unAssignPatientFromBed(patient));
 	}
 	
