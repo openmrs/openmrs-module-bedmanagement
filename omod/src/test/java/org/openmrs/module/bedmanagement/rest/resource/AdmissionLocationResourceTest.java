@@ -1,15 +1,5 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.openmrs.module.bedmanagement.constants.BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Assert;
@@ -21,6 +11,16 @@ import org.openmrs.module.webservices.rest.SimpleObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.openmrs.module.bedmanagement.constants.BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION;
 
 public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 	
@@ -58,18 +58,20 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		LinkedHashMap<String, Object> occupiedBed = (LinkedHashMap<String, Object>) ((List) object.get("bedLayouts")).get(0);
 		LinkedHashMap<String, Object> unOccupiedBed = (LinkedHashMap<String, Object>) ((List) object.get("bedLayouts"))
 		        .get(2);
-		LinkedHashMap<String, Object> patient = (LinkedHashMap<String, Object>) occupiedBed.get("patient");
+		List<Map<String, Object>> patients = (List<Map<String, Object>>) occupiedBed.get("patients");
 		
 		assertEquals(6, bedLayouts.size());
 		assertEquals("OCCUPIED", occupiedBed.get("status"));
 		assertEquals("307-a", occupiedBed.get("bedNumber"));
-		assertNotNull(patient);
-		assertEquals("2b597be0-83c7-4f1d-b3d2-1d61ab128762", patient.get("uuid"));
+		assertNotNull(patients);
+		assertEquals(patients.size(), 1);
+		assertEquals("2b597be0-83c7-4f1d-b3d2-1d61ab128762", patients.get(0).get("uuid"));
 		List<Object> bedTagMapsForOccupiedBed = (List<Object>) occupiedBed.get("bedTagMaps");
 		assertEquals(2, bedTagMapsForOccupiedBed.size());
 		assertEquals("AVAILABLE", unOccupiedBed.get("status"));
 		assertEquals("307-c", unOccupiedBed.get("bedNumber"));
-		assertNull(unOccupiedBed.get("patient"));
+		assertNotNull(unOccupiedBed.get("patients"));
+		assertEquals(((List) unOccupiedBed.get("patients")).size(), 0);
 		List<Object> bedTagMapsForUnOccupiedBed = (List<Object>) unOccupiedBed.get("bedTagMaps");
 		assertEquals(1, bedTagMapsForUnOccupiedBed.size());
 	}

@@ -24,7 +24,7 @@ public class BedLayout {
 	
 	private String location;
 	
-	private Patient patient;
+	private Set<Patient> patients;
 	
 	private Set<BedTagMap> bedTagMaps;
 	
@@ -92,12 +92,12 @@ public class BedLayout {
 		this.location = location;
 	}
 	
-	public Patient getPatient() {
-		return patient;
+	public Set<Patient> getPatients() {
+		return patients;
 	}
 	
-	public void setPatient(Patient patient) {
-		this.patient = patient;
+	public void setPatients(Set<Patient> patients) {
+		this.patients = patients;
 	}
 	
 	@Override
