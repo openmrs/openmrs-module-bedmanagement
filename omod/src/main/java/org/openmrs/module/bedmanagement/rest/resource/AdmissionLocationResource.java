@@ -13,14 +13,6 @@
  */
 package org.openmrs.module.bedmanagement.rest.resource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
 import io.swagger.models.properties.StringProperty;
@@ -29,11 +21,8 @@ import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
-import org.openmrs.module.bedmanagement.BedLayout;
 import org.openmrs.module.bedmanagement.constants.BedManagementApiConstants;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
-import org.openmrs.module.bedmanagement.entity.BedTagMap;
-import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
@@ -55,6 +44,14 @@ import org.openmrs.module.webservices.rest.web.response.ConversionException;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Resource(name = RestConstants.VERSION_1
         + "/admissionLocation", supportedClass = AdmissionLocation.class, supportedOpenmrsVersions = { "1.9.* - 9.*" })
@@ -118,16 +115,6 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 		return modelImpl;
 	}
 	
-	@PropertyGetter("bedLayouts")
-	public Object getBedLayouts(AdmissionLocation admissionLocation) throws Exception {
-		List<BedLayout> bedLayouts = admissionLocation.getBedLayouts();
-		List<SimpleObject> ret = new ArrayList<SimpleObject>();
-		for (BedLayout bedLayout : bedLayouts) {
-			ret.add(getBedLayout(bedLayout));
-		}
-		return ret;
-	}
-	
 	@PropertyGetter("bedLocationMappings")
 	public Object getBedLocationMappings(AdmissionLocation admissionLocation) throws Exception {
 		List<BedLocationMapping> bedLocationMappings = Context.getService(BedManagementService.class)
@@ -142,55 +129,10 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 			object.put("bedId", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getId() : null);
 			object.put("bedUuid", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getUuid() : null);
 			object.put("status", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getStatus() : null);
-			object.put("bedType",
-			    bedLocationMapping.getBed() != null ? this.getBedType(bedLocationMapping.getBed().getBedType()) : null);
+			object.put("bedType", bedLocationMapping.getBed() != null ? bedLocationMapping.getBed().getBedType() : null);
 			ret.add(object);
 		}
 		return ret;
-	}
-	
-	private SimpleObject getBedLayout(BedLayout bedLayout) throws Exception {
-		SimpleObject ret = new SimpleObject();
-		ret.put("rowNumber", bedLayout.getRowNumber());
-		ret.put("columnNumber", bedLayout.getColumnNumber());
-		ret.put("bedNumber", bedLayout.getBedNumber());
-		ret.put("bedId", bedLayout.getBedId());
-		ret.put("bedUuid", bedLayout.getBedUuid());
-		ret.put("status", bedLayout.getStatus());
-		ret.put("bedType", bedLayout.getBedType() != null ? this.getBedType(bedLayout.getBedType()) : null);
-		ret.put("location", bedLayout.getLocation());
-		ret.put("bedTagMaps", getCustomRepresentationForBedTagMaps(bedLayout));
-		ret.put("patients", getCustomRepresentationForPatient(bedLayout));
-		return ret;
-	}
-	
-	private SimpleObject getBedType(BedType bedType) {
-		SimpleObject ret = new SimpleObject();
-		ret.put("uuid", bedType.getUuid());
-		ret.put("name", bedType.getName());
-		ret.put("displayName", bedType.getDisplayName());
-		ret.put("description", bedType.getDescription());
-		return ret;
-	}
-	
-	private List<SimpleObject> getCustomRepresentationForBedTagMaps(BedLayout bedLayout) {
-		Set<BedTagMap> bedTagMaps = bedLayout.getBedTagMaps();
-		String specification = "(uuid,bedTag:(name))";
-		Representation rep = new CustomRepresentation(specification);
-		List<SimpleObject> customBedTagMaps = new ArrayList<SimpleObject>();
-		if (bedTagMaps != null)
-			for (BedTagMap bedTagMap : bedTagMaps) {
-				if (!bedTagMap.isVoided()) {
-					customBedTagMaps.add((SimpleObject) ConversionUtil.convertToRepresentation(bedTagMap, rep));
-				}
-			}
-		return customBedTagMaps;
-	}
-	
-	private Object getCustomRepresentationForPatient(BedLayout bedLayout) {
-		String specification = "(uuid,person:(gender,age,preferredName:(givenName,familyName),preferredAddress:default),identifiers:(identifier))";
-		Representation rep = new CustomRepresentation(specification);
-		return ConversionUtil.convertToRepresentation(bedLayout.getPatients(), rep);
 	}
 	
 	@Override

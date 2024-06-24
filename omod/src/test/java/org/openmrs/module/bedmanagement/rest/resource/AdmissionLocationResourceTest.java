@@ -20,6 +20,8 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.openmrs.module.bedmanagement.constants.BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION;
 
 public class AdmissionLocationResourceTest extends MainResourceControllerTest {
@@ -65,15 +67,51 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		assertEquals("307-a", occupiedBed.get("bedNumber"));
 		assertNotNull(patients);
 		assertEquals(patients.size(), 1);
-		assertEquals("2b597be0-83c7-4f1d-b3d2-1d61ab128762", patients.get(0).get("uuid"));
+		{
+			Map patient = patients.get(0);
+			assertEquals("2b597be0-83c7-4f1d-b3d2-1d61ab128762", patient.get("uuid"));
+			Map person = (Map) patient.get("person");
+			assertNotNull(person);
+			assertEquals("F", person.get("gender"));
+			assertTrue(person.containsKey("age"));
+			assertNull(person.get("age"));
+			Map preferredName = (Map) person.get("preferredName");
+			assertNotNull(preferredName);
+			assertEquals("John", preferredName.get("givenName"));
+			assertEquals("Doe", preferredName.get("familyName"));
+			assertTrue(person.containsKey("preferredAddress"));
+			List identifiers = (List) patient.get("identifiers");
+			assertEquals(1, identifiers.size());
+			Map identifier = (Map) identifiers.get(0);
+			assertEquals("1234", identifier.get("identifier"));
+		}
+		
 		List<Object> bedTagMapsForOccupiedBed = (List<Object>) occupiedBed.get("bedTagMaps");
 		assertEquals(2, bedTagMapsForOccupiedBed.size());
+		for (Object bedTagMap : bedTagMapsForOccupiedBed) {
+			Map m = (Map) bedTagMap;
+			String uuid = (String) m.get("uuid");
+			String tagName = (String) ((Map) m.get("bedTag")).get("name");
+			if (uuid.equals("73e846d6-ed5f-55e6-a3c9-0800274a1111")) {
+				assertEquals("Broken", tagName);
+			} else if (uuid.equals("73e846d6-ed5f-55e6-a3c9-0800274a2222")) {
+				assertEquals("Oxygen", tagName);
+			} else {
+				Assert.fail("Unexpected bedTagMap: " + bedTagMap);
+			}
+		}
+		
 		assertEquals("AVAILABLE", unOccupiedBed.get("status"));
 		assertEquals("307-c", unOccupiedBed.get("bedNumber"));
 		assertNotNull(unOccupiedBed.get("patients"));
 		assertEquals(((List) unOccupiedBed.get("patients")).size(), 0);
 		List<Object> bedTagMapsForUnOccupiedBed = (List<Object>) unOccupiedBed.get("bedTagMaps");
 		assertEquals(1, bedTagMapsForUnOccupiedBed.size());
+		{
+			Map bedTagMap = (Map) bedTagMapsForUnOccupiedBed.get(0);
+			assertEquals("73e846d6-ed5f-55e6-a3c9-0800274a3333", bedTagMap.get("uuid"));
+			assertEquals("Oxygen", ((Map) bedTagMap.get("bedTag")).get("name"));
+		}
 	}
 	
 	@Test
@@ -263,5 +301,13 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		// org.openmrs.module.webservices.rest.web.v1_0.controller.MainResourceController.create(MainResourceController.java:92)\n\tat
 		// etc
 		handle(request);
+	}
+	
+	@Test
+	public void shouldSupportCustomRepresentation() throws Exception {
+		MockHttpServletRequest request = request(RequestMethod.GET, getURI() + "/" + getUuid());
+		request.setParameter("v", "custom:(ward:(name),bedLayouts:(bedNumber,bedTags))");
+		SimpleObject object = deserialize(handle(request));
+		System.out.println(object);
 	}
 }
