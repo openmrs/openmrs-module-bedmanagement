@@ -24,7 +24,9 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
  */
 @Handler(supports = BedLayout.class, order = 0)
 public class BedLayoutResource extends BaseDelegatingResource<BedLayout> {
-
+	
+	private static final String DEFAULT_PATIENT_REP = "(uuid,person:(gender,age,preferredName:(givenName,familyName),preferredAddress:default),identifiers:(identifier))";
+	
 	@Override
 	public BedLayout getByUniqueId(String uniqueId) {
 		throw new ResourceDoesNotSupportOperationException();
@@ -54,7 +56,7 @@ public class BedLayoutResource extends BaseDelegatingResource<BedLayout> {
 		description.addProperty("status");
 		description.addProperty("location");
 		description.addProperty("bedType");
-		description.addProperty("patients");
+		description.addProperty("patients", new CustomRepresentation(DEFAULT_PATIENT_REP));
 		description.addProperty("bedTagMaps");
 		return description;
 	}
