@@ -20,7 +20,7 @@ import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOp
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 /**
- * An implementation of Converter to be able to create a representation for a BedLayout
+ * An implementation of Resource to be able to create a representation for a BedLayout
  */
 @Handler(supports = BedLayout.class, order = 0)
 public class BedLayoutResource extends BaseDelegatingResource<BedLayout> {

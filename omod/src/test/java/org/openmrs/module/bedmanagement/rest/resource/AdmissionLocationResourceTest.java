@@ -317,5 +317,23 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		List<Map<String, Object>> bedLayouts = object.get("bedLayouts");
 		Assert.assertNotNull(bedLayouts);
 		Assert.assertEquals(6, bedLayouts.size());
+		for (Map<String, Object> bedLayout : bedLayouts) {
+			Assert.assertEquals(2, bedLayout.size());
+			String bedNumber = (String)bedLayout.get("bedNumber");
+			Assert.assertNotNull(bedNumber);
+			if (bedNumber.equals("307-a")) {
+				List<Map<String, Object>> bedTagMaps = (List<Map<String, Object>>)bedLayout.get("bedTagMaps");
+				Assert.assertEquals(2, bedTagMaps.size());
+				for (Map<String, Object> bedTagMap : bedTagMaps) {
+					Assert.assertEquals(1, bedTagMap.size());
+					Map<String, Object> bedTag = (Map<String, Object>) bedTagMap.get("bedTag");
+					Assert.assertNotNull(bedTag);
+					Assert.assertEquals(1, bedTag.size());
+					String bedTagName = (String)bedTag.get("name");
+					Assert.assertNotNull(bedTagName);
+					Assert.assertTrue(bedTagName.equals("Oxygen") || bedTagName.equals("Broken"));
+				}
+			}
+		}
 	}
 }
