@@ -306,8 +306,16 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 	@Test
 	public void shouldSupportCustomRepresentation() throws Exception {
 		MockHttpServletRequest request = request(RequestMethod.GET, getURI() + "/" + getUuid());
-		request.setParameter("v", "custom:(ward:(name),bedLayouts:(bedNumber,bedTags))");
+		request.setParameter("v", "custom:(ward:(name),bedLayouts:(bedNumber,bedTagMaps:(bedTag:(name))))");
 		SimpleObject object = deserialize(handle(request));
 		System.out.println(object);
+		Assert.assertEquals(2, object.keySet().size());
+		Map<String, Object> ward = object.get("ward");
+		Assert.assertNotNull(ward);
+		Assert.assertEquals(1, ward.keySet().size());
+		Assert.assertEquals("Orthopaedic ward", ward.get("name"));
+		List<Map<String, Object>> bedLayouts = object.get("bedLayouts");
+		Assert.assertNotNull(bedLayouts);
+		Assert.assertEquals(6, bedLayouts.size());
 	}
 }
