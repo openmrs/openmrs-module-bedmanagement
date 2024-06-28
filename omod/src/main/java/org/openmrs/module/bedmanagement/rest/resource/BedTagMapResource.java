@@ -21,8 +21,11 @@ import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.service.BedTagMapService;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
+import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
+import org.openmrs.module.webservices.rest.web.representation.CustomRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
+import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
@@ -63,12 +66,18 @@ public class BedTagMapResource extends DataDelegatingCrudResource<BedTagMap> {
 	
 	@Override
 	public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
-		if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
-			DelegatingResourceDescription description = new DelegatingResourceDescription();
-			description.addProperty("uuid");
-			return description;
+		if (rep instanceof CustomRepresentation) {
+			return null;
 		}
-		return null;
+		DelegatingResourceDescription description = new DelegatingResourceDescription();
+		description.addProperty("uuid");
+		if (rep instanceof DefaultRepresentation || rep instanceof FullRepresentation) {
+			description.addProperty("bedTag", Representation.DEFAULT);
+		}
+		if (rep instanceof FullRepresentation) {
+			description.addProperty("bed", Representation.REF);
+		}
+		return description;
 	}
 	
 	@Override
@@ -93,4 +102,8 @@ public class BedTagMapResource extends DataDelegatingCrudResource<BedTagMap> {
 		return new ModelImpl().property("bed", new StringProperty()).property("bedTag", new StringProperty());
 	}
 	
+	@PropertyGetter("display")
+	public String getDisplayString(BedTagMap bedTagMap) {
+		return bedTagMap.getBedTag().getName();
+	}
 }

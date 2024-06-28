@@ -14,6 +14,7 @@
 package org.openmrs.module.bedmanagement.dao.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.BooleanUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -30,6 +31,7 @@ import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedTag;
+import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.entity.BedType;
 
 import java.util.ArrayList;
@@ -205,7 +207,14 @@ public class BedManagementDaoImpl implements BedManagementDao {
 				bedLayout.setBedUuid(blm.getBed().getUuid());
 				bedLayout.setStatus(blm.getBed().getStatus());
 				bedLayout.setBedType(blm.getBed().getBedType());
-				bedLayout.setBedTagMaps(blm.getBed().getBedTagMap());
+				bedLayout.setBedTagMaps(new HashSet<>());
+				if (blm.getBed().getBedTagMap() != null) {
+					for (BedTagMap bedTagMap : blm.getBed().getBedTagMap()) {
+						if (BooleanUtils.isNotTrue(bedTagMap.getVoided())) {
+							bedLayout.getBedTagMaps().add(bedTagMap);
+						}
+					}
+				}
 				bedLayout.setPatients(new HashSet<>());
 				for (BedPatientAssignment patientAssignment : getCurrentAssignmentsByBed(blm.getBed())) {
 					bedLayout.getPatients().add(patientAssignment.getPatient());
