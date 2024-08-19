@@ -51,11 +51,16 @@ public class BedDetailsResource extends DelegatingCrudResource<BedDetails> {
 	}
 	
 	@Override
-	protected void delete(BedDetails bedDetails, String reason, RequestContext requestContext) throws ResponseException {
+	public void delete(String id, String reason, RequestContext requestContext) throws ResponseException {
 		String patientUuid = requestContext.getParameter("patientUuid");
 		BedManagementService bedManagementService = (BedManagementService) Context
 		        .getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
 		bedManagementService.unAssignPatientFromBed(Context.getPatientService().getPatientByUuid(patientUuid));
+	}
+	
+	@Override
+	protected void delete(BedDetails bedDetails, String s, RequestContext requestContext) throws ResponseException {
+		throw new ResourceDoesNotSupportOperationException("delete of bed not supported");
 	}
 	
 	@Override
