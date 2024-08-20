@@ -51,11 +51,17 @@ public class BedDetailsResource extends DelegatingCrudResource<BedDetails> {
 	}
 	
 	@Override
-	protected void delete(BedDetails bedDetails, String reason, RequestContext requestContext) throws ResponseException {
+	public void delete(String id, String reason, RequestContext requestContext) throws ResponseException {
 		String patientUuid = requestContext.getParameter("patientUuid");
 		BedManagementService bedManagementService = (BedManagementService) Context
 		        .getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
 		bedManagementService.unAssignPatientFromBed(Context.getPatientService().getPatientByUuid(patientUuid));
+	}
+	
+	@Override
+	protected void delete(BedDetails bedDetails, String s, RequestContext requestContext) throws ResponseException {
+		// we use the (String, String, RequestContext) method instead to avoid the error reported here: https://openmrs.atlassian.net/browse/BED-14
+		throw new ResourceDoesNotSupportOperationException("not supported");
 	}
 	
 	@Override
