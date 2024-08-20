@@ -60,7 +60,8 @@ public class BedDetailsResource extends DelegatingCrudResource<BedDetails> {
 	
 	@Override
 	protected void delete(BedDetails bedDetails, String s, RequestContext requestContext) throws ResponseException {
-		throw new ResourceDoesNotSupportOperationException("delete of bed not supported");
+		// we use the (String, String, RequestContext) method instead to avoid the error reported here: https://openmrs.atlassian.net/browse/BED-14
+		throw new ResourceDoesNotSupportOperationException("not supported");
 	}
 	
 	@Override
