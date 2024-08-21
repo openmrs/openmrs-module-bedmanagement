@@ -12,6 +12,7 @@ import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
+import org.openmrs.module.webservices.rest.web.representation.CustomRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
 import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
@@ -34,6 +35,9 @@ public class BedTypeResource extends DelegatingCrudResource<BedType> {
 	
 	@Override
 	public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
+		if (rep instanceof CustomRepresentation) {
+			return null;
+		}
 		DelegatingResourceDescription description = new DelegatingResourceDescription();
 		description.addProperty("uuid");
 		description.addProperty("name");
