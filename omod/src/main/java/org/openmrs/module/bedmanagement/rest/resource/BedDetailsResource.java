@@ -34,7 +34,6 @@ import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -119,8 +118,10 @@ public class BedDetailsResource extends DelegatingCrudResource<BedDetails> {
 		String patientUuid = context.getParameter("patientUuid");
 		Patient patient = Context.getPatientService().getPatientByUuid(patientUuid);
 		BedDetails bedDetails = getBedManagementService().getBedAssignmentDetailsByPatient(patient);
-		List<BedDetails> ret = (bedDetails == null || bedDetails.getBedId() == 0) ? new ArrayList<>()
-		        : Collections.singletonList(bedDetails);
+		List<BedDetails> ret = Collections.emptyList();
+		if (bedDetails != null && bedDetails.getBedId() != 0) {
+			ret = Collections.singletonList(bedDetails);
+		}
 		return new NeedsPaging<>(ret, context);
 	}
 	

@@ -26,7 +26,6 @@ import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -47,7 +46,10 @@ public class BedDetailsResourceSearchHandler implements SearchHandler {
 	public PageableResult search(RequestContext requestContext) throws ResponseException {
 		String visitUuid = requestContext.getParameter("visitUuid");
 		BedDetails bedDetails = Context.getService(BedManagementService.class).getLatestBedDetailsByVisit(visitUuid);
-		List<BedDetails> ret = bedDetails == null ? new ArrayList<>() : Collections.singletonList(bedDetails);
+		List<BedDetails> ret = Collections.emptyList();
+		if (bedDetails != null) {
+			ret = Collections.singletonList(bedDetails);
+		}
 		return new NeedsPaging<>(ret, requestContext);
 	}
 	
