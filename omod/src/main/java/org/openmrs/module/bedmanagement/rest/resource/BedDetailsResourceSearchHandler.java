@@ -22,13 +22,14 @@ import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
 import org.openmrs.module.webservices.rest.web.resource.api.SearchConfig;
 import org.openmrs.module.webservices.rest.web.resource.api.SearchHandler;
 import org.openmrs.module.webservices.rest.web.resource.api.SearchQuery;
-import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
-import org.openmrs.module.webservices.rest.web.resource.impl.EmptySearchResult;
+import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Component
 public class BedDetailsResourceSearchHandler implements SearchHandler {
@@ -44,13 +45,10 @@ public class BedDetailsResourceSearchHandler implements SearchHandler {
 	
 	@Override
 	public PageableResult search(RequestContext requestContext) throws ResponseException {
-		BedManagementService bedManagementService = (BedManagementService) Context
-		        .getModuleOpenmrsServices(BedManagementService.class.getName()).get(0);
 		String visitUuid = requestContext.getParameter("visitUuid");
-		BedDetails bedDetails = bedManagementService.getLatestBedDetailsByVisit(visitUuid);
-		AlreadyPaged<BedDetails> alreadyPaged = new AlreadyPaged<BedDetails>(requestContext,
-		        Collections.singletonList(bedDetails), false);
-		return bedDetails == null ? new EmptySearchResult() : alreadyPaged;
+		BedDetails bedDetails = Context.getService(BedManagementService.class).getLatestBedDetailsByVisit(visitUuid);
+		List<BedDetails> ret = bedDetails == null ? new ArrayList<>() : Collections.singletonList(bedDetails);
+		return new NeedsPaging<>(ret, requestContext);
 	}
 	
 }

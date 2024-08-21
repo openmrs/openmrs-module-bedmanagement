@@ -4,7 +4,6 @@ import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
 import io.swagger.models.properties.StringProperty;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -14,9 +13,9 @@ import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
-import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
+import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ConversionException;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
@@ -67,27 +66,25 @@ public class BedTypeResource extends DelegatingCrudResource<BedType> {
 	
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-		List<BedType> bedTypeList = Context.getService(BedManagementService.class).getBedTypes(null, context.getLimit(),
-		    context.getStartIndex());
-		return new AlreadyPaged<BedType>(context, bedTypeList, false);
+		List<BedType> bedTypeList = getBedManagementService().getBedTypes(null, null, null);
+		return new NeedsPaging<>(bedTypeList, context);
 	}
 	
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
 		String name = context.getParameter("name");
-		List<BedType> bedTypeList = Context.getService(BedManagementService.class).getBedTypes(name, context.getLimit(),
-		    context.getStartIndex());
-		return new AlreadyPaged<BedType>(context, bedTypeList, false);
+		List<BedType> bedTypeList = getBedManagementService().getBedTypes(name, null, null);
+		return new NeedsPaging<>(bedTypeList, context);
 	}
 	
 	@Override
 	public BedType getByUniqueId(String uuid) {
-		return Context.getService(BedManagementService.class).getBedTypeByUuid(uuid);
+		return getBedManagementService().getBedTypeByUuid(uuid);
 	}
 	
 	@Override
 	public BedType save(BedType bedType) {
-		return Context.getService(BedManagementService.class).saveBedType(bedType);
+		return getBedManagementService().saveBedType(bedType);
 	}
 	
 	@Override
@@ -96,31 +93,31 @@ public class BedTypeResource extends DelegatingCrudResource<BedType> {
 			throw new ConversionException("Required properties: name, displayName");
 		
 		BedType bedType = this.constructBedType(null, propertiesToCreate);
-		Context.getService(BedManagementService.class).saveBedType(bedType);
+		getBedManagementService().saveBedType(bedType);
 		return ConversionUtil.convertToRepresentation(bedType, context.getRepresentation());
 	}
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
 		BedType bedType = this.constructBedType(uuid, propertiesToUpdate);
-		Context.getService(BedManagementService.class).saveBedType(bedType);
+		getBedManagementService().saveBedType(bedType);
 		return ConversionUtil.convertToRepresentation(bedType, context.getRepresentation());
 	}
 	
 	@Override
 	protected void delete(BedType bedType, String reason, RequestContext context) throws ResponseException {
-		Context.getService(BedManagementService.class).deleteBedType(bedType);
+		getBedManagementService().deleteBedType(bedType);
 	}
 	
 	@Override
 	public void purge(BedType bedType, RequestContext context) throws ResponseException {
-		Context.getService(BedManagementService.class).deleteBedType(bedType);
+		getBedManagementService().deleteBedType(bedType);
 	}
 	
 	private BedType constructBedType(String uuid, SimpleObject properties) {
 		BedType bedType;
 		if (uuid != null) {
-			bedType = Context.getService(BedManagementService.class).getBedTypeByUuid(uuid);
+			bedType = getBedManagementService().getBedTypeByUuid(uuid);
 			if (bedType == null)
 				throw new IllegalPropertyException("Bed Type not exist");
 			
@@ -142,5 +139,9 @@ public class BedTypeResource extends DelegatingCrudResource<BedType> {
 		}
 		
 		return bedType;
+	}
+	
+	BedManagementService getBedManagementService() {
+		return Context.getService(BedManagementService.class);
 	}
 }
