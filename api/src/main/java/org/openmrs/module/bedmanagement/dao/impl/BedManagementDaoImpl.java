@@ -215,10 +215,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
 						}
 					}
 				}
-				bedLayout.setPatients(new HashSet<>());
-				for (BedPatientAssignment patientAssignment : getCurrentAssignmentsByBed(blm.getBed())) {
-					bedLayout.getPatients().add(patientAssignment.getPatient());
-				}
+				bedLayout.setBedPatientAssignments(getCurrentAssignmentsByBed(blm.getBed()));
 			}
 			bedLayouts.add(bedLayout);
 		}
