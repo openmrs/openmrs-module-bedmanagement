@@ -37,9 +37,9 @@ import org.openmrs.module.webservices.rest.web.representation.NamedRepresentatio
 import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
-import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
+import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ConversionException;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
@@ -61,7 +61,12 @@ public class AdmissionLocationResource extends DelegatingCrudResource<AdmissionL
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
 		List<AdmissionLocation> admissionLocations = Context.getService(BedManagementService.class).getAdmissionLocations();
-		return new AlreadyPaged<AdmissionLocation>(context, admissionLocations, false);
+		return new NeedsPaging<>(admissionLocations, context);
+	}
+	
+	@Override
+	protected PageableResult doSearch(RequestContext context) throws ResponseException {
+		return doGetAll(context);
 	}
 	
 	@Override

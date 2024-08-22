@@ -13,8 +13,6 @@
  */
 package org.openmrs.module.bedmanagement.rest.resource;
 
-import java.util.List;
-
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
 import io.swagger.models.properties.IntegerProperty;
@@ -39,13 +37,15 @@ import org.openmrs.module.webservices.rest.web.representation.FullRepresentation
 import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
-import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
+import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ConversionException;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
+
+import java.util.List;
 
 @Resource(name = RestConstants.VERSION_1 + "/bed", supportedClass = Bed.class, supportedOpenmrsVersions = { "1.9.* - 9.*" })
 public class BedResource extends DelegatingCrudResource<Bed> {
@@ -130,21 +130,20 @@ public class BedResource extends DelegatingCrudResource<Bed> {
 	
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-		List<Bed> bedList = Context.getService(BedManagementService.class).getBeds(context.getLimit(),
-		    context.getStartIndex());
-		return new AlreadyPaged<Bed>(context, bedList, false);
+		List<Bed> bedList = getBedManagementService().getBeds(null, null);
+		return new NeedsPaging<>(bedList, context);
 	}
 	
 	@Override
 	protected PageableResult doSearch(RequestContext context) {
 		BedStatus bedStatus = null;
-		if (context.getParameter("status") != null)
+		if (context.getParameter("status") != null) {
 			bedStatus = context.getParameter("status").equals("AVAILABLE") ? BedStatus.AVAILABLE : BedStatus.OCCUPIED;
+		}
 		String bedType = context.getParameter("bedType");
 		String locationUuid = context.getParameter("locationUuid");
-		List<Bed> bedList = Context.getService(BedManagementService.class).getBeds(locationUuid, bedType, bedStatus,
-		    context.getLimit(), context.getStartIndex());
-		return new AlreadyPaged<Bed>(context, bedList, false);
+		List<Bed> bedList = getBedManagementService().getBeds(locationUuid, bedType, bedStatus, null, null);
+		return new NeedsPaging<>(bedList, context);
 	}
 	
 	@Override
@@ -273,5 +272,9 @@ public class BedResource extends DelegatingCrudResource<Bed> {
 		
 		existingBedLocationMapping.setBed(bed);
 		return existingBedLocationMapping;
+	}
+	
+	BedManagementService getBedManagementService() {
+		return Context.getService(BedManagementService.class);
 	}
 }
