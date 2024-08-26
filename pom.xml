@@ -4,7 +4,7 @@
 
   <groupId>org.openmrs.module</groupId>
   <artifactId>bedmanagement</artifactId>
-  <version>6.0.0</version>
+  <version>6.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Bed Management Module</name>
   <description>Helps in alloting beds.</description>
@@ -26,7 +26,7 @@
     <url>git@github.com:openmrs/openmrs-module-bedmanagement.git</url>
     <connection>scm:git:git@github.com:openmrs/openmrs-module-bedmanagement.git</connection>
     <developerConnection>scm:git:git@github.com:openmrs/openmrs-module-bedmanagement.git</developerConnection>
-    <tag>6.0.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <modules>
