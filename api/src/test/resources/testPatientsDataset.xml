@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Patient dataset is in its own separate file as encounters dataset cannot be included within the same file.-->
+<dataset>
+    <!-- Patient 1001 has an active visit, an encounter and a bed assigned (see bedManagementDAOComponentTestDataset.xml) -->
+    <person person_id="1001" gender="" birthdate="1975-06-30" birthdate_estimated="false" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" voided="false" void_reason="" uuid="12345678-cfd2-4301-b53b-ff17c5654dd7"/>
+    <patient patient_id="1001" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <visit visit_id="1001" patient_id="1001" visit_type_id="1" date_started="2005-01-01 00:00:00.0" location_id="1" indication_concept_id="5497" creator="1" date_created="2005-01-01 00:00:00.0" voided="0" uuid="12345678-6b78-11e0-93c3-18a905e044dc" />
+</dataset>

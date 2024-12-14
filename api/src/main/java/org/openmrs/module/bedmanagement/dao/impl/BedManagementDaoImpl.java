@@ -16,7 +16,7 @@ package org.openmrs.module.bedmanagement.dao.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -93,6 +93,30 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	}
 	
 	@Override
+	public List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encunterUuid, boolean includeEnded) {
+		Session session = sessionFactory.getCurrentSession();
+		List<BedPatientAssignment> bpaList = (List<BedPatientAssignment>) session
+		        .createQuery("select bpa from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
+		                + "where enc.uuid = :encounterUuid AND "
+		                + "(bpa.endDatetime IS NOT NULL OR :includeEnded IS TRUE) AND " + "(bpa.voided IS FALSE) "
+		                + "order by bpa.startDatetime DESC")
+		        .setParameter("encounterUuid", encunterUuid).setParameter("includeEnded", includeEnded).list();
+		return bpaList;
+	}
+	
+	public List<BedPatientAssignment> getBedPatientAssignmentByVisit(String visitUuid, boolean includeEnded) {
+		Session session = sessionFactory.getCurrentSession();
+		List<BedPatientAssignment> bpaList = (List<BedPatientAssignment>) session
+		        .createQuery("select bpa from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
+		                + "inner join enc.visit v " + "where v.uuid = :visitUuid AND "
+		                + "(bpa.endDatetime IS NOT NULL OR :includeEnded IS TRUE) AND " + "(bpa.voided IS FALSE) "
+		                + "order by bpa.startDatetime DESC")
+		        .setParameter("visitUuid", visitUuid).setParameter("includeEnded", includeEnded).list();
+		
+		return bpaList;
+	}
+	
+	@Override
 	public List<BedPatientAssignment> getCurrentAssignmentsByBed(Bed bed) {
 		Session session = sessionFactory.getCurrentSession();
 		List<BedPatientAssignment> assignments = session
@@ -109,6 +133,16 @@ public class BedManagementDaoImpl implements BedManagementDao {
 		                + "inner join enc.visit v where v.uuid = :visitUuid order by bpa.startDatetime DESC")
 		        .setParameter("visitUuid", visitUuid).setMaxResults(1).uniqueResult();
 		return bed;
+	}
+	
+	@Override
+	public List<Bed> getAssignedBedsByVisit(String visitUuid) {
+		Session session = sessionFactory.getCurrentSession();
+		List<Bed> beds = (List<Bed>) session.createQuery("select bpa.bed from BedPatientAssignment bpa "
+		        + "inner join bpa.encounter enc "
+		        + "inner join enc.visit v where v.uuid = :visitUuid AND bpa.endDatetime IS NULL order by bpa.startDatetime DESC")
+		        .setParameter("visitUuid", visitUuid).list();
+		return beds;
 	}
 	
 	@Override

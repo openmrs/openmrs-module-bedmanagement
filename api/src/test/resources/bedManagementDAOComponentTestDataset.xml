@@ -171,8 +171,7 @@
 
     <person person_id="567" gender="" birthdate="1975-06-30" birthdate_estimated="false" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" voided="false" void_reason="" uuid="6adb7c42-cfd2-4301-b53b-ff17c5654ff7"/>
     <person person_id="678" gender="" birthdate="1975-06-30" birthdate_estimated="false" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" voided="false" void_reason="" uuid="6adb7c42-cfd2-4301-b53b-ff17c5654dd7"/>
-
+    
+    <encounter encounter_id="1001" visit_id="1001" encounter_type="2" patient_id="1001" location_id="1" form_id="1" encounter_datetime="2008-08-01 00:00:00.0" creator="1" date_created="2008-08-18 14:09:05.0" voided="false" uuid="12345678-393b-4118-9c83-a3715b82d4de"/>
+    <bed_patient_assignment_map bed_patient_assignment_map_id="1001" patient_id="1001" bed_id="12" date_started="2014-09-18 14:09:05.0"  encounter_id="1001" date_created="2014-01-01 00:00:00.0" voided="false" uuid="10011001-1001-1001-1001-100000000001"/>
 </dataset>
-
-
-

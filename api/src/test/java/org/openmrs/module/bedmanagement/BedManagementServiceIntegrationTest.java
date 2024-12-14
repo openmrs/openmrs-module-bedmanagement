@@ -36,6 +36,7 @@ public class BedManagementServiceIntegrationTest extends BaseModuleWebContextSen
 	
 	@Before
 	public void beforeAllTests() throws Exception {
+		executeDataSet("testPatientsDataset.xml");
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
 	}
 	

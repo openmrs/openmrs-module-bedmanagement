@@ -13,11 +13,13 @@
  */
 package org.openmrs.module.bedmanagement.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.Visit;
 import org.openmrs.annotation.Authorized;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
@@ -97,8 +99,27 @@ public interface BedManagementService extends OpenmrsService {
 	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
 	BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
 	
+	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
+	List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encunterUuid, boolean includeEnded);
+	
+	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
+	List<BedPatientAssignment> getBedPatientAssignmentByVisit(String visitUuid, boolean includeEnded);
+	
 	@Authorized(value = { "Assign Beds", "Edit Admission Locations" }, requireAll = true)
 	BedDetails unAssignPatientFromBed(Patient patient);
+	
+	@Authorized(value = { "Assign Beds", "Edit Admission Locations" }, requireAll = true)
+	BedPatientAssignment saveBedPatientAssignment(BedPatientAssignment bpa);
+	
+	/**
+	 * Unassign all assigned beds from a patient associated with the given visit. The number of assigned
+	 * beds for the patient *should* be at most one, but this function does not assume that.
+	 * 
+	 * @param visit
+	 * @return a List of beds that got unassigned as a result of calling this function
+	 */
+	@Authorized(value = { "Assign Beds", "Edit Admission Locations" }, requireAll = true)
+	List<BedDetails> unAssignBedsInEndedVisit(Visit visit);
 	
 	@Authorized(value = { "Get Beds", "Get Admission Locations" }, requireAll = true)
 	BedDetails getLatestBedDetailsByVisit(String visitUuid);
@@ -259,4 +280,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Edit Bed Type" }, requireAll = true)
 	void deleteBedType(BedType bedType);
+	
+	@Authorized(value = { "Assign Beds", "Edit Admission Locations" }, requireAll = true)
+	void deleteBedPatientAssignment(BedPatientAssignment bpa, String reason);
 }

@@ -17,6 +17,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.Patient;
+import org.openmrs.Visit;
 import org.openmrs.api.APIException;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
@@ -165,16 +166,30 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	}
 	
 	@Override
+	public List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encunterUuid, boolean includeEnded) {
+		return bedManagementDao.getBedPatientAssignmentByEncounter(encunterUuid, includeEnded);
+	}
+	
+	@Override
+	public List<BedPatientAssignment> getBedPatientAssignmentByVisit(String visitUuid, boolean includeEnded) {
+		return bedManagementDao.getBedPatientAssignmentByVisit(visitUuid, includeEnded);
+	}
+	
+	@Override
 	@Transactional
 	public BedDetails unAssignPatientFromBed(Patient patient) {
 		Bed bed = bedManagementDao.getBedByPatient(patient);
+		return unassignBed(bed, patient, new Date());
+	}
+	
+	private BedDetails unassignBed(Bed bed, Patient patient, Date bedAssignmentEndDatetime) {
 		BedPatientAssignment endedAssignment = null;
 		if (bed != null) {
 			List<BedPatientAssignment> currentAssignments = bedManagementDao.getCurrentAssignmentsByBed(bed);
 			BedStatus finalStatus = BedStatus.AVAILABLE;
 			for (BedPatientAssignment assignment : currentAssignments) {
 				if (assignment.getPatient().equals(patient)) {
-					assignment.setEndDatetime(new Date());
+					assignment.setEndDatetime(bedAssignmentEndDatetime);
 					endedAssignment = bedManagementDao.saveBedPatientAssignment(assignment);
 				} else {
 					finalStatus = BedStatus.OCCUPIED;
@@ -188,6 +203,28 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 			bedDetails.setLastAssignment(endedAssignment);
 		}
 		return bedDetails;
+	}
+	
+	@Override
+	@Transactional
+	public List<BedDetails> unAssignBedsInEndedVisit(Visit visit) {
+		if (visit == null || visit.getId() == null || visit.getStopDatetime() == null) {
+			throw new APIException("Visit does not exist or has not ended");
+		}
+		Patient patient = visit.getPatient();
+		List<Bed> beds = bedManagementDao.getAssignedBedsByVisit(visit.getUuid());
+		List<BedDetails> unassignedBeds = new ArrayList<>();
+		for (Bed bed : beds) {
+			BedDetails unassignedBed = unassignBed(bed, patient, visit.getStopDatetime());
+			unassignedBeds.add(unassignedBed);
+		}
+		return unassignedBeds;
+	}
+	
+	@Override
+	@Transactional
+	public BedPatientAssignment saveBedPatientAssignment(BedPatientAssignment bpa) {
+		return bedManagementDao.saveBedPatientAssignment(bpa);
 	}
 	
 	@Override
@@ -319,6 +356,16 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	@Override
 	public void deleteBedType(BedType bedType) {
 		bedManagementDao.deleteBedType(bedType);
+	}
+	
+	@Override
+	public void deleteBedPatientAssignment(BedPatientAssignment bpa, String reason) {
+		
+		bpa.setVoided(true);
+		bpa.setDateVoided(new Date());
+		bpa.setVoidReason(reason);
+		bpa.setVoidedBy(Context.getAuthenticatedUser());
+		bedManagementDao.saveBedPatientAssignment(bpa);
 	}
 	
 	private BedDetails getBedDetails(Bed bed) {

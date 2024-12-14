@@ -22,4 +22,6 @@
 *.ipr
 *.iws
 *.sass-cache
+*.swp
 *.DS_Store
+/.vscode

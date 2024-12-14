@@ -54,6 +54,7 @@ public class BedManagementServiceTest extends BaseModuleWebContextSensitiveTest 
 		superUserPassword = "test";
 		normalUser = "normal-user";
 		normalUserPassword = "normal-password";
+		executeDataSet("testPatientsDataset.xml");
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
 		patient = Context.getPatientService().getPatient(3);
 		location = Context.getLocationService().getLocation(12347);
