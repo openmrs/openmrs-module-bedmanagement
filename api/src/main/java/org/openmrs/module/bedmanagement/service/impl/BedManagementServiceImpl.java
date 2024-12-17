@@ -125,7 +125,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		bedPatientAssignment.setPatient(patient);
 		bedPatientAssignment.setEncounter(encounter);
 		bedPatientAssignment.setBed(bed);
-		bedPatientAssignment.setStartDatetime(new Date());
+		bedPatientAssignment.setStartDatetime(encounter.getEncounterDatetime());
 		bedManagementDao.saveBedPatientAssignment(bedPatientAssignment);
 		
 		bed.setStatus(BedStatus.OCCUPIED.toString());
@@ -212,7 +212,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 			throw new APIException("Visit does not exist or has not ended");
 		}
 		Patient patient = visit.getPatient();
-		List<Bed> beds = bedManagementDao.getAssignedBedsByVisit(visit.getUuid());
+		List<Bed> beds = bedManagementDao.getAssignedBedsByVisit(visit.getUuid(), false);
 		List<BedDetails> unassignedBeds = new ArrayList<>();
 		for (Bed bed : beds) {
 			BedDetails unassignedBed = unassignBed(bed, patient, visit.getStopDatetime());

@@ -15,7 +15,7 @@
 /**
  * This package contains SaveHandlers and Validators that enforces the following invariants. For any
  * bed patient assignment bpa created by encounter e in visit v, the following should always hold
- * true: - bpa.startDatetime <= bpa.endDatetime - e.encounterTime <= bpa.startDatetime -
- * bpa.endDatetime <= v.endDatetime
+ * true: bpa.startDatetime <= bpa.endDatetime; e.encounterTime == bpa.startDatetime; bpa.endDatetime
+ * <= v.endDatetime;
  */
 package org.openmrs.module.bedmanagement.aop;

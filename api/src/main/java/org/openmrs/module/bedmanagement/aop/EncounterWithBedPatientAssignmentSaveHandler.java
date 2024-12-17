@@ -42,17 +42,27 @@ public class EncounterWithBedPatientAssignmentSaveHandler implements SaveHandler
 	
 	@Override
 	public void handle(Encounter encounter, User user, Date date, String s) {
+		
 		if (encounter.getEncounterId() != null) {
+			
+			List<BedPatientAssignment> bpaList = bedManagementService.getBedPatientAssignmentByEncounter(encounter.getUuid(),
+			    true);
 			
 			if (encounter.getVoided()) {
 				log.debug("Voiding beds due to voided encounter");
-				List<BedPatientAssignment> bpaList = bedManagementService
-				        .getBedPatientAssignmentByEncounter(encounter.getUuid(), true);
 				for (BedPatientAssignment bpa : bpaList) {
 					bedManagementService.deleteBedPatientAssignment(bpa, "encounter voided");
 					log.debug("Voided bedPatientAssignment for bed " + bpa.getBed());
 				}
 			}
+			
+			Date encounterDatetime = encounter.getEncounterDatetime();
+			for (BedPatientAssignment bpa : bpaList) {
+				log.debug("updating bedPatientAssignment starttime for bed " + bpa.getBed());
+				bpa.setStartDatetime(encounterDatetime);
+				bedManagementService.saveBedPatientAssignment(bpa);
+			}
 		}
+		
 	}
 }

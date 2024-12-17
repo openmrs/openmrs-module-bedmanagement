@@ -47,13 +47,14 @@ public interface BedManagementDao {
 	Bed getLatestBedByVisit(String visitUuid);
 	
 	/**
-	 * Return a list of bed that are currently assigned to a patient associated with the given visit.
-	 * This list *should* be at most size 1, but this function does not assume that.
+	 * Return a list of beds assigned to a patient associated with the given visit.
 	 * 
 	 * @param visitUuid
+	 * @param includeEnded If false, only the currently active bed assignment is returned. Otherwise,
+	 *            all assignments within the visit are returned.
 	 * @return
 	 */
-	List<Bed> getAssignedBedsByVisit(String visitUuid);
+	List<Bed> getAssignedBedsByVisit(String visitUuid, boolean includeEnded);
 	
 	List<BedTag> getAllBedTags();
 	
