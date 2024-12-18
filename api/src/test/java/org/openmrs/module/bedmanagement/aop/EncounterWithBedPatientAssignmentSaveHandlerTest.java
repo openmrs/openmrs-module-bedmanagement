@@ -73,8 +73,7 @@ public class EncounterWithBedPatientAssignmentSaveHandlerTest extends BaseModule
 		BedPatientAssignment updatedBpa = bedManagementService.getBedPatientAssignmentByUuid(bpa.getUuid());
 		assertThat("bed patient assignment start datetime should change with encounter time", updatedBpa.getStartDatetime(),
 		    equalTo(oneSecondAfter));
-
-				
+		
 		Date oneSecondBefore = Date.from(encounterTime.toInstant().minus(1, ChronoUnit.SECONDS));
 		encounter.setEncounterDatetime(oneSecondBefore);
 		encounterService.saveEncounter(encounter);

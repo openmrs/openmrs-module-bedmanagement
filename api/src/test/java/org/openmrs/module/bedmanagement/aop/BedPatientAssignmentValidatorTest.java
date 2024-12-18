@@ -8,9 +8,7 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openmrs.Encounter;
 import org.openmrs.Visit;
-import org.openmrs.api.EncounterService;
 import org.openmrs.api.ValidationException;
 import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
@@ -43,21 +41,6 @@ public class BedPatientAssignmentValidatorTest extends BaseModuleWebContextSensi
 			Date startTime = bpa.getStartDatetime();
 			Date oneSecondBeforeStartTime = Date.from(startTime.toInstant().minus(1, ChronoUnit.SECONDS));
 			bpa.setEndDatetime(oneSecondBeforeStartTime);
-			bedManagementService.saveBedPatientAssignment(bpa);
-		});
-	}
-	
-	@Test
-	public void testExceptionThrownWhenBedAssignmentStarttimeBeforeEncounterTime() {
-		EncounterService encounterService = Context.getEncounterService();
-		Encounter encounter = encounterService.getEncounter(1001);
-		BedPatientAssignment bpa = bedManagementService
-		        .getBedPatientAssignmentByUuid("10011001-1001-1001-1001-100000000001");
-		
-		assertThrows(ValidationException.class, () -> {
-			Date encounterTime = encounter.getEncounterDatetime();
-			Date oneSecondBeforeEncounterTime = Date.from(encounterTime.toInstant().minus(1, ChronoUnit.SECONDS));
-			bpa.setStartDatetime(oneSecondBeforeEncounterTime);
 			bedManagementService.saveBedPatientAssignment(bpa);
 		});
 	}

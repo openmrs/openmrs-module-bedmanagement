@@ -42,18 +42,14 @@ public class BedPatientAssignmentValidator implements Validator {
 		Visit visit = assigningEncounter.getVisit();
 		
 		if (bedAssignmentEndTime != null && bedAssignmentEndTime.before(bedAssignmentStartTime)) {
-			errors.rejectValue("startDatetime", "bedPatientAssignment.startDatetime.beforeStartDatetime",
-			    "Bed assignment's startDatetime cannot be after endDatetime");
-		}
-		if (!bedAssignmentStartTime.equals(assigningEncounter.getEncounterDatetime())) {
-			errors.rejectValue("startDatetime", "bedPatientAssignment.startDatetime.notEqualToEncounterDatetime",
-			    "Bed assignment's endDatetime must be same as encounter datetime");
+			errors.rejectValue("endDatetime", "bedPatientAssignment.endtDatetime.beforeStartDatetime",
+			    "Bed assignment's endDatetime cannot be before startDatetime");
 		}
 		if (visit != null && visit.getStopDatetime() != null && bedAssignmentEndTime != null
 		        && bedAssignmentEndTime.after(visit.getStopDatetime())) {
 			
 			errors.rejectValue("endDatetime", "bedPatientAssignment.endDatetime.afterVisitStopDatetime",
-			    "Bed assignment's endDatetime cannot be after visit endDatetime");
+			    "Bed assignment's endDatetime cannot be after visit stopDatetime");
 		}
 	}
 	
