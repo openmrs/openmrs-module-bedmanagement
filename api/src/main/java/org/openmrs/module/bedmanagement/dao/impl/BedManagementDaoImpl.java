@@ -135,18 +135,6 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	}
 	
 	@Override
-	public List<Bed> getAssignedBedsByVisit(String visitUuid, boolean includeEnded) {
-		Session session = sessionFactory.getCurrentSession();
-		List<Bed> beds = (List<Bed>) session
-		        .createQuery("select bpa.bed from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
-		                + "inner join enc.visit v where v.uuid = :visitUuid AND "
-		                + "(bpa.endDatetime IS NULL OR :includeEnded IS TRUE) AND " + "(bpa.voided IS FALSE) "
-		                + "order by bpa.startDatetime DESC")
-		        .setParameter("visitUuid", visitUuid).setParameter("includeEnded", includeEnded).list();
-		return beds;
-	}
-	
-	@Override
 	public List<BedTag> getAllBedTags() {
 		Session session = sessionFactory.getCurrentSession();
 		return session.createQuery("from BedTag where voided =:voided").setParameter("voided", false).list();

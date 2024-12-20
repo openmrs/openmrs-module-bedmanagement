@@ -13,6 +13,8 @@
  */
 package org.openmrs.module.bedmanagement.service.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
@@ -45,6 +47,8 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	private BedManagementDao bedManagementDao;
 	
 	private LocationService locationService;
+	
+	private final Log log = LogFactory.getLog(getClass());
 	
 	public void setDao(BedManagementDao dao) {
 		this.bedManagementDao = dao;
@@ -212,10 +216,11 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 			throw new APIException("Visit does not exist or has not ended");
 		}
 		Patient patient = visit.getPatient();
-		List<Bed> beds = bedManagementDao.getAssignedBedsByVisit(visit.getUuid(), false);
+		List<BedPatientAssignment> bedassignments = bedManagementDao.getBedPatientAssignmentByVisit(visit.getUuid(), false);
 		List<BedDetails> unassignedBeds = new ArrayList<>();
-		for (Bed bed : beds) {
-			BedDetails unassignedBed = unassignBed(bed, patient, visit.getStopDatetime());
+		for (BedPatientAssignment bpa : bedassignments) {
+			BedDetails unassignedBed = unassignBed(bpa.getBed(), patient, visit.getStopDatetime());
+			log.debug("Unassigned bed " + unassignedBed);
 			unassignedBeds.add(unassignedBed);
 		}
 		return unassignedBeds;

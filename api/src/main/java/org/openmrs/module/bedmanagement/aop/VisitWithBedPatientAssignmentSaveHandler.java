@@ -46,10 +46,7 @@ public class VisitWithBedPatientAssignmentSaveHandler implements SaveHandler<Vis
 			
 			if (visit.getStopDatetime() != null) {
 				log.debug("Unassigning bed from patient (if any) due to stopped visit on " + visit.getStopDatetime());
-				List<BedDetails> unassignedBeds = bedManagementService.unAssignBedsInEndedVisit(visit);
-				for (BedDetails bed : unassignedBeds) {
-					log.debug("Unassigned bed " + bed);
-				}
+				bedManagementService.unAssignBedsInEndedVisit(visit);
 			}
 		}
 	}
