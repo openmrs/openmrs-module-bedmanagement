@@ -40,6 +40,7 @@ public class HibernateBedManagementDaoTest extends BaseModuleWebContextSensitive
 	
 	@Before
 	public void beforeAllTests() throws Exception {
+		executeDataSet("testPatientsDataset.xml");
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
 	}
 	

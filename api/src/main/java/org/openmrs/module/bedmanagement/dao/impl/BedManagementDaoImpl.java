@@ -16,7 +16,7 @@ package org.openmrs.module.bedmanagement.dao.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -90,6 +90,29 @@ public class BedManagementDaoImpl implements BedManagementDao {
 		Session session = sessionFactory.getCurrentSession();
 		return (BedPatientAssignment) session.createQuery("from BedPatientAssignment bpa " + "where bpa.uuid = :uuid")
 		        .setParameter("uuid", uuid).uniqueResult();
+	}
+	
+	@Override
+	public List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encunterUuid, boolean includeEnded) {
+		Session session = sessionFactory.getCurrentSession();
+		List<BedPatientAssignment> bpaList = (List<BedPatientAssignment>) session
+		        .createQuery("select bpa from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
+		                + "where enc.uuid = :encounterUuid AND " + "(bpa.endDatetime IS NULL OR :includeEnded IS TRUE) AND "
+		                + "(bpa.voided IS FALSE) " + "order by bpa.startDatetime DESC")
+		        .setParameter("encounterUuid", encunterUuid).setParameter("includeEnded", includeEnded).list();
+		return bpaList;
+	}
+	
+	public List<BedPatientAssignment> getBedPatientAssignmentByVisit(String visitUuid, boolean includeEnded) {
+		Session session = sessionFactory.getCurrentSession();
+		List<BedPatientAssignment> bpaList = (List<BedPatientAssignment>) session
+		        .createQuery(
+		            "select bpa from BedPatientAssignment bpa " + "inner join bpa.encounter enc " + "inner join enc.visit v "
+		                    + "where v.uuid = :visitUuid AND " + "(bpa.endDatetime IS NULL OR :includeEnded IS TRUE) AND "
+		                    + "(bpa.voided IS FALSE) " + "order by bpa.startDatetime DESC")
+		        .setParameter("visitUuid", visitUuid).setParameter("includeEnded", includeEnded).list();
+		
+		return bpaList;
 	}
 	
 	@Override
