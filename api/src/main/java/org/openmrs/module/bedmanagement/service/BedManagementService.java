@@ -13,9 +13,6 @@
  */
 package org.openmrs.module.bedmanagement.service;
 
-import java.util.Date;
-import java.util.List;
-
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
@@ -31,9 +28,9 @@ import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.module.bedmanagement.exception.BedOccupiedException;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+import java.util.List;
+
 public interface BedManagementService extends OpenmrsService {
 	
 	/**
