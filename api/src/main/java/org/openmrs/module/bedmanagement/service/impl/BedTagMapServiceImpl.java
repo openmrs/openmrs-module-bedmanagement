@@ -21,9 +21,11 @@ import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.service.BedTagMapService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
+@Transactional
 public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMapService {
 	
 	BedTagMapDao bedTagMapDao;
@@ -33,6 +35,7 @@ public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMa
 	}
 	
 	@Override
+	@Transactional
 	public BedTagMap save(BedTagMap bedTagMap) {
 		if (getBedTagMapWithBedAndTag(bedTagMap.getBed(), bedTagMap.getBedTag()) != null) {
 			throw new APIException("Tag Already Present For Bed");
@@ -41,6 +44,7 @@ public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMa
 	}
 	
 	@Override
+	@Transactional
 	public void delete(BedTagMap bedTagMap, String reason) {
 		bedTagMap.setVoided(true);
 		bedTagMap.setDateVoided(new Date());
@@ -50,16 +54,19 @@ public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMa
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public BedTagMap getBedTagMapByUuid(String bedTagMapUuid) {
 		return bedTagMapDao.getBedTagMapByUuid(bedTagMapUuid);
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public BedTagMap getBedTagMapWithBedAndTag(Bed bed, BedTag bedTag) {
 		return bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag);
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public BedTag getBedTagByUuid(String bedTagUuid) {
 		return bedTagMapDao.getBedTagByUuid(bedTagUuid);
 	}

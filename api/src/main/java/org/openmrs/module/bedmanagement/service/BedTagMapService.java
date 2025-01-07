@@ -5,9 +5,7 @@ import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public interface BedTagMapService extends OpenmrsService {
 	
 	@Authorized(value = { "Edit Bed Tags", "Get Bed Tags", "Get Beds" }, requireAll = true)
