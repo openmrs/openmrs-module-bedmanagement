@@ -267,7 +267,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
 			existingBedLocationMapping.setRow(row);
 			existingBedLocationMapping.setColumn(column);
 		} else if (existingBedLocationMapping.getBed() != null) {
-			throw new IllegalPropertyException("Already bed assign to give row & column");
+			throw new IllegalPropertyException("A bed is already assigned to the given row & column");
 		}
 		
 		existingBedLocationMapping.setBed(bed);
