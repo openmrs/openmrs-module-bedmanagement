@@ -322,8 +322,10 @@
         </addColumn>
     </changeSet>
 
+    <!-- note bed_patient_assignment_map_bed_unique_uuid constraint was originally called bed_unique_uuid -->
     <changeSet author="tw" id="28112013_20">
         <validCheckSum>9:76deb800a39aee496eb70e572bac5d20</validCheckSum>
+        <validCheckSum>8:d7d99c44b6450a9ccd30ad053409e8ed</validCheckSum>
         <addUniqueConstraint tableName="bed_patient_assignment_map"
                              columnNames="uuid" constraintName="bed_patient_assignment_map_bed_unique_uuid"/>
         <addForeignKeyConstraint constraintName="bed_patient_assignment_map_creator"
