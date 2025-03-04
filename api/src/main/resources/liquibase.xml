@@ -323,8 +323,9 @@
     </changeSet>
 
     <changeSet author="tw" id="28112013_20">
+        <validCheckSum>9:76deb800a39aee496eb70e572bac5d20</validCheckSum>
         <addUniqueConstraint tableName="bed_patient_assignment_map"
-                             columnNames="uuid" constraintName="bed_unique_uuid"/>
+                             columnNames="uuid" constraintName="bed_patient_assignment_map_bed_unique_uuid"/>
         <addForeignKeyConstraint constraintName="bed_patient_assignment_map_creator"
                                  baseTableName="bed_patient_assignment_map" baseColumnNames="creator"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
