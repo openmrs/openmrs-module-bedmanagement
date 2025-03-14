@@ -88,8 +88,10 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	@Override
 	public BedPatientAssignment getBedPatientAssignmentByUuid(String uuid) {
 		Session session = sessionFactory.getCurrentSession();
-		return (BedPatientAssignment) session.createQuery("from BedPatientAssignment bpa " + "where bpa.uuid = :uuid")
-		        .setParameter("uuid", uuid).uniqueResult();
+		return (BedPatientAssignment) session.createQuery("from BedPatientAssignment bpa " + 
+		"where bpa.uuid = :uuid AND bpa.voided =false")
+		        .setParameter("uuid", uuid)
+				.uniqueResult();
 	}
 	
 	@Override
