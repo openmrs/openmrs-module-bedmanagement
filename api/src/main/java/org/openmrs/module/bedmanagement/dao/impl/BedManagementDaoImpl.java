@@ -121,7 +121,11 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	public List<BedPatientAssignment> getCurrentAssignmentsByBed(Bed bed) {
 		Session session = sessionFactory.getCurrentSession();
 		List<BedPatientAssignment> assignments = session
-		        .createQuery("from BedPatientAssignment where bed=:bed and endDatetime is null").setParameter("bed", bed)
+		        .createQuery("from BedPatientAssignment bpa " +
+				"where bpa.bed=:bed " +
+				"AND bpa.voided =false " +
+				"AND bpa.endDatetime is NULL")
+				.setParameter("bed", bed)
 		        .list();
 		return assignments;
 	}
