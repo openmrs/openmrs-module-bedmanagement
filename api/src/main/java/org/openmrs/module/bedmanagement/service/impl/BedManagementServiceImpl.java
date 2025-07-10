@@ -182,8 +182,8 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	
 	@Override
 	@Transactional(readOnly = true)
-	public List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encunterUuid, boolean includeEnded) {
-		return bedManagementDao.getBedPatientAssignmentByEncounter(encunterUuid, includeEnded);
+	public List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encounterUuid, boolean includeEnded) {
+		return bedManagementDao.getBedPatientAssignmentByEncounter(encounterUuid, includeEnded);
 	}
 	
 	@Override

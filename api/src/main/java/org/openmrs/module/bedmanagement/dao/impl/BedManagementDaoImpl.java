@@ -16,6 +16,7 @@ package org.openmrs.module.bedmanagement.dao.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.hibernate.Criteria;
+import org.hibernate.FlushMode;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -95,11 +96,20 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	@Override
 	public List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encunterUuid, boolean includeEnded) {
 		Session session = sessionFactory.getCurrentSession();
-		List<BedPatientAssignment> bpaList = (List<BedPatientAssignment>) session
-		        .createQuery("select bpa from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
-		                + "where enc.uuid = :encounterUuid AND " + "(bpa.endDatetime IS NULL OR :includeEnded IS TRUE) AND "
-		                + "(bpa.voided IS FALSE) " + "order by bpa.startDatetime DESC")
-		        .setParameter("encounterUuid", encunterUuid).setParameter("includeEnded", includeEnded).list();
+		List<BedPatientAssignment> bpaList;
+		FlushMode flushMode = session.getHibernateFlushMode();
+		try {
+			session.setHibernateFlushMode(FlushMode.MANUAL);
+			bpaList = (List<BedPatientAssignment>) session
+			        .createQuery("select bpa from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
+			                + "where enc.uuid = :encounterUuid AND "
+			                + "(bpa.endDatetime IS NULL OR :includeEnded IS TRUE) AND " + "(bpa.voided IS FALSE) "
+			                + "order by bpa.startDatetime DESC")
+			        .setParameter("encounterUuid", encunterUuid).setParameter("includeEnded", includeEnded).list();
+		}
+		finally {
+			session.setHibernateFlushMode(flushMode);
+		}
 		return bpaList;
 	}
 	
