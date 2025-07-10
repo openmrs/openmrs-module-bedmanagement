@@ -277,6 +277,15 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Edit Bed Type" }, requireAll = true)
 	void deleteBedType(BedType bedType);
+
+	/**
+	 * Retire bed type
+	 *
+	 * @param bedType {@link BedType}
+	 * @param retireReason {@link String}
+	 */
+	@Authorized(value = { "Edit Bed Type" }, requireAll = true)
+	BedType retireBedType(BedType bedType, String retireReason);
 	
 	@Authorized(value = { "Assign Beds", "Edit Admission Locations" }, requireAll = true)
 	void deleteBedPatientAssignment(BedPatientAssignment bpa, String reason);

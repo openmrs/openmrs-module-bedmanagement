@@ -6,6 +6,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.api.APIException;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.response.ObjectNotFoundException;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BedTypeResourceTest extends MainResourceControllerTest {
@@ -82,7 +85,7 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 		SimpleObject bedType = deserialize(handle(request));
 		
 		Assert.assertNotNull(bedType.get("uuid"));
-		Assert.assertEquals("Large Bed", bedType.get("name"));
+		assertEquals("Large Bed", bedType.get("name"));
 	}
 	
 	@Test
@@ -131,5 +134,35 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 		
 		MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI() + "/" + bedTypeId);
 		handle(getRequest);
+	}
+
+	@Test
+	public void shouldRetireBedType() throws Exception {
+		String uuid = "6f9fb341-0fd5-11e8-adb7-080027b38972";
+
+		MockHttpServletRequest retireRequest = request(RequestMethod.POST, getURI() + "/" + uuid);
+		SimpleObject retireParameters = new SimpleObject();
+		retireParameters.put("retired", "true");
+		retireParameters.put("retiredReason", "Retired Reason");
+		String retireJson = new ObjectMapper().writeValueAsString(retireParameters);
+		retireRequest.setContent(retireJson.getBytes());
+		handle(retireRequest);
+
+		MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI());
+		SimpleObject object = deserialize(handle(getRequest));
+		List results = object.get("results");
+		assertEquals(results.size(), 2);
+	}
+
+	@Test(expected = APIException.class)
+	public void shouldThrowExceptionWhenRetireReasonIsBlank() throws Exception {
+		String uuid = "6f9fb341-0fd5-11e8-adb7-080027b38972";
+
+		MockHttpServletRequest retireRequest = request(RequestMethod.POST, getURI() + "/" + uuid);
+		SimpleObject retireParameters = new SimpleObject();
+		retireParameters.put("retired", "true");
+		String retireJson = new ObjectMapper().writeValueAsString(retireParameters);
+		retireRequest.setContent(retireJson.getBytes());
+		handle(retireRequest);
 	}
 }
