@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.bedmanagement.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Encounter;
@@ -384,6 +385,9 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	@Override
 	@Transactional
 	public BedType saveBedType(BedType bedType) {
+		if (bedType.getRetired()) {
+			return getBedManagementService().retireBedType(bedType, bedType.getRetireReason());
+		}
 		return bedManagementDao.saveBedType(bedType);
 	}
 	
@@ -391,6 +395,19 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	@Transactional
 	public void deleteBedType(BedType bedType) {
 		bedManagementDao.deleteBedType(bedType);
+	}
+	
+	@Override
+	@Transactional
+	public BedType retireBedType(BedType bedType, String retireReason) {
+		if (StringUtils.isBlank(retireReason)) {
+			throw new APIException("BedType.retiring.reason.required", (Object[]) null);
+		}
+		bedType.setRetired(true);
+		bedType.setRetireReason(retireReason);
+		bedType.setRetiredBy(Context.getAuthenticatedUser());
+		bedType.setDateRetired(new Date());
+		return bedManagementDao.saveBedType(bedType);
 	}
 	
 	@Override

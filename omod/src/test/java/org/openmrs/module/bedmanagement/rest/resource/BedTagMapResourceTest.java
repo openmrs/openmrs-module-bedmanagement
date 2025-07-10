@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openmrs.module.webservices.rest.SimpleObject;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class BedTagMapResourceTest extends MainResourceControllerTest {

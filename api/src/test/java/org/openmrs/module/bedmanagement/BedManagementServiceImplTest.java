@@ -10,12 +10,14 @@ import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonName;
 import org.openmrs.User;
+import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
+import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -27,11 +29,14 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
@@ -180,6 +185,38 @@ public class BedManagementServiceImplTest {
 		bedManagementService.deleteBed(bed, "test");
 		
 		verify(bedManagementDao, times(0)).deleteBedLocationMapping(any(BedLocationMapping.class));
+	}
+
+	@Test
+	public void shouldRetireBedType() {
+		BedType bedType = new BedType();
+		bedType.setName("Large");
+		bedType.setDisplayName("L");
+		bedType.setDescription("Large bed");
+
+		mockStatic(Context.class);
+		User authUser = mock(User.class);
+		when(Context.getAuthenticatedUser()).thenReturn(authUser);
+
+		when(bedManagementDao.saveBedType(any(BedType.class)))
+				.thenAnswer(inv -> inv.getArgument(0));
+
+		BedType retired = bedManagementService.retireBedType(bedType, "Duplicate entry");
+
+		assertEquals(Boolean.TRUE, retired.getRetired());
+		assertEquals("Duplicate entry", retired.getRetireReason());
+		assertEquals(authUser, retired.getRetiredBy());
+		assertNotNull(retired.getDateRetired());
+
+		verify(bedManagementDao, times(1)).saveBedType(retired);
+
+	}
+
+	@Test
+	public void shouldThrowExceptionWhenRetireReasonIsBlank() {
+		BedType bt = new BedType();
+		assertThrows(APIException.class, () -> bedManagementService.retireBedType(bt, "  "));
+		verifyNoInteractions(bedManagementDao);
 	}
 	
 	private Patient createPatient(String identifierString, String patientUuid, String firstName, String middleName,

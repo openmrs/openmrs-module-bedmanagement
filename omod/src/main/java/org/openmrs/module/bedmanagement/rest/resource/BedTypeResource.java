@@ -3,6 +3,7 @@ package org.openmrs.module.bedmanagement.rest.resource;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
 import io.swagger.models.properties.StringProperty;
+import org.apache.commons.lang3.BooleanUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
@@ -133,6 +134,13 @@ public class BedTypeResource extends DelegatingCrudResource<BedType> {
 			
 			if (properties.get("description") != null)
 				bedType.setDescription((String) properties.get("description"));
+			
+			if (properties.get("retired") != null)
+				bedType.setRetired(BooleanUtils.toBoolean((String) properties.get("retired")));
+			
+			if (properties.get("retiredReason") != null)
+				bedType.setRetireReason(properties.get("retiredReason"));
+			
 		} else {
 			bedType = new BedType();
 			if (properties.get("name") == null || properties.get("displayName") == null)
