@@ -283,6 +283,8 @@ public interface BedManagementService extends OpenmrsService {
 	 *
 	 * @param bedType {@link BedType}
 	 * @param retireReason {@link String}
+	 * @return {@link BedType}
+	 * @since 6.2.0
 	 */
 	@Authorized(value = { "Edit Bed Type" }, requireAll = true)
 	BedType retireBedType(BedType bedType, String retireReason);
