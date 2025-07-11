@@ -26,7 +26,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -186,32 +185,31 @@ public class BedManagementServiceImplTest {
 		
 		verify(bedManagementDao, times(0)).deleteBedLocationMapping(any(BedLocationMapping.class));
 	}
-
+	
 	@Test
 	public void shouldRetireBedType() {
 		BedType bedType = new BedType();
 		bedType.setName("Large");
 		bedType.setDisplayName("L");
 		bedType.setDescription("Large bed");
-
+		
 		mockStatic(Context.class);
 		User authUser = mock(User.class);
 		when(Context.getAuthenticatedUser()).thenReturn(authUser);
-
-		when(bedManagementDao.saveBedType(any(BedType.class)))
-				.thenAnswer(inv -> inv.getArgument(0));
-
+		
+		when(bedManagementDao.saveBedType(any(BedType.class))).thenAnswer(inv -> inv.getArgument(0));
+		
 		BedType retired = bedManagementService.retireBedType(bedType, "Duplicate entry");
-
+		
 		assertEquals(Boolean.TRUE, retired.getRetired());
 		assertEquals("Duplicate entry", retired.getRetireReason());
 		assertEquals(authUser, retired.getRetiredBy());
 		assertNotNull(retired.getDateRetired());
-
+		
 		verify(bedManagementDao, times(1)).saveBedType(retired);
-
+		
 	}
-
+	
 	@Test
 	public void shouldThrowExceptionWhenRetireReasonIsBlank() {
 		BedType bt = new BedType();

@@ -277,7 +277,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Edit Bed Type" }, requireAll = true)
 	void deleteBedType(BedType bedType);
-
+	
 	/**
 	 * Retire bed type
 	 *

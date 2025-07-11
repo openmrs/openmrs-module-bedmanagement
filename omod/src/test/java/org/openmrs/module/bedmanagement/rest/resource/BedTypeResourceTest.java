@@ -69,7 +69,7 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 		List results = (ArrayList) object.get("results");
 		
 		Assert.assertEquals(1, results.size());
-		Assert.assertEquals("6f9fb240-0fd5-11e8-adb7-080027b38971", PropertyUtils.getProperty(results.get(0), "uuid"));
+		Assert.assertEquals("6f9fb240-0fd5-11e8-adb7-080027b38973", PropertyUtils.getProperty(results.get(0), "uuid"));
 		Assert.assertEquals("luxury", PropertyUtils.getProperty(results.get(0), "name"));
 	}
 	
@@ -108,7 +108,7 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 	public void onDeleteBedTypeByIdShouldThrowException() {
 		try {
 			MockHttpServletRequest request = request(RequestMethod.DELETE,
-			    getURI() + "/6f9fb240-0fd5-11e8-adb7-080027b38971");
+			    getURI() + "/6f9fb240-0fd5-11e8-adb7-080027b38973");
 			handle(request);
 		}
 		catch (Exception e) {
@@ -135,11 +135,11 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 		MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI() + "/" + bedTypeId);
 		handle(getRequest);
 	}
-
+	
 	@Test
 	public void shouldRetireBedType() throws Exception {
 		String uuid = "6f9fb341-0fd5-11e8-adb7-080027b38972";
-
+		
 		MockHttpServletRequest retireRequest = request(RequestMethod.POST, getURI() + "/" + uuid);
 		SimpleObject retireParameters = new SimpleObject();
 		retireParameters.put("retired", "true");
@@ -147,17 +147,17 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 		String retireJson = new ObjectMapper().writeValueAsString(retireParameters);
 		retireRequest.setContent(retireJson.getBytes());
 		handle(retireRequest);
-
+		
 		MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI());
 		SimpleObject object = deserialize(handle(getRequest));
 		List results = object.get("results");
 		assertEquals(results.size(), 2);
 	}
-
+	
 	@Test(expected = APIException.class)
 	public void shouldThrowExceptionWhenRetireReasonIsBlank() throws Exception {
 		String uuid = "6f9fb341-0fd5-11e8-adb7-080027b38972";
-
+		
 		MockHttpServletRequest retireRequest = request(RequestMethod.POST, getURI() + "/" + uuid);
 		SimpleObject retireParameters = new SimpleObject();
 		retireParameters.put("retired", "true");
