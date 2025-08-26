@@ -41,9 +41,22 @@ export default class AddEditBedTag extends React.Component {
     onSubmitHandler(event) {
         event.preventDefault();
 
-        this.setState({
-            disableSubmit: true
-        });
+        const existingTags = this.props.bedTagFunctions.getAllBedTags() || [];
+        const duplicate = existingTags.some(
+            (tag) =>
+                tag.name.toLowerCase() === this.state.name.trim().toLowerCase() &&
+                tag.uuid !== this.state.uuid
+        );
+
+        if (duplicate) {
+            this.props.bedTagFunctions.notify(
+                'error',
+                this.intl.formatMessage({id: 'BED_TAG_DUPLICATE_MSG'}, {name: this.state.name})
+            );
+            return;
+        }
+
+        this.setState({ disableSubmit: true });
         const self = this;
         const parameters = {
             name: this.state.name
@@ -73,8 +86,7 @@ export default class AddEditBedTag extends React.Component {
                 self.setState({
                     disableSubmit: false
                 });
-
-                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                const error = errorResponse.response?.data?.error || errorResponse;
                 self.props.bedTagFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }
