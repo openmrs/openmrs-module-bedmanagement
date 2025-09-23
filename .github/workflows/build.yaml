@@ -19,6 +19,9 @@ jobs:
       matrix:
         java-version: [8, 11, 17]
 
+    env:
+      JAVA_VERSION: ${{ matrix.java-version }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -29,11 +32,15 @@ jobs:
           distribution: temurin
           cache: maven
 
-      - name: Build and Test with Maven
+      - name: Configure MAVEN_OPTS for Java 9+
+        if: ${{ matrix.java-version != 8 }}
         run: |
-          if [[ "${{ matrix.java-version }}" == "8" ]]; then
-            MAVEN_OPTS=""
-          else
-            MAVEN_OPTS="--add-opens java.xml/jdk.xml.internal=ALL-UNNAMED"
-          fi
-          mvn clean install --batch-mode --show-version --file pom.xml
+          echo "MAVEN_OPTS=--add-opens java.xml/jdk.xml.internal=ALL-UNNAMED" >> $GITHUB_ENV
+          echo "MAVEN_OPTS=$MAVEN_OPTS --add-opens java.base/java.lang=ALL-UNNAMED" >> $GITHUB_ENV
+          echo "MAVEN_OPTS=$MAVEN_OPTS --add-opens java.base/java.io=ALL-UNNAMED" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true --batch-mode --show-version --file pom.xml
+
+      - name: Build and Test with Maven
+        run: mvn test --batch-mode --show-version --file pom.xml
