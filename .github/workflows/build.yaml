@@ -1,4 +1,4 @@
-name: Build and Test with Maven
+name: Build with Maven
 
 on:
   push:
@@ -11,53 +11,23 @@ on:
       - 'master'
   workflow_dispatch:
 
-permissions: read-all
-
 jobs:
   build:
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        platform:
-          - ubuntu-16.04
-        java-version:
-          - 8
-    runs-on: ${{ matrix.platform }}
+        java-version: [8, 11, 17]
+
     steps:
-      - uses: actions/checkout@v5
-      - name: Setup JDK
-        uses: actions/setup-java@v5
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v4
         with:
-          distribution: 'adopt'
           java-version: ${{ matrix.java-version }}
-
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
-      - name: Install dependencies
-        run: mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true --batch-mode --show-version --file pom.xml
+          distribution: temurin
+          cache: maven
 
       - name: Build and Test with Maven
-        run: mvn test --batch-mode --file pom.xml
-
-      - name: Set branch name and PR number
-        id: refs
-        run: |
-          BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
-          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH" 2>/dev/null || echo "")
-          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
-
-      - name: Update coverage data
-        if: ${{ steps.refs.outcome == 'success' }}
-        continue-on-error: true
-        env:
-          CI_NAME: GitHub
-          CI_BUILD_NUMBER: ${{ github.run_id }}
-          CI_BUILD_URL: https://github.com/${{ github.repository }}/commit/${{ github.event.after }}/checks
-          CI_BRANCH: ${{ steps.refs.outputs.branch_name }}
-          CI_PULL_REQUEST: ${{ steps.refs.outputs.pr_number }}
-        run: mvn jacoco:report coveralls:report --batch-mode --file pom.xml --no-transfer-progress -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
+        run: mvn clean install --batch-mode --show-version --file pom.xml
