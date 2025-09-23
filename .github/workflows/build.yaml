@@ -30,4 +30,6 @@ jobs:
           cache: maven
 
       - name: Build and Test with Maven
-        run: mvn clean install --batch-mode --show-version --file pom.xml
+        run: |
+          MAVEN_OPTS="--add-opens java.xml/jdk.xml.internal=ALL-UNNAMED" \
+          mvn clean install --batch-mode --show-version --file pom.xml
