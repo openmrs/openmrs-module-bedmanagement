@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - '2.x.x'
+      - 'master'
   pull_request:
     branches:
       - '2.x.x'
+      - 'master'
   workflow_dispatch:
 
 permissions: read-all
