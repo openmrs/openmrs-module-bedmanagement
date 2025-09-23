@@ -31,5 +31,9 @@ jobs:
 
       - name: Build and Test with Maven
         run: |
-          MAVEN_OPTS="--add-opens java.xml/jdk.xml.internal=ALL-UNNAMED" \
+          if [[ "${{ matrix.java-version }}" == "8" ]]; then
+            MAVEN_OPTS=""
+          else
+            MAVEN_OPTS="--add-opens java.xml/jdk.xml.internal=ALL-UNNAMED"
+          fi
           mvn clean install --batch-mode --show-version --file pom.xml
