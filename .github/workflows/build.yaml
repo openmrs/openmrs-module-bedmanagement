@@ -1,0 +1,32 @@
+name: Build with Maven
+
+on:
+  push:
+    branches:
+      - '2.x.x'
+      - 'master'
+  pull_request:
+    branches:
+      - '2.x.x'
+      - 'master'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          java-version: 8
+          distribution: temurin
+          cache: maven
+
+      - name: Install dependencies
+        run: mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true --batch-mode --show-version --file pom.xml
+
+      - name: Build and Test with Maven
+        run: mvn test --batch-mode --show-version --file pom.xml
