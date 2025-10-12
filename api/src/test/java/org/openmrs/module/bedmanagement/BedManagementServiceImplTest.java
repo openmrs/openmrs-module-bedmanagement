@@ -30,6 +30,7 @@ import java.util.HashSet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -83,11 +84,14 @@ public class BedManagementServiceImplTest {
 		currentAssignment.setPatient(patient);
 		currentAssignment.setStartDatetime(new Date());
 		currentAssignment.setEndDatetime(null);
+		currentAssignment.setVoided(false);
+
 		BedPatientAssignment previousAssignment = new BedPatientAssignment();
 		previousAssignment.setBed(bed);
 		previousAssignment.setPatient(patient);
 		previousAssignment.setStartDatetime(new Date());
 		previousAssignment.setEndDatetime(new Date());
+		previousAssignment.setVoided(true);
 		
 		when(bedManagementDao.getBedById(bedId)).thenReturn(bed);
 		when(bedManagementDao.getWardForBed(bed)).thenReturn(ward);
@@ -118,18 +122,21 @@ public class BedManagementServiceImplTest {
 		currentAssignment1.setPatient(patient1);
 		currentAssignment1.setStartDatetime(new Date());
 		currentAssignment1.setEndDatetime(null);
+		currentAssignment1.setVoided(false);
 		
 		BedPatientAssignment currentAssignment2 = new BedPatientAssignment();
 		currentAssignment2.setBed(bed);
 		currentAssignment2.setPatient(patient2);
 		currentAssignment2.setStartDatetime(new Date());
 		currentAssignment2.setEndDatetime(null);
+		currentAssignment2.setVoided(false); 
 		
 		BedPatientAssignment stoppedBedAssignment = new BedPatientAssignment();
 		stoppedBedAssignment.setBed(bed);
 		stoppedBedAssignment.setPatient(patient1);
 		stoppedBedAssignment.setStartDatetime(new Date());
 		stoppedBedAssignment.setEndDatetime(new Date());
+		stoppedBedAssignment.setVoided(true);
 		
 		when(bedManagementDao.getBedById(bedId)).thenReturn(bed);
 		when(bedManagementDao.getWardForBed(bed)).thenReturn(ward);
