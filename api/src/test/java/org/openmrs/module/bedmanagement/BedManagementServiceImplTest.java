@@ -31,6 +31,7 @@ import java.util.HashSet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -66,54 +67,6 @@ public class BedManagementServiceImplTest {
 		bedManagementService.getAdmissionLocationByLocation(location);
 
 		verify(bedManagementDao).getAdmissionLocationForLocation(location);
-	}
-
-	@Test
-	public void shouldReturnCurrentBedAssignmentWhenVoidedIsFalse() {
-		Bed bed = new Bed();
-		bed.setId(10);
-		bed.setBedNumber("B201");
-
-		Patient patient = createPatient("PID789", "uuid789", "Alice", "B", "Smith");
-
-		BedPatientAssignment assignment = new BedPatientAssignment();
-		assignment.setBed(bed);
-		assignment.setPatient(patient);
-		assignment.setStartDatetime(new Date());
-		assignment.setEndDatetime(null);
-		assignment.setVoided(false);
-
-		when(bedManagementDao.getCurrentAssignmentsByBed(bed))
-				.thenReturn(Collections.singletonList(assignment));
-
-		BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bed.getId()));
-
-		assertEquals(1, bedDetails.getPatients().size());
-		assertEquals("PID789", bedDetails.getPatients().get(0).getPatientIdentifier().getIdentifier());
-		assertEquals("Alice B Smith", bedDetails.getPatients().get(0).getPersonName().getFullName());
-	}
-
-	@Test
-	public void shouldNotReturnBedAssignmentWhenVoidedIsTrue() {
-		Bed bed = new Bed();
-		bed.setId(11);
-		bed.setBedNumber("B202");
-
-		Patient patient = createPatient("PID101", "uuid101", "Bob", "C", "Jones");
-
-		BedPatientAssignment assignment = new BedPatientAssignment();
-		assignment.setBed(bed);
-		assignment.setPatient(patient);
-		assignment.setStartDatetime(new Date());
-		assignment.setEndDatetime(null);
-		assignment.setVoided(true);
-
-		when(bedManagementDao.getCurrentAssignmentsByBed(bed))
-				.thenReturn(Collections.emptyList());
-
-		BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bed.getId()));
-
-		assertEquals(0, bedDetails.getPatients().size());
 	}
 
 	@Test
@@ -197,6 +150,53 @@ public class BedManagementServiceImplTest {
 		assertEquals("GAN456", actualPatient2.getPatientIdentifier().getIdentifier());
 		assertEquals("first2 middle2 last2", actualPatient2.getPersonName().getFullName());
 		assertEquals("M", actualPatient2.getGender());
+	}
+
+	@Test
+	public void shouldReturnCurrentBedAssignmentWhenVoidedIsFalse() {
+		Bed bed = new Bed();
+		bed.setId(10);
+		bed.setBedNumber("B201");
+
+		Patient patient = createPatient("PID789", "uuid789", "Alice", "B", "Smith");
+
+		BedPatientAssignment assignment = new BedPatientAssignment();
+		assignment.setBed(bed);
+		assignment.setPatient(patient);
+		assignment.setStartDatetime(new Date());
+		assignment.setEndDatetime(null);
+		assignment.setVoided(false);
+
+		when(bedManagementDao.getCurrentAssignmentsByBed(any(Bed.class)))
+				.thenReturn(Collections.singletonList(assignment));
+
+		BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bed.getId()));
+
+		assertEquals(1, bedDetails.getPatients().size());
+		assertEquals("PID789", bedDetails.getPatients().get(0).getPatientIdentifier().getIdentifier());
+		assertEquals("Alice B Smith", bedDetails.getPatients().get(0).getPersonName().getFullName());
+	}
+
+	@Test
+	public void shouldNotReturnBedAssignmentWhenVoidedIsTrue() {
+		Bed bed = new Bed();
+		bed.setId(11);
+		bed.setBedNumber("B202");
+
+		Patient patient = createPatient("PID101", "uuid101", "Bob", "C", "Jones");
+
+		BedPatientAssignment assignment = new BedPatientAssignment();
+		assignment.setBed(bed);
+		assignment.setPatient(patient);
+		assignment.setStartDatetime(new Date());
+		assignment.setEndDatetime(null);
+		assignment.setVoided(true);
+
+		when(bedManagementDao.getCurrentAssignmentsByBed(any(Bed.class))).thenReturn(Collections.emptyList());
+
+		BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bed.getId()));
+
+		assertEquals(0, bedDetails.getPatients().size());
 	}
 
 	@Test
