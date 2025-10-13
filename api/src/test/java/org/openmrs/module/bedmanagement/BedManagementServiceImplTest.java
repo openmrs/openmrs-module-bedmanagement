@@ -167,10 +167,11 @@ public class BedManagementServiceImplTest {
 		assignment.setEndDatetime(null);
 		assignment.setVoided(false);
 
+		when(bedManagementDao.getBedById(10)).thenReturn(bed);
 		when(bedManagementDao.getCurrentAssignmentsByBed(any(Bed.class)))
 				.thenReturn(Collections.singletonList(assignment));
 
-		BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bed.getId()));
+		BedDetails bedDetails = bedManagementService.getBedDetailsById("10");
 
 		assertEquals(1, bedDetails.getPatients().size());
 		assertEquals("PID789", bedDetails.getPatients().get(0).getPatientIdentifier().getIdentifier());
@@ -192,9 +193,11 @@ public class BedManagementServiceImplTest {
 		assignment.setEndDatetime(null);
 		assignment.setVoided(true);
 
-		when(bedManagementDao.getCurrentAssignmentsByBed(any(Bed.class))).thenReturn(Collections.emptyList());
+		when(bedManagementDao.getBedById(11)).thenReturn(bed);
+		when(bedManagementDao.getCurrentAssignmentsByBed(any(Bed.class)))
+				.thenReturn(Collections.emptyList());
 
-		BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bed.getId()));
+		BedDetails bedDetails = bedManagementService.getBedDetailsById("11");
 
 		assertEquals(0, bedDetails.getPatients().size());
 	}
