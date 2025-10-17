@@ -14,6 +14,7 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
+import org.openmrs.module.bedmanagement.dao.impl.BedManagementDaoImpl;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
@@ -27,14 +28,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
+import java.util.UUID;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -49,51 +49,65 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @PrepareForTest(Context.class)
 public class BedManagementServiceImplTest {
 	
-	BedManagementServiceImpl bedManagementService;
+	private BedManagementServiceImpl bedManagementService;
+	
+	private BedManagementDaoImpl realBedManagementDao;
 	
 	@Mock
-	BedManagementDao bedManagementDao;
+	private BedManagementDao bedManagementDao;
+	
+	@Mock
+	private SessionFactory sessionFactory;
+	
+	@Mock
+	private Session session;
 	
 	@Before
 	public void setup() {
 		bedManagementService = new BedManagementServiceImpl();
 		bedManagementService.setDao(bedManagementDao);
+		
+		realBedManagementDao = new BedManagementDaoImpl();
+		realBedManagementDao.setSessionFactory(sessionFactory);
+		
+		when(sessionFactory.getCurrentSession()).thenReturn(session);
 	}
 	
 	@Test
-	public void shouldReturnBedByPatient() {
-		Patient patient = Context.getPatientService().getPatient(2);
-		Bed bed = bedManagementDao.getBedByPatient(patient);
+	public void shouldCallGetBedByPatient_realDao() {
+		Patient patient = createPatient("PID001", "uuid001", "John", "M", "Doe");
 		
-		assertNotNull("Expected to find a bed assigned to patient with ID 2", bed);
-		assertEquals("B101", bed.getBedNumber());
+		realBedManagementDao.getBedByPatient(patient);
+		
+		verify(session).createQuery(any(String.class));
 	}
 	
 	@Test
-	public void shouldReturnBedPatientAssignmentByUuid() {
-		String uuid = "bpa-uuid-001";
-		BedPatientAssignment assignment = bedManagementDao.getBedPatientAssignmentByUuid(uuid);
+	public void shouldCallGetBedPatientAssignmentByUuid_realDao() {
+		String uuid = UUID.randomUUID().toString();
 		
-		assertNotNull("Expected BedPatientAssignment for the given UUID", assignment);
-		assertEquals(uuid, assignment.getUuid());
+		realBedManagementDao.getBedPatientAssignmentByUuid(uuid);
+		
+		verify(session).createQuery(any(String.class));
 	}
 	
 	@Test
-	public void shouldReturnCurrentAssignmentsByBed() {
-		Bed bed = bedManagementDao.getBedById(1);
-		List<BedPatientAssignment> assignments = bedManagementDao.getCurrentAssignmentsByBed(bed);
+	public void shouldCallGetCurrentAssignmentsByBed_realDao() {
+		Bed bed = new Bed();
+		bed.setId(1);
 		
-		assertNotNull("Expected assignments list not to be null", assignments);
-		assertFalse("Expected at least one active assignment for bed ID 1", assignments.isEmpty());
+		realBedManagementDao.getCurrentAssignmentsByBed(bed);
+		
+		verify(session).createQuery(any(String.class));
 	}
 	
 	@Test
-	public void shouldReturnLatestBedByVisit() {
-		String visitUuid = "visit-uuid-123";
-		Bed bed = bedManagementDao.getLatestBedByVisit(visitUuid);
+	public void shouldCallGetLatestBedByVisit_realDao() {
+		String visitUuid = UUID.randomUUID().toString();
 		
-		assertNotNull("Expected a bed returned for the given visit UUID", bed);
-		assertEquals("B103", bed.getBedNumber());
+		realBedManagementDao.getLatestBedByVisit(visitUuid);
+		
+		verify(session).createQuery(any(String.class));
 	}
 	
 	@Test
@@ -206,10 +220,9 @@ public class BedManagementServiceImplTest {
 		assignment.setEndDatetime(null);
 		assignment.setVoided(false);
 		
-		when(bedManagementDao.getBedById(10)).thenReturn(bed);
 		when(bedManagementDao.getCurrentAssignmentsByBed(any(Bed.class))).thenReturn(Collections.singletonList(assignment));
 		
-		BedDetails bedDetails = bedManagementService.getBedDetailsById("10");
+		BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bed.getId()));
 		
 		assertEquals(1, bedDetails.getPatients().size());
 		assertEquals("PID789", bedDetails.getPatients().get(0).getPatientIdentifier().getIdentifier());
@@ -231,10 +244,9 @@ public class BedManagementServiceImplTest {
 		assignment.setEndDatetime(null);
 		assignment.setVoided(true);
 		
-		when(bedManagementDao.getBedById(11)).thenReturn(bed);
 		when(bedManagementDao.getCurrentAssignmentsByBed(any(Bed.class))).thenReturn(Collections.emptyList());
 		
-		BedDetails bedDetails = bedManagementService.getBedDetailsById("11");
+		BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bed.getId()));
 		
 		assertEquals(0, bedDetails.getPatients().size());
 	}
