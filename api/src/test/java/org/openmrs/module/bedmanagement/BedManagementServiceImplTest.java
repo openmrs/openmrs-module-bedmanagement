@@ -3,15 +3,18 @@ package org.openmrs.module.bedmanagement;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.Mock;
-import org.openmrs.Location;
+
 import org.openmrs.Patient;
+import org.openmrs.PersonName;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
-import org.openmrs.PersonName;
+import org.openmrs.Location;
 import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
+
 import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.dao.impl.BedManagementDaoImpl;
@@ -20,9 +23,13 @@ import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
+
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,116 +37,131 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.UUID;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
-
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.spy;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Context.class)
 public class BedManagementServiceImplTest {
-	
-	private BedManagementServiceImpl bedManagementService;
-	
-	@Mock
-	private BedManagementDao bedManagementDao;
-	
-	@Mock
-	private SessionFactory sessionFactory;
-	
-	@Mock
-	private Session session;
-	
-	private BedManagementDaoImpl realBedManagementDao;
-	
-	private Bed dummyBed;
-	
-	private BedPatientAssignment dummyAssignment;
-	
-	@Before
-	public void setup() {
-		bedManagementService = new BedManagementServiceImpl();
-		bedManagementService.setDao(bedManagementDao);
-		
-		realBedManagementDao = spy(new BedManagementDaoImpl());
-		realBedManagementDao.setSessionFactory(sessionFactory);
-		
-		when(sessionFactory.getCurrentSession()).thenReturn(session);
-		
-		dummyBed = new Bed();
-		dummyBed.setId(1);
-		dummyBed.setBedNumber("B101");
-		
-		dummyAssignment = new BedPatientAssignment();
-		dummyAssignment.setBed(dummyBed);
-		dummyAssignment.setPatient(new Patient());
-		
-		Query<BedPatientAssignment> assignmentQuery = mock(Query.class);
-		when(session.createQuery(contains("FROM BedPatientAssignment"), eq(BedPatientAssignment.class)))
-		        .thenReturn(assignmentQuery);
-		when(assignmentQuery.setParameter(anyString(), any())).thenReturn(assignmentQuery);
-		when(assignmentQuery.setParameter(anyInt(), any())).thenReturn(assignmentQuery);
-		when(assignmentQuery.list()).thenReturn(Collections.singletonList(dummyAssignment));
-		when(assignmentQuery.uniqueResult()).thenReturn(dummyAssignment);
-		
-		Query<Bed> bedQuery = mock(Query.class);
-		when(session.createQuery(contains("FROM Bed"), eq(Bed.class))).thenReturn(bedQuery);
-		when(bedQuery.setParameter(anyString(), any())).thenReturn(bedQuery);
-		when(bedQuery.setParameter(anyInt(), any())).thenReturn(bedQuery);
-		when(bedQuery.uniqueResult()).thenReturn(dummyBed);
-		
-		when(bedManagementDao.getBedById(any(Integer.class))).thenReturn(new Bed());
-	}
-	
-	@Test
-	public void shouldCallGetBedByPatient() {
-		Patient patient = new Patient();
-		patient.setUuid(UUID.randomUUID().toString());
-		
-		doCallRealMethod().when(realBedManagementDao).getBedByPatient(any(Patient.class));
-		realBedManagementDao.getBedByPatient(patient);
-		
-		verify(sessionFactory).getCurrentSession();
-		verify(session, atLeastOnce()).createQuery(any(String.class));
-	}
-	
-	@Test
-	public void shouldCallGetBedPatientAssignmentByUuid() {
-		String uuid = UUID.randomUUID().toString();
-		
-		doCallRealMethod().when(realBedManagementDao).getBedPatientAssignmentByUuid(any(String.class));
-		realBedManagementDao.getBedPatientAssignmentByUuid(uuid);
-		
-		verify(sessionFactory).getCurrentSession();
-		verify(session, atLeastOnce()).createQuery(any(String.class));
-	}
-	
-	@Test
-	public void shouldCallGetCurrentAssignmentsByBed() {
-		Bed bed = new Bed();
-		bed.setId(1);
-		
-		doCallRealMethod().when(realBedManagementDao).getCurrentAssignmentsByBed(any(Bed.class));
-		realBedManagementDao.getCurrentAssignmentsByBed(bed);
-		
-		verify(sessionFactory).getCurrentSession();
-		verify(session, atLeastOnce()).createQuery(any(String.class));
-	}
-	
-	@Test
-	public void shouldCallGetLatestBedByVisit() {
+
+    private BedManagementServiceImpl bedManagementService;
+
+    @Mock
+    private BedManagementDao bedManagementDao;
+
+    @Mock
+    private SessionFactory sessionFactory;
+
+    @Mock
+    private Session session;
+
+    private BedManagementDaoImpl realBedManagementDao;
+
+    private Bed dummyBed;
+    private BedPatientAssignment dummyAssignment;
+
+    @Before
+    public void setup() {
+        // Initialize service
+        bedManagementService = new BedManagementServiceImpl();
+        bedManagementService.setDao(bedManagementDao);
+
+        // Spy the real DAO for the four real-method calls
+        realBedManagementDao = spy(new BedManagementDaoImpl());
+        realBedManagementDao.setSessionFactory(sessionFactory);
+
+        // Mock session factory
+        when(sessionFactory.getCurrentSession()).thenReturn(session);
+
+        // Dummy Bed and Assignment
+        dummyBed = new Bed();
+        dummyBed.setId(1);
+        dummyBed.setBedNumber("B101");
+
+        dummyAssignment = new BedPatientAssignment();
+        dummyAssignment.setBed(dummyBed);
+        dummyAssignment.setPatient(new Patient());
+
+        // Mock BedPatientAssignment query
+        Query<BedPatientAssignment> assignmentQuery = mock(Query.class);
+        when(session.createQuery("FROM BedPatientAssignment WHERE patient.uuid = :uuid", BedPatientAssignment.class))
+                .thenReturn(assignmentQuery);
+        when(assignmentQuery.setParameter(anyString(), any())).thenReturn(assignmentQuery);
+        when(assignmentQuery.list()).thenReturn(Collections.singletonList(dummyAssignment));
+        when(assignmentQuery.uniqueResult()).thenReturn(dummyAssignment);
+
+        // Mock Bed query
+        Query<Bed> bedQuery = mock(Query.class);
+        when(session.createQuery("FROM Bed WHERE id = :id", Bed.class)).thenReturn(bedQuery);
+        when(bedQuery.setParameter(anyString(), any())).thenReturn(bedQuery);
+        when(bedQuery.uniqueResult()).thenReturn(dummyBed);
+
+        // Mock other DAO methods (outside the four real ones)
+        when(bedManagementDao.getBedById(any(Integer.class))).thenReturn(new Bed());
+    }
+
+    // === Tests for the four real DAO methods ===
+
+    @Test
+    public void shouldGetBedByPatient() {
+        Patient patient = new Patient();
+        patient.setUuid(UUID.randomUUID().toString());
+
+        doCallRealMethod().when(realBedManagementDao).getBedByPatient(any(Patient.class));
+        Bed result = realBedManagementDao.getBedByPatient(patient);
+
+        assertNotNull(result);
+        verify(sessionFactory).getCurrentSession();
+        verify(session, atLeastOnce()).createQuery(anyString());
+    }
+
+    @Test
+    public void shouldGetBedPatientAssignmentByUuid() {
+        String uuid = UUID.randomUUID().toString();
+
+        doCallRealMethod().when(realBedManagementDao).getBedPatientAssignmentByUuid(anyString());
+        BedPatientAssignment result = realBedManagementDao.getBedPatientAssignmentByUuid(uuid);
+
+        assertNotNull(result);
+        verify(sessionFactory).getCurrentSession();
+        verify(session, atLeastOnce()).createQuery(anyString());
+    }
+
+    @Test
+    public void shouldGetCurrentAssignmentsByBed() {
+        Bed bed = new Bed();
+        bed.setId(1);
+
+        doCallRealMethod().when(realBedManagementDao).getCurrentAssignmentsByBed(any(Bed.class));
+        realBedManagementDao.getCurrentAssignmentsByBed(bed);
+
+        verify(sessionFactory).getCurrentSession();
+        verify(session, atLeastOnce()).createQuery(anyString());
+    }
+
+    @Test
+	public void shouldGetLatestBedByVisit() {
 		String visitUuid = UUID.randomUUID().toString();
-		
-		doCallRealMethod().when(realBedManagementDao).getLatestBedByVisit(any(String.class));
+
+		doCallRealMethod().when(realBedManagementDao).getLatestBedByVisit(anyString());
 		realBedManagementDao.getLatestBedByVisit(visitUuid);
-		
+
 		verify(sessionFactory).getCurrentSession();
-		verify(session, atLeastOnce()).createQuery(any(String.class));
+		verify(session, atLeastOnce()).createQuery(anyString());
 	}
 	
 	@Test
