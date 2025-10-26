@@ -2,10 +2,12 @@ package org.openmrs.module.bedmanagement;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.Encounter;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonName;
+import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
@@ -21,126 +23,144 @@ import static org.junit.Assert.assertNotNull;
 
 public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 
-	private BedManagementDao bedManagementDao;
+    private BedManagementDao bedManagementDao;
 
-	@Before
-	public void setup() {
-		bedManagementDao = Context.getService(BedManagementDao.class);
-	}
+    @Before
+    public void setup() {
+        bedManagementDao = Context.getService(BedManagementDao.class);
+    }
 
-	private Patient createPatient(String identifierString, String firstName, String middleName, String lastName) {
-		PatientIdentifierType pit = new PatientIdentifierType();
-		pit.setName("Test Identifier Type");
-		Context.getPatientService().savePatientIdentifierType(pit);
+    private Patient createPatient(String identifierString, String firstName, String middleName, String lastName) {
+        PatientIdentifierType pit = new PatientIdentifierType();
+        pit.setName("Test Identifier Type");
+        Context.getPatientService().savePatientIdentifierType(pit);
 
-		PatientIdentifier identifier = new PatientIdentifier(identifierString, pit, null);
-		identifier.setPreferred(true);
+        PatientIdentifier identifier = new PatientIdentifier(identifierString, pit, null);
+        identifier.setPreferred(true);
 
-		PersonName name = new PersonName(firstName, middleName, lastName);
-		name.setPreferred(true);
+        PersonName name = new PersonName(firstName, middleName, lastName);
+        name.setPreferred(true);
 
-		Patient patient = new Patient();
-		patient.addIdentifier(identifier);
-		patient.addName(name);
-		patient.setGender("M");
+        Patient patient = new Patient();
+        patient.addIdentifier(identifier);
+        patient.addName(name);
+        patient.setGender("M");
 
-		return Context.getPatientService().savePatient(patient);
-	}
+        return Context.getPatientService().savePatient(patient);
+    }
 
-	private Bed createBed(String bedNumber) {
-		BedType bedType = new BedType();
-		bedType.setName("Test BedType");
-		bedType.setDisplayName("TB");
-		bedType.setDescription("Test Bed Type");
-		Context.getService(BedManagementDao.class).saveBedType(bedType);
+    private Bed createBed(String bedNumber) {
+        BedType bedType = new BedType();
+        bedType.setName("Test BedType");
+        bedType.setDisplayName("TB");
+        bedType.setDescription("Test Bed Type");
+        Context.getService(BedManagementDao.class).saveBedType(bedType);
 
-		Bed bed = new Bed();
-		bed.setBedNumber(bedNumber);
-		bed.setStatus("AVAILABLE");
-		bed.setBedType(bedType);
-		return bedManagementDao.saveBed(bed);
-	}
+        Bed bed = new Bed();
+        bed.setBedNumber(bedNumber);
+        bed.setStatus("AVAILABLE");
+        bed.setBedType(bedType);
+        return bedManagementDao.saveBed(bed);
+    }
 
-	@Test
-	public void shouldReturnBedByPatient() {
-		Patient patient = createPatient("PID123", "John", "A", "Doe");
-		Bed bed = createBed("B101");
+    @Test
+    public void shouldReturnBedByPatient() {
+        Patient patient = createPatient("PID123", "John", "A", "Doe");
+        Bed bed = createBed("B101");
 
-		BedPatientAssignment assignment = new BedPatientAssignment();
-		assignment.setBed(bed);
-		assignment.setPatient(patient);
-		assignment.setStartDatetime(new Date());
-		assignment.setEndDatetime(null);
-		bedManagementDao.saveBedPatientAssignment(assignment);
+        BedPatientAssignment assignment = new BedPatientAssignment();
+        assignment.setBed(bed);
+        assignment.setPatient(patient);
+        assignment.setStartDatetime(new Date());
+        assignment.setEndDatetime(null);
+        bedManagementDao.saveBedPatientAssignment(assignment);
 
-		Bed result = bedManagementDao.getBedByPatient(patient);
-		assertNotNull(result);
-		assertEquals("B101", result.getBedNumber());
-	}
+        Bed result = bedManagementDao.getBedByPatient(patient);
+        assertNotNull(result);
+        assertEquals("B101", result.getBedNumber());
+    }
 
-	@Test
-	public void shouldReturnBedPatientAssignmentByUuid() {
-		Patient patient = createPatient("PID124", "Jane", "B", "Smith");
-		Bed bed = createBed("B102");
+    @Test
+    public void shouldReturnBedPatientAssignmentByUuid() {
+        Patient patient = createPatient("PID124", "Jane", "B", "Smith");
+        Bed bed = createBed("B102");
 
-		BedPatientAssignment assignment = new BedPatientAssignment();
-		assignment.setBed(bed);
-		assignment.setPatient(patient);
-		assignment.setStartDatetime(new Date());
-		assignment.setEndDatetime(null);
-		BedPatientAssignment saved = bedManagementDao.saveBedPatientAssignment(assignment);
+        BedPatientAssignment assignment = new BedPatientAssignment();
+        assignment.setBed(bed);
+        assignment.setPatient(patient);
+        assignment.setStartDatetime(new Date());
+        assignment.setEndDatetime(null);
+        BedPatientAssignment saved = bedManagementDao.saveBedPatientAssignment(assignment);
 
-		BedPatientAssignment result = bedManagementDao.getBedPatientAssignmentByUuid(saved.getUuid());
-		assertNotNull(result);
-		assertEquals(patient.getUuid(), result.getPatient().getUuid());
-	}
+        BedPatientAssignment result = bedManagementDao.getBedPatientAssignmentByUuid(saved.getUuid());
+        assertNotNull(result);
+        assertEquals(patient.getUuid(), result.getPatient().getUuid());
+    }
 
-	@Test
-	public void shouldReturnCurrentAssignmentsByBed() {
-		Bed bed = createBed("B103");
-		Patient patient1 = createPatient("PID125", "Alice", "C", "Jones");
-		Patient patient2 = createPatient("PID126", "Bob", "D", "White");
+    @Test
+    public void shouldReturnCurrentAssignmentsByBed() {
+        Bed bed = createBed("B103");
+        Patient patient1 = createPatient("PID125", "Alice", "C", "Jones");
+        Patient patient2 = createPatient("PID126", "Bob", "D", "White");
 
-		BedPatientAssignment assignment1 = new BedPatientAssignment();
-		assignment1.setBed(bed);
-		assignment1.setPatient(patient1);
-		assignment1.setStartDatetime(new Date());
-		assignment1.setEndDatetime(null);
-		bedManagementDao.saveBedPatientAssignment(assignment1);
+        BedPatientAssignment assignment1 = new BedPatientAssignment();
+        assignment1.setBed(bed);
+        assignment1.setPatient(patient1);
+        assignment1.setStartDatetime(new Date());
+        assignment1.setEndDatetime(null);
+        bedManagementDao.saveBedPatientAssignment(assignment1);
 
-		BedPatientAssignment assignment2 = new BedPatientAssignment();
-		assignment2.setBed(bed);
-		assignment2.setPatient(patient2);
-		assignment2.setStartDatetime(new Date());
-		assignment2.setEndDatetime(null);
-		bedManagementDao.saveBedPatientAssignment(assignment2);
+        BedPatientAssignment assignment2 = new BedPatientAssignment();
+        assignment2.setBed(bed);
+        assignment2.setPatient(patient2);
+        assignment2.setStartDatetime(new Date());
+        assignment2.setEndDatetime(null);
+        bedManagementDao.saveBedPatientAssignment(assignment2);
 
-		List<BedPatientAssignment> results = bedManagementDao.getCurrentAssignmentsByBed(bed);
-		assertEquals(2, results.size());
-	}
+        List<BedPatientAssignment> results = bedManagementDao.getCurrentAssignmentsByBed(bed);
+        assertEquals(2, results.size());
+    }
 
-	@Test
-	public void shouldReturnLatestBedByVisits() {
-		Patient patient = createPatient("PID127", "Charlie", "E", "Brown");
-		Bed bed1 = createBed("B104");
-		Bed bed2 = createBed("B105");
+    @Test
+    public void shouldReturnLatestBedByVisit() {
+        Patient patient = createPatient("PID127", "Charlie", "E", "Brown");
 
-		BedPatientAssignment assignment1 = new BedPatientAssignment();
-		assignment1.setBed(bed1);
-		assignment1.setPatient(patient);
-		assignment1.setStartDatetime(new Date(System.currentTimeMillis() - 100000L));
-		assignment1.setEndDatetime(new Date(System.currentTimeMillis() - 50000L));
-		bedManagementDao.saveBedPatientAssignment(assignment1);
+        Visit visit = new Visit();
+        visit.setPatient(patient);
+        Context.getVisitService().saveVisit(visit);
 
-		BedPatientAssignment assignment2 = new BedPatientAssignment();
-		assignment2.setBed(bed2);
-		assignment2.setPatient(patient);
-		assignment2.setStartDatetime(new Date());
-		assignment2.setEndDatetime(null);
-		bedManagementDao.saveBedPatientAssignment(assignment2);
+        Encounter encounter1 = new Encounter();
+        encounter1.setPatient(patient);
+        encounter1.setVisit(visit);
+        Context.getEncounterService().saveEncounter(encounter1);
 
-		Bed latest = bedManagementDao.getLatestBedByVisits(patient);
-		assertNotNull(latest);
-		assertEquals("B105", latest.getBedNumber());
-	}
+        Encounter encounter2 = new Encounter();
+        encounter2.setPatient(patient);
+        encounter2.setVisit(visit);
+        Context.getEncounterService().saveEncounter(encounter2);
+
+        Bed bed1 = createBed("B104");
+        Bed bed2 = createBed("B105");
+
+        BedPatientAssignment assignment1 = new BedPatientAssignment();
+        assignment1.setBed(bed1);
+        assignment1.setPatient(patient);
+        assignment1.setEncounter(encounter1);
+        assignment1.setStartDatetime(new Date(System.currentTimeMillis() - 100000L));
+        assignment1.setEndDatetime(new Date(System.currentTimeMillis() - 50000L));
+        bedManagementDao.saveBedPatientAssignment(assignment1);
+
+        BedPatientAssignment assignment2 = new BedPatientAssignment();
+        assignment2.setBed(bed2);
+        assignment2.setPatient(patient);
+        assignment2.setEncounter(encounter2);
+        assignment2.setStartDatetime(new Date());
+        assignment2.setEndDatetime(null);
+        bedManagementDao.saveBedPatientAssignment(assignment2);
+
+        Bed latest = bedManagementDao.getLatestBedByVisit(visit.getUuid());
+
+        assertNotNull(latest);
+        assertEquals("B105", latest.getBedNumber());
+    }
 }
