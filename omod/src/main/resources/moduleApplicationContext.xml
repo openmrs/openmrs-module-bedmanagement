@@ -1,25 +1,33 @@
-<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-  <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-  <property name="url" value="${database.url}"/>
-  <property name="username" value="${database.username}"/>
-  <property name="password" value="${database.password}"/>
-</bean>
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-  <property name="dataSource" ref="dataSource"/>
-  <property name="packagesToScan" value="org.openmrs.module.bedmanagement.entity"/>
-  <property name="hibernateProperties">
-    <props>
-      <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-      <prop key="hibernate.show_sql">false</prop>
-    </props>
-  </property>
-</bean>
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="${database.url}"/>
+        <property name="username" value="${database.username}"/>
+        <property name="password" value="${database.password}"/>
+    </bean>
 
-<bean id="dbSessionFactory" class="org.openmrs.api.db.hibernate.DbSessionFactory">
-  <property name="sessionFactory" ref="sessionFactory"/>
-</bean>
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="org.openmrs.module.bedmanagement.entity"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">false</prop>
+            </props>
+        </property>
+    </bean>
 
-<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-  <property name="sessionFactory" ref="sessionFactory"/>
-</bean>
+    <bean id="dbSessionFactory" class="org.openmrs.api.db.hibernate.DbSessionFactory">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+</beans>
