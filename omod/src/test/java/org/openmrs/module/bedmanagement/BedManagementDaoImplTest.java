@@ -14,6 +14,7 @@ import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Date;
 import java.util.List;
@@ -21,18 +22,20 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+@ContextConfiguration(locations = {"classpath:moduleApplicationContext.xml"}, inheritLocations = false)
 public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 
     private BedManagementDao bedManagementDao;
 
     @Before
     public void setup() {
-        bedManagementDao = Context.getService(BedManagementDao.class);
+        bedManagementDao = Context.getRegisteredComponent("bedManagementDao", BedManagementDao.class);
     }
 
     private Patient createPatient(String identifierString, String firstName, String middleName, String lastName) {
         PatientIdentifierType pit = new PatientIdentifierType();
         pit.setName("Test Identifier Type");
+        pit.setDescription("Test Identifier Type Description");
         Context.getPatientService().savePatientIdentifierType(pit);
 
         PatientIdentifier identifier = new PatientIdentifier(identifierString, pit, null);
@@ -54,7 +57,7 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
         bedType.setName("Test BedType");
         bedType.setDisplayName("TB");
         bedType.setDescription("Test Bed Type");
-        Context.getService(BedManagementDao.class).saveBedType(bedType);
+        bedType = bedManagementDao.saveBedType(bedType);
 
         Bed bed = new Bed();
         bed.setBedNumber(bedNumber);
@@ -76,7 +79,8 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
         bedManagementDao.saveBedPatientAssignment(assignment);
 
         Bed result = bedManagementDao.getBedByPatient(patient);
-        assertNotNull(result);
+
+        assertNotNull("Expected a bed to be returned for the patient", result);
         assertEquals("B101", result.getBedNumber());
     }
 
@@ -93,7 +97,8 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
         BedPatientAssignment saved = bedManagementDao.saveBedPatientAssignment(assignment);
 
         BedPatientAssignment result = bedManagementDao.getBedPatientAssignmentByUuid(saved.getUuid());
-        assertNotNull(result);
+
+        assertNotNull("Expected a BedPatientAssignment to be found by UUID", result);
         assertEquals(patient.getUuid(), result.getPatient().getUuid());
     }
 
@@ -118,6 +123,8 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
         bedManagementDao.saveBedPatientAssignment(assignment2);
 
         List<BedPatientAssignment> results = bedManagementDao.getCurrentAssignmentsByBed(bed);
+
+        assertNotNull("Expected a list of current assignments", results);
         assertEquals(2, results.size());
     }
 
@@ -160,7 +167,7 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 
         Bed latest = bedManagementDao.getLatestBedByVisit(visit.getUuid());
 
-        assertNotNull(latest);
+        assertNotNull("Expected the latest bed to be returned for the visit", latest);
         assertEquals("B105", latest.getBedNumber());
     }
 }
