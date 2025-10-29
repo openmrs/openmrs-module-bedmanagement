@@ -14,7 +14,6 @@ import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Date;
 import java.util.List;
@@ -22,7 +21,6 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-@ContextConfiguration(locations = {"classpath:moduleApplicationContext.xml"})
 public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 
     private BedManagementDao bedManagementDao;
