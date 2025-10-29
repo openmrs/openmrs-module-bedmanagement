@@ -14,6 +14,7 @@ import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,15 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+/**
+ * Integration tests for BedManagementDaoImpl.
+ * This test explicitly loads moduleApplicationContext.xml
+ * to ensure all module beans (including bedManagementDao) are initialized correctly.
+ */
+@ContextConfiguration(locations = {
+        "classpath:applicationContext-service.xml",
+        "classpath*:moduleApplicationContext.xml"
+})
 public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 
     private BedManagementDao bedManagementDao;
@@ -28,6 +38,7 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
     @Before
     public void setup() {
         bedManagementDao = Context.getRegisteredComponent("bedManagementDao", BedManagementDao.class);
+        assertNotNull("bedManagementDao should be initialized", bedManagementDao);
     }
 
     private Patient createPatient(String identifierString, String firstName, String middleName, String lastName) {
