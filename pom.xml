@@ -4,7 +4,7 @@
 
   <groupId>org.openmrs.module</groupId>
   <artifactId>bedmanagement</artifactId>
-  <version>6.2.0-SNAPSHOT</version>
+  <version>7.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Bed Management Module</name>
   <description>Helps in alloting beds.</description>
@@ -37,7 +37,7 @@
   </modules>
 
   <properties>
-    <openMRSVersion>2.4.2</openMRSVersion>
+    <openMRSVersion>2.8.0</openMRSVersion>
     <openMRSRuntimeVersion>2.4.2</openMRSRuntimeVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <webservicesRestModuleVersion>2.29.0</webservicesRestModuleVersion>
