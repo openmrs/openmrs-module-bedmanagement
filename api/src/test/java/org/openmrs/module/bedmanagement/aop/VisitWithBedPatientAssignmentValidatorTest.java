@@ -10,7 +10,6 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.api.PatientService;
@@ -20,14 +19,11 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.BedDetails;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@org.springframework.test.context.ContextConfiguration(locations = {
-        "classpath:TestingApplicationContext.xml" }, inheritLocations = true)
-public class VisitWithBedPatientAssignmentValidatorTest extends BaseModuleWebContextSensitiveTest {
+public class VisitWithBedPatientAssignmentValidatorTest extends BaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private BedManagementService bedManagementService;
