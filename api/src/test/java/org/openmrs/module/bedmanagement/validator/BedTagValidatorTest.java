@@ -17,7 +17,6 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@ContextConfiguration(locations = { "classpath:applicationContext-service.xml", "classpath:moduleApplicationContext.xml" })
 public class BedTagValidatorTest extends BaseModuleContextSensitiveTest {
 
     @Autowired
@@ -28,10 +27,7 @@ public class BedTagValidatorTest extends BaseModuleContextSensitiveTest {
 
     @Before
     public void setUp() throws Exception {
-        if (!Context.isAuthenticated()) {
-            Context.authenticate("admin", "Admin123");
-        }
-
+       
         List<BedTag> allTags = bedManagementService.getAllBedTags();
         for (BedTag tag : allTags) {
             bedManagementService.deleteBedTag(tag, null);
