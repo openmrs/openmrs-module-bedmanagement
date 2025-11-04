@@ -8,6 +8,7 @@
  */
 package org.openmrs.validator;
 
+import org.openmrs.util.OpenmrsUtil;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.BedTag;
@@ -50,13 +51,9 @@ public class BedTagValidator implements Validator {
         List<BedTag> existingTags = bedManagementService.getAllBedTags();
 
         for (BedTag existingTag : existingTags) {
-            boolean isVoided = existingTag.getVoided();
-
-            if (!isVoided
-                    && existingTag.getName().equalsIgnoreCase(tag.getName())
-                    && (tag.getUuid() == null || !tag.getUuid().equals(existingTag.getUuid()))) {
-                errors.rejectValue("name", "bedtag.name.duplicate",
-                        "Bed tag name already exists and the existing tag is not expired");
+            if (OpenmrsUtil.nullSafeEqualsIgnoreCase(existingTag.getName(), tag.getName())
+                    && !OpenmrsUtil.nullSafeEqualsIgnoreCase(existingTag.getUuid(), tag.getUuid())) {
+                errors.rejectValue("name", "bedtag.name.duplicate", "Bed tag name already exists");
                 return;
             }
         }
