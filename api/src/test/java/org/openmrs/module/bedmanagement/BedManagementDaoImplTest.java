@@ -25,7 +25,6 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-@ContextConfiguration(locations = { "classpath:TestingApplicationContext.xml" })
 public class BedManagementDaoImplTest extends BaseModuleWebContextSensitiveTest {
 	
 	private BedManagementDao bedManagementDao;
