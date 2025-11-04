@@ -2,7 +2,6 @@ package org.openmrs.module.bedmanagement;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.Bed;
@@ -10,16 +9,12 @@ import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.bedmanagement.service.BedTagMapService;
-import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@org.springframework.test.context.ContextConfiguration(locations = {
-        "classpath:TestingApplicationContext.xml" }, inheritLocations = true)
-public class BedTagMapServiceTest extends BaseModuleWebContextSensitiveTest {
+public class BedTagMapServiceTest extends BaseModuleContextSensitiveTest {
 	
 	private String privilegedUser;
 	
