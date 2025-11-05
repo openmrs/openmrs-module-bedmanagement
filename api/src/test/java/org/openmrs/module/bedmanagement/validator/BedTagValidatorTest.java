@@ -2,6 +2,7 @@ package org.openmrs.module.bedmanagement.validator;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.api.ValidationException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
@@ -132,19 +133,12 @@ public class BedTagValidatorTest extends BaseModuleContextSensitiveTest {
         assertFalse(errors.hasErrors());
     }
 
-    @Test
-    public void saveBedTag_shouldNotSaveInvalidTag() {
-        BedTag invalidTag = new BedTag();
-        invalidTag.setName("");
-
-        try {
-            bedManagementService.saveBedTag(invalidTag);
-        } catch (Exception ignored) {
-        }
-
-        List<BedTag> tags = bedManagementService.getAllBedTags();
-        assertFalse(tags.stream().anyMatch(t -> "".equals(t.getName())));
-    }
+   @Test(expected = ValidationException.class)
+	public void saveBedTag_shouldNotSaveInvalidTag() {
+		BedTag invalidTag = new BedTag();
+		invalidTag.setName("");
+        bedManagementService.saveBedTag(invalidTag);
+	}
 
     @Test
     public void saveBedTag_shouldInvokeValidatorIndirectly() {
