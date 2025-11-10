@@ -3,12 +3,10 @@ package org.openmrs.module.bedmanagement.validator;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.ValidationException;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -28,7 +26,6 @@ public class BedTagValidatorTest extends BaseModuleContextSensitiveTest {
 
     @Before
     public void setUp() throws Exception {
-       
         List<BedTag> allTags = bedManagementService.getAllBedTags();
         for (BedTag tag : allTags) {
             bedManagementService.deleteBedTag(tag, null);
@@ -133,24 +130,10 @@ public class BedTagValidatorTest extends BaseModuleContextSensitiveTest {
         assertFalse(errors.hasErrors());
     }
 
-   @Test(expected = ValidationException.class)
-	public void saveBedTag_shouldNotSaveInvalidTag() {
-		BedTag invalidTag = new BedTag();
-		invalidTag.setName("");
-        bedManagementService.saveBedTag(invalidTag);
-	}
-
-    @Test
-    public void saveBedTag_shouldInvokeValidatorIndirectly() {
+    @Test(expected = ValidationException.class)
+    public void saveBedTag_shouldNotSaveInvalidTag() {
         BedTag invalidTag = new BedTag();
         invalidTag.setName("");
-
-        try {
-            bedManagementService.saveBedTag(invalidTag);
-        } catch (Exception ignored) {
-        }
-
-        List<BedTag> tags = bedManagementService.getAllBedTags();
-        assertFalse("Invalid tag should not be saved", tags.stream().anyMatch(t -> "".equals(t.getName())));
+        bedManagementService.saveBedTag(invalidTag);
     }
 }
