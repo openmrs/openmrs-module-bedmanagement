@@ -13,14 +13,20 @@
  */
 package org.openmrs.module.bedmanagement.dao.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.hibernate.transform.Transformers;
 import org.openmrs.Location;
 import org.openmrs.Patient;
@@ -34,12 +40,6 @@ import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.entity.BedType;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class BedManagementDaoImpl implements BedManagementDao {
 	
@@ -100,11 +100,9 @@ public class BedManagementDaoImpl implements BedManagementDao {
 		FlushMode flushMode = session.getHibernateFlushMode();
 		try {
 			session.setHibernateFlushMode(FlushMode.MANUAL);
-			bpaList = (List<BedPatientAssignment>) session
-			        .createQuery("select bpa from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
-			                + "where enc.uuid = :encounterUuid AND "
-			                + "(bpa.endDatetime IS NULL OR :includeEnded IS TRUE) AND " + "(bpa.voided IS FALSE) "
-			                + "order by bpa.startDatetime DESC")
+			bpaList = session.createQuery("select bpa from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
+			        + "where enc.uuid = :encounterUuid AND " + "(bpa.endDatetime IS NULL OR :includeEnded IS TRUE) AND "
+			        + "(bpa.voided IS FALSE) " + "order by bpa.startDatetime DESC")
 			        .setParameter("encounterUuid", encunterUuid).setParameter("includeEnded", includeEnded).list();
 		}
 		finally {
@@ -113,9 +111,10 @@ public class BedManagementDaoImpl implements BedManagementDao {
 		return bpaList;
 	}
 	
+	@Override
 	public List<BedPatientAssignment> getBedPatientAssignmentByVisit(String visitUuid, boolean includeEnded) {
 		Session session = sessionFactory.getCurrentSession();
-		List<BedPatientAssignment> bpaList = (List<BedPatientAssignment>) session
+		List<BedPatientAssignment> bpaList = session
 		        .createQuery(
 		            "select bpa from BedPatientAssignment bpa " + "inner join bpa.encounter enc " + "inner join enc.visit v "
 		                    + "where v.uuid = :visitUuid AND " + "(bpa.endDatetime IS NULL OR :includeEnded IS TRUE) AND "
@@ -138,12 +137,12 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	@Override
 	public Bed getLatestBedByVisit(String visitUuid) {
 		Session session = sessionFactory.getCurrentSession();
-		Bed bed = (Bed) session
-		        .createQuery("select bpa.bed from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
-		                + "inner join enc.visit v " + "where v.uuid = :visitUuid " + "and bpa.voided = false "
-		                + "order by bpa.startDatetime DESC")
-		        .setParameter("visitUuid", visitUuid).setMaxResults(1).uniqueResult();
-		return bed;
+		
+		String hql = "select bpa.bed " + "from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
+		        + "inner join enc.visit v " + "where v.uuid = :visitUuid " + "and bpa.voided = false "
+		        + "order by bpa.startDatetime DESC";
+		
+		return (Bed) session.createQuery(hql).setParameter("visitUuid", visitUuid).setMaxResults(1).uniqueResult();
 	}
 	
 	@Override
@@ -277,23 +276,28 @@ public class BedManagementDaoImpl implements BedManagementDao {
 			criteria.createAlias("blm.location", "location");
 			criteria.add(Restrictions.eq("location", location));
 			criteria.add(Restrictions.eq("bed.voided", false));
-			if (bedStatus != null)
+			if (bedStatus != null) {
 				criteria.add(Restrictions.eq("bed.status", bedStatus.toString()));
-			if (bedType != null)
+			}
+			if (bedType != null) {
 				criteria.add(Restrictions.eq("bed.bedType", bedType));
+			}
 		} else {
 			criteria = session.createCriteria(Bed.class, "bed");
 			criteria.add(Restrictions.eq("voided", false));
-			if (bedStatus != null)
+			if (bedStatus != null) {
 				criteria.add(Restrictions.eq("status", bedStatus.toString()));
-			if (bedType != null)
+			}
+			if (bedType != null) {
 				criteria.add(Restrictions.eq("bedType", bedType));
+			}
 		}
 		
 		if (limit != null) {
 			criteria.setMaxResults(limit);
-			if (offset != null)
+			if (offset != null) {
 				criteria.setFirstResult(offset);
+			}
 		}
 		
 		return criteria;
@@ -340,13 +344,15 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	public List<BedTag> getBedTags(String name, Integer limit, Integer offset) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedTag.class);
 		criteria.add(Restrictions.eq("voided", false));
-		if (name != null)
+		if (name != null) {
 			criteria.add(Restrictions.eq("name", name));
+		}
 		
 		if (limit != null) {
 			criteria.setMaxResults(limit);
-			if (offset != null)
+			if (offset != null) {
 				criteria.setFirstResult(offset);
+			}
 		}
 		return criteria.list();
 	}
@@ -383,12 +389,14 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	public List<BedType> getBedTypes(String name, Integer limit, Integer offset) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedType.class);
 		criteria.add(Restrictions.eq("retired", false));
-		if (name != null)
+		if (name != null) {
 			criteria.add(Restrictions.eq("name", name));
+		}
 		if (limit != null) {
 			criteria.setMaxResults(limit);
-			if (offset != null)
+			if (offset != null) {
 				criteria.setFirstResult(offset);
+			}
 		}
 		return criteria.list();
 	}
