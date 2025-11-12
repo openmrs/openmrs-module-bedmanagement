@@ -24,13 +24,15 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -44,10 +46,10 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @PrepareForTest(Context.class)
 public class BedManagementServiceImplTest {
 	
-	BedManagementServiceImpl bedManagementService;
+	private BedManagementServiceImpl bedManagementService;
 	
 	@Mock
-	BedManagementDao bedManagementDao;
+	private BedManagementDao bedManagementDao;
 	
 	@Before
 	public void setup() {
@@ -76,18 +78,12 @@ public class BedManagementServiceImplTest {
 		bed.setBedNumber("bedNumber");
 		bed.setId(1);
 		bed.setStatus(BedStatus.OCCUPIED.name());
-		bed.setBedNumber("bedNumber");
 		
 		BedPatientAssignment currentAssignment = new BedPatientAssignment();
 		currentAssignment.setBed(bed);
 		currentAssignment.setPatient(patient);
 		currentAssignment.setStartDatetime(new Date());
 		currentAssignment.setEndDatetime(null);
-		BedPatientAssignment previousAssignment = new BedPatientAssignment();
-		previousAssignment.setBed(bed);
-		previousAssignment.setPatient(patient);
-		previousAssignment.setStartDatetime(new Date());
-		previousAssignment.setEndDatetime(new Date());
 		
 		when(bedManagementDao.getBedById(bedId)).thenReturn(bed);
 		when(bedManagementDao.getWardForBed(bed)).thenReturn(ward);
@@ -111,7 +107,6 @@ public class BedManagementServiceImplTest {
 		bed.setBedNumber("bedNumber");
 		bed.setId(1);
 		bed.setStatus(BedStatus.OCCUPIED.name());
-		bed.setBedNumber("bedNumber");
 		
 		BedPatientAssignment currentAssignment1 = new BedPatientAssignment();
 		currentAssignment1.setBed(bed);
@@ -124,12 +119,6 @@ public class BedManagementServiceImplTest {
 		currentAssignment2.setPatient(patient2);
 		currentAssignment2.setStartDatetime(new Date());
 		currentAssignment2.setEndDatetime(null);
-		
-		BedPatientAssignment stoppedBedAssignment = new BedPatientAssignment();
-		stoppedBedAssignment.setBed(bed);
-		stoppedBedAssignment.setPatient(patient1);
-		stoppedBedAssignment.setStartDatetime(new Date());
-		stoppedBedAssignment.setEndDatetime(new Date());
 		
 		when(bedManagementDao.getBedById(bedId)).thenReturn(bed);
 		when(bedManagementDao.getWardForBed(bed)).thenReturn(ward);
@@ -148,6 +137,24 @@ public class BedManagementServiceImplTest {
 		assertEquals("GAN456", actualPatient2.getPatientIdentifier().getIdentifier());
 		assertEquals("first2 middle2 last2", actualPatient2.getPersonName().getFullName());
 		assertEquals("M", actualPatient2.getGender());
+	}
+	
+	@Test
+	public void shouldReturnOnlyNonVoidedBedAssignments() throws Exception {
+		int bedId = 10;
+		
+		Bed bed = bedManagementDao.getBedById(bedId);
+		List<BedPatientAssignment> allAssignments = bedManagementDao.getCurrentAssignmentsByBed(bed);
+		
+		BedDetails bedDetails = bedManagementService.getBedDetailsById(String.valueOf(bedId));
+		
+		for (Patient patient : bedDetails.getPatients()) {
+			for (BedPatientAssignment assignment : allAssignments) {
+				if (assignment.getPatient().getUuid().equals(patient.getUuid())) {
+					assertEquals(false, assignment.getVoided());
+				}
+			}
+		}
 	}
 	
 	@Test
@@ -207,7 +214,6 @@ public class BedManagementServiceImplTest {
 		assertNotNull(retired.getDateRetired());
 		
 		verify(bedManagementDao, times(1)).saveBedType(retired);
-		
 	}
 	
 	@Test
@@ -226,9 +232,7 @@ public class BedManagementServiceImplTest {
 		Patient patient = new Patient();
 		patient.setUuid(patientUuid);
 		patient.setGender("M");
-		patient.setIdentifiers(new HashSet<PatientIdentifier>(Arrays.asList(identifier)));
-		patient.setNames(new HashSet<PersonName>(Arrays.asList(personName)));
+		patient.setIdentifiers(new HashSet<>(Arrays.asList(identifier)));
+		patient.setNames(new HashSet<>(Arrays.asList(personName)));
 		return patient;
-	}
-	
-}
+	}}
