@@ -405,8 +405,6 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		}
 		bedType.setRetired(true);
 		bedType.setRetireReason(retireReason);
-		bedType.setRetiredBy(Context.getAuthenticatedUser());
-		bedType.setDateRetired(new Date());
 		return bedManagementDao.saveBedType(bedType);
 	}
 	
