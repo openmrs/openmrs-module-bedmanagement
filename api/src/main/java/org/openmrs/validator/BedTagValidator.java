@@ -6,6 +6,7 @@
  *
  * Copyright (C) OpenMRS Inc.
  */
+
 package org.openmrs.validator;
 
 import org.openmrs.util.OpenmrsUtil;
@@ -17,7 +18,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import org.openmrs.validator.ValidateUtil;
 
 @Component("bedTagValidator")
 @Handler(supports = { BedTag.class }, order = 50)
@@ -37,25 +39,19 @@ public class BedTagValidator implements Validator {
 
         BedTag tag = (BedTag) target;
 
-        if (tag.getName() == null || tag.getName().trim().isEmpty()) {
+        if (StringUtils.isBlank(tag.getName())) {
             errors.rejectValue("name", "bedtag.name.required", "Name is required");
             return;
         }
 
-        if (tag.getName().length() > 50) {
-            errors.rejectValue("name", "bedtag.name.tooLong", "Name cannot exceed 50 characters");
-            return;
-        }
+        ValidateUtil.validateFieldLengths(errors, target.getClass(), "name");
 
         BedManagementService bedManagementService = Context.getService(BedManagementService.class);
-        List<BedTag> existingTags = bedManagementService.getAllBedTags();
 
-        for (BedTag existingTag : existingTags) {
-            if (OpenmrsUtil.nullSafeEqualsIgnoreCase(existingTag.getName(), tag.getName())
-                    && !OpenmrsUtil.nullSafeEqualsIgnoreCase(existingTag.getUuid(), tag.getUuid())) {
-                errors.rejectValue("name", "bedtag.name.duplicate", "Bed tag name already exists");
-                return;
-            }
+        BedTag existingTag = bedManagementService.getBedTagByUuid(tag.getName());
+
+        if (existingTag != null && !OpenmrsUtil.nullSafeEqualsIgnoreCase(existingTag.getUuid(), tag.getUuid())) {
+            errors.rejectValue("name", "bedtag.name.duplicate", "Bed tag name already exists");
         }
     }
 }
