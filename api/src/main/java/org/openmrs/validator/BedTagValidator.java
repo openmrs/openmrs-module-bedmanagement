@@ -9,49 +9,51 @@
 
 package org.openmrs.validator;
 
-import org.openmrs.util.OpenmrsUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
+import org.openmrs.util.OpenmrsUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-
-import org.apache.commons.lang3.StringUtils;
 import org.openmrs.validator.ValidateUtil;
 
 @Component("bedTagValidator")
 @Handler(supports = { BedTag.class }, order = 50)
 public class BedTagValidator implements Validator {
 
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return BedTag.class.isAssignableFrom(clazz);
-    }
+	@Override
+	public boolean supports(Class<?> clazz) {
+		return BedTag.class.isAssignableFrom(clazz);
+	}
 
-    @Override
-    public void validate(Object target, Errors errors) {
-        if (!(target instanceof BedTag)) {
-            errors.reject("error.general", "Invalid object type");
-            return;
-        }
+	@Override
+	public void validate(Object target, Errors errors) {
+		if (!(target instanceof BedTag)) {
+			errors.reject("error.general", "Invalid object type");
+			return;
+		}
 
-        BedTag tag = (BedTag) target;
+		BedTag tag = (BedTag) target;
 
-        if (StringUtils.isBlank(tag.getName())) {
-            errors.rejectValue("name", "bedtag.name.required", "Name is required");
-            return;
-        }
+		if (StringUtils.isBlank(tag.getName())) {
+			errors.rejectValue("name", "bedtag.name.required", "Name is required");
+			return;
+		}
 
-        ValidateUtil.validateFieldLengths(errors, target.getClass(), "name");
+		ValidateUtil.validateFieldLengths(errors, target.getClass(), "name");
 
-        BedManagementService bedManagementService = Context.getService(BedManagementService.class);
+		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
 
-        BedTag existingTag = bedManagementService.getBedTagByUuid(tag.getName());
-
-        if (existingTag != null && !OpenmrsUtil.nullSafeEqualsIgnoreCase(existingTag.getUuid(), tag.getUuid())) {
-            errors.rejectValue("name", "bedtag.name.duplicate", "Bed tag name already exists");
-        }
-    }
+		for (BedTag existingTag : bedManagementService.getAllBedTags()) {
+			if (!existingTag.isVoided() && existingTag.getName() != null
+			        && existingTag.getName().equalsIgnoreCase(tag.getName())
+			        && !OpenmrsUtil.nullSafeEquals(existingTag.getUuid(), tag.getUuid())) {
+				errors.rejectValue("name", "bedtag.name.duplicate", "Bed tag name already exists");
+				break;
+			}
+		}
+	}
 }
