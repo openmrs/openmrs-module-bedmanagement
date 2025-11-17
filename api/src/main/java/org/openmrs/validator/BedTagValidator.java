@@ -14,46 +14,55 @@ import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
-import org.openmrs.util.OpenmrsUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import org.openmrs.validator.ValidateUtil;
+import org.openmrs.util.OpenmrsUtil;
 
 @Component("bedTagValidator")
 @Handler(supports = { BedTag.class }, order = 50)
 public class BedTagValidator implements Validator {
 
-	@Override
-	public boolean supports(Class<?> clazz) {
-		return BedTag.class.isAssignableFrom(clazz);
-	}
+    private static final int MAX_NAME_LENGTH = 50;
 
-	@Override
-	public void validate(Object target, Errors errors) {
-		if (!(target instanceof BedTag)) {
-			errors.reject("error.general", "Invalid object type");
-			return;
-		}
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return BedTag.class.isAssignableFrom(clazz);
+    }
 
-		BedTag tag = (BedTag) target;
+    @Override
+    public void validate(Object target, Errors errors) {
+        if (!(target instanceof BedTag)) {
+            errors.reject("error.general", "Invalid object type");
+            return;
+        }
 
-		if (StringUtils.isBlank(tag.getName())) {
-			errors.rejectValue("name", "bedtag.name.required", "Name is required");
-			return;
-		}
+        BedTag tag = (BedTag) target;
 
-		ValidateUtil.validateFieldLengths(errors, target.getClass(), "name");
+        if (StringUtils.isBlank(tag.getName())) {
+            errors.rejectValue("name", "bedtag.name.required", "Name is required");
+            return;
+        }
 
-		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
+        if (tag.getName().length() > MAX_NAME_LENGTH) {
+            errors.rejectValue(
+                    "name",
+                    "bedtag.name.tooLong",
+                    "Name must be at most " + MAX_NAME_LENGTH + " characters"
+            );
+        }
 
-		for (BedTag existingTag : bedManagementService.getAllBedTags()) {
-			if (!existingTag.isVoided() && existingTag.getName() != null
-			        && existingTag.getName().equalsIgnoreCase(tag.getName())
-			        && !OpenmrsUtil.nullSafeEquals(existingTag.getUuid(), tag.getUuid())) {
-				errors.rejectValue("name", "bedtag.name.duplicate", "Bed tag name already exists");
-				break;
-			}
-		}
-	}
+        BedManagementService bedManagementService = Context.getService(BedManagementService.class);
+
+        for (BedTag existingTag : bedManagementService.getAllBedTags()) {
+            if (!existingTag.isVoided()
+                    && existingTag.getName() != null
+                    && existingTag.getName().equalsIgnoreCase(tag.getName())
+                    && !OpenmrsUtil.nullSafeEquals(existingTag.getUuid(), tag.getUuid())) {
+
+                errors.rejectValue("name", "bedtag.name.duplicate", "Bed tag name already exists");
+                break;
+            }
+        }
+    }
 }
