@@ -22,7 +22,6 @@ import org.openmrs.util.OpenmrsUtil;
 @Component("bedTagValidator")
 @Handler(supports = { BedTag.class }, order = 50)
 public class BedTagValidator implements Validator {
-	
 	private static final int MAX_NAME_LENGTH = 50;
 	
 	@Override
