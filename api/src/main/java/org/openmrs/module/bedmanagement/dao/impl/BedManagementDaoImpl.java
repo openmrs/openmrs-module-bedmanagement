@@ -94,16 +94,18 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	}
 	
 	@Override
-	public List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encunterUuid, boolean includeEnded) {
+	public List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encounterUuid, boolean includeEnded) {
 		Session session = sessionFactory.getCurrentSession();
 		List<BedPatientAssignment> bpaList;
 		FlushMode flushMode = session.getHibernateFlushMode();
 		try {
 			session.setHibernateFlushMode(FlushMode.MANUAL);
-			bpaList = session.createQuery("select bpa from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
-			        + "where enc.uuid = :encounterUuid AND " + "(bpa.endDatetime IS NULL OR :includeEnded IS TRUE) AND "
-			        + "(bpa.voided IS FALSE) " + "order by bpa.startDatetime DESC")
-			        .setParameter("encounterUuid", encunterUuid).setParameter("includeEnded", includeEnded).list();
+			bpaList = (List<BedPatientAssignment>) session
+			        .createQuery("select bpa from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
+			                + "where enc.uuid = :encounterUuid AND "
+			                + "(bpa.endDatetime IS NULL OR :includeEnded IS TRUE) AND " + "(bpa.voided IS FALSE) "
+			                + "order by bpa.startDatetime DESC")
+			        .setParameter("encounterUuid", encounterUuid).setParameter("includeEnded", includeEnded).list();
 		}
 		finally {
 			session.setHibernateFlushMode(flushMode);
