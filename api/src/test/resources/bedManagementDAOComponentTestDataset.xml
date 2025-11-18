@@ -2,6 +2,7 @@
 <dataset>
     <!-- this creates admission locations for testing bed management dao. We also add few non admission locations. -->
     <location location_id="12348" name="Ganiyari" description="This is a small village in central India." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="285e8574-9d21-11e2-8137-0800271c1b75"/>
+    <location location_id="99999" name="Voided Test Location" description="Should not be included" creator="1" date_created="2008-08-18 14:09:05.0" retired="1" uuid="999e8574-9d21-11e2-8137-0800271c1b80"/>
     <!--first ward-->
     <location location_id="12345" name="Cardio ward on first floor" description="This ward houses cardio patients. It is a general cardio ward." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="7779d653-393b-4118-9c83-a3715b82d4ac" parent_location="12348"/>
     <location location_id="123451" name="Physical Location for Cardio ward on first floor" description="This ward houses cardio patients. It is a general cardio ward." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="98bc9b32-9d1a-11e2-8137-0800271c1b75" parent_location="12345" />
@@ -10,11 +11,13 @@
 
     <location_tag_map location_id="12345" location_tag_id="12" />
     <location_tag_map location_id="123451" location_tag_id="12" />
+    <location_tag_map location_id="99999" location_tag_id="12" voided="true"/>
     <!--<location_tag_map location_id="123451" location_tag_id="12" />-->
 
     <bed_type bed_type_id="1" name="deluxe" description="deluxe bed" display_name="DLX" date_created="2005-01-01 00:00:00.0" retired="false" uuid="6f9faf08-0fd5-11e8-adb7-080027b38971"/>
     <bed_type bed_type_id="2" name="luxury" description="luxury bed" display_name="LXY" date_created="2005-01-01 00:00:00.0" retired="false" uuid="6f9fb240-0fd5-11e8-adb7-080027b38971"/>
     <bed_type bed_type_id="3" name="normal" description="normal bed" display_name="NRM" date_created="2005-01-01 00:00:00.0" retired="false" uuid="6f9fb341-0fd5-11e8-adb7-080027b38971"/>
+    <bed_type bed_type_id="99" name="voided type" description="should be excluded" display_name="VOID" date_created="2005-01-01 00:00:00.0" retired="true" uuid="6f9faf08-0fd5-11e8-adb7-080027b38999"/>
 
     <bed bed_id="1" uuid="bb02b84b-d225-11e4-9c67-080027b662ec" bed_number="304-a" status="OCCUPIED" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed bed_id="2" uuid="bb049d6d-d225-11e4-9c67-080027b662fc" bed_number="304-b" status="AVAILABLE" bed_type_id="2" date_created="2005-01-01 00:00:00.0" voided="false"/>
@@ -26,6 +29,7 @@
     <bed bed_id="8" uuid="bb0a43db-d225-11e4-9c67-080027b662ec" bed_number="305-d" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed bed_id="9" uuid="bb0a7ad0-d225-11e4-9c67-080027b662ec" bed_number="306-a" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed bed_id="10" uuid="bb0f8866-d225-11e4-9c67-080027b662ec" bed_number="306-b" status="AVAILABLE" bed_type_id="3" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <bed bed_id="99" uuid="bb02b84b-d225-11e4-9c67-080027b66299" bed_number="VOID-1" status="AVAILABLE" bed_type_id="1" date_created="2005-01-01 00:00:00.0" voided="true"/>
 
     <bed_location_map bed_location_map_id="1" location_id="123451" bed_row_number="1" bed_column_number="1" bed_id="1"/>
     <bed_location_map bed_location_map_id="2" location_id="123451" bed_row_number="1" bed_column_number="2" bed_id="2"/>
@@ -69,6 +73,7 @@
     <person person_id="3" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128762"/>
     <person person_id="4" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128823"/>
     <person person_id="5" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128824"/>
+    <person person_id="99" gender="M" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="true" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128799"/>
 
     <person_name person_name_id="1" preferred="true" person_id="3" given_name="John" middle_name=" " family_name="Doe" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f1f7d08-076b-4fc6-acac-4bb91515141e"/>
     <person_name person_name_id="2" preferred="true" person_id="4" given_name="Jane" middle_name=" " family_name="Doe" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f1f7d08-076b-4fc6-acac-4bb91515141f"/>
@@ -85,6 +90,7 @@
     <encounter encounter_id="7" visit_id="5" encounter_type="7" patient_id="2" location_id="2" form_id="1" encounter_datetime="2008-08-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" uuid="y403fafb-aaab-42d0-9d11-4f52e89d123r"/>
     <encounter encounter_id="8" visit_id="6" encounter_type="7" patient_id="2" location_id="2" form_id="1" encounter_datetime="2013-08-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" uuid="y403fafb-cccc-42d0-9d11-4f52e89d123r"/>
     <encounter encounter_id="9" visit_id="6" encounter_type="7" patient_id="2" location_id="2" form_id="1" encounter_datetime="2013-10-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" uuid="y403fafb-cccc-42d0-9d01-4f52e89d123r"/>
+    <encounter encounter_id="99" encounter_type="7" patient_id="3" location_id="2" form_id="1" encounter_datetime="2013-10-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="true" uuid="y403fafb-cccc-42d0-9d01-4f52e89d199r"/>
     <bed_patient_assignment_map bed_patient_assignment_map_id="6" patient_id="2" bed_id="12" date_started="2008-09-18 14:09:05.0" date_stopped="2008-10-18 14:09:05.0" encounter_id="7" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed_patient_assignment_map bed_patient_assignment_map_id="7" patient_id="2" bed_id="13" date_started="2013-09-18 14:09:05.0" date_stopped="2015-11-18 14:09:05.0" encounter_id="8" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <bed_patient_assignment_map bed_patient_assignment_map_id="8" patient_id="2" bed_id="12" date_started="2014-09-18 14:09:05.0"  date_stopped="2008-11-25 14:09:05.0" encounter_id="9" date_created="2014-01-01 00:00:00.0" voided="false"/>
@@ -101,6 +107,7 @@
     <bed_patient_assignment_map bed_patient_assignment_map_id="5" patient_id="4" bed_id="12" date_started="2008-08-18 14:09:05.0" encounter_id="3" date_created="2005-01-01 00:00:00.0" voided="false" uuid="7819d653-393b-4118-9c83-a3715b82d4dd"/>
     <bed_patient_assignment_map bed_patient_assignment_map_id="6" patient_id="2" bed_id="13" date_started="2008-08-18 14:19:05.0" encounter_id="7" date_created="2005-01-01 00:00:00.0" voided="false" uuid="7819d653-393b-4118-9c83-a3715c82d4dd"/>
     <bed_patient_assignment_map bed_patient_assignment_map_id="7" patient_id="2" bed_id="12" date_stopped="2008-10-18 14:09:05.0" date_started="2008-08-18 14:25:05.0" encounter_id="7" date_created="2005-01-01 00:00:00.0" voided="false" uuid="7819d653-393b-4118-9c83-a3715e82d4dd"/>
+    <bed_patient_assignment_map bed_patient_assignment_map_id="99" patient_id="3" bed_id="99" date_started="2008-08-18 14:09:05.0" encounter_id="1" date_created="2005-01-01 00:00:00.0" voided="true"/>
 
     <!--additional wards-->
     <location location_id="12346" name="Cardio ward on third floor" description="This ward houses cardio patients. It is a special cardio ward." creator="1" date_created="2008-08-18 14:09:05.0" retired="0" uuid="e26cea2c-1b9f-666e-6511-f3ef6c88af6f"/>
@@ -116,11 +123,13 @@
     <bed_tag bed_tag_id="3" name="Isolation" creator="1" date_created="2017-02-07 20:01:30" voided="false" uuid="73e846d6-ed5f-33e6-a3c9-0800274a5156"/>
     <bed_tag bed_tag_id="4" name="Sanitation required" creator="1" date_created="2017-02-07 20:01:30" voided="false" uuid="73e846d6-ed5f-44e6-a3c9-0800274a5156"/>
     <bed_tag bed_tag_id="5" name="Strict Isolation" creator="1" date_created="2017-02-07 20:01:30" voided="true" uuid="73e846d6-ed5f-55e6-a3c9-0800274a5156"/>
+    <bed_tag bed_tag_id="99" name="Voided Tag" creator="1" date_created="2017-02-07 20:01:30" voided="true" uuid="73e846d6-ed5f-55e6-a3c9-0800274a9999"/>
 
     <bed_tag_map bed_tag_map_id="1" bed_id="11" bed_tag_id="1" uuid="73e846d6-ed5f-55e6-a3c9-0800274a1111" creator="0" date_created="2017-02-07 20:01:30" voided="false"/>
     <bed_tag_map bed_tag_map_id="2" bed_id="11" bed_tag_id="2" uuid="73e846d6-ed5f-55e6-a3c9-0800274a2222" creator="0" date_created="2017-02-07 20:01:30" voided="false"/>
     <bed_tag_map bed_tag_map_id="3" bed_id="13" bed_tag_id="2" uuid="73e846d6-ed5f-55e6-a3c9-0800274a3333" creator="0" date_created="2017-02-07 20:01:30" voided="false"/>
     <bed_tag_map bed_tag_map_id="4" bed_id="11" bed_tag_id="3" uuid="73e846d6-ed5f-55e6-a3c9-0800274a4444" creator="0" date_created="2017-02-07 20:01:30" voided="true"/>
+    <bed_tag_map bed_tag_map_id="99" bed_id="99" bed_tag_id="99" uuid="73e846d6-ed5f-55e6-a3c9-0800274a9998" creator="0" date_created="2017-02-07 20:01:30" voided="true"/>
 
     <privilege privilege="Get Admission Locations" description="Able to view admission locations" uuid="3480cb6d-c291-66c8-8d3a-96dc33d109fb"/>
     <privilege privilege="View Locations" description="Able to view  locations" uuid="3480cb6d-c291-66c8-8d3a-96dc33d199fb"/>
@@ -171,7 +180,7 @@
 
     <person person_id="567" gender="" birthdate="1975-06-30" birthdate_estimated="false" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" voided="false" void_reason="" uuid="6adb7c42-cfd2-4301-b53b-ff17c5654ff7"/>
     <person person_id="678" gender="" birthdate="1975-06-30" birthdate_estimated="false" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" voided="false" void_reason="" uuid="6adb7c42-cfd2-4301-b53b-ff17c5654dd7"/>
-    
+
     <encounter encounter_id="1001" visit_id="1001" encounter_type="2" patient_id="1001" location_id="1" form_id="1" encounter_datetime="2008-08-01 00:00:00.0" creator="1" date_created="2008-08-18 14:09:05.0" voided="false" uuid="12345678-393b-4118-9c83-a3715b82d4de"/>
     <bed_patient_assignment_map bed_patient_assignment_map_id="1001" patient_id="1001" bed_id="12" date_started="2014-09-18 14:09:05.0"  encounter_id="1001" date_created="2014-01-01 00:00:00.0" voided="false" uuid="10011001-1001-1001-1001-100000000001"/>
 </dataset>
