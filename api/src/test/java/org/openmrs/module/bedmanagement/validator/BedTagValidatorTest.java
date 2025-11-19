@@ -1,5 +1,3 @@
-package org.openmrs.module.bedmanagement.validator;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmrs.api.ValidationException;
