@@ -95,9 +95,12 @@ public interface BedManagementService extends OpenmrsService {
 	
 	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
 	BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
+
+	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
+	List<BedPatientAssignment> getBedPatientAssignmentByPatient(String patientUuid, boolean includeEnded);
 	
 	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
-	List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encunterUuid, boolean includeEnded);
+	List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encounterUuid, boolean includeEnded);
 	
 	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
 	List<BedPatientAssignment> getBedPatientAssignmentByVisit(String visitUuid, boolean includeEnded);
