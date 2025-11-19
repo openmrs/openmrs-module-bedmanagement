@@ -40,7 +40,7 @@ public class EncounterWithBedPatientAssignmentSaveHandlerTest extends BaseModule
 		Visit visit = visitService.getVisit(1001);
 		BedPatientAssignment bpa = bedManagementService
 		        .getBedPatientAssignmentByUuid("10011001-1001-1001-1001-100000000001");
-		assertThat("bed patient assignment should initially not bed void", bpa.getVoided(), is(false));
+		assertThat("bed patient assignment should initially not be void", bpa.getVoided(), is(false));
 		
 		visit = visitService.voidVisit(visit, "for testing");
 		assertThat(visit.getVoided(), is(true));
