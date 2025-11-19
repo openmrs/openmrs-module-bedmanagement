@@ -10,46 +10,47 @@ package org.openmrs.validator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.annotation.Handler;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
+import org.openmrs.util.ValidateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-@Handler(supports = { BedTag.class }, order = 50)
+@Handler(supports = {BedTag.class}, order = 50)
 public class BedTagValidator implements Validator {
 
-	@Override
-	public boolean supports(Class<?> clazz) {
-		return BedTag.class.equals(clazz);
-	}
+    @Autowired
+    private BedManagementService bedManagementService;
 
-	@Override
-	public void validate(Object target, Errors errors) {
-		if (!(target instanceof BedTag)) {
-			errors.reject("error.general");
-			return;
-		}
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return BedTag.class.equals(clazz);
+    }
 
-		BedTag tag = (BedTag) target;
+    @Override
+    public void validate(Object target, Errors errors) {
+        if (!(target instanceof BedTag)) {
+            errors.reject("error.general");
+            return;
+        }
 
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.name");
+        BedTag tag = (BedTag) target;
 
-		if (StringUtils.isBlank(tag.getName())) {
-			return;
-		}
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.name");
 
-		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
+        if (StringUtils.isBlank(tag.getName())) {
+            return;
+        }
 
-		BedTag existing = bedManagementService.getBedTagByUuid(tag.getName().trim());
+        BedTag existing = bedManagementService.getBedTagByName(tag.getName().trim());
+        if (existing != null && !existing.getUuid().equals(tag.getUuid())) {
+            if (existing.getDateVoided() == null) {
+                errors.rejectValue("name", "general.error.nameAlreadyInUse");
+            }
+        }
 
-		if (existing != null && !existing.getUuid().equals(tag.getUuid())) {
-			if (existing.getDateVoided() == null) {
-				errors.rejectValue("name", "general.error.nameAlreadyInUse");
-			}
-		}
-
-		ValidateUtil.validateFieldLengths(errors, tag.getClass(), "name");
-	}
+        ValidateUtil.validateFieldLengths(errors, tag.getClass(), "name");
+    }
 }
