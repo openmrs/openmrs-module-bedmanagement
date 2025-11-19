@@ -1,3 +1,6 @@
+# This workflow builds and tests an OpenMRS module (or any Java project) using Maven.
+# It runs on multiple Java versions for compatibility and uses caching to speed up builds.
+
 name: Build with Maven
 
 on:
@@ -13,20 +16,35 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [ubuntu-latest]
+        java-version: [8, 11, 17, 21]
+
+    runs-on: ${{ matrix.platform }}
+    env:
+      PLATFORM: ${{ matrix.platform }}
+      JAVA_VERSION: ${{ matrix.java-version }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 8
+      - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v4
         with:
-          java-version: 8
-          distribution: temurin
-          cache: maven
+          distribution: 'temurin'
+          java-version: ${{ matrix.java-version }}
+          cache: 'maven'
+
+      - name: Verify environment setup
+        run: |
+          echo "Running on $PLATFORM using Java $JAVA_VERSION"
+          java -version
+          mvn -version
 
       - name: Install dependencies
-        run: mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true --batch-mode --show-version --file pom.xml
+        run: mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true --batch-mode --show-version
 
-      - name: Build and Test with Maven
-        run: mvn test --batch-mode --show-version --file pom.xml
+      - name: Run tests
+        run: mvn test --batch-mode --show-version
