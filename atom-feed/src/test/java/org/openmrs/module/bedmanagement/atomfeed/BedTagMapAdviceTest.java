@@ -21,8 +21,15 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mockConstruction;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class BedTagMapAdviceTest {
@@ -76,13 +83,14 @@ public class BedTagMapAdviceTest {
 	
 	@BeforeEach
 	public void setUp() throws Exception {
-		mockStatic(Context.class);
-		when(Context.getRegisteredComponents(PlatformTransactionManager.class))
+		contextStaticMock = mockStatic(Context.class);
+		
+		contextStaticMock.when(() -> Context.getRegisteredComponents(PlatformTransactionManager.class))
 		        .thenReturn(Collections.singletonList(platformTransactionManager));
-		when(Context.getAdministrationService()).thenReturn(administrationService);
-		when(administrationService.getGlobalProperty(anyString())).thenReturn("true");
-		when(administrationService.getGlobalProperty(anyString(), anyString()))
-		        .thenReturn(DEFAULT_BED_TAG_MAP_EVENT_URL_PATTERN);
+		contextStaticMock.when(Context::getAdministrationService).thenReturn(administrationService);
+		when(administrationService.getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY))).thenReturn("true");
+		when(administrationService.getGlobalProperty(eq(BED_TAG_MAP_EVENT_URL_PATTERN_GLOBAL_PROPERTY),
+		    eq(DEFAULT_BED_TAG_MAP_EVENT_URL_PATTERN))).thenReturn(DEFAULT_BED_TAG_MAP_EVENT_URL_PATTERN);
 		atomFeedSpringTransactionManager = spy(new AtomFeedSpringTransactionManager(platformTransactionManager));
 		atomFeedTxMgrConstruction = mockConstruction(AtomFeedSpringTransactionManager.class,
 		    (mock, context) -> atomFeedSpringTransactionManager = spy(mock));
@@ -119,8 +127,8 @@ public class BedTagMapAdviceTest {
 	}
 	
 	private void verifyAssertsForRaisingEvents() throws Exception {
-		Context.getRegisteredComponents(PlatformTransactionManager.class);
-		Context.getAdministrationService();
+		contextStaticMock.when(() -> Context.getRegisteredComponents(PlatformTransactionManager.class));
+		contextStaticMock.when(Context::getAdministrationService);
 		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY));
 		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_URL_PATTERN_GLOBAL_PROPERTY),
 		    eq(DEFAULT_BED_TAG_MAP_EVENT_URL_PATTERN));
@@ -131,8 +139,8 @@ public class BedTagMapAdviceTest {
 	}
 	
 	private void verifyAssertsForNotRaisingEvents() throws Exception {
-		Context.getRegisteredComponents(PlatformTransactionManager.class);
-		Context.getAdministrationService();
+		contextStaticMock.when(() -> Context.getRegisteredComponents(PlatformTransactionManager.class));
+		contextStaticMock.when(Context::getAdministrationService);
 		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY));
 		verify(administrationService, times(0)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_URL_PATTERN_GLOBAL_PROPERTY),
 		    eq(DEFAULT_BED_TAG_MAP_EVENT_URL_PATTERN));
@@ -152,7 +160,7 @@ public class BedTagMapAdviceTest {
 	
 	@Test
 	public void shouldRaiseEventIfEventGlobalPropertyIsEmpty() throws Exception {
-		when(administrationService.getGlobalProperty(anyString())).thenReturn("");
+		when(administrationService.getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY))).thenReturn("");
 		
 		bedTagMapAdvice.afterReturning(bedTagMap, this.getClass().getMethod("save"), null, null);
 		
@@ -161,7 +169,7 @@ public class BedTagMapAdviceTest {
 	
 	@Test
 	public void shouldNotRaiseEventIfEventGlobalPropertyIsFalse() throws Exception {
-		when(administrationService.getGlobalProperty(anyString())).thenReturn("false");
+		when(administrationService.getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY))).thenReturn("false");
 		
 		bedTagMapAdvice.afterReturning(bedTagMap, this.getClass().getMethod("save"), null, null);
 		
