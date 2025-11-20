@@ -17,39 +17,44 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import java.util.List;
+
 @Handler(supports = { BedTag.class }, order = 50)
 public class BedTagValidator implements Validator {
-	
+
 	@Autowired
 	private BedManagementService bedManagementService;
-	
+
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return BedTag.class.equals(clazz);
 	}
-	
+
 	@Override
 	public void validate(Object target, Errors errors) {
 		if (!(target instanceof BedTag)) {
 			errors.reject("error.general");
 			return;
 		}
-		
+
 		BedTag tag = (BedTag) target;
-		
+
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.name");
-		
+
 		if (StringUtils.isBlank(tag.getName())) {
 			return;
 		}
-		
-		BedTag existing = bedManagementService.getBedTagByUuid(tag.getUuid().trim());
-		if (existing != null && !existing.getUuid().equals(tag.getUuid())) {
-			if (existing.getDateVoided() == null) {
+
+		List<BedTag> tagsWithSameName = bedManagementService.getBedTags(tag.getName().trim(), 1, 0);
+
+		if (!tagsWithSameName.isEmpty()) {
+			BedTag existing = tagsWithSameName.get(0);
+
+			if (!existing.getUuid().equals(tag.getUuid()) && existing.getDateVoided() == null) {
 				errors.rejectValue("name", "general.error.nameAlreadyInUse");
 			}
 		}
-		
+
 		ValidateUtil.validateFieldLengths(errors, tag.getClass(), "name");
 	}
 }

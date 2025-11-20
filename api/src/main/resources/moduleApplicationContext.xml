@@ -8,7 +8,6 @@
 
 
 
-    <bean id="bedTagValidator" class="org.openmrs.validator.BedTagValidator"/>
 
     <bean id="bedManagementDao" class="org.openmrs.module.bedmanagement.dao.impl.BedManagementDaoImpl">
         <property name="sessionFactory">
