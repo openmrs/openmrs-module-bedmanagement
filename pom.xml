@@ -37,13 +37,13 @@
   </modules>
 
   <properties>
-    <openMRSVersion>2.4.2</openMRSVersion>
-    <openMRSRuntimeVersion>2.4.2</openMRSRuntimeVersion>
+    <openMRSVersion>2.7.7</openMRSVersion>
+    <openMRSRuntimeVersion>2.7.7</openMRSRuntimeVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <webservicesRestModuleVersion>2.29.0</webservicesRestModuleVersion>
-    <openmrsAtomfeedVersion>2.6.1</openmrsAtomfeedVersion>
+    <webservicesRestModuleVersion>3.0.0</webservicesRestModuleVersion>
+    <openmrsAtomfeedVersion>2.6.3</openmrsAtomfeedVersion>
     <atomfeed.version>1.10.1</atomfeed.version>
-    <legacyuiVersion>1.11.0</legacyuiVersion>
+    <legacyuiVersion>2.0.0-SNAPSHOT</legacyuiVersion>
     <log4jVersion>2.17.1</log4jVersion>
   </properties>
 
@@ -111,6 +111,13 @@
         <scope>provided</scope>
       </dependency>
 
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-inline</artifactId>
+        <version>4.8.0</version>
+        <scope>test</scope>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
   
@@ -169,6 +176,14 @@
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
             <tagNameFormat>@{project.version}</tagNameFormat>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
+          <configuration>
+            <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
           </configuration>
         </plugin>
       </plugins>

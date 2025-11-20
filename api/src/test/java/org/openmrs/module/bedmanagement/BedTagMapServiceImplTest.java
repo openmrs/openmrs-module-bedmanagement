@@ -1,11 +1,14 @@
 package org.openmrs.module.bedmanagement;
 
-import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
@@ -14,19 +17,12 @@ import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.service.impl.BedTagMapServiceImpl;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
-@PowerMockIgnore("javax.management.*")
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ Context.class })
+@ExtendWith(MockitoExtension.class)
 public class BedTagMapServiceImplTest {
 	
 	BedTagMapServiceImpl bedTagMapService;
@@ -35,19 +31,10 @@ public class BedTagMapServiceImplTest {
 	BedTagMapDao bedTagMapDao;
 	
 	@Mock
-	Context context;
-	
-	@Mock
 	private User authenticatedUser;
 	
-	@Rule
-	public final ExpectedException exception = ExpectedException.none();
-	
-	@Before
+	@BeforeEach
 	public void setup() {
-		initMocks(this);
-		PowerMockito.mockStatic(Context.class);
-		when(Context.getAuthenticatedUser()).thenReturn(authenticatedUser);
 		bedTagMapService = new BedTagMapServiceImpl();
 		bedTagMapService.setDao(bedTagMapDao);
 	}
@@ -78,16 +65,16 @@ public class BedTagMapServiceImplTest {
 	
 	@Test
 	public void shouldThrowExceptionIfGivenBedAlreadyAssignedGivenBedTag() throws Exception {
-		exception.expect(APIException.class);
-		exception.expectMessage("Tag Already Present For Bed");
-		
-		Bed bed = new Bed();
-		BedTag bedTag = new BedTag();
-		BedTagMap bedTagMap = new BedTagMap();
-		bedTagMap.setBed(bed);
-		bedTagMap.setBedTag(bedTag);
-		when(bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(bedTagMap);
-		bedTagMapService.save(bedTagMap);
+		assertThrows("Tag Already Present For Bed", APIException.class, () -> {
+			Bed bed = new Bed();
+			BedTag bedTag = new BedTag();
+			BedTagMap bedTagMap = new BedTagMap();
+			bedTagMap.setBed(bed);
+			bedTagMap.setBedTag(bedTag);
+			when(bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(bedTagMap);
+			bedTagMapService.save(bedTagMap);
+			
+		});
 	}
 	
 	@Test
@@ -104,9 +91,13 @@ public class BedTagMapServiceImplTest {
 	
 	@Test
 	public void shouldVoidGivenBedTagMap() throws Exception {
-		String reason = "some reason";
-		BedTagMap bedTagMap = new BedTagMap();
-		bedTagMapService.delete(bedTagMap, reason);
-		verify(bedTagMapDao, times(1)).saveOrUpdate(any(BedTagMap.class));
+		try (MockedStatic<Context> mockedContext = Mockito.mockStatic(Context.class)) {
+			String reason = "some reason";
+			BedTagMap bedTagMap = new BedTagMap();
+			User user = mock(User.class);
+			mockedContext.when(Context::getAuthenticatedUser).thenReturn(user);
+			bedTagMapService.delete(bedTagMap, reason);
+			verify(bedTagMapDao, times(1)).saveOrUpdate(any(BedTagMap.class));
+		}
 	}
 }

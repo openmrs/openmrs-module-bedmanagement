@@ -1,9 +1,12 @@
 package org.openmrs.module.bedmanagement;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
@@ -19,9 +22,6 @@ import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.module.bedmanagement.service.impl.BedManagementServiceImpl;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -30,18 +30,9 @@ import java.util.HashSet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.mockito.Mockito.*;
 
-@PowerMockIgnore("javax.management.*")
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Context.class)
+@ExtendWith(MockitoExtension.class)
 public class BedManagementServiceImplTest {
 	
 	BedManagementServiceImpl bedManagementService;
@@ -49,7 +40,7 @@ public class BedManagementServiceImplTest {
 	@Mock
 	BedManagementDao bedManagementDao;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		bedManagementService = new BedManagementServiceImpl();
 		bedManagementService.setDao(bedManagementDao);
@@ -152,62 +143,65 @@ public class BedManagementServiceImplTest {
 	
 	@Test
 	public void shouldCallDeleteBedLocationMappingWhenLocationMappedBedIsDeleted() {
-		Bed bed = new Bed();
-		bed.setBedNumber("bedNumber");
-		bed.setId(1);
-		bed.setStatus(BedStatus.AVAILABLE.name());
-		BedLocationMapping bedLocationMapping = mock(BedLocationMapping.class);
-		mockStatic(Context.class);
-		User user = mock(User.class);
-		
-		when(bedManagementDao.getBedLocationMappingByBed(bed)).thenReturn(bedLocationMapping);
-		doNothing().when(bedManagementDao).deleteBedLocationMapping(bedLocationMapping);
-		when(Context.getAuthenticatedUser()).thenReturn(user);
-		
-		bedManagementService.deleteBed(bed, "test");
-		
-		verify(bedManagementDao, times(1)).deleteBedLocationMapping(bedLocationMapping);
+		try (MockedStatic<Context> mockedContext = Mockito.mockStatic(Context.class)) {
+			Bed bed = new Bed();
+			bed.setBedNumber("bedNumber");
+			bed.setId(1);
+			bed.setStatus(BedStatus.AVAILABLE.name());
+			BedLocationMapping bedLocationMapping = mock(BedLocationMapping.class);
+			User user = mock(User.class);
+			
+			when(bedManagementDao.getBedLocationMappingByBed(bed)).thenReturn(bedLocationMapping);
+			doNothing().when(bedManagementDao).deleteBedLocationMapping(bedLocationMapping);
+			mockedContext.when(Context::getAuthenticatedUser).thenReturn(user);
+			
+			bedManagementService.deleteBed(bed, "test");
+			
+			verify(bedManagementDao, times(1)).deleteBedLocationMapping(bedLocationMapping);
+		}
 	}
 	
 	@Test
 	public void shouldNotCallDeleteBedLocationMappingWhenDeletedBedIsNotMappedToAnyLocation() {
-		Bed bed = new Bed();
-		bed.setBedNumber("bedNumber");
-		bed.setId(1);
-		bed.setStatus(BedStatus.AVAILABLE.name());
-		mockStatic(Context.class);
-		User user = mock(User.class);
-		
-		when(bedManagementDao.getBedLocationMappingByBed(bed)).thenReturn(null);
-		when(Context.getAuthenticatedUser()).thenReturn(user);
-		
-		bedManagementService.deleteBed(bed, "test");
-		
-		verify(bedManagementDao, times(0)).deleteBedLocationMapping(any(BedLocationMapping.class));
+		try (MockedStatic<Context> mockedContext = Mockito.mockStatic(Context.class)) {
+			
+			Bed bed = new Bed();
+			bed.setBedNumber("bedNumber");
+			bed.setId(1);
+			bed.setStatus(BedStatus.AVAILABLE.name());
+			User user = mock(User.class);
+			
+			when(bedManagementDao.getBedLocationMappingByBed(bed)).thenReturn(null);
+			mockedContext.when(Context::getAuthenticatedUser).thenReturn(user);
+			
+			bedManagementService.deleteBed(bed, "test");
+			
+			verify(bedManagementDao, times(0)).deleteBedLocationMapping(any(BedLocationMapping.class));
+		}
 	}
 	
 	@Test
 	public void shouldRetireBedType() {
-		BedType bedType = new BedType();
-		bedType.setName("Large");
-		bedType.setDisplayName("L");
-		bedType.setDescription("Large bed");
-		
-		mockStatic(Context.class);
-		User authUser = mock(User.class);
-		when(Context.getAuthenticatedUser()).thenReturn(authUser);
-		
-		when(bedManagementDao.saveBedType(any(BedType.class))).thenAnswer(inv -> inv.getArgument(0));
-		
-		BedType retired = bedManagementService.retireBedType(bedType, "Duplicate entry");
-		
-		assertEquals(Boolean.TRUE, retired.getRetired());
-		assertEquals("Duplicate entry", retired.getRetireReason());
-		assertEquals(authUser, retired.getRetiredBy());
-		assertNotNull(retired.getDateRetired());
-		
-		verify(bedManagementDao, times(1)).saveBedType(retired);
-		
+		try (MockedStatic<Context> mockedContext = Mockito.mockStatic(Context.class)) {
+			BedType bedType = new BedType();
+			bedType.setName("Large");
+			bedType.setDisplayName("L");
+			bedType.setDescription("Large bed");
+			
+			User authUser = mock(User.class);
+			mockedContext.when(Context::getAuthenticatedUser).thenReturn(authUser);
+			
+			when(bedManagementDao.saveBedType(any(BedType.class))).thenAnswer(inv -> inv.getArgument(0));
+			
+			BedType retired = bedManagementService.retireBedType(bedType, "Duplicate entry");
+			
+			assertEquals(Boolean.TRUE, retired.getRetired());
+			assertEquals("Duplicate entry", retired.getRetireReason());
+			assertEquals(authUser, retired.getRetiredBy());
+			assertNotNull(retired.getDateRetired());
+			
+			verify(bedManagementDao, times(1)).saveBedType(retired);
+		}
 	}
 	
 	@Test
