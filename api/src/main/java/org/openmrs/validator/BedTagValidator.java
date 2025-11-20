@@ -17,44 +17,39 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import java.util.List;
-
 @Handler(supports = { BedTag.class }, order = 50)
 public class BedTagValidator implements Validator {
 
-	@Autowired
-	private BedManagementService bedManagementService;
+    @Autowired
+    private BedManagementService bedManagementService;
 
-	@Override
-	public boolean supports(Class<?> clazz) {
-		return BedTag.class.equals(clazz);
-	}
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return BedTag.class.equals(clazz);
+    }
 
-	@Override
-	public void validate(Object target, Errors errors) {
-		if (!(target instanceof BedTag)) {
-			errors.reject("error.general");
-			return;
-		}
+    @Override
+    public void validate(Object target, Errors errors) {
+        if (!(target instanceof BedTag)) {
+            errors.reject("error.general");
+            return;
+        }
 
-		BedTag tag = (BedTag) target;
+        BedTag tag = (BedTag) target;
 
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.name");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.name");
 
-		if (StringUtils.isBlank(tag.getName())) {
-			return;
-		}
+        if (StringUtils.isBlank(tag.getName())) {
+            return;
+        }
 
-		List<BedTag> tagsWithSameName = bedManagementService.getBedTags(tag.getName().trim(), 1, 0);
+        BedTag existing = bedManagementService.getBedTagByUuid(tag.getName().trim());
 
-		if (!tagsWithSameName.isEmpty()) {
-			BedTag existing = tagsWithSameName.get(0);
+        if (existing != null && existing.getDateVoided() == null
+                && !existing.getUuid().equals(tag.getUuid())) {
+            errors.rejectValue("name", "general.error.nameAlreadyInUse");
+        }
 
-			if (!existing.getUuid().equals(tag.getUuid()) && existing.getDateVoided() == null) {
-				errors.rejectValue("name", "general.error.nameAlreadyInUse");
-			}
-		}
-
-		ValidateUtil.validateFieldLengths(errors, tag.getClass(), "name");
-	}
+        ValidateUtil.validateFieldLengths(errors, tag.getClass(), "name");
+    }
 }
