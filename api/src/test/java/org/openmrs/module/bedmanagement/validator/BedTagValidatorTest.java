@@ -1,3 +1,5 @@
+package org.openmrs.module.bedmanagement.validator;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmrs.api.ValidationException;
@@ -129,10 +131,10 @@ public class BedTagValidatorTest extends BaseModuleContextSensitiveTest {
 
 	@Test
 	public void saveBedTag_shouldNotSaveInvalidTag() {
-        assertThrows(ValidationException.class, () -> {
-            BedTag invalidTag = new BedTag();
-            invalidTag.setName("");
-            bedManagementService.saveBedTag(invalidTag);
-        });
+		assertThrows(ValidationException.class, () -> {
+			BedTag invalidTag = new BedTag();
+			invalidTag.setName("");
+			bedManagementService.saveBedTag(invalidTag);
+		});
 	}
 }
