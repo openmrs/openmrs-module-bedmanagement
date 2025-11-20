@@ -27,13 +27,13 @@ import java.util.Date;
 
 @Transactional
 public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMapService {
-	
+
 	BedTagMapDao bedTagMapDao;
-	
+
 	public void setDao(BedTagMapDao dao) {
 		this.bedTagMapDao = dao;
 	}
-	
+
 	@Override
 	@Transactional
 	public BedTagMap save(BedTagMap bedTagMap) {
@@ -42,7 +42,7 @@ public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMa
 		}
 		return bedTagMapDao.saveOrUpdate(bedTagMap);
 	}
-	
+
 	@Override
 	@Transactional
 	public void delete(BedTagMap bedTagMap, String reason) {
@@ -52,22 +52,28 @@ public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMa
 		bedTagMap.setVoidedBy(Context.getAuthenticatedUser());
 		bedTagMapDao.saveOrUpdate(bedTagMap);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BedTagMap getBedTagMapByUuid(String bedTagMapUuid) {
 		return bedTagMapDao.getBedTagMapByUuid(bedTagMapUuid);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BedTagMap getBedTagMapWithBedAndTag(Bed bed, BedTag bedTag) {
 		return bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BedTag getBedTagByUuid(String bedTagUuid) {
 		return bedTagMapDao.getBedTagByUuid(bedTagUuid);
 	}
+
+	 @Override
+    @Transactional(readOnly = true)
+    public BedTag getBedTagByName(String bedTagName) {
+        return bedTagMapDao.getBedTagByName(bedTagName);
+    }
 }
