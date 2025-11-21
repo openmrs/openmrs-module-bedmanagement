@@ -32,7 +32,7 @@ import org.openmrs.module.bedmanagement.exception.BedOccupiedException;
 import java.util.List;
 
 public interface BedManagementService extends OpenmrsService {
-	
+
 	/**
 	 * Get all admission locations
 	 *
@@ -40,7 +40,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized({ "Get Admission Locations", "Get Beds" })
 	List<AdmissionLocation> getAdmissionLocations();
-	
+
 	/**
 	 * Get bed location mapping by location
 	 *
@@ -49,7 +49,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized({ "Get Admission Locations", "Get Beds" })
 	List<BedLocationMapping> getBedLocationMappingsByLocation(Location location);
-	
+
 	/**
 	 * Get admission location by location
 	 *
@@ -58,7 +58,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized({ "Get Admission Locations", "Get Beds" })
 	AdmissionLocation getAdmissionLocationByLocation(Location location);
-	
+
 	/**
 	 * Save / Update admission location
 	 *
@@ -67,7 +67,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized({ "Edit Admission Locations", "Manage Locations" })
 	AdmissionLocation saveAdmissionLocation(AdmissionLocation admissionLocation);
-	
+
 	/**
 	 * Set bed location mapping for admission location
 	 *
@@ -78,55 +78,55 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized({ "Edit Admission Locations", "Manage Locations" })
 	AdmissionLocation setBedLayoutForAdmissionLocation(AdmissionLocation admissionLocation, Integer row, Integer column);
-	
+
 	@Authorized(value = { "Assign Beds", "Edit Admission Locations" }, requireAll = true)
 	BedDetails assignPatientToBed(Patient patient, Encounter encounter, String bedId);
-	
+
 	Bed getBedById(int id);
-	
+
 	@Authorized(value = { "Get Beds", "Get Admission Locations" }, requireAll = true)
 	BedDetails getBedAssignmentDetailsByPatient(Patient patient);
-	
+
 	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
 	BedDetails getBedDetailsById(String id);
-	
+
 	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
 	BedDetails getBedDetailsByUuid(String uuid);
-	
+
 	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
 	BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
 
 	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
 	List<BedPatientAssignment> getBedPatientAssignmentByPatient(String patientUuid, boolean includeEnded);
-	
+
 	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
 	List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encounterUuid, boolean includeEnded);
-	
+
 	@Authorized(value = { "Get Admission Locations", "Get Beds" }, requireAll = true)
 	List<BedPatientAssignment> getBedPatientAssignmentByVisit(String visitUuid, boolean includeEnded);
-	
+
 	@Authorized(value = { "Assign Beds", "Edit Admission Locations" }, requireAll = true)
 	BedDetails unAssignPatientFromBed(Patient patient);
-	
+
 	@Authorized(value = { "Assign Beds", "Edit Admission Locations" }, requireAll = true)
 	BedPatientAssignment saveBedPatientAssignment(BedPatientAssignment bpa);
-	
+
 	/**
 	 * Unassign all assigned beds from a patient associated with the given visit. The number of assigned
 	 * beds for the patient *should* be at most one, but this function does not assume that.
-	 * 
+	 *
 	 * @param visit
 	 * @return a List of beds that got unassigned as a result of calling this function
 	 */
 	@Authorized(value = { "Assign Beds", "Edit Admission Locations" }, requireAll = true)
 	List<BedDetails> unAssignBedsInEndedVisit(Visit visit);
-	
+
 	@Authorized(value = { "Get Beds", "Get Admission Locations" }, requireAll = true)
 	BedDetails getLatestBedDetailsByVisit(String visitUuid);
-	
+
 	@Authorized(value = { "Get Bed Tags" }, requireAll = true)
 	List<BedTag> getAllBedTags();
-	
+
 	/**
 	 * Get bed location mapping by bed id
 	 *
@@ -135,7 +135,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = "Get Beds", requireAll = true)
 	BedLocationMapping getBedLocationMappingByBedId(Integer bedId);
-	
+
 	/**
 	 * Get all beds
 	 *
@@ -145,7 +145,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Get Beds" }, requireAll = true)
 	List<Bed> getBeds(Integer limit, Integer offset);
-	
+
 	/**
 	 * Get beds by location uuid and/or bed type name and/or status
 	 *
@@ -158,7 +158,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Get Beds" }, requireAll = true)
 	List<Bed> getBeds(String locationUuid, String bedTypeName, BedStatus status, Integer limit, Integer offset);
-	
+
 	/**
 	 * Get bed by bed uuid
 	 *
@@ -167,7 +167,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Get Beds" }, requireAll = true)
 	Bed getBedByUuid(String uuid);
-	
+
 	/**
 	 * Soft delete bed
 	 *
@@ -176,7 +176,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Edit Beds" }, requireAll = true)
 	void deleteBed(Bed bed, String reason) throws BedOccupiedException;
-	
+
 	/**
 	 * Save / update bed
 	 *
@@ -185,7 +185,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Edit Beds" }, requireAll = true)
 	Bed saveBed(Bed bed);
-	
+
 	/**
 	 * Get bed tag by Id
 	 *
@@ -194,7 +194,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Get Bed Tags" }, requireAll = true)
 	BedTag getBedTagByUuid(String uuid);
-	
+
 	/**
 	 * Get bed tags
 	 *
@@ -205,7 +205,16 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Get Bed Tags" }, requireAll = true)
 	List<BedTag> getBedTags(String name, Integer limit, Integer offset);
-	
+
+	/**
+	 * Get bed tag by name
+	 *
+	 * @param name {@link String} bed tag name
+	 * @return {@link BedTag} or null if not found
+	 */
+	@Authorized(value = { "Get Bed Tags" }, requireAll = true)
+	BedTag getBedTagByName(String name);
+
 	/**
 	 * Save / Update bed Tag
 	 *
@@ -214,7 +223,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Edit Bed Tags" }, requireAll = true)
 	BedTag saveBedTag(BedTag bedTag);
-	
+
 	/**
 	 * Delete bed tag
 	 *
@@ -223,7 +232,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Edit Bed Tags" }, requireAll = true)
 	void deleteBedTag(BedTag bedTag, String reason);
-	
+
 	/**
 	 * Save / Update bed location mapping
 	 *
@@ -232,7 +241,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = "Edit Beds", requireAll = true)
 	BedLocationMapping saveBedLocationMapping(BedLocationMapping bedLocationMapping);
-	
+
 	/**
 	 * Get bed types by name
 	 *
@@ -243,7 +252,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Get Bed Type" }, requireAll = true)
 	List<BedType> getBedTypes(String name, Integer limit, Integer offset);
-	
+
 	/**
 	 * Get bed location mapping by location uuid and row and column
 	 *
@@ -254,7 +263,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = "Get Beds", requireAll = true)
 	BedLocationMapping getBedLocationMappingByLocationUuidAndRowColumn(String locationUuid, Integer row, Integer column);
-	
+
 	/**
 	 * Get bedType by Id
 	 *
@@ -263,7 +272,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Get Bed Type" }, requireAll = true)
 	BedType getBedTypeByUuid(String uuid);
-	
+
 	/**
 	 * Save / Update bed Type
 	 *
@@ -272,7 +281,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Edit Bed Type" }, requireAll = true)
 	BedType saveBedType(BedType bedType);
-	
+
 	/**
 	 * Delete bed type
 	 *
@@ -280,7 +289,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Edit Bed Type" }, requireAll = true)
 	void deleteBedType(BedType bedType);
-	
+
 	/**
 	 * Retire bed type
 	 *
@@ -289,7 +298,7 @@ public interface BedManagementService extends OpenmrsService {
 	 */
 	@Authorized(value = { "Edit Bed Type" }, requireAll = true)
 	BedType retireBedType(BedType bedType, String retireReason);
-	
+
 	@Authorized(value = { "Assign Beds", "Edit Admission Locations" }, requireAll = true)
 	void deleteBedPatientAssignment(BedPatientAssignment bpa, String reason);
 }
