@@ -386,17 +386,19 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		Assert.assertEquals(3, bedLocationMappings.get(14).getRow());
 		Assert.assertEquals(5, bedLocationMappings.get(14).getColumn());
 	}
-
+	
 	@Test
 	public void shouldGetBedPatientAssignmentByPatient() {
 		Context.authenticate(superUser, superUserPassword);
-
+		
 		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
 		
-		List<BedPatientAssignment> totalBpaList = bedManagementService.getBedPatientAssignmentByPatient(patient.getUuid(), true);
+		List<BedPatientAssignment> totalBpaList = bedManagementService.getBedPatientAssignmentByPatient(patient.getUuid(),
+		    true);
 		Assert.assertEquals(totalBpaList.size(), 2);
 		
-		List<BedPatientAssignment> currentBpaList = bedManagementService.getBedPatientAssignmentByPatient(patient.getUuid(), false);
+		List<BedPatientAssignment> currentBpaList = bedManagementService.getBedPatientAssignmentByPatient(patient.getUuid(),
+		    false);
 		Assert.assertEquals(currentBpaList.size(), 1);
 	}
 	
