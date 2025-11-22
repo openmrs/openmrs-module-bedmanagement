@@ -3,7 +3,7 @@
     <parent>
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>bedmanagement</artifactId>
-	<version>6.2.0-SNAPSHOT</version>
+	<version>7.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -78,6 +78,16 @@
             <artifactId>openmrs-api</artifactId>
             <version>${openMRSVersion}</version>
             <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
