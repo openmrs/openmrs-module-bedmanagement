@@ -58,27 +58,14 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 		return newType;
 	}
 
-	private Patient createPatient(String identifierString, String firstName, String middleName, String lastName) {
-		PatientIdentifierType pit = Context.getPatientService().getPatientIdentifierTypeByName("Test Identifier Type");
-		if (pit == null) {
-			pit = new PatientIdentifierType();
-			pit.setName("Test Identifier Type");
-			pit.setDescription("Test Identifier Type Description");
-			Context.getPatientService().savePatientIdentifierType(pit);
+	private Patient loadPatient(String identifierString) {
+		Patient patient = Context.getPatientService().getPatientByUuid(identifierString);
+
+		if (patient == null) {
+			throw new IllegalStateException("No test patient found with identifier: " + identifierString);
 		}
 
-		PatientIdentifier identifier = new PatientIdentifier(identifierString, pit, defaultLocation);
-		identifier.setPreferred(true);
-
-		PersonName name = new PersonName(firstName, middleName, lastName);
-		name.setPreferred(true);
-
-		Patient patient = new Patient();
-		patient.addIdentifier(identifier);
-		patient.addName(name);
-		patient.setGender("M");
-
-		return Context.getPatientService().savePatient(patient);
+		return patient;
 	}
 
 	private Bed createBed(String bedNumber) {
@@ -130,26 +117,31 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void shouldReturnBedByPatient() {
 		Patient patient = createPatient("PID123", "John", "A", "Doe");
-		Bed bed = createBed("B101");
-
-		Visit visit = createVisit(patient);
-		Encounter encounter = createEncounter(patient, visit);
-
-		BedPatientAssignment assignment = new BedPatientAssignment();
-		assignment.setBed(bed);
-		assignment.setPatient(patient);
-		assignment.setEncounter(encounter);
-		assignment.setStartDatetime(new Date());
-		assignment.setEndDatetime(null);
-		bedManagementDao.saveBedPatientAssignment(assignment);
-
-		Bed result = bedManagementDao.getBedByPatient(patient);
-
-		assertNotNull("Expected a bed to be returned for the patient", result);
-		assertEquals("B101", result.getBedNumber());
-	}
-
-	@Test
+				Bed bed = createBed("B101");
+		
+				Visit visit = createVisit(patient);
+				Encounter encounter = createEncounter(patient, visit);
+		
+				BedPatientAssignment assignment = new BedPatientAssignment();
+				assignment.setBed(bed);
+				assignment.setPatient(patient);
+				assignment.setEncounter(encounter);
+				assignment.setStartDatetime(new Date());
+				assignment.setEndDatetime(null);
+				bedManagementDao.saveBedPatientAssignment(assignment);
+		
+				Bed result = bedManagementDao.getBedByPatient(patient);
+		
+				assertNotNull("Expected a bed to be returned for the patient", result);
+				assertEquals("B101", result.getBedNumber());
+			}
+		
+			private Patient createPatient(String string, String string2, String string3, String string4) {
+				// TODO Auto-generated method stub
+				throw new UnsupportedOperationException("Unimplemented method 'createPatient'");
+			}
+		
+			@Test
 	public void shouldReturnBedPatientAssignmentByUuid() {
 		Patient patient = createPatient("PID124", "Jane", "B", "Smith");
 		Bed bed = createBed("B102");
