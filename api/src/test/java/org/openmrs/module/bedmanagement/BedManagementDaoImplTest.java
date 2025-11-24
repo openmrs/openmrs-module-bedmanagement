@@ -6,9 +6,6 @@ import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Patient;
-import org.openmrs.PatientIdentifier;
-import org.openmrs.PatientIdentifierType;
-import org.openmrs.PersonName;
 import org.openmrs.Visit;
 import org.openmrs.VisitType;
 import org.openmrs.api.context.Context;
@@ -17,7 +14,6 @@ import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Date;
 import java.util.List;
@@ -46,11 +42,9 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 
 	private EncounterType getOrCreateEncounterType(String name) {
 		EncounterType encounterType = Context.getEncounterService().getEncounterType(name);
-
 		if (encounterType != null) {
 			return encounterType;
 		}
-
 		EncounterType newType = new EncounterType();
 		newType.setName(name);
 		newType.setDescription("Created for testing: " + name);
@@ -58,13 +52,18 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 		return newType;
 	}
 
-	private Patient loadPatient(String identifierString) {
-		Patient patient = Context.getPatientService().getPatientByUuid(identifierString);
-
-		if (patient == null) {
-			throw new IllegalStateException("No test patient found with identifier: " + identifierString);
+	private Patient loadPatient(String patientIdStr) {
+		int patientId;
+		try {
+			patientId = Integer.parseInt(patientIdStr);
 		}
-
+		catch (NumberFormatException e) {
+			throw new IllegalArgumentException("Invalid patient ID: " + patientIdStr, e);
+		}
+		Patient patient = Context.getPatientService().getPatient(patientId);
+		if (patient == null) {
+			throw new IllegalStateException("No test patient found with ID: " + patientId);
+		}
 		return patient;
 	}
 
@@ -116,34 +115,29 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 
 	@Test
 	public void shouldReturnBedByPatient() {
-		Patient patient = createPatient("PID123", "John", "A", "Doe");
-				Bed bed = createBed("B101");
-		
-				Visit visit = createVisit(patient);
-				Encounter encounter = createEncounter(patient, visit);
-		
-				BedPatientAssignment assignment = new BedPatientAssignment();
-				assignment.setBed(bed);
-				assignment.setPatient(patient);
-				assignment.setEncounter(encounter);
-				assignment.setStartDatetime(new Date());
-				assignment.setEndDatetime(null);
-				bedManagementDao.saveBedPatientAssignment(assignment);
-		
-				Bed result = bedManagementDao.getBedByPatient(patient);
-		
-				assertNotNull("Expected a bed to be returned for the patient", result);
-				assertEquals("B101", result.getBedNumber());
-			}
-		
-			private Patient createPatient(String string, String string2, String string3, String string4) {
-				// TODO Auto-generated method stub
-				throw new UnsupportedOperationException("Unimplemented method 'createPatient'");
-			}
-		
-			@Test
+		Patient patient = loadPatient("2");
+		Bed bed = createBed("B101");
+
+		Visit visit = createVisit(patient);
+		Encounter encounter = createEncounter(patient, visit);
+
+		BedPatientAssignment assignment = new BedPatientAssignment();
+		assignment.setBed(bed);
+		assignment.setPatient(patient);
+		assignment.setEncounter(encounter);
+		assignment.setStartDatetime(new Date());
+		assignment.setEndDatetime(null);
+		bedManagementDao.saveBedPatientAssignment(assignment);
+
+		Bed result = bedManagementDao.getBedByPatient(patient);
+
+		assertNotNull("Expected a bed to be returned for the patient", result);
+		assertEquals("B101", result.getBedNumber());
+	}
+
+	@Test
 	public void shouldReturnBedPatientAssignmentByUuid() {
-		Patient patient = createPatient("PID124", "Jane", "B", "Smith");
+		Patient patient = loadPatient("6");
 		Bed bed = createBed("B102");
 
 		Visit visit = createVisit(patient);
@@ -166,8 +160,8 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void shouldReturnCurrentAssignmentsByBed() {
 		Bed bed = createBed("B103");
-		Patient patient1 = createPatient("PID125", "Alice", "C", "Jones");
-		Patient patient2 = createPatient("PID126", "Bob", "D", "White");
+		Patient patient1 = loadPatient("7");
+		Patient patient2 = loadPatient("8");
 
 		Visit visit1 = createVisit(patient1);
 		Encounter encounter1 = createEncounter(patient1, visit1);
@@ -199,7 +193,7 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 
 	@Test
 	public void shouldReturnLatestBedByVisit() {
-		Patient patient = createPatient("PID127", "Charlie", "E", "Brown");
+		Patient patient = loadPatient("2");
 
 		Visit visit = createVisit(patient);
 
