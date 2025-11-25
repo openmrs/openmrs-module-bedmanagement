@@ -50,11 +50,17 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 	}
 	
 	private Visit getTestVisit(Patient patient) {
-		return Context.getVisitService().getVisitsByPatient(patient).get(0);
+		List<Visit> visits = Context.getVisitService().getVisitsByPatient(patient);
+		assertNotNull(visits);
+		assertEquals(true, !visits.isEmpty());
+		return visits.get(0);
 	}
 	
 	private Encounter getTestEncounter(Patient patient) {
-		return Context.getEncounterService().getEncountersByPatient(patient).get(0);
+		List<Encounter> encounters = Context.getEncounterService().getEncountersByPatient(patient);
+		assertNotNull(encounters);
+		assertEquals(true, !encounters.isEmpty());
+		return encounters.get(0);
 	}
 	
 	@Test
@@ -103,7 +109,6 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 	public void shouldReturnCurrentAssignmentsByBed() {
 		Bed bed = createBed("B103");
 		
-		// Only use patients that exist in standardTestDataset.xml
 		Patient patient1 = Context.getPatientService().getPatient(2);
 		Patient patient2 = Context.getPatientService().getPatient(7);
 		
