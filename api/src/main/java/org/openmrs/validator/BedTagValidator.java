@@ -19,32 +19,32 @@ import org.springframework.validation.Validator;
 
 @Handler(supports = { BedTag.class }, order = 50)
 public class BedTagValidator implements Validator {
-	
+
 	@Autowired
 	private BedManagementService bedManagementService;
-	
+
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return BedTag.class.equals(clazz);
 	}
-	
+
 	@Override
 	public void validate(Object target, Errors errors) {
 		if (!(target instanceof BedTag)) {
 			errors.reject("error.general");
 			return;
 		}
-		
+
 		BedTag tag = (BedTag) target;
-		
+
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.name");
-		
+
 		if (StringUtils.isBlank(tag.getName())) {
 			return;
 		}
-		
-		BedTag existing = bedManagementService.getBedTagByUuid(tag.getName().trim());
-		
+
+		BedTag existing = bedManagementService.getBedTagByName(tag.getName().trim());
+
 		if (existing != null && existing.getDateVoided() == null && !existing.getUuid().equals(tag.getUuid())) {
 			errors.rejectValue("name", "general.error.nameAlreadyInUse");
 		}
