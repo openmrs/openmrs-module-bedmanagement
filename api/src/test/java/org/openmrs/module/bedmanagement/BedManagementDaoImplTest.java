@@ -7,7 +7,6 @@ import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
-import org.openmrs.VisitType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
@@ -23,205 +22,196 @@ import static org.junit.Assert.assertNotNull;
 
 public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 
-	private BedManagementDao bedManagementDao;
+    private BedManagementDao bedManagementDao;
+    private Location defaultLocation;
+    private EncounterType defaultEncounterType;
 
-	private Location defaultLocation;
+    @Before
+    public void setup() throws Exception {
+        executeDataSet("org/openmrs/include/standardTestDataset.xml");
 
-	private EncounterType defaultEncounterType;
+        bedManagementDao = Context.getRegisteredComponent("bedManagementDao", BedManagementDao.class);
+        assertNotNull("bedManagementDao should be initialized", bedManagementDao);
 
-	@Before
-	public void setup() {
-		bedManagementDao = Context.getRegisteredComponent("bedManagementDao", BedManagementDao.class);
-		assertNotNull("bedManagementDao should be initialized", bedManagementDao);
+        defaultLocation = Context.getLocationService().getLocationByUuid("8d6c993e-c2cc-11de-8d13-0010c6dffd0f");
+        assertNotNull("Default location should not be null", defaultLocation);
 
-		defaultLocation = Context.getLocationService().getLocationByUuid("8d6c993e-c2cc-11de-8d13-0010c6dffd0f");
-		assertNotNull("Default location should not be null", defaultLocation);
+        defaultEncounterType = Context.getEncounterService().getEncounterType("Outpatient Encounter");
+        if (defaultEncounterType == null) {
+            List<EncounterType> allTypes = Context.getEncounterService().getAllEncounterTypes();
+            if (!allTypes.isEmpty()) {
+                defaultEncounterType = allTypes.get(0);
+            }
+        }
+        assertNotNull("Default encounter type should not be null", defaultEncounterType);
+    }
 
-		defaultEncounterType = getOrCreateEncounterType("Test Encounter Type");
-	}
+    private Bed createBed(String bedNumber) {
+        BedType bedType = new BedType();
+        bedType.setName("Test BedType");
+        bedType.setDisplayName("TB");
+        bedType.setDescription("Test Bed Type");
+        bedType = bedManagementDao.saveBedType(bedType);
 
-	private EncounterType getOrCreateEncounterType(String name) {
-		EncounterType encounterType = Context.getEncounterService().getEncounterType(name);
-		if (encounterType != null) {
-			return encounterType;
-		}
-		EncounterType newType = new EncounterType();
-		newType.setName(name);
-		newType.setDescription("Created for testing: " + name);
-		Context.getEncounterService().saveEncounterType(newType);
-		return newType;
-	}
+        Bed bed = new Bed();
+        bed.setBedNumber(bedNumber);
+        bed.setStatus("AVAILABLE");
+        bed.setBedType(bedType);
+        return bedManagementDao.saveBed(bed);
+    }
 
-	private Patient loadPatient(String patientIdStr) {
-		int patientId;
-		try {
-			patientId = Integer.parseInt(patientIdStr);
-		}
-		catch (NumberFormatException e) {
-			throw new IllegalArgumentException("Invalid patient ID: " + patientIdStr, e);
-		}
-		Patient patient = Context.getPatientService().getPatient(patientId);
-		if (patient == null) {
-			throw new IllegalStateException("No test patient found with ID: " + patientId);
-		}
-		return patient;
-	}
+    private Visit getTestVisit(Patient patient) {
+        List<Visit> visits = Context.getVisitService().getVisitsByPatient(patient);
+        if (visits.isEmpty()) {
+            Visit visit = new Visit();
+            visit.setPatient(patient);
+            visit.setLocation(defaultLocation);
+            visit.setStartDatetime(new Date());
+            visit.setVisitType(Context.getVisitService().getAllVisitTypes().get(0));
+            visit = Context.getVisitService().saveVisit(visit);
+            return visit;
+        }
+        return visits.get(0);
+    }
 
-	private Bed createBed(String bedNumber) {
-		BedType bedType = new BedType();
-		bedType.setName("Test BedType");
-		bedType.setDisplayName("TB");
-		bedType.setDescription("Test Bed Type");
-		bedType = bedManagementDao.saveBedType(bedType);
+    private Encounter getTestEncounter(Patient patient) {
+        List<Encounter> encounters = Context.getEncounterService().getEncountersByPatient(patient);
+        if (encounters.isEmpty()) {
+            Visit visit = getTestVisit(patient);
+            Encounter encounter = new Encounter();
+            encounter.setPatient(patient);
+            encounter.setVisit(visit);
+            encounter.setEncounterType(defaultEncounterType);
+            encounter.setEncounterDatetime(new Date());
+            encounter = Context.getEncounterService().saveEncounter(encounter);
+            return encounter;
+        }
 
-		Bed bed = new Bed();
-		bed.setBedNumber(bedNumber);
-		bed.setStatus("AVAILABLE");
-		bed.setBedType(bedType);
-		return bedManagementDao.saveBed(bed);
-	}
+        Encounter encounter = encounters.get(0);
+        if (encounter.getEncounterType() == null) {
+            encounter.setEncounterType(defaultEncounterType);
+            Context.getEncounterService().saveEncounter(encounter);
+        }
 
-	private VisitType getOrCreateVisitType(String name) {
-		for (VisitType vt : Context.getVisitService().getAllVisitTypes()) {
-			if (name.equals(vt.getName())) {
-				return vt;
-			}
-		}
-		VisitType newType = new VisitType();
-		newType.setName(name);
-		newType.setDescription("Test Visit Type");
-		return Context.getVisitService().saveVisitType(newType);
-	}
+        return encounter;
+    }
 
-	private Visit createVisit(Patient patient) {
-		VisitType visitType = getOrCreateVisitType("Outpatient");
+    @Test
+    public void shouldReturnBedByPatient() {
+        Patient patient = Context.getPatientService().getPatient(2);
+        Bed bed = createBed("B101");
 
-		Visit visit = new Visit();
-		visit.setPatient(patient);
-		visit.setVisitType(visitType);
-		visit.setStartDatetime(new Date());
-		return Context.getVisitService().saveVisit(visit);
-	}
+        Visit visit = getTestVisit(patient);
+        Encounter encounter = getTestEncounter(patient);
 
-	private Encounter createEncounter(Patient patient, Visit visit) {
-		Encounter encounter = new Encounter();
-		encounter.setPatient(patient);
-		encounter.setVisit(visit);
-		encounter.setEncounterType(defaultEncounterType);
-		encounter.setEncounterDatetime(new Date());
-		encounter.setLocation(defaultLocation);
-		return Context.getEncounterService().saveEncounter(encounter);
-	}
+        BedPatientAssignment assignment = new BedPatientAssignment();
+        assignment.setBed(bed);
+        assignment.setPatient(patient);
+        assignment.setEncounter(encounter);
+        assignment.setStartDatetime(new Date());
+        assignment.setEndDatetime(null);
+        bedManagementDao.saveBedPatientAssignment(assignment);
 
-	@Test
-	public void shouldReturnBedByPatient() {
-		Patient patient = loadPatient("2");
-		Bed bed = createBed("B101");
+        Bed result = bedManagementDao.getBedByPatient(patient);
 
-		Visit visit = createVisit(patient);
-		Encounter encounter = createEncounter(patient, visit);
+        assertNotNull("Expected a bed to be returned for the patient", result);
+        assertEquals("B101", result.getBedNumber());
+    }
 
-		BedPatientAssignment assignment = new BedPatientAssignment();
-		assignment.setBed(bed);
-		assignment.setPatient(patient);
-		assignment.setEncounter(encounter);
-		assignment.setStartDatetime(new Date());
-		assignment.setEndDatetime(null);
-		bedManagementDao.saveBedPatientAssignment(assignment);
+    @Test
+    public void shouldReturnBedPatientAssignmentByUuid() {
+        Patient patient = Context.getPatientService().getPatient(6);
+        Bed bed = createBed("B102");
 
-		Bed result = bedManagementDao.getBedByPatient(patient);
+        Encounter encounter = getTestEncounter(patient);
 
-		assertNotNull("Expected a bed to be returned for the patient", result);
-		assertEquals("B101", result.getBedNumber());
-	}
+        BedPatientAssignment assignment = new BedPatientAssignment();
+        assignment.setBed(bed);
+        assignment.setPatient(patient);
+        assignment.setEncounter(encounter);
+        assignment.setStartDatetime(new Date());
+        assignment.setEndDatetime(null);
+        BedPatientAssignment saved = bedManagementDao.saveBedPatientAssignment(assignment);
 
-	@Test
-	public void shouldReturnBedPatientAssignmentByUuid() {
-		Patient patient = loadPatient("6");
-		Bed bed = createBed("B102");
+        BedPatientAssignment result = bedManagementDao.getBedPatientAssignmentByUuid(saved.getUuid());
 
-		Visit visit = createVisit(patient);
-		Encounter encounter = createEncounter(patient, visit);
+        assertNotNull("Expected a BedPatientAssignment to be found by UUID", result);
+        assertEquals(patient.getUuid(), result.getPatient().getUuid());
+    }
 
-		BedPatientAssignment assignment = new BedPatientAssignment();
-		assignment.setBed(bed);
-		assignment.setPatient(patient);
-		assignment.setEncounter(encounter);
-		assignment.setStartDatetime(new Date());
-		assignment.setEndDatetime(null);
-		BedPatientAssignment saved = bedManagementDao.saveBedPatientAssignment(assignment);
+    @Test
+    public void shouldReturnCurrentAssignmentsByBed() {
+        Bed bed = createBed("B103");
+        Patient patient1 = Context.getPatientService().getPatient(7);
+        Patient patient2 = Context.getPatientService().getPatient(8);
 
-		BedPatientAssignment result = bedManagementDao.getBedPatientAssignmentByUuid(saved.getUuid());
+        Encounter encounter1 = getTestEncounter(patient1);
+        Encounter encounter2 = getTestEncounter(patient2);
 
-		assertNotNull("Expected a BedPatientAssignment to be found by UUID", result);
-		assertEquals(patient.getUuid(), result.getPatient().getUuid());
-	}
+        BedPatientAssignment assignment1 = new BedPatientAssignment();
+        assignment1.setBed(bed);
+        assignment1.setPatient(patient1);
+        assignment1.setEncounter(encounter1);
+        assignment1.setStartDatetime(new Date());
+        assignment1.setEndDatetime(null);
+        bedManagementDao.saveBedPatientAssignment(assignment1);
 
-	@Test
-	public void shouldReturnCurrentAssignmentsByBed() {
-		Bed bed = createBed("B103");
-		Patient patient1 = loadPatient("7");
-		Patient patient2 = loadPatient("8");
+        BedPatientAssignment assignment2 = new BedPatientAssignment();
+        assignment2.setBed(bed);
+        assignment2.setPatient(patient2);
+        assignment2.setEncounter(encounter2);
+        assignment2.setStartDatetime(new Date());
+        assignment2.setEndDatetime(null);
+        bedManagementDao.saveBedPatientAssignment(assignment2);
 
-		Visit visit1 = createVisit(patient1);
-		Encounter encounter1 = createEncounter(patient1, visit1);
+        List<BedPatientAssignment> results = bedManagementDao.getCurrentAssignmentsByBed(bed);
 
-		Visit visit2 = createVisit(patient2);
-		Encounter encounter2 = createEncounter(patient2, visit2);
+        assertNotNull("Expected a list of current assignments", results);
+        assertEquals(2, results.size());
+    }
 
-		BedPatientAssignment assignment1 = new BedPatientAssignment();
-		assignment1.setBed(bed);
-		assignment1.setPatient(patient1);
-		assignment1.setEncounter(encounter1);
-		assignment1.setStartDatetime(new Date());
-		assignment1.setEndDatetime(null);
-		bedManagementDao.saveBedPatientAssignment(assignment1);
+    @Test
+    public void shouldReturnLatestBedByVisit() {
+        Patient patient = Context.getPatientService().getPatient(2);
 
-		BedPatientAssignment assignment2 = new BedPatientAssignment();
-		assignment2.setBed(bed);
-		assignment2.setPatient(patient2);
-		assignment2.setEncounter(encounter2);
-		assignment2.setStartDatetime(new Date());
-		assignment2.setEndDatetime(null);
-		bedManagementDao.saveBedPatientAssignment(assignment2);
+        Visit visit = getTestVisit(patient);
 
-		List<BedPatientAssignment> results = bedManagementDao.getCurrentAssignmentsByBed(bed);
+        Encounter encounter1 = new Encounter();
+        encounter1.setPatient(patient);
+        encounter1.setVisit(visit);
+        encounter1.setEncounterType(defaultEncounterType);
+        encounter1.setEncounterDatetime(new Date(System.currentTimeMillis() - 100000L));
+        encounter1 = Context.getEncounterService().saveEncounter(encounter1);
 
-		assertNotNull("Expected a list of current assignments", results);
-		assertEquals(2, results.size());
-	}
+        Encounter encounter2 = new Encounter();
+        encounter2.setPatient(patient);
+        encounter2.setVisit(visit);
+        encounter2.setEncounterType(defaultEncounterType);
+        encounter2.setEncounterDatetime(new Date());
+        encounter2 = Context.getEncounterService().saveEncounter(encounter2);
 
-	@Test
-	public void shouldReturnLatestBedByVisit() {
-		Patient patient = loadPatient("2");
+        Bed bed1 = createBed("B104");
+        Bed bed2 = createBed("B105");
 
-		Visit visit = createVisit(patient);
+        BedPatientAssignment assignment1 = new BedPatientAssignment();
+        assignment1.setBed(bed1);
+        assignment1.setPatient(patient);
+        assignment1.setEncounter(encounter1);
+        assignment1.setStartDatetime(new Date(System.currentTimeMillis() - 100000L));
+        assignment1.setEndDatetime(new Date(System.currentTimeMillis() - 50000L));
+        bedManagementDao.saveBedPatientAssignment(assignment1);
 
-		Encounter encounter1 = createEncounter(patient, visit);
-		Encounter encounter2 = createEncounter(patient, visit);
+        BedPatientAssignment assignment2 = new BedPatientAssignment();
+        assignment2.setBed(bed2);
+        assignment2.setPatient(patient);
+        assignment2.setEncounter(encounter2);
+        assignment2.setStartDatetime(new Date());
+        assignment2.setEndDatetime(null);
+        bedManagementDao.saveBedPatientAssignment(assignment2);
 
-		Bed bed1 = createBed("B104");
-		Bed bed2 = createBed("B105");
+        Bed latest = bedManagementDao.getLatestBedByVisit(visit.getUuid());
 
-		BedPatientAssignment assignment1 = new BedPatientAssignment();
-		assignment1.setBed(bed1);
-		assignment1.setPatient(patient);
-		assignment1.setEncounter(encounter1);
-		assignment1.setStartDatetime(new Date(System.currentTimeMillis() - 100000L));
-		assignment1.setEndDatetime(new Date(System.currentTimeMillis() - 50000L));
-		bedManagementDao.saveBedPatientAssignment(assignment1);
-
-		BedPatientAssignment assignment2 = new BedPatientAssignment();
-		assignment2.setBed(bed2);
-		assignment2.setPatient(patient);
-		assignment2.setEncounter(encounter2);
-		assignment2.setStartDatetime(new Date());
-		assignment2.setEndDatetime(null);
-		bedManagementDao.saveBedPatientAssignment(assignment2);
-
-		Bed latest = bedManagementDao.getLatestBedByVisit(visit.getUuid());
-
-		assertNotNull("Expected the latest bed to be returned for the visit", latest);
-		assertEquals("B105", latest.getBedNumber());
-	}
+        assertNotNull("Expected the latest bed to be returned for the visit", latest);
+        assertEquals("B105", latest.getBedNumber());
+    }
 }
