@@ -33,16 +33,13 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
         bedManagementDao = Context.getRegisteredComponent("bedManagementDao", BedManagementDao.class);
         assertNotNull("bedManagementDao should be initialized", bedManagementDao);
 
-        defaultLocation = Context.getLocationService().getLocationByUuid("8d6c993e-c2cc-11de-8d13-0010c6dffd0f");
+        defaultLocation = Context.getLocationService()
+                .getLocationByUuid("8d6c993e-c2cc-11de-8d13-0010c6dffd0f");
         assertNotNull("Default location should not be null", defaultLocation);
 
-        defaultEncounterType = Context.getEncounterService().getEncounterType("Outpatient Encounter");
-        if (defaultEncounterType == null) {
-            List<EncounterType> allTypes = Context.getEncounterService().getAllEncounterTypes();
-            if (!allTypes.isEmpty()) {
-                defaultEncounterType = allTypes.get(0);
-            }
-        }
+        defaultEncounterType = Context.getEncounterService()
+                .getEncounterType("Scheduled");
+                
         assertNotNull("Default encounter type should not be null", defaultEncounterType);
     }
 
@@ -57,6 +54,7 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
         bed.setBedNumber(bedNumber);
         bed.setStatus("AVAILABLE");
         bed.setBedType(bedType);
+
         return bedManagementDao.saveBed(bed);
     }
 
@@ -68,14 +66,14 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
             visit.setLocation(defaultLocation);
             visit.setStartDatetime(new Date());
             visit.setVisitType(Context.getVisitService().getAllVisitTypes().get(0));
-            visit = Context.getVisitService().saveVisit(visit);
-            return visit;
+            return Context.getVisitService().saveVisit(visit);
         }
         return visits.get(0);
     }
 
     private Encounter getTestEncounter(Patient patient) {
         List<Encounter> encounters = Context.getEncounterService().getEncountersByPatient(patient);
+
         if (encounters.isEmpty()) {
             Visit visit = getTestVisit(patient);
             Encounter encounter = new Encounter();
@@ -83,11 +81,11 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
             encounter.setVisit(visit);
             encounter.setEncounterType(defaultEncounterType);
             encounter.setEncounterDatetime(new Date());
-            encounter = Context.getEncounterService().saveEncounter(encounter);
-            return encounter;
+            return Context.getEncounterService().saveEncounter(encounter);
         }
 
         Encounter encounter = encounters.get(0);
+
         if (encounter.getEncounterType() == null) {
             encounter.setEncounterType(defaultEncounterType);
             Context.getEncounterService().saveEncounter(encounter);
@@ -110,6 +108,7 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
         assignment.setEncounter(encounter);
         assignment.setStartDatetime(new Date());
         assignment.setEndDatetime(null);
+
         bedManagementDao.saveBedPatientAssignment(assignment);
 
         Bed result = bedManagementDao.getBedByPatient(patient);
@@ -122,7 +121,6 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
     public void shouldReturnBedPatientAssignmentByUuid() {
         Patient patient = Context.getPatientService().getPatient(6);
         Bed bed = createBed("B102");
-
         Encounter encounter = getTestEncounter(patient);
 
         BedPatientAssignment assignment = new BedPatientAssignment();
@@ -131,6 +129,7 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
         assignment.setEncounter(encounter);
         assignment.setStartDatetime(new Date());
         assignment.setEndDatetime(null);
+
         BedPatientAssignment saved = bedManagementDao.saveBedPatientAssignment(assignment);
 
         BedPatientAssignment result = bedManagementDao.getBedPatientAssignmentByUuid(saved.getUuid());
@@ -164,7 +163,8 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
         assignment2.setEndDatetime(null);
         bedManagementDao.saveBedPatientAssignment(assignment2);
 
-        List<BedPatientAssignment> results = bedManagementDao.getCurrentAssignmentsByBed(bed);
+        List<BedPatientAssignment> results =
+                bedManagementDao.getCurrentAssignmentsByBed(bed);
 
         assertNotNull("Expected a list of current assignments", results);
         assertEquals(2, results.size());
@@ -173,7 +173,6 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
     @Test
     public void shouldReturnLatestBedByVisit() {
         Patient patient = Context.getPatientService().getPatient(2);
-
         Visit visit = getTestVisit(patient);
 
         Encounter encounter1 = new Encounter();
