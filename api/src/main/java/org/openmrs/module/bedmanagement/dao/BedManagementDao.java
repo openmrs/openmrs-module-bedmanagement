@@ -38,6 +38,8 @@ public interface BedManagementDao {
 	
 	BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
 	
+	List<BedPatientAssignment> getBedPatientAssignmentByPatient(String patientUuid, boolean includeEnded);
+	
 	List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encounterUuid, boolean includeEnded);
 	
 	List<BedPatientAssignment> getBedPatientAssignmentByVisit(String visitUuid, boolean includeEnded);

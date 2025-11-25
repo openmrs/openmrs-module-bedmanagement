@@ -13,6 +13,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
@@ -384,6 +385,21 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		Assert.assertEquals(1, bedLocationMappings.get(0).getColumn());
 		Assert.assertEquals(3, bedLocationMappings.get(14).getRow());
 		Assert.assertEquals(5, bedLocationMappings.get(14).getColumn());
+	}
+	
+	@Test
+	public void shouldGetBedPatientAssignmentByPatient() {
+		Context.authenticate(superUser, superUserPassword);
+		
+		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
+		
+		List<BedPatientAssignment> totalBpaList = bedManagementService.getBedPatientAssignmentByPatient(patient.getUuid(),
+		    true);
+		Assert.assertEquals(totalBpaList.size(), 2);
+		
+		List<BedPatientAssignment> currentBpaList = bedManagementService.getBedPatientAssignmentByPatient(patient.getUuid(),
+		    false);
+		Assert.assertEquals(currentBpaList.size(), 1);
 	}
 	
 	@Test(expected = APIException.class)
