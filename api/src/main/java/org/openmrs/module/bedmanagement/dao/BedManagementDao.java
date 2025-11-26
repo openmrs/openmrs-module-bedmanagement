@@ -37,7 +37,7 @@ public interface BedManagementDao {
 	Location getWardForBed(Bed bed);
 
 	BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
-
+	
 	List<BedPatientAssignment> getBedPatientAssignmentByPatient(String patientUuid, boolean includeEnded);
 
 	List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encounterUuid, boolean includeEnded);
