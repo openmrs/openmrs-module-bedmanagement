@@ -49,18 +49,16 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 		return bedManagementDao.saveBed(bed);
 	}
 	
-	private Visit getTestVisit(Patient patient) {
-		List<Visit> visits = Context.getVisitService().getVisitsByPatient(patient);
-		assertNotNull(visits);
-		assertEquals(true, !visits.isEmpty());
-		return visits.get(0);
+	private Visit getTestVisit(Patient patient, Integer visitId) {
+		Visit visit = Context.getVisitService().getVisit(visitId);
+		assertNotNull(visit);
+		return visit;
 	}
 	
-	private Encounter getTestEncounter(Patient patient) {
-		List<Encounter> encounters = Context.getEncounterService().getEncountersByPatient(patient);
-		assertNotNull(encounters);
-		assertEquals(true, !encounters.isEmpty());
-		return encounters.get(0);
+	private Encounter getTestEncounter(Patient patient, Integer encounterId) {
+		Encounter encounter = Context.getEncounterService().getEncounter(encounterId);
+		assertNotNull(encounter);
+		return encounter;
 	}
 	
 	@Test
@@ -68,7 +66,7 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 		Patient patient = Context.getPatientService().getPatient(2);
 		Bed bed = createBed("B101");
 		
-		Encounter encounter = getTestEncounter(patient);
+		Encounter encounter = getTestEncounter(patient, 3);
 		
 		BedPatientAssignment assignment = new BedPatientAssignment();
 		assignment.setBed(bed);
@@ -89,7 +87,7 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 		Patient patient = Context.getPatientService().getPatient(2);
 		Bed bed = createBed("B102");
 		
-		Encounter encounter = getTestEncounter(patient);
+		Encounter encounter = getTestEncounter(patient, 3);
 		
 		BedPatientAssignment assignment = new BedPatientAssignment();
 		assignment.setBed(bed);
@@ -112,8 +110,8 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 		Patient patient1 = Context.getPatientService().getPatient(2);
 		Patient patient2 = Context.getPatientService().getPatient(7);
 		
-		Encounter encounter1 = getTestEncounter(patient1);
-		Encounter encounter2 = getTestEncounter(patient2);
+		Encounter encounter1 = getTestEncounter(patient1, 3);
+		Encounter encounter2 = getTestEncounter(patient2, 4);
 		
 		BedPatientAssignment a1 = new BedPatientAssignment();
 		a1.setBed(bed);
@@ -138,7 +136,7 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void shouldReturnLatestBedByVisit() {
 		Patient patient = Context.getPatientService().getPatient(2);
-		Visit visit = getTestVisit(patient);
+		Visit visit = getTestVisit(patient, 1);
 		
 		Encounter encounter1 = new Encounter();
 		encounter1.setPatient(patient);
