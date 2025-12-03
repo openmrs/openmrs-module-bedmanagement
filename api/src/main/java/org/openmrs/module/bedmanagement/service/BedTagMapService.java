@@ -22,6 +22,4 @@ public interface BedTagMapService extends OpenmrsService {
 
 	@Authorized(value = { "Get Bed Tags", "Get Beds" }, requireAll = true)
 	BedTag getBedTagByUuid(String bedTagUuid);
-
-    BedTag getBedTagByName(String name);
 }
