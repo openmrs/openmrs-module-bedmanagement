@@ -21,7 +21,7 @@ public class BedManagementDaoImplTest extends BaseModuleContextSensitiveTest {
     @Before
     public void setup() throws Exception {
         executeDataSet("org/openmrs/include/standardTestDataset.xml");
-        executeDataSet("org/openmrs/module/bedmanagement/bedManagementDAOComponentTestDataset.xml");
+        executeDataSet("bedManagementDAOComponentTestDataset.xml");
 
         bedManagementDao = Context.getRegisteredComponent("bedManagementDao", BedManagementDao.class);
     }
