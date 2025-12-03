@@ -9,6 +9,7 @@
 
 
 
+
     <bean id="bedManagementDao" class="org.openmrs.module.bedmanagement.dao.impl.BedManagementDaoImpl">
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
