@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.openmrs.module</groupId>
         <artifactId>bedmanagement</artifactId>
-        <version>6.2.0-SNAPSHOT</version>
+        <version>7.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>bedmanagement-owa</artifactId>
@@ -18,7 +18,7 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.12.1</version>
+                <version>1.6</version>
                 <executions>
                     <execution>
                         <id>install node and yarn</id>
@@ -26,8 +26,8 @@
                             <goal>install-node-and-yarn</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v18.20.5</nodeVersion>
-                            <yarnVersion>v1.22.19</yarnVersion>
+                            <nodeVersion>v14.7.0</nodeVersion>
+                            <yarnVersion>v1.3.2</yarnVersion>
                         </configuration>
                     </execution>
 
