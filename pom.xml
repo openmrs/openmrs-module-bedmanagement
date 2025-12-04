@@ -4,7 +4,7 @@
 
   <groupId>org.openmrs.module</groupId>
   <artifactId>bedmanagement</artifactId>
-  <version>6.2.0-SNAPSHOT</version>
+  <version>7.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Bed Management Module</name>
   <description>Helps in alloting beds.</description>
@@ -37,13 +37,13 @@
   </modules>
 
   <properties>
-    <openMRSVersion>2.4.2</openMRSVersion>
-    <openMRSRuntimeVersion>2.4.2</openMRSRuntimeVersion>
+    <openMRSVersion>2.7.0</openMRSVersion>
+    <openMRSRuntimeVersion>2.7.0</openMRSRuntimeVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <webservicesRestModuleVersion>2.29.0</webservicesRestModuleVersion>
-    <openmrsAtomfeedVersion>2.6.1</openmrsAtomfeedVersion>
+    <webservicesRestModuleVersion>3.0.0</webservicesRestModuleVersion>
+    <openmrsAtomfeedVersion>2.6.3</openmrsAtomfeedVersion>
     <atomfeed.version>1.10.1</atomfeed.version>
-    <legacyuiVersion>1.11.0</legacyuiVersion>
+    <legacyuiVersion>2.0.0</legacyuiVersion>
     <log4jVersion>2.17.1</log4jVersion>
   </properties>
 
@@ -83,6 +83,16 @@
         <version>${openMRSVersion}</version>
         <type>pom</type>
         <scope>test</scope>
+        <exclusions>
+            <exclusion>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-api-mockito2</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-api-mockito</artifactId>
+            </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.openmrs.module</groupId>
@@ -110,6 +120,20 @@
         <version>${legacyuiVersion}</version>
         <scope>provided</scope>
       </dependency>
+
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-inline</artifactId>
+        <version>3.12.4</version>
+        <scope>test</scope>
+      </dependency>
+
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.17.6</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
   </dependencyManagement>
@@ -141,6 +165,10 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
@@ -151,6 +179,22 @@
             <target>8</target>
             <source>8</source>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.11.2</version>
+          <configuration>
+            <additionalJOption>-Xdoclint:none</additionalJOption>
+          </configuration>
+          <executions>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.openmrs.maven.plugins</groupId>
