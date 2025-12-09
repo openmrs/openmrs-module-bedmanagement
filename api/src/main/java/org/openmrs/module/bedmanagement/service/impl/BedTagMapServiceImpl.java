@@ -1,7 +1,7 @@
 /**
  * The contents of this file are subject to the OpenMRS Public License
  * Version 1.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License a
+ * compliance with the License. You may obtain a copy of the License at
  * http://license.openmrs.org
  *
  * Software distributed under the License is distributed on an "AS IS"
@@ -27,13 +27,13 @@ import java.util.Date;
 
 @Transactional
 public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMapService {
-
+	
 	BedTagMapDao bedTagMapDao;
-
+	
 	public void setDao(BedTagMapDao dao) {
 		this.bedTagMapDao = dao;
 	}
-
+	
 	@Override
 	@Transactional
 	public BedTagMap save(BedTagMap bedTagMap) {
@@ -42,7 +42,7 @@ public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMa
 		}
 		return bedTagMapDao.saveOrUpdate(bedTagMap);
 	}
-
+	
 	@Override
 	@Transactional
 	public void delete(BedTagMap bedTagMap, String reason) {
@@ -52,17 +52,23 @@ public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMa
 		bedTagMap.setVoidedBy(Context.getAuthenticatedUser());
 		bedTagMapDao.saveOrUpdate(bedTagMap);
 	}
-
+	
 	@Override
 	@Transactional(readOnly = true)
 	public BedTagMap getBedTagMapByUuid(String bedTagMapUuid) {
 		return bedTagMapDao.getBedTagMapByUuid(bedTagMapUuid);
 	}
-
+	
 	@Override
 	@Transactional(readOnly = true)
 	public BedTagMap getBedTagMapWithBedAndTag(Bed bed, BedTag bedTag) {
 		return bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public BedTag getBedTagByUuid(String bedTagUuid) {
+		return bedTagMapDao.getBedTagByUuid(bedTagUuid);
 	}
 
 	@Override
@@ -70,9 +76,4 @@ public class BedTagMapServiceImpl extends BaseOpenmrsService implements BedTagMa
 	public BedTag getBedTagByUuid(String bedTagUuid) {
 		return bedTagMapDao.getBedTagByUuid(bedTagUuid);
 	}
-
-	@Transactional(readOnly = true)
-    public BedTag getBedTagByName(String bedTagName) {
-        return bedTagMapDao.getBedTagByName(bedTagName);
-    }
 }
