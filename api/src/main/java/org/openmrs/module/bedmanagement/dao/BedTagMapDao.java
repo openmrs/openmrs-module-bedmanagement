@@ -18,14 +18,14 @@ import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 
 public interface BedTagMapDao {
-
+	
 	BedTagMap saveOrUpdate(BedTagMap bedTagMap);
-
+	
 	BedTagMap getBedTagMapByUuid(String bedTagMapUuid);
-
+	
 	BedTag getBedTagByUuid(String bedTagUuid);
-
+	
 	BedTagMap getBedTagMapWithBedAndTag(Bed bed, BedTag bedTag);
 
-    BedTag getBedTagByName(String bedTagName);
+	BedTag getBedTagByName(String bedTagName);
 }
