@@ -27,37 +27,37 @@ import org.openmrs.module.bedmanagement.entity.BedType;
 import java.util.List;
 
 public interface BedManagementDao {
-
+	
 	Bed getBedById(int id);
-
+	
 	Bed getBedByUuid(String uuid);
-
+	
 	Bed getBedByPatient(Patient patient);
-
+	
 	Location getWardForBed(Bed bed);
-
+	
 	BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
-
+	
 	List<BedPatientAssignment> getBedPatientAssignmentByPatient(String patientUuid, boolean includeEnded);
-
+	
 	List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encounterUuid, boolean includeEnded);
-
+	
 	List<BedPatientAssignment> getBedPatientAssignmentByVisit(String visitUuid, boolean includeEnded);
-
+	
 	List<BedPatientAssignment> getCurrentAssignmentsByBed(Bed bed);
-
+	
 	Bed getLatestBedByVisit(String visitUuid);
-
+	
 	List<BedTag> getAllBedTags();
-
+	
 	/**
 	 * Get all admission locations
-	 *
+	 * 
 	 * @param locations {@link List<Location>}
 	 * @return {@link List<AdmissionLocation>}
 	 */
 	List<AdmissionLocation> getAdmissionLocations(List<Location> locations);
-
+	
 	/**
 	 * Get admission location for for a given location. Locations marked with the appropriate tag are
 	 * <i>admission</i> locations. This method returns the admission location, if applicable, when given
@@ -67,7 +67,7 @@ public interface BedManagementDao {
 	 * @return {@link AdmissionLocation} return null if not exist
 	 */
 	AdmissionLocation getAdmissionLocationForLocation(Location location);
-
+	
 	/**
 	 * Get bed location mappings by location
 	 *
@@ -75,7 +75,7 @@ public interface BedManagementDao {
 	 * @return {@link List< BedLocationMapping >}
 	 */
 	List<BedLocationMapping> getBedLocationMappingsByLocation(Location location);
-
+	
 	/**
 	 * Get bed location mapping by location and row and column
 	 *
@@ -85,7 +85,7 @@ public interface BedManagementDao {
 	 * @return {@link BedLocationMapping}
 	 */
 	BedLocationMapping getBedLocationMappingByLocationAndRowAndColumn(Location location, Integer row, Integer column);
-
+	
 	/**
 	 * Save / Update Bed location mapping
 	 *
@@ -93,7 +93,7 @@ public interface BedManagementDao {
 	 * @return {@link BedLocationMapping}
 	 */
 	BedLocationMapping saveBedLocationMapping(BedLocationMapping bedLocationMapping);
-
+	
 	/**
 	 * Get bed layout by location
 	 *
@@ -101,7 +101,7 @@ public interface BedManagementDao {
 	 * @return {@link List<BedLayout>}
 	 */
 	List<BedLayout> getBedLayoutsByLocation(Location location);
-
+	
 	/**
 	 * Get bed location mapping {@link BedLocationMapping} by bed
 	 *
@@ -109,7 +109,7 @@ public interface BedManagementDao {
 	 * @return {@link BedLocationMapping}
 	 */
 	BedLocationMapping getBedLocationMappingByBed(Bed bed);
-
+	
 	/**
 	 * Get beds.
 	 *
@@ -122,7 +122,7 @@ public interface BedManagementDao {
 	 * @return {@link List<Bed>}
 	 */
 	List<Bed> getBeds(Location location, BedType bedType, BedStatus status, Integer limit, Integer offset);
-
+	
 	/**
 	 * Get total bed number by location {@link Location} uuid
 	 *
@@ -130,7 +130,7 @@ public interface BedManagementDao {
 	 * @return {@link Long} total number of beds
 	 */
 	Integer getBedCountByLocation(Location location);
-
+	
 	/**
 	 * Save / update bed
 	 *
@@ -140,21 +140,21 @@ public interface BedManagementDao {
 	Bed saveBed(Bed bed);
 
 	/**
-	 * Get bed tag by Uuid
+	 * Get bed tag by Name
 	 *
-	 * @param uuid {@link String} bed tag uuid
+	 * @param name {@link String} bed tag name
 	 * @return {@link BedTag}
 	 */
-	BedTag getBedTagByUuid(String uuid);
-
+	BedTag getBedTagByName(String Name);
+	
 	/**
 	 * Get bed tag by Uuid
 	 *
 	 * @param uuid {@link String} bed tag uuid
 	 * @return {@link BedTag}
 	 */
-	BedTag getBedTagByName(String Name);
-
+	BedTag getBedTagByUuid(String uuid);
+	
 	/**
 	 * Return bed tags
 	 *
@@ -164,7 +164,7 @@ public interface BedManagementDao {
 	 * @return {@link List<BedTag>}
 	 */
 	List<BedTag> getBedTags(String name, Integer limit, Integer offset);
-
+	
 	/**
 	 * Save / Update bed tag
 	 *
@@ -172,22 +172,22 @@ public interface BedManagementDao {
 	 * @return {@link BedTag}
 	 */
 	BedTag saveBedTag(BedTag bedTag);
-
+	
 	/**
 	 * Delete bed tag
 	 *
 	 * @param bedTag {@link BedTag}
 	 */
 	void deleteBedTag(BedTag bedTag);
-
+	
 	/**
 	 * Get bed type by Id
-	 *
+	 * 
 	 * @param id {@link Integer} bed Id
 	 * @return {@link BedType}
 	 */
 	BedType getBedTypeById(Integer id);
-
+	
 	/**
 	 * Get bed type by Uuid
 	 *
@@ -195,7 +195,7 @@ public interface BedManagementDao {
 	 * @return {@link BedType}
 	 */
 	BedType getBedTypeByUuid(String uuid);
-
+	
 	/**
 	 * Get bed sypes
 	 *
@@ -205,7 +205,7 @@ public interface BedManagementDao {
 	 * @return {@link List<BedType>}
 	 */
 	List<BedType> getBedTypes(String name, Integer limit, Integer offset);
-
+	
 	/**
 	 * Save/Update bed type
 	 *
@@ -213,21 +213,21 @@ public interface BedManagementDao {
 	 * @return {@link BedType}
 	 */
 	BedType saveBedType(BedType bedType);
-
+	
 	/**
 	 * Delete Bed type
 	 *
 	 * @param bedType {@link BedType}
 	 */
 	void deleteBedType(BedType bedType);
-
+	
 	/**
 	 * Delete Bed location mapping
 	 *
 	 * @param bedLocationMapping
 	 */
 	void deleteBedLocationMapping(BedLocationMapping bedLocationMapping);
-
+	
 	/**
 	 * @param bedPatientAssignment the BedPatientAssignment to save
 	 * @return the saved BedPatientAssignment
