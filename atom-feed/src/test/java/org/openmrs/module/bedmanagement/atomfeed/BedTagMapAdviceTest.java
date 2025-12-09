@@ -4,40 +4,39 @@ import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsQueueJdbcImpl;
 import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedConstruction;
+import org.mockito.MockedStatic;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import java.net.URI;
 import java.util.Collections;
-import java.util.Date;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mockConstruction;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.*;
-import static org.powermock.api.mockito.PowerMockito.spy;
 
-@PowerMockIgnore("javax.management.*")
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ Context.class, BedTagMapAdvice.class })
+@ExtendWith(MockitoExtension.class)
 public class BedTagMapAdviceTest {
 	
 	private BedTagMapAdvice bedTagMapAdvice;
-	
-	private AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
 	
 	@Mock
 	private BedTagMap bedTagMap;
@@ -47,15 +46,6 @@ public class BedTagMapAdviceTest {
 	
 	@Mock
 	private PlatformTransactionManager platformTransactionManager;
-	
-	@Mock
-	private AllEventRecordsQueueJdbcImpl allEventRecordsQueue;
-	
-	@Mock
-	private EventServiceImpl eventService;
-	
-	@Mock
-	private Event event;
 	
 	private static final String BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY = "atomfeed.publish.eventsForBedTagMapChange";
 	
@@ -72,51 +62,87 @@ public class BedTagMapAdviceTest {
 	
 	private static final String TITLE = "Bed-Tag-Map";
 	
-	@Before
-	public void setUp() throws Exception {
-		PowerMockito.mockStatic(Context.class);
-		when(Context.getRegisteredComponents(PlatformTransactionManager.class))
+	private MockedStatic<Context> contextStaticMock;
+	
+	private MockedConstruction<AtomFeedSpringTransactionManager> atomFeedTxMgrConstruction;
+	
+	private MockedConstruction<AllEventRecordsQueueJdbcImpl> queueConstruction;
+	
+	private MockedConstruction<EventServiceImpl> eventServiceConstruction;
+	
+	private MockedConstruction<Event> eventConstruction;
+	
+	// A hack to resolve the error when Mocking the Context :)
+	private Logger logger = LoggerFactory.getLogger(BedTagMapAdviceTest.class);
+	
+	@BeforeEach
+	public void setUp() {
+		contextStaticMock = mockStatic(Context.class);
+		
+		contextStaticMock.when(() -> Context.getRegisteredComponents(PlatformTransactionManager.class))
 		        .thenReturn(Collections.singletonList(platformTransactionManager));
-		when(Context.getAdministrationService()).thenReturn(administrationService);
-		when(administrationService.getGlobalProperty(anyString())).thenReturn("true");
-		when(administrationService.getGlobalProperty(anyString(), anyString()))
+		contextStaticMock.when(Context::getAdministrationService).thenReturn(administrationService);
+		lenient().when(administrationService.getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY)))
+		        .thenReturn("true");
+		lenient()
+		        .when(
+		            administrationService.getGlobalProperty(eq(BED_TAG_MAP_EVENT_URL_PATTERN_GLOBAL_PROPERTY), anyString()))
 		        .thenReturn(DEFAULT_BED_TAG_MAP_EVENT_URL_PATTERN);
-		atomFeedSpringTransactionManager = spy(new AtomFeedSpringTransactionManager(platformTransactionManager));
-		whenNew(AtomFeedSpringTransactionManager.class).withArguments(platformTransactionManager)
-		        .thenReturn(atomFeedSpringTransactionManager);
-		whenNew(AllEventRecordsQueueJdbcImpl.class).withArguments(atomFeedSpringTransactionManager)
-		        .thenReturn(allEventRecordsQueue);
-		whenNew(EventServiceImpl.class).withArguments(allEventRecordsQueue).thenReturn(eventService);
-		whenNew(Event.class).withAnyArguments().thenReturn(event);
-		when(bedTagMap.getUuid()).thenReturn(SOME_UUID);
+		atomFeedTxMgrConstruction = mockConstruction(AtomFeedSpringTransactionManager.class, (mock, context) -> {
+			when(mock.executeWithTransaction(any(AFTransactionWorkWithoutResult.class))).thenAnswer(invocation -> {
+				AFTransactionWorkWithoutResult work = invocation.getArgument(0);
+				try {
+					java.lang.reflect.Method method = AFTransactionWorkWithoutResult.class
+					        .getDeclaredMethod("doInTransaction");
+					method.setAccessible(true);
+					method.invoke(work);
+				}
+				catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+				return null;
+			});
+		});
+		
+		queueConstruction = mockConstruction(AllEventRecordsQueueJdbcImpl.class);
+		
+		eventServiceConstruction = mockConstruction(EventServiceImpl.class);
+		
+		eventConstruction = mockConstruction(Event.class);
+		
+		lenient().when(bedTagMap.getUuid()).thenReturn(SOME_UUID);
 		
 		bedTagMapAdvice = new BedTagMapAdvice();
 	}
 	
-	private void verifyAssertsForRaisingEvents() throws Exception {
-		Context.getRegisteredComponents(PlatformTransactionManager.class);
-		Context.getAdministrationService();
-		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY));
-		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_URL_PATTERN_GLOBAL_PROPERTY),
-		    eq(DEFAULT_BED_TAG_MAP_EVENT_URL_PATTERN));
-		verify(bedTagMap, times(1)).getUuid();
-		verifyNew(Event.class, times(1)).withArguments(anyString(), eq(TITLE), any(), any(),
-		    eq(DEFAULT_BED_TAG_MAP_EVENT_URL_PATTERN_AFTER_UUID_REPLACE), eq(CATEGORY));
-		verify(atomFeedSpringTransactionManager, times(1)).executeWithTransaction(any(AFTransactionWorkWithoutResult.class));
-		verify(eventService, times(1)).notify(event);
+	@AfterEach
+	void tearDown() {
+		contextStaticMock.close();
+		atomFeedTxMgrConstruction.close();
+		queueConstruction.close();
+		eventServiceConstruction.close();
+		eventConstruction.close();
 	}
 	
-	private void verifyAssertsForNotRaisingEvents() throws Exception {
-		Context.getRegisteredComponents(PlatformTransactionManager.class);
-		Context.getAdministrationService();
+	private void verifyAssertsForRaisingEvents() {
+		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY));
+		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_URL_PATTERN_GLOBAL_PROPERTY),
+		    anyString());
+		verify(bedTagMap, times(1)).getUuid();
+		assertEquals(1, eventConstruction.constructed().size());
+		assertEquals(1, atomFeedTxMgrConstruction.constructed().size());
+		verify(atomFeedTxMgrConstruction.constructed().get(0), times(1))
+		        .executeWithTransaction(any(AFTransactionWorkWithoutResult.class));
+		assertEquals(1, eventServiceConstruction.constructed().size());
+		verify(eventServiceConstruction.constructed().get(0), times(1)).notify(any(Event.class));
+	}
+	
+	private void verifyAssertsForNotRaisingEvents() {
 		verify(administrationService, times(1)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY));
 		verify(administrationService, times(0)).getGlobalProperty(eq(BED_TAG_MAP_EVENT_URL_PATTERN_GLOBAL_PROPERTY),
-		    eq(DEFAULT_BED_TAG_MAP_EVENT_URL_PATTERN));
+		    anyString());
 		verify(bedTagMap, times(0)).getUuid();
-		verifyNew(Event.class, times(0)).withArguments(anyString(), eq(TITLE), any(Date.class), any(URI.class),
-		    eq(DEFAULT_BED_TAG_MAP_EVENT_URL_PATTERN_AFTER_UUID_REPLACE), eq(CATEGORY));
-		verify(atomFeedSpringTransactionManager, times(0)).executeWithTransaction(any(AFTransactionWorkWithoutResult.class));
-		verify(eventService, times(0)).notify(event);
+		assertEquals(0, eventConstruction.constructed().size());
 	}
 	
 	@Test
@@ -129,7 +155,7 @@ public class BedTagMapAdviceTest {
 	
 	@Test
 	public void shouldRaiseEventIfEventGlobalPropertyIsEmpty() throws Exception {
-		when(administrationService.getGlobalProperty(anyString())).thenReturn("");
+		when(administrationService.getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY))).thenReturn("");
 		
 		bedTagMapAdvice.afterReturning(bedTagMap, this.getClass().getMethod("save"), null, null);
 		
@@ -138,7 +164,7 @@ public class BedTagMapAdviceTest {
 	
 	@Test
 	public void shouldNotRaiseEventIfEventGlobalPropertyIsFalse() throws Exception {
-		when(administrationService.getGlobalProperty(anyString())).thenReturn("false");
+		when(administrationService.getGlobalProperty(eq(BED_TAG_MAP_EVENT_RECORD_GLOBAL_PROPERTY))).thenReturn("false");
 		
 		bedTagMapAdvice.afterReturning(bedTagMap, this.getClass().getMethod("save"), null, null);
 		

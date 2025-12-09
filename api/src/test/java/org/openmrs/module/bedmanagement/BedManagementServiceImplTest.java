@@ -45,7 +45,7 @@ public class BedManagementServiceImplTest {
 
 	@Mock
 	BedManagementDao bedManagementDao;
-
+	
 	@BeforeEach
 	public void setup() {
 		bedManagementService = new BedManagementServiceImpl();
@@ -156,13 +156,13 @@ public class BedManagementServiceImplTest {
 			bed.setStatus(BedStatus.AVAILABLE.name());
 			BedLocationMapping bedLocationMapping = mock(BedLocationMapping.class);
 			User user = mock(User.class);
-
+			
 			when(bedManagementDao.getBedLocationMappingByBed(bed)).thenReturn(bedLocationMapping);
 			doNothing().when(bedManagementDao).deleteBedLocationMapping(bedLocationMapping);
 			mockedContext.when(Context::getAuthenticatedUser).thenReturn(user);
-
+			
 			bedManagementService.deleteBed(bed, "test");
-
+			
 			verify(bedManagementDao, times(1)).deleteBedLocationMapping(bedLocationMapping);
 		}
 	}
@@ -170,18 +170,18 @@ public class BedManagementServiceImplTest {
 	@Test
 	public void shouldNotCallDeleteBedLocationMappingWhenDeletedBedIsNotMappedToAnyLocation() {
 		try (MockedStatic<Context> mockedContext = Mockito.mockStatic(Context.class)) {
-
+			
 			Bed bed = new Bed();
 			bed.setBedNumber("bedNumber");
 			bed.setId(1);
 			bed.setStatus(BedStatus.AVAILABLE.name());
 			User user = mock(User.class);
-
+			
 			when(bedManagementDao.getBedLocationMappingByBed(bed)).thenReturn(null);
 			mockedContext.when(Context::getAuthenticatedUser).thenReturn(user);
-
+			
 			bedManagementService.deleteBed(bed, "test");
-
+			
 			verify(bedManagementDao, times(0)).deleteBedLocationMapping(any(BedLocationMapping.class));
 		}
 	}
@@ -193,19 +193,19 @@ public class BedManagementServiceImplTest {
 			bedType.setName("Large");
 			bedType.setDisplayName("L");
 			bedType.setDescription("Large bed");
-
+			
 			User authUser = mock(User.class);
 			mockedContext.when(Context::getAuthenticatedUser).thenReturn(authUser);
-
+			
 			when(bedManagementDao.saveBedType(any(BedType.class))).thenAnswer(inv -> inv.getArgument(0));
-
+			
 			BedType retired = bedManagementService.retireBedType(bedType, "Duplicate entry");
-
+			
 			assertEquals(Boolean.TRUE, retired.getRetired());
 			assertEquals("Duplicate entry", retired.getRetireReason());
 			assertEquals(authUser, retired.getRetiredBy());
 			assertNotNull(retired.getDateRetired());
-
+			
 			verify(bedManagementDao, times(1)).saveBedType(retired);
 		}
 	}
