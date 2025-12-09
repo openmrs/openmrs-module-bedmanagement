@@ -19,11 +19,21 @@ import org.openmrs.Encounter;
 import org.openmrs.Visit;
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Handler(supports = BedPatientAssignment.class)
 public class BedPatientAssignmentValidator implements Validator {
+	
+	private final BedManagementService bedManagementService;
+	
+	@Autowired
+	public BedPatientAssignmentValidator(@Qualifier("bedManagementService") BedManagementService bedManagementService) {
+		this.bedManagementService = bedManagementService;
+	}
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -50,6 +60,11 @@ public class BedPatientAssignmentValidator implements Validator {
 			
 			errors.rejectValue("endDatetime", "bedPatientAssignment.endDatetime.afterVisitStopDatetime",
 			    "Bed assignment's endDatetime cannot be after visit stopDatetime");
+		}
+		
+		if (bedManagementService.getBedAssignmentDetailsByPatient(bpa.getPatient()) != null) {
+			errors.rejectValue("patient", "bedPatientAssignment.patient.alreadyAssigned",
+			    "Cannot have multiple active bed assignments for the same patient");
 		}
 	}
 	
