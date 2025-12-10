@@ -4,7 +4,7 @@
 
   <groupId>org.openmrs.module</groupId>
   <artifactId>bedmanagement</artifactId>
-  <version>7.0.0-SNAPSHOT</version>
+  <version>7.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Bed Management Module</name>
   <description>Helps in alloting beds.</description>
@@ -43,7 +43,7 @@
     <webservicesRestModuleVersion>3.0.0</webservicesRestModuleVersion>
     <openmrsAtomfeedVersion>2.6.3</openmrsAtomfeedVersion>
     <atomfeed.version>1.10.1</atomfeed.version>
-    <legacyuiVersion>2.0.0-SNAPSHOT</legacyuiVersion>
+    <legacyuiVersion>2.0.0</legacyuiVersion>
     <log4jVersion>2.17.1</log4jVersion>
   </properties>
 
@@ -165,6 +165,10 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
@@ -175,6 +179,22 @@
             <target>8</target>
             <source>8</source>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.11.2</version>
+          <configuration>
+            <additionalJOption>-Xdoclint:none</additionalJOption>
+          </configuration>
+          <executions>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.openmrs.maven.plugins</groupId>

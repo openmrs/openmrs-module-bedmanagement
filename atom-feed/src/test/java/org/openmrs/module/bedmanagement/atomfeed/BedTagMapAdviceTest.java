@@ -71,8 +71,8 @@ public class BedTagMapAdviceTest {
 	private MockedConstruction<EventServiceImpl> eventServiceConstruction;
 	
 	private MockedConstruction<Event> eventConstruction;
-
-    // A hack to resolve the error when Mocking the Context :)
+	
+	// A hack to resolve the error when Mocking the Context :)
 	private Logger logger = LoggerFactory.getLogger(BedTagMapAdviceTest.class);
 	
 	@BeforeEach
