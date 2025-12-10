@@ -14,10 +14,13 @@
 package org.openmrs.module.bedmanagement.aop;
 
 import java.util.Date;
+import java.util.List;
 
 import org.openmrs.Encounter;
+import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.annotation.Handler;
+import org.openmrs.module.bedmanagement.BedDetails;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +53,10 @@ public class BedPatientAssignmentValidator implements Validator {
 		Date bedAssignmentEndTime = bpa.getEndDatetime();
 		Encounter assigningEncounter = bpa.getEncounter();
 		Visit visit = assigningEncounter.getVisit();
+		Patient patient = bpa.getPatient();
 		
 		if (bedAssignmentEndTime != null && bedAssignmentEndTime.before(bedAssignmentStartTime)) {
-			errors.rejectValue("endDatetime", "bedPatientAssignment.endtDatetime.beforeStartDatetime",
+			errors.rejectValue("endDatetime", "bedPatientAssignment.endDatetime.beforeStartDatetime",
 			    "Bed assignment's endDatetime cannot be before startDatetime");
 		}
 		if (visit != null && visit.getStopDatetime() != null && bedAssignmentEndTime != null
@@ -62,7 +66,17 @@ public class BedPatientAssignmentValidator implements Validator {
 			    "Bed assignment's endDatetime cannot be after visit stopDatetime");
 		}
 		
-		if (bedManagementService.getBedAssignmentDetailsByPatient(bpa.getPatient()) != null) {
+		// prevent multiple active bed assignments for the same patient
+		List<BedPatientAssignment> currentAssignments = bedManagementService
+		        .getBedPatientAssignmentByPatient(patient.getUuid(), false);
+		boolean isAttemptingMultipleAssignments = false;
+		for (BedPatientAssignment current : currentAssignments) {
+			if (!current.getId().equals(bpa.getId())) {
+				isAttemptingMultipleAssignments = true;
+				break;
+			}
+		}
+		if (isAttemptingMultipleAssignments) {
 			errors.rejectValue("patient", "bedPatientAssignment.patient.alreadyAssigned",
 			    "Cannot have multiple active bed assignments for the same patient");
 		}
