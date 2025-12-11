@@ -20,7 +20,6 @@ import org.openmrs.Encounter;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.bedmanagement.BedDetails;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
