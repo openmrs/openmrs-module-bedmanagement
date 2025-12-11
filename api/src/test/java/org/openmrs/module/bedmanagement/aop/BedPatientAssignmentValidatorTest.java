@@ -1,5 +1,6 @@
 package org.openmrs.module.bedmanagement.aop;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 
 import java.time.temporal.ChronoUnit;
@@ -7,10 +8,12 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.api.ValidationException;
 import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
@@ -53,6 +56,24 @@ public class BedPatientAssignmentValidatorTest extends BaseModuleContextSensitiv
 			Date oneSecondAfter = Date.from(now.toInstant().plus(1, ChronoUnit.SECONDS));
 			bpa.setEndDatetime(oneSecondAfter);
 			bedManagementService.saveBedPatientAssignment(bpa);
+		});
+	}
+	
+	@Test
+	public void testExceptionThrownWhenMultipleActiveBedsAssignedToPatient() {
+		BedPatientAssignment bpa = bedManagementService
+		  .getBedPatientAssignmentByUuid("10011001-1001-1001-1001-100000000001");
+		Patient patient = bpa.getPatient();
+		Bed bed = bedManagementService.getBedById(13);
+		assertNull(bpa.getEndDatetime());
+		
+		assertThrows(ValidationException.class, () -> {
+			BedPatientAssignment bpa2 = new BedPatientAssignment();
+			bpa2.setPatient(patient);
+			bpa2.setStartDatetime(new Date());
+			bpa2.setEncounter(bpa.getEncounter());
+			bpa2.setBed(bed);
+			bedManagementService.saveBedPatientAssignment(bpa2);
 		});
 	}
 }
