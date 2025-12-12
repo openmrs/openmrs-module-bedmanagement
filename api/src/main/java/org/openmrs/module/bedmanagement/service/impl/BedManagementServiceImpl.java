@@ -45,21 +45,21 @@ import java.util.List;
 
 @Transactional
 public class BedManagementServiceImpl extends BaseOpenmrsService implements BedManagementService {
-	
+
 	private BedManagementDao bedManagementDao;
-	
+
 	private LocationService locationService;
-	
+
 	private final Log log = LogFactory.getLog(getClass());
-	
+
 	public void setDao(BedManagementDao dao) {
 		this.bedManagementDao = dao;
 	}
-	
+
 	public void setLocationService(LocationService locationService) {
 		this.locationService = locationService;
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<AdmissionLocation> getAdmissionLocations() {
@@ -68,19 +68,19 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		List<Location> locations = locationService.getLocationsByTag(admissionLocationTag);
 		return bedManagementDao.getAdmissionLocations(locations);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<BedLocationMapping> getBedLocationMappingsByLocation(Location location) {
 		return bedManagementDao.getBedLocationMappingsByLocation(location);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public AdmissionLocation getAdmissionLocationByLocation(Location location) {
 		return bedManagementDao.getAdmissionLocationForLocation(location);
 	}
-	
+
 	@Override
 	@Transactional
 	public AdmissionLocation saveAdmissionLocation(AdmissionLocation admissionLocation) {
@@ -89,7 +89,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		admissionLocation = bedManagementDao.getAdmissionLocationForLocation(location);
 		return admissionLocation;
 	}
-	
+
 	@Override
 	@Transactional
 	public AdmissionLocation setBedLayoutForAdmissionLocation(AdmissionLocation admissionLocation, Integer row,
@@ -108,7 +108,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 				}
 			}
 		}
-		
+
 		List<BedLocationMapping> bedLocationMappings = bedManagementDao
 		        .getBedLocationMappingsByLocation(admissionLocation.getWard());
 		for (BedLocationMapping bedlocationMapping : bedLocationMappings) {
@@ -121,90 +121,90 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 				}
 			}
 		}
-		
+
 		admissionLocation = bedManagementDao.getAdmissionLocationForLocation(location);
 		return admissionLocation;
 	}
-	
+
 	@Override
 	@Transactional
 	public BedDetails assignPatientToBed(Patient patient, Encounter encounter, String bedId) {
 		BedDetails prev = getBedManagementService().unAssignPatientFromBed(patient);
 		Bed bed = bedManagementDao.getBedById(Integer.parseInt(bedId));
-		
+
 		BedPatientAssignment bedPatientAssignment = new BedPatientAssignment();
 		bedPatientAssignment.setPatient(patient);
 		bedPatientAssignment.setEncounter(encounter);
 		bedPatientAssignment.setBed(bed);
 		bedPatientAssignment.setStartDatetime(encounter.getEncounterDatetime());
 		bedManagementDao.saveBedPatientAssignment(bedPatientAssignment);
-		
+
 		bed.setStatus(BedStatus.OCCUPIED.toString());
 		bed = bedManagementDao.saveBed(bed);
-		
+
 		BedDetails current = getBedDetails(bed);
 		BedPatientAssignment prevAssignment = (prev != null) ? prev.getLastAssignment() : null;
 		current.setLastAssignment(prevAssignment);
 		return current;
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Bed getBedById(int id) {
 		return bedManagementDao.getBedById(id);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BedDetails getBedAssignmentDetailsByPatient(Patient patient) {
 		Bed bed = bedManagementDao.getBedByPatient(patient);
 		return getBedDetails(bed);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BedDetails getBedDetailsById(String id) {
 		Bed bed = bedManagementDao.getBedById(Integer.parseInt(id));
 		return getBedDetails(bed);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BedDetails getBedDetailsByUuid(String uuid) {
 		Bed bed = bedManagementDao.getBedByUuid(uuid);
 		return getBedDetails(bed);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BedPatientAssignment getBedPatientAssignmentByUuid(String uuid) {
 		return bedManagementDao.getBedPatientAssignmentByUuid(uuid);
 	}
-	
+
 	@Override
 	public List<BedPatientAssignment> getBedPatientAssignmentByPatient(String patientUuid, boolean includeEnded) {
 		return bedManagementDao.getBedPatientAssignmentByPatient(patientUuid, includeEnded);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encounterUuid, boolean includeEnded) {
 		return bedManagementDao.getBedPatientAssignmentByEncounter(encounterUuid, includeEnded);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<BedPatientAssignment> getBedPatientAssignmentByVisit(String visitUuid, boolean includeEnded) {
 		return bedManagementDao.getBedPatientAssignmentByVisit(visitUuid, includeEnded);
 	}
-	
+
 	@Override
 	@Transactional
 	public BedDetails unAssignPatientFromBed(Patient patient) {
 		Bed bed = bedManagementDao.getBedByPatient(patient);
 		return unassignBed(bed, patient, new Date());
 	}
-	
+
 	private BedDetails unassignBed(Bed bed, Patient patient, Date bedAssignmentEndDatetime) {
 		BedPatientAssignment endedAssignment = null;
 		if (bed != null) {
@@ -227,7 +227,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		}
 		return bedDetails;
 	}
-	
+
 	@Override
 	@Transactional
 	public List<BedDetails> unAssignBedsInEndedVisit(Visit visit) {
@@ -244,39 +244,39 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		}
 		return unassignedBeds;
 	}
-	
+
 	@Override
 	@Transactional
 	public BedPatientAssignment saveBedPatientAssignment(BedPatientAssignment bpa) {
 		return bedManagementDao.saveBedPatientAssignment(bpa);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BedDetails getLatestBedDetailsByVisit(String visitUuid) {
 		Bed bed = bedManagementDao.getLatestBedByVisit(visitUuid);
 		return getBedDetails(bed);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<BedTag> getAllBedTags() {
 		return bedManagementDao.getAllBedTags();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BedLocationMapping getBedLocationMappingByBedId(Integer bedId) {
 		Bed bed = bedManagementDao.getBedById(bedId);
 		return bedManagementDao.getBedLocationMappingByBed(bed);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<Bed> getBeds(Integer limit, Integer offset) {
 		return bedManagementDao.getBeds(null, null, null, limit, offset);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<Bed> getBeds(String locationUuid, String bedTypeName, BedStatus status, Integer limit, Integer offset) {
@@ -288,16 +288,16 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 				throw new APIException("Invalid bed type name");
 			bedType = bedTypes.get(0);
 		}
-		
+
 		return bedManagementDao.getBeds(location, bedType, status, limit, offset);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Bed getBedByUuid(String uuid) {
 		return bedManagementDao.getBedByUuid(uuid);
 	}
-	
+
 	@Override
 	@Transactional
 	public void deleteBed(Bed bed, String reason) throws BedOccupiedException {
@@ -308,38 +308,44 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		if (bedLocationMapping != null) {
 			bedManagementDao.deleteBedLocationMapping(bedLocationMapping);
 		}
-		
+
 		bed.setVoided(true);
 		bed.setDateVoided(new Date());
 		bed.setVoidReason(reason);
 		bed.setVoidedBy(Context.getAuthenticatedUser());
 		bedManagementDao.saveBed(bed);
 	}
-	
+
 	@Override
 	@Transactional
 	public Bed saveBed(Bed bed) {
 		return bedManagementDao.saveBed(bed);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BedTag getBedTagByUuid(String uuid) {
 		return bedManagementDao.getBedTagByUuid(uuid);
 	}
-	
+
+	@Override
+	@Transactional(readOnly = true)
+	public BedTag getBedTagByName(String name) {
+		return bedManagementDao.getBedTagByName(name);
+	}
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<BedTag> getBedTags(String name, Integer limit, Integer offset) {
 		return bedManagementDao.getBedTags(name, limit, offset);
 	}
-	
+
 	@Override
 	@Transactional
 	public BedTag saveBedTag(BedTag bedTag) {
 		return bedManagementDao.saveBedTag(bedTag);
 	}
-	
+
 	@Override
 	@Transactional
 	public void deleteBedTag(BedTag bedTag, String reason) {
@@ -348,14 +354,14 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		bedTag.setVoidedBy(Context.getAuthenticatedUser());
 		bedManagementDao.saveBedTag(bedTag);
 	}
-	
+
 	@Override
 	@Transactional
 	public BedLocationMapping saveBedLocationMapping(BedLocationMapping bedLocationMapping) {
 		Location location = bedLocationMapping.getLocation();
 		BedLocationMapping existingBedLocationMapping = bedManagementDao.getBedLocationMappingByLocationAndRowAndColumn(
 		    location, bedLocationMapping.getRow(), bedLocationMapping.getColumn());
-		
+
 		if (existingBedLocationMapping != null && existingBedLocationMapping.getBed() == null) {
 			existingBedLocationMapping.setBed(bedLocationMapping.getBed());
 			bedLocationMapping = existingBedLocationMapping;
@@ -363,16 +369,16 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		        && !existingBedLocationMapping.getBed().getId().equals(bedLocationMapping.getBed().getId())) {
 			throw new APIException("Already bed assign to give row & column");
 		}
-		
+
 		return bedManagementDao.saveBedLocationMapping(bedLocationMapping);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<BedType> getBedTypes(String name, Integer limit, Integer offset) {
 		return bedManagementDao.getBedTypes(name, limit, offset);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BedLocationMapping getBedLocationMappingByLocationUuidAndRowColumn(String locationUuid, Integer row,
@@ -380,13 +386,13 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		Location location = locationService.getLocationByUuid(locationUuid);
 		return bedManagementDao.getBedLocationMappingByLocationAndRowAndColumn(location, row, column);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BedType getBedTypeByUuid(String uuid) {
 		return bedManagementDao.getBedTypeByUuid(uuid);
 	}
-	
+
 	@Override
 	@Transactional
 	public BedType saveBedType(BedType bedType) {
@@ -395,13 +401,13 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		}
 		return bedManagementDao.saveBedType(bedType);
 	}
-	
+
 	@Override
 	@Transactional
 	public void deleteBedType(BedType bedType) {
 		bedManagementDao.deleteBedType(bedType);
 	}
-	
+
 	@Override
 	@Transactional
 	public BedType retireBedType(BedType bedType, String retireReason) {
@@ -414,18 +420,18 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		bedType.setDateRetired(new Date());
 		return bedManagementDao.saveBedType(bedType);
 	}
-	
+
 	@Override
 	@Transactional
 	public void deleteBedPatientAssignment(BedPatientAssignment bpa, String reason) {
-		
+
 		bpa.setVoided(true);
 		bpa.setDateVoided(new Date());
 		bpa.setVoidReason(reason);
 		bpa.setVoidedBy(Context.getAuthenticatedUser());
 		bedManagementDao.saveBedPatientAssignment(bpa);
 	}
-	
+
 	private BedDetails getBedDetails(Bed bed) {
 		if (bed == null) {
 			return null;
@@ -445,7 +451,7 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 		bedDetails.setBedType(bed.getBedType());
 		return bedDetails;
 	}
-	
+
 	protected BedManagementService getBedManagementService() {
 		return Context.getService(BedManagementService.class);
 	}
