@@ -62,7 +62,7 @@ public class BedPatientAssignmentValidatorTest extends BaseModuleContextSensitiv
 	@Test
 	public void testExceptionThrownWhenMultipleActiveBedsAssignedToPatient() {
 		BedPatientAssignment bpa = bedManagementService
-		  .getBedPatientAssignmentByUuid("10011001-1001-1001-1001-100000000001");
+		        .getBedPatientAssignmentByUuid("10011001-1001-1001-1001-100000000001");
 		Patient patient = bpa.getPatient();
 		Bed bed = bedManagementService.getBedById(13);
 		assertNull(bpa.getEndDatetime());
