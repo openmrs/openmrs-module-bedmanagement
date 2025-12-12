@@ -1,7 +1,7 @@
 /**
  * The contents of this file are subject to the OpenMRS Public License
  * Version 1.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
+ * compliance with the License. You may obtain a copy of the License a
  * http://license.openmrs.org
  *
  * Software distributed under the License is distributed on an "AS IS"
@@ -27,47 +27,49 @@ import org.openmrs.module.bedmanagement.entity.BedType;
 import java.util.List;
 
 public interface BedManagementDao {
-	
+
 	Bed getBedById(int id);
-	
+
 	Bed getBedByUuid(String uuid);
-	
+
 	Bed getBedByPatient(Patient patient);
-	
+
 	Location getWardForBed(Bed bed);
-	
+
 	BedPatientAssignment getBedPatientAssignmentByUuid(String uuid);
-	
+
 	List<BedPatientAssignment> getBedPatientAssignmentByPatient(String patientUuid, boolean includeEnded);
-	
+
 	List<BedPatientAssignment> getBedPatientAssignmentByEncounter(String encounterUuid, boolean includeEnded);
-	
+
 	List<BedPatientAssignment> getBedPatientAssignmentByVisit(String visitUuid, boolean includeEnded);
-	
+
 	List<BedPatientAssignment> getCurrentAssignmentsByBed(Bed bed);
-	
+
 	Bed getLatestBedByVisit(String visitUuid);
-	
+
 	List<BedTag> getAllBedTags();
-	
+
 	/**
 	 * Get all admission locations
-	 * 
+	 *
 	 * @param locations {@link List<Location>}
 	 * @return {@link List<AdmissionLocation>}
 	 */
 	List<AdmissionLocation> getAdmissionLocations(List<Location> locations);
-	
+
 	/**
-	 * Get admission location for for a given location. Locations marked with the appropriate tag are
-	 * <i>admission</i> locations. This method returns the admission location, if applicable, when given
+	 * Get admission location for for a given location. Locations marked with the
+	 * appropriate tag are
+	 * <i>admission</i> locations. This method returns the admission location, if
+	 * applicable, when given
 	 * a candidate location.
 	 *
 	 * @param location {@link Location}
-	 * @return {@link AdmissionLocation} return null if not exist
+	 * @return {@link AdmissionLocation} return null if not exis
 	 */
 	AdmissionLocation getAdmissionLocationForLocation(Location location);
-	
+
 	/**
 	 * Get bed location mappings by location
 	 *
@@ -75,17 +77,17 @@ public interface BedManagementDao {
 	 * @return {@link List< BedLocationMapping >}
 	 */
 	List<BedLocationMapping> getBedLocationMappingsByLocation(Location location);
-	
+
 	/**
 	 * Get bed location mapping by location and row and column
 	 *
 	 * @param location {@link Location} ward's room location
-	 * @param row {@link Integer} bed row
-	 * @param column {@link Integer} bed column
+	 * @param row      {@link Integer} bed row
+	 * @param column   {@link Integer} bed column
 	 * @return {@link BedLocationMapping}
 	 */
 	BedLocationMapping getBedLocationMappingByLocationAndRowAndColumn(Location location, Integer row, Integer column);
-	
+
 	/**
 	 * Save / Update Bed location mapping
 	 *
@@ -93,7 +95,7 @@ public interface BedManagementDao {
 	 * @return {@link BedLocationMapping}
 	 */
 	BedLocationMapping saveBedLocationMapping(BedLocationMapping bedLocationMapping);
-	
+
 	/**
 	 * Get bed layout by location
 	 *
@@ -101,7 +103,7 @@ public interface BedManagementDao {
 	 * @return {@link List<BedLayout>}
 	 */
 	List<BedLayout> getBedLayoutsByLocation(Location location);
-	
+
 	/**
 	 * Get bed location mapping {@link BedLocationMapping} by bed
 	 *
@@ -109,20 +111,25 @@ public interface BedManagementDao {
 	 * @return {@link BedLocationMapping}
 	 */
 	BedLocationMapping getBedLocationMappingByBed(Bed bed);
-	
+
 	/**
 	 * Get beds.
 	 *
-	 * @param location {@link Location} admission location, if null filter by location criteria will not
-	 *            applied
-	 * @param bedType {@link BedType} bed type, if null filter by bed type criteria will not applied
-	 * @param status {@link BedStatus} bed status, if filter by null bed type criteria will not applied
-	 * @param limit {@link Integer} limit result set, return all result set if limit is null
-	 * @param offset {@link Integer} specify the starting row offset into the result set
+	 * @param location {@link Location} admission location, if null filter by
+	 *                 location criteria will no
+	 *                 applied
+	 * @param bedType  {@link BedType} bed type, if null filter by bed type criteria
+	 *                 will not applied
+	 * @param status   {@link BedStatus} bed status, if filter by null bed type
+	 *                 criteria will not applied
+	 * @param limit    {@link Integer} limit result set, return all result set if
+	 *                 limit is null
+	 * @param offset   {@link Integer} specify the starting row offset into the
+	 *                 result se
 	 * @return {@link List<Bed>}
 	 */
 	List<Bed> getBeds(Location location, BedType bedType, BedStatus status, Integer limit, Integer offset);
-	
+
 	/**
 	 * Get total bed number by location {@link Location} uuid
 	 *
@@ -130,7 +137,7 @@ public interface BedManagementDao {
 	 * @return {@link Long} total number of beds
 	 */
 	Integer getBedCountByLocation(Location location);
-	
+
 	/**
 	 * Save / update bed
 	 *
@@ -138,7 +145,7 @@ public interface BedManagementDao {
 	 * @return {@link Bed}
 	 */
 	Bed saveBed(Bed bed);
-	
+
 	/**
 	 * Get bed tag by Uuid
 	 *
@@ -146,17 +153,20 @@ public interface BedManagementDao {
 	 * @return {@link BedTag}
 	 */
 	BedTag getBedTagByUuid(String uuid);
-	
+
 	/**
 	 * Return bed tags
 	 *
-	 * @param name {@link String} bed tag name, if null filter by name criteria will not applied
-	 * @param limit {@link Integer} limit result set, return all result set if limit is null
-	 * @param offset {@link Integer} specify the starting row offset into the result set
+	 * @param name   {@link String} bed tag name, if null filter by name criteria
+	 *               will not applied
+	 * @param limit  {@link Integer} limit result set, return all result set if
+	 *               limit is null
+	 * @param offset {@link Integer} specify the starting row offset into the resul
+	 *               se
 	 * @return {@link List<BedTag>}
 	 */
 	List<BedTag> getBedTags(String name, Integer limit, Integer offset);
-	
+
 	/**
 	 * Save / Update bed tag
 	 *
@@ -164,22 +174,22 @@ public interface BedManagementDao {
 	 * @return {@link BedTag}
 	 */
 	BedTag saveBedTag(BedTag bedTag);
-	
+
 	/**
 	 * Delete bed tag
 	 *
 	 * @param bedTag {@link BedTag}
 	 */
 	void deleteBedTag(BedTag bedTag);
-	
+
 	/**
 	 * Get bed type by Id
-	 * 
+	 *
 	 * @param id {@link Integer} bed Id
 	 * @return {@link BedType}
 	 */
 	BedType getBedTypeById(Integer id);
-	
+
 	/**
 	 * Get bed type by Uuid
 	 *
@@ -187,17 +197,20 @@ public interface BedManagementDao {
 	 * @return {@link BedType}
 	 */
 	BedType getBedTypeByUuid(String uuid);
-	
+
 	/**
 	 * Get bed sypes
 	 *
-	 * @param name {@link String} bed type name, if null filter by name criteria will not applied
-	 * @param limit {@link Integer} limit result set, return all result set if limit is null
-	 * @param offset {@link Integer} specify the starting row offset into the result set
+	 * @param name   {@link String} bed type name, if null filter by name criteria
+	 *               will not applied
+	 * @param limit  {@link Integer} limit result set, return all result set if
+	 *               limit is null
+	 * @param offset {@link Integer} specify the starting row offset into the resul
+	 *               se
 	 * @return {@link List<BedType>}
 	 */
 	List<BedType> getBedTypes(String name, Integer limit, Integer offset);
-	
+
 	/**
 	 * Save/Update bed type
 	 *
@@ -205,24 +218,32 @@ public interface BedManagementDao {
 	 * @return {@link BedType}
 	 */
 	BedType saveBedType(BedType bedType);
-	
+
 	/**
 	 * Delete Bed type
 	 *
 	 * @param bedType {@link BedType}
 	 */
 	void deleteBedType(BedType bedType);
-	
+
 	/**
 	 * Delete Bed location mapping
 	 *
 	 * @param bedLocationMapping
 	 */
 	void deleteBedLocationMapping(BedLocationMapping bedLocationMapping);
-	
+
 	/**
 	 * @param bedPatientAssignment the BedPatientAssignment to save
-	 * @return the saved BedPatientAssignment
+	 * @return the saved BedPatientAssignmen
 	 */
 	BedPatientAssignment saveBedPatientAssignment(BedPatientAssignment bedPatientAssignment);
+
+	/**
+	 * Get a bed by its bed number.
+	 *
+	 * @param bedNumber {@link String} the bed number
+	 * @return {@link Bed} the bed with the given number, or null if not found
+	 */
+	Bed getBedByBedNumber(String bedNumber);
 }
