@@ -23,6 +23,8 @@ public interface BedTagMapDao {
 	
 	BedTagMap getBedTagMapByUuid(String bedTagMapUuid);
 	
+	BedTag getBedTagByName(String bedTagName);
+	
 	BedTag getBedTagByUuid(String bedTagUuid);
 	
 	BedTagMap getBedTagMapWithBedAndTag(Bed bed, BedTag bedTag);

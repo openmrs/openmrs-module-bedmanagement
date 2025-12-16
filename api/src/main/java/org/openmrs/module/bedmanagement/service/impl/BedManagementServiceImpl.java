@@ -324,6 +324,12 @@ public class BedManagementServiceImpl extends BaseOpenmrsService implements BedM
 	
 	@Override
 	@Transactional(readOnly = true)
+	public BedTag getBedTagByName(String name) {
+		return bedManagementDao.getBedTagByName(name);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
 	public BedTag getBedTagByUuid(String uuid) {
 		return bedManagementDao.getBedTagByUuid(uuid);
 	}
