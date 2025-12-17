@@ -37,13 +37,17 @@ public class BedTagValidator implements Validator {
 		
 		BedTag tag = (BedTag) target;
 		
+		if (tag.getName() != null) {
+			tag.setName(tag.getName().trim());
+		}
+		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.name");
 		
 		if (StringUtils.isBlank(tag.getName())) {
 			return;
 		}
 		
-		BedTag existing = bedManagementService.getBedTagByName(tag.getName().trim());
+		BedTag existing = bedManagementService.getBedTagByName(tag.getName());
 		
 		if (existing != null && !existing.getVoided() && !existing.getUuid().equals(tag.getUuid())) {
 			errors.rejectValue("name", "general.error.nameAlreadyInUse");

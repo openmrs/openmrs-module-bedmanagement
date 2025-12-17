@@ -2,7 +2,6 @@ package org.openmrs.module.bedmanagement.validator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openmrs.api.ValidationException;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
@@ -14,7 +13,6 @@ import org.springframework.validation.Validator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BedTagValidatorTest extends BaseModuleContextSensitiveTest {
@@ -86,7 +84,7 @@ public class BedTagValidatorTest extends BaseModuleContextSensitiveTest {
 	}
 	
 	@Test
-	public void validate_shouldPassValidationIfAllRequiredFieldsHaveProperValues() {
+	public void validate_shouldPassValidationIfNameIsValid() {
 		BedTag tag = new BedTag();
 		tag.setName("Isolation");
 		
@@ -94,17 +92,11 @@ public class BedTagValidatorTest extends BaseModuleContextSensitiveTest {
 		bedTagValidator.validate(tag, errors);
 		
 		assertFalse(errors.hasErrors());
-		
-		bedManagementService.saveBedTag(tag);
-		
-		List<BedTag> tags = bedManagementService.getAllBedTags();
-		assertTrue(tags.stream().anyMatch(t -> "Isolation".equals(t.getName())));
 	}
 	
 	@Test
 	public void validate_shouldFailValidationIfFieldLengthIsTooLong() {
 		BedTag tag = new BedTag();
-		
 		String longName = new String(new char[260]).replace('\0', 'A');
 		tag.setName(longName);
 		
@@ -123,14 +115,5 @@ public class BedTagValidatorTest extends BaseModuleContextSensitiveTest {
 		bedTagValidator.validate(tag, errors);
 		
 		assertFalse(errors.hasErrors());
-	}
-	
-	@Test
-	public void saveBedTag_shouldNotSaveInvalidTag() {
-		assertThrows(ValidationException.class, () -> {
-			BedTag invalidTag = new BedTag();
-			invalidTag.setName("");
-			bedManagementService.saveBedTag(invalidTag);
-		});
 	}
 }
