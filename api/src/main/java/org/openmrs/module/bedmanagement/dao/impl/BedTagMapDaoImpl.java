@@ -45,7 +45,7 @@ public class BedTagMapDaoImpl implements BedTagMapDao {
 	
 	@Override
 	public BedTag getBedTagByName(String bedTagName) {
-		return (BedTag) sessionFactory.getCurrentSession().createQuery("from BedTag where name = :name")
+		return (BedTag) sessionFactory.getCurrentSession().createQuery("from BedTag where name = :name and voided = false")
 		        .setParameter("name", bedTagName).uniqueResult();
 	}
 	
