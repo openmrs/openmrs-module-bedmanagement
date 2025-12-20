@@ -140,6 +140,14 @@ public interface BedManagementDao {
 	Bed saveBed(Bed bed);
 	
 	/**
+	 * Get bed tag by Name
+	 *
+	 * @param name {@link String} bed tag name
+	 * @return {@link BedTag}
+	 */
+	BedTag getBedTagByName(String name);
+	
+	/**
 	 * Get bed tag by Uuid
 	 *
 	 * @param uuid {@link String} bed tag uuid

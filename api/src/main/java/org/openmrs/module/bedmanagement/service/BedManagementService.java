@@ -187,6 +187,15 @@ public interface BedManagementService extends OpenmrsService {
 	Bed saveBed(Bed bed);
 	
 	/**
+	 * Get bed tag by name
+	 *
+	 * @param name {@link String} bed tag name
+	 * @return {@link BedTag} or null if not found
+	 */
+	@Authorized(value = { "Get Bed Tags" }, requireAll = true)
+	BedTag getBedTagByName(String name);
+	
+	/**
 	 * Get bed tag by Id
 	 *
 	 * @param uuid {@link String} Bed tag uuid

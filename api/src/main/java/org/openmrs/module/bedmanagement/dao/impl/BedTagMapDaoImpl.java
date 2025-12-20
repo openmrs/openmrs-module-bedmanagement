@@ -20,7 +20,7 @@ import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.dao.BedTagMapDao;
 
-public class BedTagMapDaoImpl implements BedTagMapDao {
+public abstract class BedTagMapDaoImpl implements BedTagMapDao {
 	
 	SessionFactory sessionFactory;
 	
