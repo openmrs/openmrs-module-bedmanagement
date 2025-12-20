@@ -20,7 +20,7 @@ import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.dao.BedTagMapDao;
 
-public class BedTagMapDaoImpl implements BedTagMapDao {
+public abstract class BedTagMapDaoImpl implements BedTagMapDao {
 	
 	SessionFactory sessionFactory;
 	
@@ -41,12 +41,6 @@ public class BedTagMapDaoImpl implements BedTagMapDao {
 		return (BedTagMap) sessionFactory.getCurrentSession()
 		        .createQuery("from BedTagMap where uuid = :uuid and voided =:voided").setParameter("uuid", bedTagMapUuid)
 		        .setParameter("voided", false).uniqueResult();
-	}
-	
-	@Override
-	public BedTag getBedTagByName(String bedTagName) {
-		return (BedTag) sessionFactory.getCurrentSession().createQuery("from BedTag where name = :name and voided = false")
-		        .setParameter("name", bedTagName).uniqueResult();
 	}
 	
 	@Override
