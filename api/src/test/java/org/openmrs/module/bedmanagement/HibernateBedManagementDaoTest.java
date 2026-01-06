@@ -453,7 +453,8 @@ public class HibernateBedManagementDaoTest extends BaseModuleContextSensitiveTes
 		String voidedBpaUuid = "00000BAD-BED0-0000-0000-000000000000";
 		int voidedBpaBedId = 1;
 		
-		assertNull(bedManagementDao.getBedPatientAssignmentByUuid(voidedBpaUuid));
+		BedPatientAssignment voidedBpa = bedManagementDao.getBedPatientAssignmentByUuid(voidedBpaUuid);
+		Assert.assertTrue(voidedBpa.getVoided());
 		
 		Bed bedWithVoidedBpa = bedManagementDao.getBedById(voidedBpaBedId);
 		List<BedPatientAssignment> assignmentsByBed = bedManagementDao.getCurrentAssignmentsByBed(bedWithVoidedBpa);
