@@ -3,6 +3,7 @@ package org.openmrs.module.bedmanagement.aop;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertNull;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -50,7 +51,7 @@ public class EncounterWithBedPatientAssignmentSaveHandlerTest extends BaseModule
 		}
 		
 		BedPatientAssignment updatedBpa = bedManagementService.getBedPatientAssignmentByUuid(bpa.getUuid());
-		assertThat("bed patient assignment should be void after voiding visit", updatedBpa.getVoided(), is(true));
+		assertNull("bed patient assignment should be void after voiding visit", updatedBpa);
 	}
 	
 	@Test
