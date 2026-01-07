@@ -11,6 +11,7 @@ import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
+import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
@@ -447,4 +448,42 @@ public class HibernateBedManagementDaoTest extends BaseModuleContextSensitiveTes
 		Assert.assertFalse(afterDeleteBedLocationMappings.contains(beforeDeleteBedLocationMappings.get(0)));
 	}
 	
+	@Test
+	public void shouldNotGetVoidedBedPatientAssignments() throws Exception {
+		String voidedBpaUuid = "00000BAD-BED0-0000-0000-000000000000";
+		int voidedBpaBedId = 1;
+		
+		BedPatientAssignment voidedBpa = bedManagementDao.getBedPatientAssignmentByUuid(voidedBpaUuid);
+		Assert.assertTrue(voidedBpa.getVoided());
+		
+		Bed bedWithVoidedBpa = bedManagementDao.getBedById(voidedBpaBedId);
+		List<BedPatientAssignment> assignmentsByBed = bedManagementDao.getCurrentAssignmentsByBed(bedWithVoidedBpa);
+		for (BedPatientAssignment bpa : assignmentsByBed) {
+			Assert.assertNotEquals(voidedBpaUuid, bpa.getUuid());
+			Assert.assertFalse(bpa.getVoided());
+		}
+		
+		Bed bed = bedManagementDao.getLatestBedByVisit("12345678-6b78-11e0-93c3-18a905e044dc");
+		Assert.assertNotEquals(voidedBpaBedId, ((Integer) bed.getId()).intValue());
+		
+		List<BedPatientAssignment> assignmentsByVisit = bedManagementDao
+		        .getBedPatientAssignmentByVisit("12345678-6b78-11e0-93c3-18a905e044dc", true);
+		for (BedPatientAssignment bpa : assignmentsByVisit) {
+			Assert.assertNotEquals(voidedBpaUuid, bpa.getUuid());
+			Assert.assertFalse(bpa.getVoided());
+		}
+		
+		List<BedPatientAssignment> assignmentsByPatient = bedManagementDao.getBedPatientAssignmentByPatient("1001", true);
+		for (BedPatientAssignment bpa : assignmentsByPatient) {
+			Assert.assertNotEquals(voidedBpaUuid, bpa.getUuid());
+			Assert.assertFalse(bpa.getVoided());
+		}
+		
+		List<BedPatientAssignment> assignmentsByEncounter = bedManagementDao
+		        .getBedPatientAssignmentByEncounter("12345678-393b-4118-9c83-a3715b82d4de", true);
+		for (BedPatientAssignment bpa : assignmentsByEncounter) {
+			Assert.assertNotEquals(voidedBpaUuid, bpa.getUuid());
+			Assert.assertFalse(bpa.getVoided());
+		}
+	}
 }

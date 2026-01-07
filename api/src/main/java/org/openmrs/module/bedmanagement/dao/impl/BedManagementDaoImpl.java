@@ -68,7 +68,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
 		Session session = sessionFactory.getCurrentSession();
 		Bed bed = (Bed) session
 		        .createQuery("select bpa.bed.bedNumber as bedNumber,bpa.bed.id as id from BedPatientAssignment bpa "
-		                + "where bpa.patient = :patient and bpa.endDatetime is null")
+		                + "where bpa.patient = :patient and bpa.endDatetime is null AND bpa.voided is false")
 		        .setParameter("patient", patient).setResultTransformer(Transformers.aliasToBean(Bed.class)).uniqueResult();
 		return bed;
 	}
@@ -141,17 +141,16 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	public List<BedPatientAssignment> getCurrentAssignmentsByBed(Bed bed) {
 		Session session = sessionFactory.getCurrentSession();
 		List<BedPatientAssignment> assignments = session
-		        .createQuery("from BedPatientAssignment where bed=:bed and endDatetime is null").setParameter("bed", bed)
-		        .list();
+		        .createQuery("from BedPatientAssignment where bed=:bed and endDatetime is null and voided is false")
+		        .setParameter("bed", bed).list();
 		return assignments;
 	}
 	
 	@Override
 	public Bed getLatestBedByVisit(String visitUuid) {
 		Session session = sessionFactory.getCurrentSession();
-		Bed bed = (Bed) session
-		        .createQuery("select bpa.bed from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
-		                + "inner join enc.visit v where v.uuid = :visitUuid order by bpa.startDatetime DESC")
+		Bed bed = (Bed) session.createQuery("select bpa.bed from BedPatientAssignment bpa " + "inner join bpa.encounter enc "
+		        + "inner join enc.visit v where v.uuid = :visitUuid and bpa.voided is false order by bpa.startDatetime DESC")
 		        .setParameter("visitUuid", visitUuid).setMaxResults(1).uniqueResult();
 		return bed;
 	}

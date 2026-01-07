@@ -20,59 +20,59 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class EncounterWithBedPatientAssignmentSaveHandlerTest extends BaseModuleContextSensitiveTest {
-	
+
 	@Autowired
 	private BedManagementService bedManagementService;
-	
+
 	@Before
 	public void beforeAllTests() throws Exception {
 		executeDataSet("testPatientsDataset.xml");
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
 	}
-	
+
 	@Test
 	public void testBedAssignmentVoidedWhenVisitIsVoided() {
 		// voiding a visit should transitively void its encounters
 		// which triggers EncounterWithBedPatientAssignmentSaveHandler
 		// to void its bed assignments
-		
+
 		VisitService visitService = Context.getVisitService();
 		Visit visit = visitService.getVisit(1001);
 		BedPatientAssignment bpa = bedManagementService
-		        .getBedPatientAssignmentByUuid("10011001-1001-1001-1001-100000000001");
+				.getBedPatientAssignmentByUuid("10011001-1001-1001-1001-100000000001");
 		assertThat("bed patient assignment should initially not be void", bpa.getVoided(), is(false));
-		
+
 		visit = visitService.voidVisit(visit, "for testing");
 		assertThat(visit.getVoided(), is(true));
-		
+
 		for (Encounter encounter : visit.getEncounters()) {
 			assertThat(encounter.getVoided(), is(true));
 		}
-		
+
 		BedPatientAssignment updatedBpa = bedManagementService.getBedPatientAssignmentByUuid(bpa.getUuid());
 		assertThat("bed patient assignment should be void after voiding visit", updatedBpa.getVoided(), is(true));
 	}
-	
+
 	@Test
 	public void testBedAssisgnmentStartDatetimeChangeWhenEncounterTimeChanges() {
 		EncounterService encounterService = Context.getEncounterService();
 		Encounter encounter = encounterService.getEncounter(1001);
 		Date encounterTime = encounter.getEncounterDatetime();
 		BedPatientAssignment bpa = bedManagementService
-		        .getBedPatientAssignmentByUuid("10011001-1001-1001-1001-100000000001");
-		
+				.getBedPatientAssignmentByUuid("10011001-1001-1001-1001-100000000001");
+
 		Date oneSecondAfter = Date.from(encounterTime.toInstant().plus(1, ChronoUnit.SECONDS));
 		encounter.setEncounterDatetime(oneSecondAfter);
 		encounterService.saveEncounter(encounter);
-		
+
 		BedPatientAssignment updatedBpa = bedManagementService.getBedPatientAssignmentByUuid(bpa.getUuid());
 		assertThat("bed patient assignment start datetime should change with encounter time", updatedBpa.getStartDatetime(),
 		    equalTo(oneSecondAfter));
-		
+
 		Date oneSecondBefore = Date.from(encounterTime.toInstant().minus(1, ChronoUnit.SECONDS));
 		encounter.setEncounterDatetime(oneSecondBefore);
 		encounterService.saveEncounter(encounter);
-		
+
 		BedPatientAssignment updatedBpa2 = bedManagementService.getBedPatientAssignmentByUuid(bpa.getUuid());
 		assertThat("bed patient assignment start datetime should change with encounter time", updatedBpa2.getStartDatetime(),
 		    equalTo(oneSecondBefore));
