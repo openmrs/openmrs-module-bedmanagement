@@ -76,4 +76,24 @@ public class BedPatientAssignmentValidatorTest extends BaseModuleContextSensitiv
 			bedManagementService.saveBedPatientAssignment(bpa2);
 		});
 	}
+	
+	@Test
+	public void testExceptionNotThrownWhenSavingEndedBedsAssignment() {
+		BedPatientAssignment bpa = bedManagementService
+		        .getBedPatientAssignmentByUuid("10011001-1001-1001-1001-100000000001");
+		Patient patient = bpa.getPatient();
+		Bed bed = bedManagementService.getBedById(13);
+		bedManagementService.saveBedPatientAssignment(bpa);
+		
+		// No exception should be thrown when saving another bed assignment with
+		// endDatetime set
+		// this usually happens when merging patients
+		BedPatientAssignment bpa2 = new BedPatientAssignment();
+		bpa2.setPatient(patient);
+		bpa2.setStartDatetime(new Date());
+		bpa2.setEncounter(bpa.getEncounter());
+		bpa2.setBed(bed);
+		bpa2.setEndDatetime(new Date());
+		bedManagementService.saveBedPatientAssignment(bpa2);
+	}
 }

@@ -66,18 +66,20 @@ public class BedPatientAssignmentValidator implements Validator {
 		}
 		
 		// prevent multiple active bed assignments for the same patient
-		List<BedPatientAssignment> currentAssignments = bedManagementService
-		        .getBedPatientAssignmentByPatient(patient.getUuid(), false);
-		boolean isAttemptingMultipleAssignments = false;
-		for (BedPatientAssignment current : currentAssignments) {
-			if (!current.getId().equals(bpa.getId())) {
-				isAttemptingMultipleAssignments = true;
-				break;
+		if (bpa.getEndDatetime() == null) {
+			List<BedPatientAssignment> currentAssignments = bedManagementService
+			        .getBedPatientAssignmentByPatient(patient.getUuid(), false);
+			boolean isAttemptingMultipleAssignments = false;
+			for (BedPatientAssignment current : currentAssignments) {
+				if (!current.getId().equals(bpa.getId())) {
+					isAttemptingMultipleAssignments = true;
+					break;
+				}
 			}
-		}
-		if (isAttemptingMultipleAssignments) {
-			errors.rejectValue("patient", "bedPatientAssignment.patient.alreadyAssigned",
-			    "Cannot have multiple active bed assignments for the same patient");
+			if (isAttemptingMultipleAssignments) {
+				errors.rejectValue("patient", "bedPatientAssignment.patient.alreadyAssigned",
+				    "Cannot have multiple active bed assignments for the same patient");
+			}
 		}
 	}
 	
