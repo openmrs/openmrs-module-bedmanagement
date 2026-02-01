@@ -23,14 +23,6 @@ public class BedTagValidatorTest extends BaseModuleContextSensitiveTest {
 	@Autowired
 	private BedManagementService bedManagementService;
 	
-	@BeforeEach
-	public void setUp() throws Exception {
-		List<BedTag> allTags = bedManagementService.getAllBedTags();
-		for (BedTag tag : allTags) {
-			bedManagementService.deleteBedTag(tag, null);
-		}
-	}
-	
 	@Test
 	public void validate_shouldFailValidationIfNameIsNullOrEmptyOrWhitespace() {
 		BedTag tag = new BedTag();
