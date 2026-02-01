@@ -340,8 +340,6 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 	
 	@Test
 	public void saveBedTag_shouldNotSaveInvalidTag() {
-		Context.authenticate(superUser, superUserPassword);
-		
 		assertThrows(ValidationException.class, () -> {
 			BedTag invalidTag = new BedTag();
 			invalidTag.setName("");
