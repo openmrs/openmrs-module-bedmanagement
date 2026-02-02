@@ -32,7 +32,6 @@ public class BedTagValidator implements Validator {
 		}
 		
 		BedTag tag = (BedTag) target;
-		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.name");
 		ValidateUtil.validateFieldLengths(errors, tag.getClass(), "name");
 		
