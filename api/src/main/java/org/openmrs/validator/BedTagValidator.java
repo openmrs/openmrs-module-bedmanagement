@@ -8,7 +8,6 @@
  */
 package org.openmrs.validator;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.bedmanagement.entity.BedTag;
@@ -35,7 +34,6 @@ public class BedTagValidator implements Validator {
 		BedTag tag = (BedTag) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.name");
-		
 		ValidateUtil.validateFieldLengths(errors, tag.getClass(), "name");
 		
 		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
