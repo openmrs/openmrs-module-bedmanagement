@@ -68,6 +68,7 @@ public class BedTagValidatorTest extends BaseModuleContextSensitiveTest {
 		
 		BedTag newTag = new BedTag();
 		newTag.setName("Emergency");
+		bedManagementService.saveBedTag(newTag);
 		
 		Errors errors = new BindException(newTag, "tag");
 		bedTagValidator.validate(newTag, errors);
