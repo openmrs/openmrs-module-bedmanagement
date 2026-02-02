@@ -37,10 +37,6 @@ public class BedTagValidator implements Validator {
 		
 		BedTag tag = (BedTag) target;
 		
-		if (tag.getName() != null) {
-			tag.setName(tag.getName().trim());
-		}
-		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.name");
 		
 		if (StringUtils.isBlank(tag.getName())) {
