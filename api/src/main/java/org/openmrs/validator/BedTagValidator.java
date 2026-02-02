@@ -9,19 +9,16 @@
 package org.openmrs.validator;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openmrs.api.context.Context;
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 @Handler(supports = { BedTag.class }, order = 50)
 public class BedTagValidator implements Validator {
-	
-	@Autowired
-	private BedManagementService bedManagementService;
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -41,6 +38,7 @@ public class BedTagValidator implements Validator {
 		
 		ValidateUtil.validateFieldLengths(errors, tag.getClass(), "name");
 		
+		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
 		BedTag existing = bedManagementService.getBedTagByName(tag.getName());
 		
 		if (existing != null && !existing.getVoided() && !existing.getUuid().equals(tag.getUuid())) {
