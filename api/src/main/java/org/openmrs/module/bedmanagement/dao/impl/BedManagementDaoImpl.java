@@ -338,6 +338,14 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	}
 	
 	@Override
+	public BedTag getBedTagByName(String name) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedTag.class);
+		criteria.add(Restrictions.eq("name", name));
+		criteria.add(Restrictions.eq("voided", false));
+		return (BedTag) criteria.uniqueResult();
+	}
+	
+	@Override
 	public BedTag getBedTagByUuid(String uuid) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedTag.class);
 		criteria.add(Restrictions.eq("uuid", uuid));

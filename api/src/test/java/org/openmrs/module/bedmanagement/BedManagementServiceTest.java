@@ -9,6 +9,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.APIException;
 import org.openmrs.api.LocationService;
+import org.openmrs.api.ValidationException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.constants.BedStatus;
 import org.openmrs.module.bedmanagement.entity.Bed;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 
 public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 	
@@ -334,6 +336,15 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		Assert.assertEquals(1, bedTags.size());
 		Assert.assertFalse(bedTags.get(0).getVoided());
 		Assert.assertEquals("Broken", bedTags.get(0).getName());
+	}
+	
+	@Test
+	public void saveBedTag_shouldNotSaveInvalidTag() {
+		assertThrows(ValidationException.class, () -> {
+			BedTag invalidTag = new BedTag();
+			invalidTag.setName("");
+			Context.getService(BedManagementService.class).saveBedTag(invalidTag);
+		});
 	}
 	
 	@Test
