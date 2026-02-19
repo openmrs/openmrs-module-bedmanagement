@@ -69,27 +69,30 @@ export default class LocationBlock extends React.PureComponent {
     }
 
     render() {
+        const managingLocationsEnabled = this.props.admissionLocationFunctions.isManagingLocationsEnabled();
         return (
             <div className="location block" onClick={this.onClickHandler}>
                 <div className="left-block">
                     <span>{this.props.admissionLocation.name}</span>
                 </div>
-                <ul className="right-block">
-                    <li>
-                        <a href="javascript:void(0);" title="edit" onClick={this.editWardClickHandler}>
-                            <i className="fa fa-pencil" aria-hidden="true" />
-                        </a>
-                    </li>
-                    {Object.keys(this.childLocations).length == 0 ? (
+                {managingLocationsEnabled &&
+                    <ul className="right-block">
                         <li>
-                            <a href="javascript:void(0);" title="delete" onClick={this.onDeleteHandler}>
-                                <i className="fa fa-trash" aria-hidden="true" />
+                            <a href="javascript:void(0);" title="edit" onClick={this.editWardClickHandler}>
+                                <i className="fa fa-pencil" aria-hidden="true" />
                             </a>
                         </li>
-                    ) : (
-                        ''
-                    )}
-                </ul>
+                        {Object.keys(this.childLocations).length == 0 ? (
+                            <li>
+                                <a href="javascript:void(0);" title="delete" onClick={this.onDeleteHandler}>
+                                    <i className="fa fa-trash" aria-hidden="true" />
+                                </a>
+                            </li>
+                        ) : (
+                            ''
+                        )}
+                    </ul>
+                }
             </div>
         );
     }

@@ -39,9 +39,10 @@ export default class AdmissionLocationList extends React.Component {
     }
 
     getBody() {
+        const managingLocationsEnabled = this.props.admissionLocationFunctions.isManagingLocationsEnabled();
         let addButtonMessage = this.intl.formatMessage({id: this.props.activeUuid == null ? 'ADD_ADMISSION_LOCATION' : 'ADD_WARD'});
         if (Object.keys(this.childAdmissionLocations).length == 0 && this.props.activeUuid == null) {
-            return (
+            return managingLocationsEnabled && (
                 <span className="btn btn-primary" onClick={this.addWardClickHandler}>
                     <i className="icon fa fa-plus" aria-hidden="true" /> {addButtonMessage}
                 </span>
@@ -63,9 +64,11 @@ export default class AdmissionLocationList extends React.Component {
                             admissionLocationFunctions={this.props.admissionLocationFunctions}
                         />
                     ))}
-                    <span className="btn btn-primary" onClick={this.addWardClickHandler}>
-                        <i className="icon fa fa-plus" aria-hidden="true" /> {addButtonMessage}
-                    </span>
+                    {managingLocationsEnabled &&
+                        <span className="btn btn-primary" onClick={this.addWardClickHandler}>
+                            <i className="icon fa fa-plus" aria-hidden="true" /> {addButtonMessage}
+                        </span>
+                    }
                 </div>
             );
         }

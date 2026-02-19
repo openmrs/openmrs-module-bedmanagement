@@ -27,17 +27,20 @@ export default class AdmissionLocationWrapper extends React.Component {
             isOpen: true,
             activeUuid: null,
             activePage: 'listing',
-            pageData: {}
+            pageData: {},
+            managingLocationsEnabled: true
         };
 
         this.intl = context.intl;
         this.fetchAllAdmissionLocations = this.fetchAllAdmissionLocations.bind(this);
         this.fetchAllVisitLocations = this.fetchAllVisitLocations.bind(this);
         this.fetchBedTypes = this.fetchBedTypes.bind(this);
+        this.managingLocationsEnabled = this.managingLocationsEnabled.bind(this);
         this.getBody = this.getBody.bind(this);
         this.fetchAllAdmissionLocations(this);
         this.fetchAllVisitLocations(this);
         this.fetchBedTypes();
+        this.managingLocationsEnabled();
     }
 
     fetchAllAdmissionLocations(self) {
@@ -129,6 +132,21 @@ export default class AdmissionLocationWrapper extends React.Component {
             });
     }
 
+    managingLocationsEnabled() {
+        const self = this;
+        const property = 'bedmanagement.owa.enableManagingLocations';
+        axios.get(this.urlHelper.apiBaseUrl() + '/systemsetting?v=custom:(value)&q=' + property)
+            .then(function(response) {
+                const results = response.data.results;
+                const enabled = !results || results.length === 0 || results[0].value !== "false";
+                self.setState({managingLocationsEnabled: enabled});
+            })
+            .catch(function(errorResponse) {
+                self.setState({managingLocationsEnabled: true});
+            }
+        )
+    };
+
     admissionLocationFunctions = {
         setActiveLocationUuid: (admissionLocationUuid) => {
             this.setState({
@@ -176,6 +194,9 @@ export default class AdmissionLocationWrapper extends React.Component {
                 admissionLocationUuid
             );
         },
+        isManagingLocationsEnabled: () => {
+            return this.state.managingLocationsEnabled;
+        },
         notify: (notifyType, message) => {
             const self = this;
             const successText = this.intl.formatMessage({id: 'SUCCESS'});
@@ -210,7 +231,7 @@ export default class AdmissionLocationWrapper extends React.Component {
                 />
             );
         } else if (this.state.activePage == 'addEditLocation') {
-            return (
+            return ( this.state.managingLocationsEnabled &&
                 <AddEditAdmissionLocation
                     operation={this.state.pageData.operation}
                     activeUuid={this.state.activeUuid}

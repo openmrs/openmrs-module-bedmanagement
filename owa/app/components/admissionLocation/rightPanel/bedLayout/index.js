@@ -137,12 +137,15 @@ export default class BedLayout extends React.Component {
     }
 
     getBody() {
+        const managingLocationsEnabled = this.props.admissionLocationFunctions.isManagingLocationsEnabled();
         if (this.state.loadingData == false && this.state.bedlayouts.length == 0) {
             return (
                 <div className="location option">
-                    <label className="button" onClick={this.addWardClickHandler}>
-                        Add Child Admission Location
-                    </label>
+                    {managingLocationsEnabled &&
+                        <label className="button" onClick={this.addWardClickHandler}>
+                            Add Child Admission Location
+                        </label>
+                    }
                     <label className="button" onClick={this.setBedLayoutClickHandler}>
                         Set Bed Layout
                     </label>
