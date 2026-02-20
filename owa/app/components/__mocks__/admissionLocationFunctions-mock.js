@@ -17,6 +17,9 @@ const admissionLocationFunctionsMock = {
     getBedTypes: () => {
         return bedTypes;
     },
+    isManagingLocationsEnabled: () => {
+        return true;
+    },
     getAdmissionLocationByUuid: (admissionLocationUuid) => {
         return typeof admissionLocations[admissionLocationUuid] !== 'undefined'
             ? admissionLocations[admissionLocationUuid]

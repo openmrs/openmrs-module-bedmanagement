@@ -60,5 +60,11 @@
 	</messages>
 	<!-- /Internationalization -->
 
+	<!-- Set this property to "false" to disable features in the OWA that allow adding, editing, and deleting locations -->
+	<globalProperty>
+		<property>bedmanagement.owa.enableManagingLocations</property>
+		<defaultValue>true</defaultValue>
+	</globalProperty>
+
 </module>
 

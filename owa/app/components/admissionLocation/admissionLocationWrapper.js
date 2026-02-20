@@ -27,17 +27,20 @@ export default class AdmissionLocationWrapper extends React.Component {
             isOpen: true,
             activeUuid: null,
             activePage: 'listing',
-            pageData: {}
+            pageData: {},
+            config: {}
         };
 
         this.intl = context.intl;
         this.fetchAllAdmissionLocations = this.fetchAllAdmissionLocations.bind(this);
         this.fetchAllVisitLocations = this.fetchAllVisitLocations.bind(this);
         this.fetchBedTypes = this.fetchBedTypes.bind(this);
+        this.fetchConfig = this.fetchConfig.bind(this);
         this.getBody = this.getBody.bind(this);
         this.fetchAllAdmissionLocations(this);
         this.fetchAllVisitLocations(this);
         this.fetchBedTypes();
+        this.fetchConfig();
     }
 
     fetchAllAdmissionLocations(self) {
@@ -129,6 +132,25 @@ export default class AdmissionLocationWrapper extends React.Component {
             });
     }
 
+    fetchConfig() {
+        const self = this;
+        const prefix = 'bedmanagement.owa.';
+        axios.get(this.urlHelper.apiBaseUrl() + '/systemsetting?v=custom:(property,value)&q=' + prefix)
+            .then(function(response) {
+                const settings = {};
+                if (response.data.results) {
+                    response.data.results.forEach(s => {
+                        settings[s.property.substring(prefix.length)] = s.value;
+                    });
+                }
+                self.setState({config: settings});
+            })
+            .catch(function(errorResponse) {
+                self.setState({config: {}});
+            }
+        )
+    };
+
     admissionLocationFunctions = {
         setActiveLocationUuid: (admissionLocationUuid) => {
             this.setState({
@@ -175,6 +197,9 @@ export default class AdmissionLocationWrapper extends React.Component {
                 this.state.admissionLocations,
                 admissionLocationUuid
             );
+        },
+        isManagingLocationsEnabled: () => {
+            return !(this.state.config.enableManagingLocations === "false");
         },
         notify: (notifyType, message) => {
             const self = this;
