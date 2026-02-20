@@ -28,19 +28,19 @@ export default class AdmissionLocationWrapper extends React.Component {
             activeUuid: null,
             activePage: 'listing',
             pageData: {},
-            managingLocationsEnabled: true
+            config: {}
         };
 
         this.intl = context.intl;
         this.fetchAllAdmissionLocations = this.fetchAllAdmissionLocations.bind(this);
         this.fetchAllVisitLocations = this.fetchAllVisitLocations.bind(this);
         this.fetchBedTypes = this.fetchBedTypes.bind(this);
-        this.managingLocationsEnabled = this.managingLocationsEnabled.bind(this);
+        this.fetchConfig = this.fetchConfig.bind(this);
         this.getBody = this.getBody.bind(this);
         this.fetchAllAdmissionLocations(this);
         this.fetchAllVisitLocations(this);
         this.fetchBedTypes();
-        this.managingLocationsEnabled();
+        this.fetchConfig();
     }
 
     fetchAllAdmissionLocations(self) {
@@ -132,17 +132,21 @@ export default class AdmissionLocationWrapper extends React.Component {
             });
     }
 
-    managingLocationsEnabled() {
+    fetchConfig() {
         const self = this;
-        const property = 'bedmanagement.owa.enableManagingLocations';
-        axios.get(this.urlHelper.apiBaseUrl() + '/systemsetting?v=custom:(value)&q=' + property)
+        const prefix = 'bedmanagement.owa.';
+        axios.get(this.urlHelper.apiBaseUrl() + '/systemsetting?v=custom:(property,value)&q=' + prefix)
             .then(function(response) {
-                const results = response.data.results;
-                const enabled = !results || results.length === 0 || results[0].value !== "false";
-                self.setState({managingLocationsEnabled: enabled});
+                const settings = {};
+                if (response.data.results) {
+                    response.data.results.forEach(s => {
+                        settings[s.property.substring(prefix.length)] = s.value;
+                    });
+                }
+                self.setState({config: settings});
             })
             .catch(function(errorResponse) {
-                self.setState({managingLocationsEnabled: true});
+                self.setState({config: {}});
             }
         )
     };
@@ -195,7 +199,7 @@ export default class AdmissionLocationWrapper extends React.Component {
             );
         },
         isManagingLocationsEnabled: () => {
-            return this.state.managingLocationsEnabled;
+            return !(this.state.config.enableManagingLocations === "false");
         },
         notify: (notifyType, message) => {
             const self = this;
@@ -231,7 +235,7 @@ export default class AdmissionLocationWrapper extends React.Component {
                 />
             );
         } else if (this.state.activePage == 'addEditLocation') {
-            return ( this.state.managingLocationsEnabled &&
+            return (
                 <AddEditAdmissionLocation
                     operation={this.state.pageData.operation}
                     activeUuid={this.state.activeUuid}
