@@ -28,7 +28,9 @@ export default class AdmissionLocationWrapper extends React.Component {
             activeUuid: null,
             activePage: 'listing',
             pageData: {},
-            config: {}
+            config: {
+                enableManagingLocations: "false"
+            }
         };
 
         this.intl = context.intl;
