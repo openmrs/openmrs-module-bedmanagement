@@ -71,7 +71,7 @@ export default class BedBlock extends React.PureComponent {
                 </div>
             );
         } else {
-            const statusId = this.props.bed.status === 'OCCUPIED' ? 'OCCUPIED' : 'AVAILABLE';
+            const statusId = (this.props.bed.status && this.props.bed.status.toUpperCase() === 'OCCUPIED') ? 'OCCUPIED' : 'AVAILABLE';
             const statusLabel = this.intl.formatMessage({ id: statusId });
     
             return (
