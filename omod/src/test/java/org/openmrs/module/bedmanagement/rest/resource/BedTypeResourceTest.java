@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.APIException;
+import org.openmrs.module.bedmanagement.entity.BedType;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.response.ObjectNotFoundException;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -135,11 +136,16 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 		MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI() + "/" + bedTypeId);
 		handle(getRequest);
 	}
-	
+
 	@Test
 	public void shouldRetireBedType() throws Exception {
 		String uuid = "6f9fb341-0fd5-11e8-adb7-080027b38972";
-		
+
+		MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI());
+		SimpleObject original = deserialize(handle(getRequest));
+		List<BedType> originalList = original.get("results");
+
+
 		MockHttpServletRequest retireRequest = request(RequestMethod.POST, getURI() + "/" + uuid);
 		SimpleObject retireParameters = new SimpleObject();
 		retireParameters.put("retired", "true");
@@ -147,17 +153,17 @@ public class BedTypeResourceTest extends MainResourceControllerTest {
 		String retireJson = new ObjectMapper().writeValueAsString(retireParameters);
 		retireRequest.setContent(retireJson.getBytes());
 		handle(retireRequest);
-		
-		MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI());
-		SimpleObject object = deserialize(handle(getRequest));
-		List results = object.get("results");
-		assertEquals(results.size(), 2);
+
+		SimpleObject simpleObject = deserialize(handle(getRequest));
+		List<BedType> results = simpleObject.get("results");
+
+		assertEquals(originalList.size() - 1, results.size());
 	}
-	
+
 	@Test(expected = APIException.class)
 	public void shouldThrowExceptionWhenRetireReasonIsBlank() throws Exception {
 		String uuid = "6f9fb341-0fd5-11e8-adb7-080027b38972";
-		
+
 		MockHttpServletRequest retireRequest = request(RequestMethod.POST, getURI() + "/" + uuid);
 		SimpleObject retireParameters = new SimpleObject();
 		retireParameters.put("retired", "true");
