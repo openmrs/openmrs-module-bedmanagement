@@ -57,6 +57,8 @@ export default {
         ADD_NEW: 'Add New',
         BED_TAG: 'Bed Tag',
         EXISTING_BED_TYPES: 'Existing Bed Types',
-        EXISTING_BED_TAGS: 'Existing Bed Tags'
+        EXISTING_BED_TAGS: 'Existing Bed Tags',
+        AVAILABLE: 'Available',
+        OCCUPIED: 'Occupied'
     }
 };
