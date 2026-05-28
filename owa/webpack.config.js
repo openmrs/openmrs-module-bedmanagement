@@ -3,7 +3,10 @@ const webpack = require('webpack');
 
 const config = {
     resolve: {
-        modules: [path.resolve('./app'), path.resolve('./node_modules')]
+        modules: [path.resolve('./app'), path.resolve('./node_modules')],
+        alias: {
+            'axios': path.resolve(__dirname, 'node_modules/axios/dist/axios.js')
+        }
     },
     entry:{
         vendor: [
