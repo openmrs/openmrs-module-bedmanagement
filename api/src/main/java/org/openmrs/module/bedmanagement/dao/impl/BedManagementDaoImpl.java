@@ -186,8 +186,10 @@ public class BedManagementDaoImpl implements BedManagementDao {
 			locations.addAll(childLocations);
 		}
 		
-		String hql = "select count(blm.bed) as totalBeds ,"
-		        + " COALESCE(sum(CASE WHEN blm.bed IS NOT NULL AND blm.bed.status = :occupied THEN 1 ELSE 0 END), 0) as occupiedBeds"
+		String hql = "select COALESCE(sum(CASE WHEN blm.bed IS NOT NULL AND blm.bed.voided = false "
+		        + "THEN 1 ELSE 0 END), 0) as totalBeds ,"
+		        + " COALESCE(sum(CASE WHEN blm.bed IS NOT NULL AND blm.bed.voided = false "
+		        + "AND blm.bed.status = :occupied THEN 1 ELSE 0 END), 0) as occupiedBeds"
 		        + " from BedLocationMapping blm where blm.location in (:locations)";
 		
 		AdmissionLocation admissionLocation = (AdmissionLocation) session.createQuery(hql)
@@ -245,7 +247,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
 			bedLayout.setRowNumber(blm.getRow());
 			bedLayout.setColumnNumber(blm.getColumn());
 			bedLayout.setLocation(blm.getLocation().getName());
-			if (blm.getBed() != null) {
+			if (blm.getBed() != null && BooleanUtils.isNotTrue(blm.getBed().getVoided())) {
 				bedLayout.setBedNumber(blm.getBed().getBedNumber());
 				bedLayout.setBedId(blm.getBed().getId());
 				bedLayout.setBedUuid(blm.getBed().getUuid());
