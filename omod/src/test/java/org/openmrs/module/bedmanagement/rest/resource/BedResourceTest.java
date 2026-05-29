@@ -175,6 +175,20 @@ public class BedResourceTest extends MainResourceControllerTest {
 		request.setContent(json.getBytes());
 		deserialize(handle(request));
 	}
+
+	@Test(expected = IllegalPropertyException.class)
+	public void shouldThrowExceptionOnDuplicateBedNumberWhenAddingBed() throws Exception {
+		MockHttpServletRequest request = request(RequestMethod.POST, getURI());
+		SimpleObject postParameters = new SimpleObject();
+		postParameters.put("bedNumber", "304-a");
+		postParameters.put("bedType", "luxury");
+		postParameters.put("row", 2);
+		postParameters.put("column", 3);
+		postParameters.put("locationUuid", "98bc9b32-9d1a-11e2-8137-0800271c1b75");
+		String json = new ObjectMapper().writeValueAsString(postParameters);
+		request.setContent(json.getBytes());
+		deserialize(handle(request));
+	}
 	
 	@Test
 	public void shouldUpdateBed() throws Exception {
@@ -193,6 +207,20 @@ public class BedResourceTest extends MainResourceControllerTest {
 		Assert.assertEquals(Integer.valueOf(2), bed.get("row"));
 		Assert.assertEquals(Integer.valueOf(3), bed.get("column"));
 		Assert.assertEquals("luxury", PropertyUtils.getProperty(bed.get("bedType"), "name"));
+	}
+
+	@Test(expected = IllegalPropertyException.class)
+	public void shouldThrowExceptionOnDuplicateBedNumberWhenUpdatingBed() throws Exception {
+		MockHttpServletRequest request = request(RequestMethod.POST, getURI() + "/" + AVAILABLE_BED_UUID);
+		SimpleObject postParameters = new SimpleObject();
+		postParameters.put("bedNumber", "304-a");
+		postParameters.put("bedType", "luxury");
+		postParameters.put("row", 2);
+		postParameters.put("column", 3);
+		postParameters.put("locationUuid", "98bc9b32-9d1a-11e2-8137-0800271c1b75");
+		String json = new ObjectMapper().writeValueAsString(postParameters);
+		request.setContent(json.getBytes());
+		deserialize(handle(request));
 	}
 	
 	@Test(expected = IllegalPropertyException.class)

@@ -141,6 +141,7 @@ describe('AddEditBed', () => {
         expect(editBedForm.find('#column-field').props().value).toBe(1);
         expect(editBedForm.find('#bed-number-field').props().value).toBe('100-a');
         expect(editBedForm.find('#bed-type').props().value).toBe('luxury');
+        expect(editBedForm.find("input[name='delete']").props().value).toBe('Delete');
         expect(shallowToJson(editBedForm)).toMatchSnapshot();
     });
 
