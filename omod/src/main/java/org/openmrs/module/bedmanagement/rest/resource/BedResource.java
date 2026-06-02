@@ -257,7 +257,7 @@ public class BedResource extends DelegatingCrudResource<Bed> {
 	}
 
 	private void validateBedNumberIsUnique(String bedNumber, String existingBedUuid) {
-		if (bedNumber.length() == 0) {
+		if (bedNumber.isEmpty()) {
 			throw new IllegalPropertyException("Bed number is required");
 		}
 
