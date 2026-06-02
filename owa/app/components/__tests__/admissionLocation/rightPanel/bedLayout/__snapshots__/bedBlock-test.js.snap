@@ -42,6 +42,8 @@ exports[`BedBlock Should render bed block properly 1`] = `
           aria-hidden="true"
           className="fa fa-trash"
         />
+
+        Delete
       </a>
     </li>
   </ul>

@@ -229,8 +229,11 @@ public class BedResource extends DelegatingCrudResource<Bed> {
 			if (bed == null)
 				throw new IllegalPropertyException("Bed not exist");
 			
-			if (properties.get("bedNumber") != null)
-				bed.setBedNumber((String) properties.get("bedNumber"));
+			if (properties.get("bedNumber") != null) {
+				String bedNumber = ((String) properties.get("bedNumber")).trim();
+				validateBedNumberIsUnique(bedNumber, uuid);
+				bed.setBedNumber(bedNumber);
+			}
 			
 			if (properties.get("status") != null)
 				bed.setStatus((String) properties.get("status"));
@@ -243,12 +246,27 @@ public class BedResource extends DelegatingCrudResource<Bed> {
 			if (properties.get("bedNumber") == null || properties.get("bedType") == null || properties.get("row") == null
 			        || properties.get("column") == null || properties.get("locationUuid") == null)
 				throw new IllegalPropertyException("Required parameters: bedNumber, bedType, row, column, locationUuid");
-			bed.setBedNumber((String) properties.get("bedNumber"));
+			String bedNumber = ((String) properties.get("bedNumber")).trim();
+			validateBedNumberIsUnique(bedNumber, null);
+			bed.setBedNumber(bedNumber);
 			bed.setStatus(properties.get("status") != null ? (String) properties.get("status") : "AVAILABLE");
 			bed.setBedType(bedType);
 		}
 		
 		return bed;
+	}
+
+	private void validateBedNumberIsUnique(String bedNumber, String existingBedUuid) {
+		if (bedNumber.isEmpty()) {
+			throw new IllegalPropertyException("Bed number is required");
+		}
+
+		for (Bed existingBed : getBedManagementService().getBeds(null, null)) {
+			if (existingBed.getBedNumber() != null && existingBed.getBedNumber().trim().equalsIgnoreCase(bedNumber)
+			        && (existingBedUuid == null || !existingBedUuid.equals(existingBed.getUuid()))) {
+				throw new IllegalPropertyException("A bed with bed number " + bedNumber + " already exists");
+			}
+		}
 	}
 	
 	private BedLocationMapping constructBedLocationMapping(Bed bed, String locationUuid, Integer row, Integer column) {

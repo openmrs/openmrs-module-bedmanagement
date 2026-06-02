@@ -281,11 +281,18 @@ exports[`AddEditBed Should display edit bed form properly 1`] = `
             value="Save"
           />
           <input
-            className="form-btn float-left"
+            className="form-btn float-left margin-right"
             name="cancel"
             onClick={[Function]}
             type="button"
             value="Cancel"
+          />
+          <input
+            className="form-btn float-left"
+            name="delete"
+            onClick={[Function]}
+            type="button"
+            value="Delete"
           />
         </div>
       </form>

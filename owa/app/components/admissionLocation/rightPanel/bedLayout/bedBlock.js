@@ -32,7 +32,7 @@ export default class BedBlock extends React.PureComponent {
         const self = this;
         const deleteConfirmationMsg = this.intl.formatMessage(
             {id: 'DELETE_BED_CONFIRM_MESSAGE'},
-            {bed_number: this.props.bedNumber}
+            {bed_number: this.props.bed.bedNumber}
         );
         const deleteSuccessMsg = this.intl.formatMessage({id: 'DELETE_SUCCESSFULLY'});
         const confirmation = confirm(deleteConfirmationMsg);
@@ -87,7 +87,8 @@ export default class BedBlock extends React.PureComponent {
                         </li>
                         <li>
                             <a href="javascript:void(0);" title="delete" onClick={this.onDeleteHandler}>
-                                <i className="fa fa-trash" aria-hidden="true" />
+                                <i className="fa fa-trash" aria-hidden="true" />{' '}
+                                {this.intl.formatMessage({id: 'DELETE'})}
                             </a>
                         </li>
                     </ul>

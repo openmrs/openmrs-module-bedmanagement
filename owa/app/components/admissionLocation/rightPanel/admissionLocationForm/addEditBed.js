@@ -27,6 +27,7 @@ export default class AddEditBed extends React.Component {
         this.onChangeBedNumberField = this.onChangeBedNumberField.bind(this);
         this.onChangeBedType = this.onChangeBedType.bind(this);
         this.onSubmitHandler = this.onSubmitHandler.bind(this);
+        this.onDeleteHandler = this.onDeleteHandler.bind(this);
         this.cancelEventHandler = this.cancelEventHandler.bind(this);
     }
 
@@ -100,7 +101,7 @@ export default class AddEditBed extends React.Component {
         event.preventDefault();
         if (this.state.rowFieldError != '' || this.state.columnFieldError != '') {
             const errorMsg = this.intl.formatMessage({id: 'FIX_ERROR_MSG'});
-            this.props.admissionLocationFunctions.notify(errorText, errorMsg);
+            this.props.admissionLocationFunctions.notify('error', errorMsg);
             return;
         }
 
@@ -144,6 +145,39 @@ export default class AddEditBed extends React.Component {
                 const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                 self.props.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
+    }
+
+    onDeleteHandler(event) {
+        event.preventDefault();
+
+        const self = this;
+        const deleteConfirmationMsg = this.intl.formatMessage(
+            {id: 'DELETE_BED_CONFIRM_MESSAGE'},
+            {bed_number: this.state.bedNumber}
+        );
+        const deleteSuccessMsg = this.intl.formatMessage({id: 'DELETE_SUCCESSFULLY'});
+        const confirmation = confirm(deleteConfirmationMsg);
+        if (confirmation) {
+            axios({
+                method: 'delete',
+                url: this.urlHelper.apiBaseUrl() + '/bed/' + this.state.bedUuid
+            })
+                .then(function() {
+                    self.props.admissionLocationFunctions.notify('success', deleteSuccessMsg);
+                    self.props.admissionLocationFunctions.setState({
+                        activePage: 'listing',
+                        pageData: {},
+                        activeUuid: self.props.activeUuid
+                    });
+                })
+                .catch(function(errorResponse) {
+                    const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                    const errorMessage = error.message.includes("BedOccupiedException")
+                        ? self.intl.formatMessage({id: 'CANNOT_DELETE_OCCUPIED_BED_ERROR'})
+                        : error.message.replace(/\[|\]/g, '');
+                    self.props.admissionLocationFunctions.notify('error', errorMessage);
+                });
+        }
     }
 
     cancelEventHandler(event) {
@@ -264,8 +298,23 @@ export default class AddEditBed extends React.Component {
                                     onClick={this.cancelEventHandler}
                                     name="cancel"
                                     value={this.intl.formatMessage({id: 'CANCEL'})}
-                                    className="form-btn float-left"
+                                    className={
+                                        this.props.operation == 'edit'
+                                            ? 'form-btn float-left margin-right'
+                                            : 'form-btn float-left'
+                                    }
                                 />
+                                {this.props.operation == 'edit' ? (
+                                    <input
+                                        type="button"
+                                        onClick={this.onDeleteHandler}
+                                        name="delete"
+                                        value={this.intl.formatMessage({id: 'DELETE'})}
+                                        className="form-btn float-left"
+                                    />
+                                ) : (
+                                    ''
+                                )}
                             </div>
                         </form>
                     </div>

@@ -122,6 +122,24 @@ public class HibernateBedManagementDaoTest extends BaseModuleContextSensitiveTes
 	}
 	
 	@Test
+	public void shouldNotReturnVoidedBedsInAdmissionLocationLayout() throws Exception {
+		Bed bed = bedManagementDao.getBedByUuid("bb02b84b-d225-11e4-9c67-080027b662ab");
+		bed.setVoided(true);
+		bedManagementDao.saveBed(bed);
+
+		Location location = locationDao.getLocationByUuid("19e023e8-20ee-4237-ade6-9e68f897b7a9");
+		AdmissionLocation admissionLocation = bedManagementDao.getAdmissionLocationForLocation(location);
+		List<BedLayout> bedLayouts = admissionLocation.getBedLayouts();
+
+		Assert.assertEquals(5, admissionLocation.getTotalBeds());
+		Assert.assertEquals(1, admissionLocation.getOccupiedBeds());
+		Assert.assertEquals(6, bedLayouts.size());
+		Assert.assertNull(bedLayouts.get(0).getBedId());
+		Assert.assertNull(bedLayouts.get(0).getBedNumber());
+		Assert.assertNull(bedLayouts.get(0).getStatus());
+	}
+
+	@Test
 	public void shouldReturnAllAdmissionLocations() throws Exception {
 		LocationTag admissionLocationTag = locationDao
 		        .getLocationTagByName(BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION);
