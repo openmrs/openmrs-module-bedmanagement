@@ -43,7 +43,7 @@ export default class BedLayoutRow extends React.Component {
                     <BedBlock
                         key={key}
                         bed={bed}
-                        layoutRow={this.props.layoutColumn}
+                        layoutRow={this.props.layoutRow}
                         layoutColumn={this.props.layoutColumn}
                         admissionLocationFunctions={this.props.admissionLocationFunctions}
                         loadAdmissionLocationLayout={this.props.loadAdmissionLocationLayout}
