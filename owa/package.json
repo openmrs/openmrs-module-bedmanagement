@@ -49,8 +49,8 @@
         "react-test-renderer": "^16.2.0"
     },
     "dependencies": {
-        "axios": "^0.17.1",
-        "axios-mock-adapter": "^1.10.0",
+        "axios": "1.16.1",
+        "axios-mock-adapter": "2.1.0",
         "babel-cli": "^6.26.0",
         "babel-loader": "^7.1.2",
         "babel-polyfill": "^6.26.0",

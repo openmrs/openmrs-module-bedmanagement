@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from "enzyme";
 import AdmissionLocationWrapper from "components/admissionLocation/admissionLocationWrapper.js";
 import MockAdapter from "axios-mock-adapter";
-import axios from "axios/index";
+import axios from "axios";
 import {IntlProvider} from "react-intl";
 import messages from 'i18n/messages';
 import {openmrsAPIResponse} from "components/__mocks__/openmrsApiResponse";
