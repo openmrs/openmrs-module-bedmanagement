@@ -71,6 +71,9 @@ export default class BedBlock extends React.PureComponent {
                 </div>
             );
         } else {
+            const statusId = (this.props.bed.status && this.props.bed.status.toUpperCase() === 'OCCUPIED') ? 'OCCUPIED' : 'AVAILABLE';
+            const statusLabel = this.intl.formatMessage({ id: statusId });
+    
             return (
                 <div className="block existing-bed">
                     <div className="left-block">
@@ -78,6 +81,7 @@ export default class BedBlock extends React.PureComponent {
                             &nbsp;
                         </i>
                         <span>{this.props.bed.bedNumber}</span>
+                        <div className="bed-status-label">{statusLabel}</div>
                     </div>
                     <ul className="right-block">
                         <li>
