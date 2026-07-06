@@ -67,9 +67,9 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	public Bed getBedByPatient(Patient patient) {
 		Session session = sessionFactory.getCurrentSession();
 		Bed bed = (Bed) session
-		        .createQuery("select bpa.bed.bedNumber as bedNumber,bpa.bed.id as id from BedPatientAssignment bpa "
+		        .createQuery("select bpa.bed from BedPatientAssignment bpa "
 		                + "where bpa.patient = :patient and bpa.endDatetime is null AND bpa.voided is false")
-		        .setParameter("patient", patient).setResultTransformer(Transformers.aliasToBean(Bed.class)).uniqueResult();
+		        .setParameter("patient", patient).uniqueResult();
 		return bed;
 	}
 	

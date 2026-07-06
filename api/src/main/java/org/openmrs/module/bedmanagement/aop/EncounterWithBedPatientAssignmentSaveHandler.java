@@ -48,10 +48,24 @@ public class EncounterWithBedPatientAssignmentSaveHandler implements SaveHandler
 			List<BedPatientAssignment> bpaList = bedManagementService.getBedPatientAssignmentByEncounter(encounter.getUuid(),
 			    true);
 			
+			// The bpa instances below are already persistent and attached to the current
+			// Hibernate
+			// session, so mutating them is enough: the changes are flushed with the
+			// surrounding
+			// transaction. We deliberately avoid calling the @Transactional
+			// bedManagementService
+			// save/delete methods here, because their commit forces an early flush of the
+			// whole
+			// session and can trip over unrelated, not-yet-populated entities (e.g. a
+			// VisitAttribute
+			// whose NOT NULL valueReference has not been serialized yet).
 			if (encounter.getVoided()) {
 				log.debug("Voiding beds due to voided encounter");
 				for (BedPatientAssignment bpa : bpaList) {
-					bedManagementService.deleteBedPatientAssignment(bpa, "encounter voided");
+					bpa.setVoided(true);
+					bpa.setDateVoided(date);
+					bpa.setVoidReason("encounter voided");
+					bpa.setVoidedBy(user);
 					log.debug("Voided bedPatientAssignment for bed " + bpa.getBed());
 				}
 			}
@@ -60,7 +74,6 @@ public class EncounterWithBedPatientAssignmentSaveHandler implements SaveHandler
 			for (BedPatientAssignment bpa : bpaList) {
 				log.debug("updating bedPatientAssignment starttime for bed " + bpa.getBed());
 				bpa.setStartDatetime(encounterDatetime);
-				bedManagementService.saveBedPatientAssignment(bpa);
 			}
 		}
 		
