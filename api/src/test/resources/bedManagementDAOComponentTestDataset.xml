@@ -122,20 +122,20 @@
     <bed_tag_map bed_tag_map_id="3" bed_id="13" bed_tag_id="2" uuid="73e846d6-ed5f-55e6-a3c9-0800274a3333" creator="0" date_created="2017-02-07 20:01:30" voided="false"/>
     <bed_tag_map bed_tag_map_id="4" bed_id="11" bed_tag_id="3" uuid="73e846d6-ed5f-55e6-a3c9-0800274a4444" creator="0" date_created="2017-02-07 20:01:30" voided="true"/>
 
-    <privilege privilege="Get Admission Locations" description="Able to view admission locations" uuid="3480cb6d-c291-66c8-8d3a-96dc33d109fb"/>
-    <privilege privilege="View Locations" description="Able to view  locations" uuid="3480cb6d-c291-66c8-8d3a-96dc33d199fb"/>
-    <privilege privilege="View Patients" description="Able to view  Patients" uuid="3480ceed-c291-66c8-8d3a-96dc33d199fb"/>
-    <privilege privilege="View Encounters" description="Able to get encounters" uuid="8480ceed-c291-66c8-8d3a-96dc33d199fb"/>
-    <privilege privilege="Assign Beds" description="Able to assign beds" uuid="8080ceed-c291-66c8-8d3a-96dc33d199fb"/>
-    <privilege privilege="Edit Admission Locations" description="Able to edit admission locations" uuid="8480ceed-c290-66c8-8d3a-96dc33d199fb"/>
-    <privilege privilege="Get Beds" description="Able to Get bed details" uuid="5580ceed-c290-66c8-8d3a-96dc33d199fb"/>
-    <privilege privilege="Get Bed Tags" description="Able to Get bed tags" uuid="5580ceed-c290-66c8-8d3a-96dc33d148hu"/>
-    <privilege privilege="Get Bed Type" description="Able to Edit bed details" uuid="5580ceed-c290-66c8-jkio-96dc33d19012"/>
-    <privilege privilege="Edit Beds" description="Able to Edit bed details" uuid="5580ceed-c290-66c8-jkio-96dc33d199fb"/>
-    <privilege privilege="Edit Bed Tags" description="Able to Edit bed tags" uuid="5580ceed-ertg-66c8-jkio-96dc33d199fb"/>
-    <privilege privilege="Edit Bed Type" description="Able to Edit bed type details" uuid="5580ceed-12gy-66c8-8d3a-96dc33d199fb"/>
-    <privilege privilege="Get Locations" description="Able to Get location details" uuid="8480ceed-c290-66c8-uig4-96dc33d199fb"/>
-    <privilege privilege="Manage Locations" description="Able to Edit location details" uuid="8480ceed-c290-dsds-uig4-96dc33d199fb"/>
+    <privilege privilege="Get Admission Locations" description="Able to view admission locations" uuid="3480cb6d-c291-66c8-8d3a-96dc33d109fb" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="View Locations" description="Able to view  locations" uuid="3480cb6d-c291-66c8-8d3a-96dc33d199fb" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="View Patients" description="Able to view  Patients" uuid="3480ceed-c291-66c8-8d3a-96dc33d199fb" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="View Encounters" description="Able to get encounters" uuid="8480ceed-c291-66c8-8d3a-96dc33d199fb" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="Assign Beds" description="Able to assign beds" uuid="8080ceed-c291-66c8-8d3a-96dc33d199fb" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="Edit Admission Locations" description="Able to edit admission locations" uuid="8480ceed-c290-66c8-8d3a-96dc33d199fb" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="Get Beds" description="Able to Get bed details" uuid="5580ceed-c290-66c8-8d3a-96dc33d199fb" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="Get Bed Tags" description="Able to Get bed tags" uuid="5580ceed-c290-66c8-8d3a-96dc33d148hu" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="Get Bed Type" description="Able to Edit bed details" uuid="5580ceed-c290-66c8-jkio-96dc33d19012" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="Edit Beds" description="Able to Edit bed details" uuid="5580ceed-c290-66c8-jkio-96dc33d199fb" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="Edit Bed Tags" description="Able to Edit bed tags" uuid="5580ceed-ertg-66c8-jkio-96dc33d199fb" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="Edit Bed Type" description="Able to Edit bed type details" uuid="5580ceed-12gy-66c8-8d3a-96dc33d199fb" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="Get Locations" description="Able to Get location details" uuid="8480ceed-c290-66c8-uig4-96dc33d199fb" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
+    <privilege privilege="Manage Locations" description="Able to Edit location details" uuid="8480ceed-c290-dsds-uig4-96dc33d199fb" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
 
     <role role="InPatient-Read" description="To View InPatient details" uuid="3480cb6d-c291-46c8-8d3a-96dc33d109fb"/>
     <role role="Test Role" description="To View Patients" uuid="9480cddd-c291-46c8-8d3a-96dc33d109fb"/>

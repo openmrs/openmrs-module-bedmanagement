@@ -4,7 +4,7 @@
 
   <groupId>org.openmrs.module</groupId>
   <artifactId>bedmanagement</artifactId>
-  <version>7.3.0-SNAPSHOT</version>
+  <version>8.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Bed Management Module</name>
   <description>Helps in alloting beds.</description>
@@ -37,18 +37,26 @@
   </modules>
 
   <properties>
-    <openMRSVersion>2.7.0</openMRSVersion>
-    <openMRSRuntimeVersion>2.7.0</openMRSRuntimeVersion>
+    <openMRSVersion>3.0.0-SNAPSHOT</openMRSVersion>
+    <openMRSRuntimeVersion>3.0.0</openMRSRuntimeVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <webservicesRestModuleVersion>3.0.0</webservicesRestModuleVersion>
+    <webservicesRestModuleVersion>5.0.0-SNAPSHOT</webservicesRestModuleVersion>
     <openmrsAtomfeedVersion>2.6.3</openmrsAtomfeedVersion>
     <atomfeed.version>1.10.1</atomfeed.version>
-    <legacyuiVersion>2.0.0</legacyuiVersion>
+    <legacyuiVersion>3.0.0-SNAPSHOT</legacyuiVersion>
     <log4jVersion>2.17.1</log4jVersion>
+    <maven.compiler.release>21</maven.compiler.release>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.openmrs</groupId>
+        <artifactId>openmrs-bom</artifactId>
+        <version>${openMRSVersion}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>org.openmrs.api</groupId>
         <artifactId>openmrs-api</artifactId>
@@ -83,16 +91,6 @@
         <version>${openMRSVersion}</version>
         <type>pom</type>
         <scope>test</scope>
-        <exclusions>
-            <exclusion>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito2</artifactId>
-            </exclusion>
-            <exclusion>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito</artifactId>
-            </exclusion>
-        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.openmrs.module</groupId>
@@ -120,20 +118,6 @@
         <version>${legacyuiVersion}</version>
         <scope>provided</scope>
       </dependency>
-
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-inline</artifactId>
-        <version>3.12.4</version>
-        <scope>test</scope>
-      </dependency>
-
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.17.6</version>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
   </dependencyManagement>
@@ -175,9 +159,9 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.13.0</version>
           <configuration>
-            <target>8</target>
-            <source>8</source>
+            <parameters>true</parameters>
           </configuration>
         </plugin>
         <plugin>

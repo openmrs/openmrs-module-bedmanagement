@@ -1,10 +1,10 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -18,10 +18,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.openmrs.module.bedmanagement.constants.BedManagementApiConstants.LOCATION_TAG_SUPPORTS_ADMISSION;
 
 public class AdmissionLocationResourceTest extends MainResourceControllerTest {
@@ -29,7 +30,7 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 	@Autowired
 	private LocationService locationService;
 	
-	@Before
+	@BeforeEach
 	public void init() throws Exception {
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
 	}
@@ -97,7 +98,7 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 			} else if (uuid.equals("73e846d6-ed5f-55e6-a3c9-0800274a2222")) {
 				assertEquals("Oxygen", tagName);
 			} else {
-				Assert.fail("Unexpected bedTagMap: " + bedTagMap);
+				Assertions.fail("Unexpected bedTagMap: " + bedTagMap);
 			}
 		}
 		
@@ -153,15 +154,15 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		LinkedHashMap location2 = (LinkedHashMap) results.get(1);
 		LinkedHashMap location3 = (LinkedHashMap) results.get(2);
 		
-		Assert.assertEquals(3, results.size());
-		Assert.assertEquals("7779d653-393b-4118-9c83-a3715b82d4ac",
+		Assertions.assertEquals(3, results.size());
+		Assertions.assertEquals("7779d653-393b-4118-9c83-a3715b82d4ac",
 		    PropertyUtils.getProperty(location1.get("ward"), "uuid"));
-		Assert.assertTrue(location1.containsKey("ward"));
-		Assert.assertTrue(location1.containsKey("totalBeds"));
-		Assert.assertTrue(location1.containsKey("occupiedBeds"));
-		Assert.assertEquals("e26cea2c-1b9f-666e-6511-f3ef6c88af6f",
+		Assertions.assertTrue(location1.containsKey("ward"));
+		Assertions.assertTrue(location1.containsKey("totalBeds"));
+		Assertions.assertTrue(location1.containsKey("occupiedBeds"));
+		Assertions.assertEquals("e26cea2c-1b9f-666e-6511-f3ef6c88af6f",
 		    PropertyUtils.getProperty(location2.get("ward"), "uuid"));
-		Assert.assertEquals("19e023e8-20ee-4237-ade6-9e68f897b7a9",
+		Assertions.assertEquals("19e023e8-20ee-4237-ade6-9e68f897b7a9",
 		    PropertyUtils.getProperty(location3.get("ward"), "uuid"));
 	}
 	
@@ -171,21 +172,22 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		request.setParameter("v", "full");
 		SimpleObject location = deserialize(handle(request));
 		
-		Assert.assertEquals("19e023e8-20ee-4237-ade6-9e68f897b7a9", PropertyUtils.getProperty(location.get("ward"), "uuid"));
-		Assert.assertEquals(Integer.valueOf(6), location.get("totalBeds"));
-		Assert.assertEquals(Integer.valueOf(2), location.get("occupiedBeds"));
-		Assert.assertTrue(location.containsKey("bedLayouts"));
+		Assertions.assertEquals("19e023e8-20ee-4237-ade6-9e68f897b7a9",
+		    PropertyUtils.getProperty(location.get("ward"), "uuid"));
+		Assertions.assertEquals(Integer.valueOf(6), location.get("totalBeds"));
+		Assertions.assertEquals(Integer.valueOf(2), location.get("occupiedBeds"));
+		Assertions.assertTrue(location.containsKey("bedLayouts"));
 		List bedLayouts = (ArrayList) location.get("bedLayouts");
-		Assert.assertEquals(6, bedLayouts.size());
+		Assertions.assertEquals(6, bedLayouts.size());
 		
 		MockHttpServletRequest request2 = request(RequestMethod.GET, getURI() + "/98bc9b32-9d1a-11e2-8137-0800271c1b75");
 		SimpleObject location2 = deserialize(handle(request2));
 		
-		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75",
+		Assertions.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75",
 		    PropertyUtils.getProperty(location2.get("ward"), "uuid"));
-		Assert.assertEquals(Integer.valueOf(10), location2.get("totalBeds"));
-		Assert.assertEquals(Integer.valueOf(1), location2.get("occupiedBeds"));
-		Assert.assertFalse(location2.containsKey("bedLayouts"));
+		Assertions.assertEquals(Integer.valueOf(10), location2.get("totalBeds"));
+		Assertions.assertEquals(Integer.valueOf(1), location2.get("occupiedBeds"));
+		Assertions.assertFalse(location2.containsKey("bedLayouts"));
 	}
 	
 	@Test
@@ -194,13 +196,13 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		request.setParameter("v", "layout");
 		SimpleObject admissionLocation = deserialize(handle(request));
 		
-		Assert.assertTrue(admissionLocation.containsKey("ward"));
-		Assert.assertTrue(admissionLocation.containsKey("bedLocationMappings"));
+		Assertions.assertTrue(admissionLocation.containsKey("ward"));
+		Assertions.assertTrue(admissionLocation.containsKey("bedLocationMappings"));
 		
 		List bedLocationMappings = (ArrayList) admissionLocation.get("bedLocationMappings");
-		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75",
+		Assertions.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75",
 		    PropertyUtils.getProperty(admissionLocation.get("ward"), "uuid"));
-		Assert.assertEquals(18, bedLocationMappings.size());
+		Assertions.assertEquals(18, bedLocationMappings.size());
 	}
 	
 	@Test
@@ -213,12 +215,12 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		request.setContent(json.getBytes());
 		SimpleObject admissionLocation = deserialize(handle(request));
 		
-		Assert.assertEquals("VIPs Ward", PropertyUtils.getProperty(admissionLocation.get("ward"), "name"));
-		Assert.assertNull(PropertyUtils.getProperty(admissionLocation.get("ward"), "childLocations"));
+		Assertions.assertEquals("VIPs Ward", PropertyUtils.getProperty(admissionLocation.get("ward"), "name"));
+		Assertions.assertNull(PropertyUtils.getProperty(admissionLocation.get("ward"), "childLocations"));
 		List tags = (ArrayList) PropertyUtils.getProperty(admissionLocation.get("ward"), "tags");
-		Assert.assertEquals("Admission Location", PropertyUtils.getProperty(tags.get(0), "display"));
-		Assert.assertEquals(Integer.valueOf(0), admissionLocation.get("totalBeds"));
-		Assert.assertEquals(Integer.valueOf(0), admissionLocation.get("occupiedBeds"));
+		Assertions.assertEquals("Admission Location", PropertyUtils.getProperty(tags.get(0), "display"));
+		Assertions.assertEquals(Integer.valueOf(0), admissionLocation.get("totalBeds"));
+		Assertions.assertEquals(Integer.valueOf(0), admissionLocation.get("occupiedBeds"));
 	}
 	
 	@Test
@@ -232,15 +234,15 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		request.setContent(json.getBytes());
 		SimpleObject admissionLocation = deserialize(handle(request));
 		
-		Assert.assertEquals("VIPs Ward", PropertyUtils.getProperty(admissionLocation.get("ward"), "name"));
+		Assertions.assertEquals("VIPs Ward", PropertyUtils.getProperty(admissionLocation.get("ward"), "name"));
 		List tags = (ArrayList) PropertyUtils.getProperty(admissionLocation.get("ward"), "tags");
-		Assert.assertEquals("Admission Location", PropertyUtils.getProperty(tags.get(0), "display"));
-		Assert.assertNotNull(PropertyUtils.getProperty(admissionLocation.get("ward"), "parentLocation"));
+		Assertions.assertEquals("Admission Location", PropertyUtils.getProperty(tags.get(0), "display"));
+		Assertions.assertNotNull(PropertyUtils.getProperty(admissionLocation.get("ward"), "parentLocation"));
 		HashMap parentAdmissionLocation = (LinkedHashMap) PropertyUtils.getProperty(admissionLocation.get("ward"),
 		    "parentLocation");
-		Assert.assertEquals("7779d653-393b-4118-9c83-a3715b82d4ac", parentAdmissionLocation.get("uuid"));
-		Assert.assertEquals(Integer.valueOf(0), admissionLocation.get("totalBeds"));
-		Assert.assertEquals(Integer.valueOf(0), admissionLocation.get("occupiedBeds"));
+		Assertions.assertEquals("7779d653-393b-4118-9c83-a3715b82d4ac", parentAdmissionLocation.get("uuid"));
+		Assertions.assertEquals(Integer.valueOf(0), admissionLocation.get("totalBeds"));
+		Assertions.assertEquals(Integer.valueOf(0), admissionLocation.get("occupiedBeds"));
 	}
 	
 	@Test
@@ -252,7 +254,7 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		request.setContent(json.getBytes());
 		SimpleObject admissionLocation = deserialize(handle(request));
 		
-		Assert.assertEquals("VIPs Ward", PropertyUtils.getProperty(admissionLocation.get("ward"), "name"));
+		Assertions.assertEquals("VIPs Ward", PropertyUtils.getProperty(admissionLocation.get("ward"), "name"));
 	}
 	
 	@Test
@@ -269,38 +271,40 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		SimpleObject admissionLocation = deserialize(handle(request));
 		
 		List bedLocationMappings = (ArrayList) admissionLocation.get("bedLocationMappings");
-		Assert.assertEquals("e26cea2c-1b9f-666e-6511-f3ef6c88af6f",
+		Assertions.assertEquals("e26cea2c-1b9f-666e-6511-f3ef6c88af6f",
 		    PropertyUtils.getProperty(admissionLocation.get("ward"), "uuid"));
-		Assert.assertEquals(6, bedLocationMappings.size());
+		Assertions.assertEquals(6, bedLocationMappings.size());
 	}
 	
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void shouldGiveCorrectErrorWithNoAdmissionLocationTagDefined() throws Exception {
-		LocationTag needToHide = locationService.getLocationTagByName(LOCATION_TAG_SUPPORTS_ADMISSION);
-		needToHide.setName("A different tag");
-		locationService.saveLocationTag(needToHide);
-		
-		MockHttpServletRequest request = request(RequestMethod.POST, getURI());
-		SimpleObject postParameters = new SimpleObject();
-		postParameters.put("name", "VIPs Ward");
-		postParameters.put("description", "ward for vip person");
-		String json = new ObjectMapper().writeValueAsString(postParameters);
-		request.setContent(json.getBytes());
-		
-		// OpenMRS's REST framework just throws an exception here rather than actually
-		// returning a response with the real error code. It's not worth modifying the
-		// webservices.rest module just to test this case properly, so this test just
-		// expects the exception. In real life this returns status 500 with body like:
-		// {"error":{"message":"[Server must be configured with a Location Tag named
-		// 'Admission Location'.]",
-		// "code":"org.openmrs.module.bedmanagement.rest.resource.AdmissionLocationResource:179",
-		// "detail":"java.lang.IllegalStateException: Server must be configured with a
-		// Location Tag named
-		// 'Admission Location'.\n\tat
-		// org.openmrs.module.bedmanagement.rest.resource.AdmissionLocationResource.create(AdmissionLocationResource.java:179)\n\tat
-		// org.openmrs.module.webservices.rest.web.v1_0.controller.MainResourceController.create(MainResourceController.java:92)\n\tat
-		// etc
-		handle(request);
+		assertThrows(IllegalStateException.class, () -> {
+			LocationTag needToHide = locationService.getLocationTagByName(LOCATION_TAG_SUPPORTS_ADMISSION);
+			needToHide.setName("A different tag");
+			locationService.saveLocationTag(needToHide);
+			
+			MockHttpServletRequest request = request(RequestMethod.POST, getURI());
+			SimpleObject postParameters = new SimpleObject();
+			postParameters.put("name", "VIPs Ward");
+			postParameters.put("description", "ward for vip person");
+			String json = new ObjectMapper().writeValueAsString(postParameters);
+			request.setContent(json.getBytes());
+			
+			// OpenMRS's REST framework just throws an exception here rather than actually
+			// returning a response with the real error code. It's not worth modifying the
+			// webservices.rest module just to test this case properly, so this test just
+			// expects the exception. In real life this returns status 500 with body like:
+			// {"error":{"message":"[Server must be configured with a Location Tag named
+			// 'Admission Location'.]",
+			// "code":"org.openmrs.module.bedmanagement.rest.resource.AdmissionLocationResource:179",
+			// "detail":"java.lang.IllegalStateException: Server must be configured with a
+			// Location Tag named
+			// 'Admission Location'.\n\tat
+			// org.openmrs.module.bedmanagement.rest.resource.AdmissionLocationResource.create(AdmissionLocationResource.java:179)\n\tat
+			// org.openmrs.module.webservices.rest.web.v1_0.controller.MainResourceController.create(MainResourceController.java:92)\n\tat
+			// etc
+			handle(request);
+		});
 	}
 	
 	@Test
@@ -309,29 +313,31 @@ public class AdmissionLocationResourceTest extends MainResourceControllerTest {
 		request.setParameter("v", "custom:(ward:(name),bedLayouts:(bedNumber,bedTagMaps:(bedTag:(name))))");
 		SimpleObject object = deserialize(handle(request));
 		System.out.println(object);
-		Assert.assertEquals(2, object.keySet().size());
+		// each level of a custom representation also carries resourceVersion
+		// (RESTWS-1012, REST 3.1.0+)
+		Assertions.assertEquals(3, object.keySet().size());
 		Map<String, Object> ward = object.get("ward");
-		Assert.assertNotNull(ward);
-		Assert.assertEquals(1, ward.keySet().size());
-		Assert.assertEquals("Orthopaedic ward", ward.get("name"));
+		Assertions.assertNotNull(ward);
+		Assertions.assertEquals(2, ward.keySet().size());
+		Assertions.assertEquals("Orthopaedic ward", ward.get("name"));
 		List<Map<String, Object>> bedLayouts = object.get("bedLayouts");
-		Assert.assertNotNull(bedLayouts);
-		Assert.assertEquals(6, bedLayouts.size());
+		Assertions.assertNotNull(bedLayouts);
+		Assertions.assertEquals(6, bedLayouts.size());
 		for (Map<String, Object> bedLayout : bedLayouts) {
-			Assert.assertEquals(2, bedLayout.size());
+			Assertions.assertEquals(3, bedLayout.size());
 			String bedNumber = (String) bedLayout.get("bedNumber");
-			Assert.assertNotNull(bedNumber);
+			Assertions.assertNotNull(bedNumber);
 			if (bedNumber.equals("307-a")) {
 				List<Map<String, Object>> bedTagMaps = (List<Map<String, Object>>) bedLayout.get("bedTagMaps");
-				Assert.assertEquals(2, bedTagMaps.size());
+				Assertions.assertEquals(2, bedTagMaps.size());
 				for (Map<String, Object> bedTagMap : bedTagMaps) {
-					Assert.assertEquals(1, bedTagMap.size());
+					Assertions.assertEquals(2, bedTagMap.size());
 					Map<String, Object> bedTag = (Map<String, Object>) bedTagMap.get("bedTag");
-					Assert.assertNotNull(bedTag);
-					Assert.assertEquals(1, bedTag.size());
+					Assertions.assertNotNull(bedTag);
+					Assertions.assertEquals(2, bedTag.size());
 					String bedTagName = (String) bedTag.get("name");
-					Assert.assertNotNull(bedTagName);
-					Assert.assertTrue(bedTagName.equals("Oxygen") || bedTagName.equals("Broken"));
+					Assertions.assertNotNull(bedTagName);
+					Assertions.assertTrue(bedTagName.equals("Oxygen") || bedTagName.equals("Broken"));
 				}
 			}
 		}

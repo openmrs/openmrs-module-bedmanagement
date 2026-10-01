@@ -13,11 +13,11 @@
  */
 package org.openmrs.module.bedmanagement.rest.resource;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Assert;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.RestConstants;
-import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
+import org.openmrs.web.test.jupiter.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -27,7 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.xml.sax.InputSource;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -146,7 +146,7 @@ public abstract class MainResourceControllerTest extends BaseModuleWebContextSen
 				break;
 			}
 		}
-		Assert.assertNotNull("The request URI does not exist", handlerExecutionChain);
+		Assertions.assertNotNull(handlerExecutionChain, "The request URI does not exist");
 		
 		handlerAdapter.handle(request, response, handlerExecutionChain.getHandler());
 		

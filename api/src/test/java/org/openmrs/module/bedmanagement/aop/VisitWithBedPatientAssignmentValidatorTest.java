@@ -3,13 +3,13 @@ package org.openmrs.module.bedmanagement.aop;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.api.PatientService;
@@ -19,8 +19,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.BedDetails;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
-import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class VisitWithBedPatientAssignmentValidatorTest extends BaseModuleContextSensitiveTest {
@@ -28,7 +27,7 @@ public class VisitWithBedPatientAssignmentValidatorTest extends BaseModuleContex
 	@Autowired
 	private BedManagementService bedManagementService;
 	
-	@Before
+	@BeforeEach
 	public void beforeAllTests() throws Exception {
 		executeDataSet("testPatientsDataset.xml");
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");

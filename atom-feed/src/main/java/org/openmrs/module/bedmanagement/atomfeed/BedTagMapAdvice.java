@@ -1,6 +1,6 @@
 package org.openmrs.module.bedmanagement.atomfeed;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.ict4h.atomfeed.server.repository.AllEventRecordsQueue;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsQueueJdbcImpl;
 import org.ict4h.atomfeed.server.service.Event;

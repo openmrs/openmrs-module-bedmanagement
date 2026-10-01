@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Date;
 
@@ -13,8 +14,8 @@ import org.openmrs.User;
 import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.context.UsernamePasswordCredentials;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.api.PatientService;
@@ -22,7 +23,7 @@ import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.BedDetails;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class VisitWithBedPatientAssignmentSaveHandlerTest extends BaseModuleContextSensitiveTest {
@@ -30,7 +31,7 @@ public class VisitWithBedPatientAssignmentSaveHandlerTest extends BaseModuleCont
 	@Autowired
 	private BedManagementService bedManagementService;
 	
-	@Before
+	@BeforeEach
 	public void beforeAllTests() throws Exception {
 		executeDataSet("testPatientsDataset.xml");
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
@@ -92,7 +93,7 @@ public class VisitWithBedPatientAssignmentSaveHandlerTest extends BaseModuleCont
 		assertThat(visitService.getVisit(1001).getStopDatetime(), is(notNullValue()));
 	}
 	
-	@Test(expected = APIAuthenticationException.class)
+	@Test
 	public void endingAVisitWithABedAssignmentShouldStillRequireBedWritePrivileges() {
 		VisitService visitService = Context.getVisitService();
 		assertThat("Invalid test data, patient has no bed assigned",
@@ -100,7 +101,7 @@ public class VisitWithBedPatientAssignmentSaveHandlerTest extends BaseModuleCont
 		    is(notNullValue()));
 		
 		becomeUserWithoutBedWritePrivileges();
-		visitService.endVisit(visitService.getVisit(1001), new Date());
+		assertThrows(APIAuthenticationException.class, () -> visitService.endVisit(visitService.getVisit(1001), new Date()));
 	}
 	
 	/**

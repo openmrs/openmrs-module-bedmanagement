@@ -1,7 +1,7 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BedDetailsResourceSearchHandlerTest extends MainResourceControllerTest {
 	
-	@Before
+	@BeforeEach
 	public void init() throws Exception {
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
 	}

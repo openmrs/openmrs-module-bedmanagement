@@ -1,8 +1,9 @@
 package org.openmrs.module.bedmanagement;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
@@ -17,13 +18,13 @@ import org.openmrs.module.bedmanagement.entity.BedLocationMapping;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 	
@@ -46,7 +47,12 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 	@Autowired
 	private LocationService locationService;
 	
-	@Before
+	/**
+	 * Core resolves role privileges in a daemon thread that opens its own session, which cannot see
+	 * rows left uncommitted in the test transaction, so the module roles are committed here and removed
+	 * again after each test.
+	 */
+	@BeforeEach
 	public void setUp() throws Exception {
 		superUser = "test-user";
 		superUserPassword = "test";
@@ -54,10 +60,16 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		normalUserPassword = "normal-password";
 		executeDataSet("testPatientsDataset.xml");
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
+		getConnection().commit();
 		patient = Context.getPatientService().getPatient(3);
 		location = Context.getLocationService().getLocation(12347);
 		encounter = Context.getEncounterService().getEncounter(2);
 		bedNumber = "11";
+	}
+	
+	@AfterEach
+	public void tearDown() {
+		deleteAllData();
 	}
 	
 	@Test
@@ -70,14 +82,16 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		assertNotNull(bedManagementService.getAdmissionLocationByLocation(location));
 	}
 	
-	@Test(expected = APIAuthenticationException.class)
+	@Test
 	public void shouldThrowAuthenticationExceptionIfUserDoesNotHaveGetAdmissionLocationsPrivilege() {
-		Context.authenticate(normalUser, normalUserPassword);
-		
-		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
-		
-		bedManagementService.getAdmissionLocations();
-		bedManagementService.getAdmissionLocationByLocation(location);
+		assertThrows(APIAuthenticationException.class, () -> {
+			Context.authenticate(normalUser, normalUserPassword);
+			
+			BedManagementService bedManagementService = Context.getService(BedManagementService.class);
+			
+			bedManagementService.getAdmissionLocations();
+			bedManagementService.getAdmissionLocationByLocation(location);
+		});
 	}
 	
 	@Test
@@ -92,14 +106,16 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		assertNotNull(bedManagementService.unAssignPatientFromBed(patient));
 	}
 	
-	@Test(expected = APIAuthenticationException.class)
+	@Test
 	public void shouldThrowAuthenticationExceptionIfUserDoesNotHaveAssignBedsAndEditAdmissionLocationsPrivileges() {
-		Context.authenticate(normalUser, normalUserPassword);
-		
-		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
-		
-		bedManagementService.assignPatientToBed(patient, encounter, bedNumber);
-		bedManagementService.unAssignPatientFromBed(patient);
+		assertThrows(APIAuthenticationException.class, () -> {
+			Context.authenticate(normalUser, normalUserPassword);
+			
+			BedManagementService bedManagementService = Context.getService(BedManagementService.class);
+			
+			bedManagementService.assignPatientToBed(patient, encounter, bedNumber);
+			bedManagementService.unAssignPatientFromBed(patient);
+		});
 	}
 	
 	@Test
@@ -115,17 +131,19 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		assertNotNull(bedManagementService.getLatestBedDetailsByVisit("8cfda6ae-6b78-11e0-93c3-18a905e044dc"));
 	}
 	
-	@Test(expected = APIAuthenticationException.class)
+	@Test
 	public void shouldThrowAuthenticationExceptionIfUserDoesNotHaveGetBedsAndEditAdmissionLocationsPrivileges() {
-		Context.authenticate(normalUser, normalUserPassword);
-		
-		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
-		
-		bedManagementService.getBedAssignmentDetailsByPatient(patient);
-		bedManagementService.getBedDetailsById("13");
-		bedManagementService.getBedDetailsByUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb");
-		bedManagementService.getBedPatientAssignmentByUuid("7819d653-393b-4118-9c83-a3715b82d4dd");
-		bedManagementService.getLatestBedDetailsByVisit("8cfda6ae-6b78-11e0-93c3-18a905e044dc");
+		assertThrows(APIAuthenticationException.class, () -> {
+			Context.authenticate(normalUser, normalUserPassword);
+			
+			BedManagementService bedManagementService = Context.getService(BedManagementService.class);
+			
+			bedManagementService.getBedAssignmentDetailsByPatient(patient);
+			bedManagementService.getBedDetailsById("13");
+			bedManagementService.getBedDetailsByUuid("5580cddd-c290-66c8-8d3a-96dc33d199fb");
+			bedManagementService.getBedPatientAssignmentByUuid("7819d653-393b-4118-9c83-a3715b82d4dd");
+			bedManagementService.getLatestBedDetailsByVisit("8cfda6ae-6b78-11e0-93c3-18a905e044dc");
+		});
 	}
 	
 	@Test
@@ -140,11 +158,11 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		List<BedLocationMapping> bedLocationMappings = Context.getService(BedManagementService.class)
 		        .getBedLocationMappingsByLocation(admissionLocation.getWard());
 		
-		Assert.assertEquals(6, bedLocationMappings.size());
-		Assert.assertEquals(1, bedLocationMappings.get(0).getRow());
-		Assert.assertEquals(1, bedLocationMappings.get(0).getColumn());
-		Assert.assertEquals(2, bedLocationMappings.get(5).getRow());
-		Assert.assertEquals(3, bedLocationMappings.get(5).getColumn());
+		Assertions.assertEquals(6, bedLocationMappings.size());
+		Assertions.assertEquals(1, bedLocationMappings.get(0).getRow());
+		Assertions.assertEquals(1, bedLocationMappings.get(0).getColumn());
+		Assertions.assertEquals(2, bedLocationMappings.get(5).getRow());
+		Assertions.assertEquals(3, bedLocationMappings.get(5).getColumn());
 	}
 	
 	@Test
@@ -156,18 +174,22 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		List<BedLocationMapping> bedLocationMappingList = Context.getService(BedManagementService.class)
 		        .getBedLocationMappingsByLocation(location);
 		
-		Assert.assertEquals(6, bedLocationMappingList.size());
-		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b56", bedLocationMappingList.get(0).getLocation().getUuid());
-		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b56", bedLocationMappingList.get(5).getLocation().getUuid());
+		Assertions.assertEquals(6, bedLocationMappingList.size());
+		Assertions.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b56",
+		    bedLocationMappingList.get(0).getLocation().getUuid());
+		Assertions.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b56",
+		    bedLocationMappingList.get(5).getLocation().getUuid());
 		
 		Location location2 = Context.getService(LocationService.class)
 		        .getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
 		List<BedLocationMapping> bedLocationMappingList2 = Context.getService(BedManagementService.class)
 		        .getBedLocationMappingsByLocation(location2);
-		Assert.assertEquals(18, bedLocationMappingList2.size());
-		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMappingList2.get(0).getLocation().getUuid());
-		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMappingList2.get(5).getLocation().getUuid());
-		Assert.assertNull(bedLocationMappingList2.get(5).getBed());
+		Assertions.assertEquals(18, bedLocationMappingList2.size());
+		Assertions.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75",
+		    bedLocationMappingList2.get(0).getLocation().getUuid());
+		Assertions.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75",
+		    bedLocationMappingList2.get(5).getLocation().getUuid());
+		Assertions.assertNull(bedLocationMappingList2.get(5).getBed());
 	}
 	
 	@Test
@@ -183,9 +205,9 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		admissionLocation.getWard().setDescription("For test");
 		Context.getService(BedManagementService.class).saveAdmissionLocation(admissionLocation);
 		
-		Assert.assertEquals("19e023e8-20ee-4237-ade6-9e68f897b7a9", admissionLocation.getWard().getUuid());
-		Assert.assertEquals(6, admissionLocation.getTotalBeds());
-		Assert.assertNotNull(admissionLocation.getBedLayouts());
+		Assertions.assertEquals("19e023e8-20ee-4237-ade6-9e68f897b7a9", admissionLocation.getWard().getUuid());
+		Assertions.assertEquals(6, admissionLocation.getTotalBeds());
+		Assertions.assertNotNull(admissionLocation.getBedLayouts());
 	}
 	
 	@Test
@@ -193,10 +215,10 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		Context.authenticate(superUser, superUserPassword);
 		
 		List<Bed> allBeds = Context.getService(BedManagementService.class).getBeds(null, null);
-		Assert.assertEquals(17, allBeds.size());
+		Assertions.assertEquals(17, allBeds.size());
 		
 		List<Bed> BedsWithLimit = Context.getService(BedManagementService.class).getBeds(10, 0);
-		Assert.assertEquals(10, BedsWithLimit.size());
+		Assertions.assertEquals(10, BedsWithLimit.size());
 	}
 	
 	@Test
@@ -206,14 +228,14 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		List<Bed> beds = Context.getService(BedManagementService.class).getBeds("98bc9b32-9d1a-11e2-8137-0800271c1b75",
 		    "luxury", BedStatus.AVAILABLE, 10, 0);
 		
-		Assert.assertEquals(2, beds.size());
-		Assert.assertEquals("luxury", beds.get(0).getBedType().getName());
-		Assert.assertEquals("AVAILABLE", beds.get(0).getStatus());
-		Assert.assertEquals("bb049d6d-d225-11e4-9c67-080027b662fc", beds.get(0).getUuid());
+		Assertions.assertEquals(2, beds.size());
+		Assertions.assertEquals("luxury", beds.get(0).getBedType().getName());
+		Assertions.assertEquals("AVAILABLE", beds.get(0).getStatus());
+		Assertions.assertEquals("bb049d6d-d225-11e4-9c67-080027b662fc", beds.get(0).getUuid());
 		
-		Assert.assertEquals("luxury", beds.get(1).getBedType().getName());
-		Assert.assertEquals("AVAILABLE", beds.get(1).getStatus());
-		Assert.assertEquals("bb0906fa-d225-11e4-9c67-080027b662gh", beds.get(1).getUuid());
+		Assertions.assertEquals("luxury", beds.get(1).getBedType().getName());
+		Assertions.assertEquals("AVAILABLE", beds.get(1).getStatus());
+		Assertions.assertEquals("bb0906fa-d225-11e4-9c67-080027b662gh", beds.get(1).getUuid());
 	}
 	
 	@Test
@@ -223,15 +245,15 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		List<Bed> beds = Context.getService(BedManagementService.class).getBeds("98bc9b32-9d1a-11e2-8137-0800271c1b75", null,
 		    BedStatus.AVAILABLE, 10, 0);
 		
-		Assert.assertEquals(9, beds.size());
-		Assert.assertEquals("bb049d6d-d225-11e4-9c67-080027b662fc", beds.get(0).getUuid());
-		Assert.assertEquals("AVAILABLE", beds.get(0).getStatus());
+		Assertions.assertEquals(9, beds.size());
+		Assertions.assertEquals("bb049d6d-d225-11e4-9c67-080027b662fc", beds.get(0).getUuid());
+		Assertions.assertEquals("AVAILABLE", beds.get(0).getStatus());
 		
-		Assert.assertEquals("AVAILABLE", beds.get(4).getStatus());
-		Assert.assertEquals("bb09cacd-d225-11e4-9c67-080027b662sc", beds.get(4).getUuid());
+		Assertions.assertEquals("AVAILABLE", beds.get(4).getStatus());
+		Assertions.assertEquals("bb09cacd-d225-11e4-9c67-080027b662sc", beds.get(4).getUuid());
 		
-		Assert.assertEquals("AVAILABLE", beds.get(8).getStatus());
-		Assert.assertEquals("bb0f8866-d225-11e4-9c67-080027b662ec", beds.get(8).getUuid());
+		Assertions.assertEquals("AVAILABLE", beds.get(8).getStatus());
+		Assertions.assertEquals("bb0f8866-d225-11e4-9c67-080027b662ec", beds.get(8).getUuid());
 	}
 	
 	@Test
@@ -241,15 +263,15 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		List<Bed> beds = Context.getService(BedManagementService.class).getBeds("98bc9b32-9d1a-11e2-8137-0800271c1b75", null,
 		    null, 10, 0);
 		
-		Assert.assertEquals(10, beds.size());
-		Assert.assertEquals("bb02b84b-d225-11e4-9c67-080027b662ec", beds.get(0).getUuid());
-		Assert.assertEquals("OCCUPIED", beds.get(0).getStatus());
+		Assertions.assertEquals(10, beds.size());
+		Assertions.assertEquals("bb02b84b-d225-11e4-9c67-080027b662ec", beds.get(0).getUuid());
+		Assertions.assertEquals("OCCUPIED", beds.get(0).getStatus());
 		
-		Assert.assertEquals("AVAILABLE", beds.get(5).getStatus());
-		Assert.assertEquals("bb09cacd-d225-11e4-9c67-080027b662sc", beds.get(5).getUuid());
+		Assertions.assertEquals("AVAILABLE", beds.get(5).getStatus());
+		Assertions.assertEquals("bb09cacd-d225-11e4-9c67-080027b662sc", beds.get(5).getUuid());
 		
-		Assert.assertFalse(beds.get(9).getVoided());
-		Assert.assertEquals("bb0f8866-d225-11e4-9c67-080027b662ec", beds.get(9).getUuid());
+		Assertions.assertFalse(beds.get(9).getVoided());
+		Assertions.assertEquals("bb0f8866-d225-11e4-9c67-080027b662ec", beds.get(9).getUuid());
 		
 	}
 	
@@ -260,16 +282,18 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		Bed bed = Context.getService(BedManagementService.class).getBedById(2);
 		Context.getService(BedManagementService.class).deleteBed(bed, "remove bed form location");
 		
-		Assert.assertTrue(bed.getVoided());
-		Assert.assertEquals("remove bed form location", bed.getVoidReason());
+		Assertions.assertTrue(bed.getVoided());
+		Assertions.assertEquals("remove bed form location", bed.getVoidReason());
 	}
 	
-	@Test(expected = APIAuthenticationException.class)
+	@Test
 	public void shouldThrowExceptionSoftDeleteBedIfUserHasNotEditBedsPrivileges() throws Exception {
-		Context.authenticate(normalUser, normalUserPassword);
-		
-		Bed bed = Context.getService(BedManagementService.class).getBedById(1);
-		Context.getService(BedManagementService.class).deleteBed(bed, "remove bed form location");
+		assertThrows(APIAuthenticationException.class, () -> {
+			Context.authenticate(normalUser, normalUserPassword);
+			
+			Bed bed = Context.getService(BedManagementService.class).getBedById(1);
+			Context.getService(BedManagementService.class).deleteBed(bed, "remove bed form location");
+		});
 	}
 	
 	@Test
@@ -286,30 +310,32 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		bedLocationMapping.setColumn(1);
 		Context.getService(BedManagementService.class).saveBedLocationMapping(bedLocationMapping);
 		
-		Assert.assertNotNull(bedLocationMapping);
-		Assert.assertEquals(4, bedLocationMapping.getRow());
-		Assert.assertEquals(1, bedLocationMapping.getColumn());
-		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMapping.getLocation().getUuid());
+		Assertions.assertNotNull(bedLocationMapping);
+		Assertions.assertEquals(4, bedLocationMapping.getRow());
+		Assertions.assertEquals(1, bedLocationMapping.getColumn());
+		Assertions.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMapping.getLocation().getUuid());
 	}
 	
-	@Test(expected = APIAuthenticationException.class)
+	@Test
 	public void shouldThrowSaveBedLocationMappingIfUserNotHasEditBedsPrivileges() throws Exception {
-		Context.authenticate(normalUser, normalUserPassword);
-		
-		Bed bed = Context.getService(BedManagementService.class).getBedById(1);
-		Location location = Context.getService(LocationService.class)
-		        .getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
-		BedLocationMapping bedLocationMapping = new BedLocationMapping();
-		bedLocationMapping.setBed(bed);
-		bedLocationMapping.setLocation(location);
-		bedLocationMapping.setRow(1);
-		bedLocationMapping.setColumn(1);
-		Context.getService(BedManagementService.class).saveBedLocationMapping(bedLocationMapping);
-		
-		Assert.assertNotNull(bedLocationMapping);
-		Assert.assertEquals(1, bedLocationMapping.getRow());
-		Assert.assertEquals(1, bedLocationMapping.getColumn());
-		Assert.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMapping.getLocation().getUuid());
+		assertThrows(APIAuthenticationException.class, () -> {
+			Context.authenticate(normalUser, normalUserPassword);
+			
+			Bed bed = Context.getService(BedManagementService.class).getBedById(1);
+			Location location = Context.getService(LocationService.class)
+			        .getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
+			BedLocationMapping bedLocationMapping = new BedLocationMapping();
+			bedLocationMapping.setBed(bed);
+			bedLocationMapping.setLocation(location);
+			bedLocationMapping.setRow(1);
+			bedLocationMapping.setColumn(1);
+			Context.getService(BedManagementService.class).saveBedLocationMapping(bedLocationMapping);
+			
+			Assertions.assertNotNull(bedLocationMapping);
+			Assertions.assertEquals(1, bedLocationMapping.getRow());
+			Assertions.assertEquals(1, bedLocationMapping.getColumn());
+			Assertions.assertEquals("98bc9b32-9d1a-11e2-8137-0800271c1b75", bedLocationMapping.getLocation().getUuid());
+		});
 	}
 	
 	@Test
@@ -319,8 +345,8 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		BedTag bedTag = Context.getService(BedManagementService.class)
 		        .getBedTagByUuid("73e846d6-ed5f-33e6-a3c9-0800274a5156");
 		
-		Assert.assertNotNull(bedTag);
-		Assert.assertEquals("73e846d6-ed5f-33e6-a3c9-0800274a5156", bedTag.getUuid());
+		Assertions.assertNotNull(bedTag);
+		Assertions.assertEquals("73e846d6-ed5f-33e6-a3c9-0800274a5156", bedTag.getUuid());
 	}
 	
 	@Test
@@ -329,13 +355,13 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		
 		List<BedTag> allBedTags = Context.getService(BedManagementService.class).getBedTags(null, 10, 0);
 		
-		Assert.assertEquals(4, allBedTags.size());
-		Assert.assertFalse(allBedTags.get(0).getVoided());
+		Assertions.assertEquals(4, allBedTags.size());
+		Assertions.assertFalse(allBedTags.get(0).getVoided());
 		
 		List<BedTag> bedTags = Context.getService(BedManagementService.class).getBedTags("Broken", 10, 0);
-		Assert.assertEquals(1, bedTags.size());
-		Assert.assertFalse(bedTags.get(0).getVoided());
-		Assert.assertEquals("Broken", bedTags.get(0).getName());
+		Assertions.assertEquals(1, bedTags.size());
+		Assertions.assertFalse(bedTags.get(0).getVoided());
+		Assertions.assertEquals("Broken", bedTags.get(0).getName());
 	}
 	
 	@Test
@@ -355,17 +381,19 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		bedTag.setName("Reserved");
 		Context.getService(BedManagementService.class).saveBedTag(bedTag);
 		
-		Assert.assertNotNull(bedTag.getId());
-		Assert.assertNotEquals("", bedTag.getUuid());
+		Assertions.assertNotNull(bedTag.getId());
+		Assertions.assertNotEquals("", bedTag.getUuid());
 	}
 	
-	@Test(expected = APIAuthenticationException.class)
+	@Test
 	public void shouldThorwExceptionOnAddNewBedTagIfUserNotHasEditTagsPrivileges() {
-		Context.authenticate(normalUser, normalUserPassword);
-		
-		BedTag bedTag = new BedTag();
-		bedTag.setName("Reserved");
-		Context.getService(BedManagementService.class).saveBedTag(bedTag);
+		assertThrows(APIAuthenticationException.class, () -> {
+			Context.authenticate(normalUser, normalUserPassword);
+			
+			BedTag bedTag = new BedTag();
+			bedTag.setName("Reserved");
+			Context.getService(BedManagementService.class).saveBedTag(bedTag);
+		});
 	}
 	
 	@Test
@@ -376,8 +404,8 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		        .getBedTagByUuid("73e846d6-ed5f-22e6-a3c9-0800274a5156");
 		Context.getService(BedManagementService.class).deleteBedTag(bedTag, "Not needed more");
 		
-		Assert.assertEquals("Not needed more", bedTag.getVoidReason());
-		Assert.assertTrue(bedTag.getVoided());
+		Assertions.assertEquals("Not needed more", bedTag.getVoidReason());
+		Assertions.assertTrue(bedTag.getVoided());
 	}
 	
 	@Test
@@ -391,11 +419,11 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		bedManagementService.setBedLayoutForAdmissionLocation(admissionLocation, 3, 5);
 		List<BedLocationMapping> bedLocationMappings = bedManagementService.getBedLocationMappingsByLocation(location);
 		
-		Assert.assertEquals(15, bedLocationMappings.size());
-		Assert.assertEquals(1, bedLocationMappings.get(0).getRow());
-		Assert.assertEquals(1, bedLocationMappings.get(0).getColumn());
-		Assert.assertEquals(3, bedLocationMappings.get(14).getRow());
-		Assert.assertEquals(5, bedLocationMappings.get(14).getColumn());
+		Assertions.assertEquals(15, bedLocationMappings.size());
+		Assertions.assertEquals(1, bedLocationMappings.get(0).getRow());
+		Assertions.assertEquals(1, bedLocationMappings.get(0).getColumn());
+		Assertions.assertEquals(3, bedLocationMappings.get(14).getRow());
+		Assertions.assertEquals(5, bedLocationMappings.get(14).getColumn());
 	}
 	
 	@Test
@@ -406,21 +434,23 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		
 		List<BedPatientAssignment> totalBpaList = bedManagementService.getBedPatientAssignmentByPatient(patient.getUuid(),
 		    true);
-		Assert.assertEquals(totalBpaList.size(), 2);
+		Assertions.assertEquals(totalBpaList.size(), 2);
 		
 		List<BedPatientAssignment> currentBpaList = bedManagementService.getBedPatientAssignmentByPatient(patient.getUuid(),
 		    false);
-		Assert.assertEquals(currentBpaList.size(), 1);
+		Assertions.assertEquals(currentBpaList.size(), 1);
 	}
 	
-	@Test(expected = APIException.class)
+	@Test
 	public void shouldThrowExceptionOnResizeBedLayoutIfBlockByExistingBeds() {
-		Context.authenticate(superUser, superUserPassword);
-		
-		BedManagementService bedManagementService = Context.getService(BedManagementService.class);
-		Location location = Context.getService(LocationService.class)
-		        .getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
-		AdmissionLocation admissionLocation = bedManagementService.getAdmissionLocationByLocation(location);
-		bedManagementService.setBedLayoutForAdmissionLocation(admissionLocation, 3, 4);
+		assertThrows(APIException.class, () -> {
+			Context.authenticate(superUser, superUserPassword);
+			
+			BedManagementService bedManagementService = Context.getService(BedManagementService.class);
+			Location location = Context.getService(LocationService.class)
+			        .getLocationByUuid("98bc9b32-9d1a-11e2-8137-0800271c1b75");
+			AdmissionLocation admissionLocation = bedManagementService.getAdmissionLocationByLocation(location);
+			bedManagementService.setBedLayoutForAdmissionLocation(admissionLocation, 3, 4);
+		});
 	}
 }

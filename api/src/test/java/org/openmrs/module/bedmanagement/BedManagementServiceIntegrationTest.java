@@ -1,8 +1,8 @@
 package org.openmrs.module.bedmanagement;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
@@ -11,17 +11,16 @@ import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
-import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class BedManagementServiceIntegrationTest extends BaseModuleContextSensitiveTest {
 	
@@ -30,7 +29,7 @@ public class BedManagementServiceIntegrationTest extends BaseModuleContextSensit
 	
 	private int bedIdFromDataSetup = 11;
 	
-	@Before
+	@BeforeEach
 	public void beforeAllTests() throws Exception {
 		executeDataSet("testPatientsDataset.xml");
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
@@ -42,12 +41,12 @@ public class BedManagementServiceIntegrationTest extends BaseModuleContextSensit
 		assertThat(admissionLocationList.size(), is(3));
 		
 		AdmissionLocation cardioWard = getWard(admissionLocationList, "Cardio ward on first floor");
-		Assert.assertEquals(10, cardioWard.getTotalBeds());
-		Assert.assertEquals(1, cardioWard.getOccupiedBeds());
+		Assertions.assertEquals(10, cardioWard.getTotalBeds());
+		Assertions.assertEquals(1, cardioWard.getOccupiedBeds());
 		
 		AdmissionLocation orthoWard = getWard(admissionLocationList, "Orthopaedic ward");
-		Assert.assertEquals(6, orthoWard.getTotalBeds());
-		Assert.assertEquals(2, orthoWard.getOccupiedBeds());
+		Assertions.assertEquals(6, orthoWard.getTotalBeds());
+		Assertions.assertEquals(2, orthoWard.getOccupiedBeds());
 	}
 	
 	@Test
@@ -114,7 +113,7 @@ public class BedManagementServiceIntegrationTest extends BaseModuleContextSensit
 		
 		BedDetails bedDetails = bedManagementService.getBedAssignmentDetailsByPatient(patient);
 		assertNotNull(bedDetails);
-		Assert.assertEquals(11, bedDetails.getBedId());
+		Assertions.assertEquals(11, bedDetails.getBedId());
 		
 		bedManagementService.assignPatientToBed(patient, encountersByPatient.get(0), String.valueOf(bedId));
 		

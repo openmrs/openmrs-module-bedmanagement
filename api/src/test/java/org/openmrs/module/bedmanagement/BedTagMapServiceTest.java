@@ -1,7 +1,8 @@
 package org.openmrs.module.bedmanagement;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.Bed;
@@ -9,10 +10,11 @@ import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.bedmanagement.service.BedTagMapService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BedTagMapServiceTest extends BaseModuleContextSensitiveTest {
 	
@@ -32,19 +34,30 @@ public class BedTagMapServiceTest extends BaseModuleContextSensitiveTest {
 	
 	private BedTagMapService bedTagMapService;
 	
-	@Before
+	/**
+	 * Core resolves role privileges in a daemon thread that opens its own session, which cannot see
+	 * rows left uncommitted in the test transaction, so the module roles are committed here and removed
+	 * again after each test.
+	 */
+	@BeforeEach
 	public void setUp() throws Exception {
 		privilegedUser = "edit-tags-user";
 		privilegedUserPassword = "normal-password";
 		normalUser = "normal-user";
 		normalUserPassword = "normal-password";
 		executeDataSet("bedTagMapTestDataSet.xml");
+		getConnection().commit();
 		isolationBedTag = Context.getService(BedTagMapService.class).getBedTagByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f3");
 		bedFifteen = Context.getService(BedManagementService.class).getBedById(15);
 		bedTagMap = new BedTagMap();
 		bedTagMap.setBedTag(isolationBedTag);
 		bedTagMap.setBed(bedFifteen);
 		bedTagMapService = Context.getService(BedTagMapService.class);
+	}
+	
+	@AfterEach
+	public void tearDown() {
+		deleteAllData();
 	}
 	
 	@Test
@@ -58,10 +71,12 @@ public class BedTagMapServiceTest extends BaseModuleContextSensitiveTest {
 		assertEquals(bedFifteen, savedBedTagMap.getBed());
 	}
 	
-	@Test(expected = APIAuthenticationException.class)
+	@Test
 	public void shouldThrowAuthenticationExceptionIfTheUserDoesNotHaveTheGetTagsEditTagsAndGetBedsPrivileges() {
-		Context.authenticate(normalUser, normalUserPassword);
-		bedTagMapService.save(bedTagMap);
+		assertThrows(APIAuthenticationException.class, () -> {
+			Context.authenticate(normalUser, normalUserPassword);
+			bedTagMapService.save(bedTagMap);
+		});
 	}
 	
 	@Test
@@ -70,10 +85,12 @@ public class BedTagMapServiceTest extends BaseModuleContextSensitiveTest {
 		bedTagMapService.delete(bedTagMap, "Need beds in general ward");
 	}
 	
-	@Test(expected = APIAuthenticationException.class)
+	@Test
 	public void shouldThrowAuthenticationExceptionIfTheUserDoesNotHaveTheGetTagsEditTagsAndGetBedsPrivilegesWhileDeletingTheBedTagMap() {
-		Context.authenticate(normalUser, normalUserPassword);
-		bedTagMapService.delete(bedTagMap, "Need beds in general ward");
+		assertThrows(APIAuthenticationException.class, () -> {
+			Context.authenticate(normalUser, normalUserPassword);
+			bedTagMapService.delete(bedTagMap, "Need beds in general ward");
+		});
 	}
 	
 	@Test
@@ -88,10 +105,12 @@ public class BedTagMapServiceTest extends BaseModuleContextSensitiveTest {
 		assertEquals(bedFifteen, bedElevenWithOxygenTag.getBed());
 	}
 	
-	@Test(expected = APIAuthenticationException.class)
+	@Test
 	public void shouldThrowAuthenticationExceptionIfTheUserDoesNotHaveTheGetTagsAndGetBedsPrivilegesWhileGettingTheBedTagMapUsingUuid() {
-		Context.authenticate(normalUser, normalUserPassword);
-		bedTagMapService.getBedTagMapByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f4");
+		assertThrows(APIAuthenticationException.class, () -> {
+			Context.authenticate(normalUser, normalUserPassword);
+			bedTagMapService.getBedTagMapByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f4");
+		});
 	}
 	
 	@Test
@@ -106,11 +125,13 @@ public class BedTagMapServiceTest extends BaseModuleContextSensitiveTest {
 		assertEquals(bedFifteen, bedTagMapWithBedAndTag.getBed());
 	}
 	
-	@Test(expected = APIAuthenticationException.class)
+	@Test
 	public void shouldThrowAuthenticationExceptionIfTheUserDoesNotHaveTheGetTagsAndGetBedsPrivilegesWhileGettingTheBedTagMapUsingBedAndBedTag() {
-		Context.authenticate(normalUser, normalUserPassword);
-		BedTag oxygenBedTag = bedTagMapService.getBedTagByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f1");
-		bedTagMapService.getBedTagMapWithBedAndTag(bedFifteen, oxygenBedTag);
+		assertThrows(APIAuthenticationException.class, () -> {
+			Context.authenticate(normalUser, normalUserPassword);
+			BedTag oxygenBedTag = bedTagMapService.getBedTagByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f1");
+			bedTagMapService.getBedTagMapWithBedAndTag(bedFifteen, oxygenBedTag);
+		});
 	}
 	
 	@Test
@@ -122,10 +143,12 @@ public class BedTagMapServiceTest extends BaseModuleContextSensitiveTest {
 		assertEquals("Oxygen", oxygenBedTag.getName());
 	}
 	
-	@Test(expected = APIAuthenticationException.class)
+	@Test
 	public void shouldThrowAuthenticationExceptionIfTheUserDoesNotHaveTheGetTagsAndGetBedsPrivilegesWhileGettingBedTagByUuid()
 	        throws Exception {
-		Context.authenticate(normalUser, normalUserPassword);
-		bedTagMapService.getBedTagByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f1");
+		assertThrows(APIAuthenticationException.class, () -> {
+			Context.authenticate(normalUser, normalUserPassword);
+			bedTagMapService.getBedTagByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f1");
+		});
 	}
 }

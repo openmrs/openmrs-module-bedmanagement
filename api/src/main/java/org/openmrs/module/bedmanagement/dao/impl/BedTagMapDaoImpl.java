@@ -15,6 +15,7 @@ package org.openmrs.module.bedmanagement.dao.impl;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
+import org.openmrs.api.db.hibernate.HibernateUtil;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
@@ -31,9 +32,9 @@ public class BedTagMapDaoImpl implements BedTagMapDao {
 	@Override
 	public BedTagMap saveOrUpdate(BedTagMap bedTagMap) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.saveOrUpdate(bedTagMap);
+		BedTagMap savedBedTagMap = HibernateUtil.saveOrUpdate(session, bedTagMap);
 		session.flush();
-		return bedTagMap;
+		return savedBedTagMap;
 	}
 	
 	@Override
