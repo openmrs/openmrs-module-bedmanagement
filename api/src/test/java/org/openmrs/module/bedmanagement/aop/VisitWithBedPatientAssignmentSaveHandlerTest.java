@@ -55,9 +55,9 @@ public class VisitWithBedPatientAssignmentSaveHandlerTest extends BaseModuleCont
 	}
 	
 	/**
-	 * Signs in as a user with no role, holding only what ending a visit needs outside bed
-	 * management, plus the bed READ privileges the visit validator checks: no "Assign Beds" and no
-	 * "Edit Admission Locations".
+	 * Signs in as a user with no role, holding only what ending a visit needs outside bed management,
+	 * plus the bed READ privileges the visit validator checks: no "Assign Beds" and no "Edit Admission
+	 * Locations".
 	 */
 	private void becomeUserWithoutBedWritePrivileges() {
 		Person person = new Person();
@@ -69,8 +69,8 @@ public class VisitWithBedPatientAssignmentSaveHandlerTest extends BaseModuleCont
 		Context.logout();
 		Context.authenticate(new UsernamePasswordCredentials("records-officer", "Records0fficer"));
 		for (String privilege : new String[] { "Edit Visits", "Get Visits", "Get Visit Types", "Get Visit Attribute Types",
-		        "Get Patients", "Get Encounters", "Get Locations", "Get Concepts", "Get Global Properties",
-		        "Get Beds", "Get Admission Locations" }) {
+		        "Get Patients", "Get Encounters", "Get Locations", "Get Concepts", "Get Global Properties", "Get Beds",
+		        "Get Admission Locations" }) {
 			Context.addProxyPrivilege(privilege);
 		}
 	}
@@ -79,10 +79,11 @@ public class VisitWithBedPatientAssignmentSaveHandlerTest extends BaseModuleCont
 	public void endingAVisitWithNoBedAssignmentShouldNotRequireBedWritePrivileges() {
 		VisitService visitService = Context.getVisitService();
 		Patient patient = Context.getPatientService().getPatient(1001);
-		// as admin, take the patient out of the bed the dataset gives this visit, so it has none left
+		// as admin, take the patient out of the bed the dataset gives this visit, so it
+		// has none left
 		bedManagementService.unAssignPatientFromBed(patient);
-		assertThat("Invalid test data, patient still has a bed", bedManagementService
-		        .getBedAssignmentDetailsByPatient(patient), is(nullValue()));
+		assertThat("Invalid test data, patient still has a bed",
+		    bedManagementService.getBedAssignmentDetailsByPatient(patient), is(nullValue()));
 		Context.flushSession();
 		
 		becomeUserWithoutBedWritePrivileges();

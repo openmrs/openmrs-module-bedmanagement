@@ -29,19 +29,19 @@ import org.openmrs.module.bedmanagement.service.BedManagementService;
  */
 @ExtendWith(MockitoExtension.class)
 public class VisitWithBedPatientAssignmentSaveHandlerUnitTest {
-
+	
 	@Mock
 	private BedManagementService bedManagementService;
-
+	
 	private VisitWithBedPatientAssignmentSaveHandler handler;
-
+	
 	private final User user = new User();
-
+	
 	@BeforeEach
 	public void setUp() {
 		handler = new VisitWithBedPatientAssignmentSaveHandler(bedManagementService);
 	}
-
+	
 	private Visit visit(Date stopDatetime) {
 		Visit visit = new Visit();
 		visit.setVisitId(1001);
@@ -49,43 +49,43 @@ public class VisitWithBedPatientAssignmentSaveHandlerUnitTest {
 		visit.setStopDatetime(stopDatetime);
 		return visit;
 	}
-
+	
 	@Test
 	public void handleShouldNotUnassignBedsWhenTheEndedVisitHasNoActiveBedAssignment() {
 		Visit visit = visit(new Date());
 		when(bedManagementService.getBedPatientAssignmentByVisit("visit-uuid", false))
 		        .thenReturn(Collections.<BedPatientAssignment> emptyList());
-
+		
 		handler.handle(visit, user, new Date(), null);
-
+		
 		verify(bedManagementService, never()).unAssignBedsInEndedVisit(any(Visit.class));
 	}
-
+	
 	@Test
 	public void handleShouldUnassignBedsWhenTheEndedVisitHasAnActiveBedAssignment() {
 		Visit visit = visit(new Date());
 		when(bedManagementService.getBedPatientAssignmentByVisit("visit-uuid", false))
 		        .thenReturn(Collections.singletonList(new BedPatientAssignment()));
-
+		
 		handler.handle(visit, user, new Date(), null);
-
+		
 		verify(bedManagementService).unAssignBedsInEndedVisit(visit);
 	}
-
+	
 	@Test
 	public void handleShouldDoNothingForAVisitThatHasNotEnded() {
 		handler.handle(visit(null), user, new Date(), null);
-
+		
 		verifyNoInteractions(bedManagementService);
 	}
-
+	
 	@Test
 	public void handleShouldDoNothingForANewVisit() {
 		Visit visit = new Visit();
 		visit.setStopDatetime(new Date());
-
+		
 		handler.handle(visit, user, new Date(), null);
-
+		
 		verifyNoInteractions(bedManagementService);
 	}
 }

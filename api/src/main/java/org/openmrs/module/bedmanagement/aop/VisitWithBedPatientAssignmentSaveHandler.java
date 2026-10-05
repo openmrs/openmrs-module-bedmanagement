@@ -42,9 +42,10 @@ public class VisitWithBedPatientAssignmentSaveHandler implements SaveHandler<Vis
 	
 	@Override
 	public void handle(Visit visit, User user, Date date, String s) {
-		// unAssignBedsInEndedVisit requires "Assign Beds" and "Edit Admission Locations", and this
-		// handler runs on every save of an ended visit. Only call it when there is a bed to free,
-		// so ending a visit of a patient who has no bed needs no bed write privilege.
+		// unAssignBedsInEndedVisit requires "Assign Beds" and "Edit Admission
+		// Locations", and this handler runs on every save of an ended visit. Only
+		// call it when there is a bed to free, so ending a visit of a patient who
+		// has no bed needs no bed write privilege.
 		if (visit.getVisitId() != null && visit.getStopDatetime() != null
 		        && !bedManagementService.getBedPatientAssignmentByVisit(visit.getUuid(), false).isEmpty()) {
 			log.debug("Unassigning bed from patient due to stopped visit on " + visit.getStopDatetime());
