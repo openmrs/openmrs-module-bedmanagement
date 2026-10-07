@@ -1,6 +1,5 @@
 package org.openmrs.module.bedmanagement;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,11 +46,6 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 	@Autowired
 	private LocationService locationService;
 	
-	/**
-	 * Core resolves role privileges in a daemon thread that opens its own session, which cannot see
-	 * rows left uncommitted in the test transaction, so the module roles are committed here and removed
-	 * again after each test.
-	 */
 	@BeforeEach
 	public void setUp() throws Exception {
 		superUser = "test-user";
@@ -60,16 +54,10 @@ public class BedManagementServiceTest extends BaseModuleContextSensitiveTest {
 		normalUserPassword = "normal-password";
 		executeDataSet("testPatientsDataset.xml");
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
-		getConnection().commit();
 		patient = Context.getPatientService().getPatient(3);
 		location = Context.getLocationService().getLocation(12347);
 		encounter = Context.getEncounterService().getEncounter(2);
 		bedNumber = "11";
-	}
-	
-	@AfterEach
-	public void tearDown() {
-		deleteAllData();
 	}
 	
 	@Test

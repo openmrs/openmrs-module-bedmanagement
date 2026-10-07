@@ -1,6 +1,5 @@
 package org.openmrs.module.bedmanagement;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmrs.api.APIAuthenticationException;
@@ -34,11 +33,6 @@ public class BedTagMapServiceTest extends BaseModuleContextSensitiveTest {
 	
 	private BedTagMapService bedTagMapService;
 	
-	/**
-	 * Core resolves role privileges in a daemon thread that opens its own session, which cannot see
-	 * rows left uncommitted in the test transaction, so the module roles are committed here and removed
-	 * again after each test.
-	 */
 	@BeforeEach
 	public void setUp() throws Exception {
 		privilegedUser = "edit-tags-user";
@@ -46,18 +40,12 @@ public class BedTagMapServiceTest extends BaseModuleContextSensitiveTest {
 		normalUser = "normal-user";
 		normalUserPassword = "normal-password";
 		executeDataSet("bedTagMapTestDataSet.xml");
-		getConnection().commit();
 		isolationBedTag = Context.getService(BedTagMapService.class).getBedTagByUuid("5580cddd-c290-66c8-8d3a-96dc33d199f3");
 		bedFifteen = Context.getService(BedManagementService.class).getBedById(15);
 		bedTagMap = new BedTagMap();
 		bedTagMap.setBedTag(isolationBedTag);
 		bedTagMap.setBed(bedFifteen);
 		bedTagMapService = Context.getService(BedTagMapService.class);
-	}
-	
-	@AfterEach
-	public void tearDown() {
-		deleteAllData();
 	}
 	
 	@Test
