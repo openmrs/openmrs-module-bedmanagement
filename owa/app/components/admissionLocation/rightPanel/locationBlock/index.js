@@ -41,7 +41,7 @@ export default class LocationBlock extends React.PureComponent {
                     self.props.admissionLocationFunctions.reFetchAllAdmissionLocations();
                 })
                 .catch(function(errorResponse) {
-                    const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                    const error = errorResponse.response && errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                     self.props.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
                 });
         }

@@ -34,7 +34,7 @@ export default class BedTypeListRow extends React.Component {
                     self.props.bedTypeFunctions.fetchBedTypes();
                 })
                 .catch(function(errorResponse) {
-                    const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                    const error = errorResponse.response && errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                     self.props.bedTypeFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
                 });
         }

@@ -62,7 +62,7 @@ export default class BedTypeWrapper extends React.Component {
                     });
                 })
                 .catch(function(errorResponse) {
-                    const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                    const error = errorResponse.response && errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                     self.props.bedTypeFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
                 });
         },

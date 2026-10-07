@@ -81,7 +81,7 @@ export default class AdmissionLocationWrapper extends React.Component {
                 self.setState({admissionLocations: admissionLocations});
             })
             .catch(function (errorResponse) {
-                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                const error = errorResponse.response && errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                 self.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }
@@ -110,7 +110,7 @@ export default class AdmissionLocationWrapper extends React.Component {
                 self.setState({visitLocations: visitLocations});
             })
             .catch(function (errorResponse) {
-                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                const error = errorResponse.response && errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                 self.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }
@@ -129,7 +129,7 @@ export default class AdmissionLocationWrapper extends React.Component {
                 });
             })
             .catch(function (errorResponse) {
-                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                const error = errorResponse.response && errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                 self.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }

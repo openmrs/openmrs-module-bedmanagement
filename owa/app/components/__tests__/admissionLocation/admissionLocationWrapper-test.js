@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from "enzyme";
 import AdmissionLocationWrapper from "components/admissionLocation/admissionLocationWrapper.js";
 import MockAdapter from "axios-mock-adapter";
-import axios from "axios/index";
+import axios from "axios";
 import {IntlProvider} from "react-intl";
 import messages from 'i18n/messages';
 import {openmrsAPIResponse} from "components/__mocks__/openmrsApiResponse";
@@ -131,5 +131,24 @@ describe('AdmissionLocationWrapper', () => {
 
         expect(admissionLocationFunctions.getAdmissionLocations()).toEqual(expectedAdmissionLocations);
         expect(admissionLocationFunctions.getVisitLocations()).toEqual(expectedVisitLocations);
-    })
+    });
+
+    it('should notify instead of throwing on network error', async () => {
+        const mock = new MockAdapter(axios);
+        mock.onGet('https://192.168.33.10/openmrs/ws/rest/v1/location?tag=Visit%20Location&v=full')
+            .reply(200, openmrsAPIResponse.visitLocations);
+        mock.onGet('https://192.168.33.10/openmrs/ws/rest/v1/location?tag=Admission%20Location&v=full')
+            .reply(200, openmrsAPIResponse.admissionLocations);
+        mock.onGet('https://192.168.33.10/openmrs/ws/rest/v1/bedtype').networkError();
+
+        let admissionLocationWrapper = shallow(<AdmissionLocationWrapper
+                match={{path: "openmrs/owa/bedmanagement/admissionLocations.html"}}/>,
+            {context: testData.context});
+
+        const notifySpy = jest.spyOn(admissionLocationWrapper.instance().admissionLocationFunctions, 'notify').mockImplementation(() => {});
+
+        await testData.sleep(100);
+
+        expect(notifySpy).toHaveBeenCalledWith('error', 'Network Error');
+    });
 });

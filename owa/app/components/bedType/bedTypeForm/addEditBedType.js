@@ -92,7 +92,7 @@ export default class AddEditBedType extends React.Component {
                     disableSubmit: false
                 });
 
-                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                const error = errorResponse.response && errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                 self.props.bedTypeFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }

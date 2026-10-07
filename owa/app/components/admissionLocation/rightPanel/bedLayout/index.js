@@ -89,7 +89,7 @@ export default class BedLayout extends React.Component {
                     self.loadAdmissionLocationLayout(self.props.activeUuid);
                 })
                 .catch(function(errorResponse) {
-                    const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                    const error = errorResponse.response && errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                     self.props.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
                 });
         }
@@ -131,7 +131,7 @@ export default class BedLayout extends React.Component {
                     loadingData: false
                 });
 
-                const error = errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
+                const error = errorResponse.response && errorResponse.response.data ? errorResponse.response.data.error : errorResponse;
                 self.props.admissionLocationFunctions.notify('error', error.message.replace(/\[|\]/g, ''));
             });
     }
