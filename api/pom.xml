@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>bedmanagement</artifactId>
-		<version>7.3.0-SNAPSHOT</version>
+		<version>8.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>bedmanagement-api</artifactId>
@@ -23,21 +23,8 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.openmrs.web</groupId>
-			<artifactId>openmrs-web</artifactId>
-			<type>jar</type>
-		</dependency>
-				
-		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.openmrs.web</groupId>
-			<artifactId>openmrs-web</artifactId>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
@@ -50,18 +37,6 @@
 		</dependency>
 				
 		<!-- End OpenMRS core -->
-
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-inline</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <scope>test</scope>
-        </dependency>
 
 	</dependencies>
 	
@@ -79,17 +54,6 @@
 				<filtering>true</filtering>
 			</testResource>
 		</testResources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
-				<configuration>
-					<source>8</source>
-					<target>8</target>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 
 </project>

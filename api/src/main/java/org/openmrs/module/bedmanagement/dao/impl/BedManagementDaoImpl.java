@@ -14,16 +14,15 @@
 package org.openmrs.module.bedmanagement.dao.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.BooleanUtils;
-import org.hibernate.Criteria;
+import org.apache.commons.lang3.BooleanUtils;
 import org.hibernate.FlushMode;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.api.db.hibernate.HibernateUtil;
 import org.openmrs.module.bedmanagement.AdmissionLocation;
 import org.openmrs.module.bedmanagement.BedLayout;
 import org.openmrs.module.bedmanagement.constants.BedStatus;
@@ -52,7 +51,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	@Override
 	public Bed getBedById(int id) {
 		Bed bed = null;
-		bed = (Bed) sessionFactory.getCurrentSession().createQuery("from Bed b where b.id = :id").setInteger("id", id)
+		bed = (Bed) sessionFactory.getCurrentSession().createQuery("from Bed b where b.id = :id").setParameter("id", id)
 		        .uniqueResult();
 		return bed;
 	}
@@ -60,7 +59,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	@Override
 	public Bed getBedByUuid(String uuid) {
 		return (Bed) sessionFactory.getCurrentSession().createQuery("from Bed b where b.uuid = :uuid and b.voided=false")
-		        .setString("uuid", uuid).uniqueResult();
+		        .setParameter("uuid", uuid).uniqueResult();
 	}
 	
 	@Override
@@ -164,7 +163,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	@Override
 	public List<AdmissionLocation> getAdmissionLocations(List<Location> locations) {
 		String sql = "select l from Location l " + "where l in :locations and "
-		        + "(l.parentLocation not in :locations or l.parentLocation is null) and " + "l.retired=0";
+		        + "(l.parentLocation not in :locations or l.parentLocation is null) and " + "l.retired=false";
 		Query query = sessionFactory.getCurrentSession().createQuery(sql);
 		query.setParameterList("locations", locations);
 		List<Location> locationList = query.list();
@@ -225,8 +224,7 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	@Override
 	public BedLocationMapping saveBedLocationMapping(BedLocationMapping bedLocationMapping) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.saveOrUpdate(bedLocationMapping);
-		return bedLocationMapping;
+		return HibernateUtil.saveOrUpdate(session, bedLocationMapping);
 	}
 	
 	@Override
@@ -276,41 +274,41 @@ public class BedManagementDaoImpl implements BedManagementDao {
 		return (BedLocationMapping) query.uniqueResult();
 	}
 	
-	private Criteria createGetBedsCriteria(Location location, BedType bedType, BedStatus bedStatus, Integer limit,
+	private Query createGetBedsQuery(Location location, BedType bedType, BedStatus bedStatus, Integer limit,
 	        Integer offset) {
 		Session session = sessionFactory.getCurrentSession();
-		Criteria criteria;
+		StringBuilder hql = new StringBuilder();
 		if (location != null) {
-			criteria = session.createCriteria(BedLocationMapping.class, "blm");
-			criteria.createAlias("blm.bed", "bed");
-			criteria.createAlias("blm.location", "location");
-			criteria.add(Restrictions.eq("location", location));
-			criteria.add(Restrictions.eq("bed.voided", false));
-			if (bedStatus != null)
-				criteria.add(Restrictions.eq("bed.status", bedStatus.toString()));
-			if (bedType != null)
-				criteria.add(Restrictions.eq("bed.bedType", bedType));
+			hql.append("select blm from BedLocationMapping blm join blm.bed bed join blm.location location"
+			        + " where location = :location and bed.voided = false");
 		} else {
-			criteria = session.createCriteria(Bed.class, "bed");
-			criteria.add(Restrictions.eq("voided", false));
-			if (bedStatus != null)
-				criteria.add(Restrictions.eq("status", bedStatus.toString()));
-			if (bedType != null)
-				criteria.add(Restrictions.eq("bedType", bedType));
+			hql.append("select bed from Bed bed where bed.voided = false");
 		}
+		if (bedStatus != null)
+			hql.append(" and bed.status = :status");
+		if (bedType != null)
+			hql.append(" and bed.bedType = :bedType");
+		
+		Query query = session.createQuery(hql.toString());
+		if (location != null)
+			query.setParameter("location", location);
+		if (bedStatus != null)
+			query.setParameter("status", bedStatus.toString());
+		if (bedType != null)
+			query.setParameter("bedType", bedType);
 		
 		if (limit != null) {
-			criteria.setMaxResults(limit);
+			query.setMaxResults(limit);
 			if (offset != null)
-				criteria.setFirstResult(offset);
+				query.setFirstResult(offset);
 		}
 		
-		return criteria;
+		return query;
 	}
 	
 	@Override
 	public List<Bed> getBeds(Location location, BedType bedType, BedStatus status, Integer limit, Integer offset) {
-		Criteria cr = createGetBedsCriteria(location, bedType, status, limit, offset);
+		Query cr = createGetBedsQuery(location, bedType, status, limit, offset);
 		if (location != null) {
 			List<BedLocationMapping> bedLocationMappings = cr.list();
 			List<Bed> beds = new ArrayList<>();
@@ -326,113 +324,103 @@ public class BedManagementDaoImpl implements BedManagementDao {
 	
 	@Override
 	public Integer getBedCountByLocation(Location location) {
-		Criteria cr = createGetBedsCriteria(location, null, null, null, null);
+		Query cr = createGetBedsQuery(location, null, null, null, null);
 		return cr.list().size();
 	}
 	
 	@Override
 	public Bed saveBed(Bed bed) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.saveOrUpdate(bed);
-		return bed;
+		return HibernateUtil.saveOrUpdate(session, bed);
 	}
 	
 	@Override
 	public BedTag getBedTagByName(String name) {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedTag.class);
-		criteria.add(Restrictions.eq("name", name));
-		criteria.add(Restrictions.eq("voided", false));
-		return (BedTag) criteria.uniqueResult();
+		return (BedTag) sessionFactory.getCurrentSession().createQuery("from BedTag where name = :name and voided = false")
+		        .setParameter("name", name).uniqueResult();
 	}
 	
 	@Override
 	public BedTag getBedTagByUuid(String uuid) {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedTag.class);
-		criteria.add(Restrictions.eq("uuid", uuid));
-		criteria.add(Restrictions.eq("voided", false));
-		return (BedTag) criteria.uniqueResult();
+		return (BedTag) sessionFactory.getCurrentSession().createQuery("from BedTag where uuid = :uuid and voided = false")
+		        .setParameter("uuid", uuid).uniqueResult();
 	}
 	
 	@Override
 	public List<BedTag> getBedTags(String name, Integer limit, Integer offset) {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedTag.class);
-		criteria.add(Restrictions.eq("voided", false));
+		Query query = sessionFactory.getCurrentSession()
+		        .createQuery("from BedTag where voided = false" + (name != null ? " and name = :name" : ""));
 		if (name != null)
-			criteria.add(Restrictions.eq("name", name));
+			query.setParameter("name", name);
 		
 		if (limit != null) {
-			criteria.setMaxResults(limit);
+			query.setMaxResults(limit);
 			if (offset != null)
-				criteria.setFirstResult(offset);
+				query.setFirstResult(offset);
 		}
-		return criteria.list();
+		return query.list();
 	}
 	
 	@Override
 	public BedTag saveBedTag(BedTag bedTag) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.saveOrUpdate(bedTag);
-		return bedTag;
+		return HibernateUtil.saveOrUpdate(session, bedTag);
 	}
 	
 	@Override
 	public void deleteBedTag(BedTag bedTag) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.delete(bedTag);
+		session.remove(bedTag);
 	}
 	
 	@Override
 	public BedType getBedTypeById(Integer id) {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedType.class);
-		criteria.add(Restrictions.eq("id", id));
-		return (BedType) criteria.uniqueResult();
+		return (BedType) sessionFactory.getCurrentSession().createQuery("from BedType where id = :id").setParameter("id", id)
+		        .uniqueResult();
 	}
 	
 	@Override
 	public BedType getBedTypeByUuid(String uuid) {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedType.class);
-		criteria.add(Restrictions.eq("uuid", uuid));
-		criteria.add(Restrictions.eq("retired", false));
-		return (BedType) criteria.uniqueResult();
+		return (BedType) sessionFactory.getCurrentSession()
+		        .createQuery("from BedType where uuid = :uuid and retired = false").setParameter("uuid", uuid)
+		        .uniqueResult();
 	}
 	
 	@Override
 	public List<BedType> getBedTypes(String name, Integer limit, Integer offset) {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BedType.class);
-		criteria.add(Restrictions.eq("retired", false));
+		Query query = sessionFactory.getCurrentSession()
+		        .createQuery("from BedType where retired = false" + (name != null ? " and name = :name" : ""));
 		if (name != null)
-			criteria.add(Restrictions.eq("name", name));
+			query.setParameter("name", name);
 		if (limit != null) {
-			criteria.setMaxResults(limit);
+			query.setMaxResults(limit);
 			if (offset != null)
-				criteria.setFirstResult(offset);
+				query.setFirstResult(offset);
 		}
-		return criteria.list();
+		return query.list();
 	}
 	
 	@Override
 	public BedType saveBedType(BedType bedType) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.saveOrUpdate(bedType);
-		return bedType;
+		return HibernateUtil.saveOrUpdate(session, bedType);
 	}
 	
 	@Override
 	public void deleteBedType(BedType bedType) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.delete(bedType);
+		session.remove(bedType);
 	}
 	
 	@Override
 	public void deleteBedLocationMapping(BedLocationMapping bedLocationMapping) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.delete(bedLocationMapping);
+		session.remove(bedLocationMapping);
 	}
 	
 	@Override
 	public BedPatientAssignment saveBedPatientAssignment(BedPatientAssignment bedPatientAssignment) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.saveOrUpdate(bedPatientAssignment);
-		return bedPatientAssignment;
+		return HibernateUtil.saveOrUpdate(session, bedPatientAssignment);
 	}
 }

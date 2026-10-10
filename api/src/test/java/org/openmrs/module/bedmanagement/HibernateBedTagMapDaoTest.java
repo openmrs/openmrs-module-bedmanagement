@@ -1,16 +1,16 @@
 package org.openmrs.module.bedmanagement;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.bedmanagement.dao.BedManagementDao;
 import org.openmrs.module.bedmanagement.dao.BedTagMapDao;
 import org.openmrs.module.bedmanagement.entity.Bed;
 import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class HibernateBedTagMapDaoTest extends BaseModuleContextSensitiveTest {
 	
@@ -20,7 +20,7 @@ public class HibernateBedTagMapDaoTest extends BaseModuleContextSensitiveTest {
 	@Autowired
 	BedManagementDao bedManagementDao;
 	
-	@Before
+	@BeforeEach
 	public void beforeAllTests() throws Exception {
 		executeDataSet("bedTagMapTestDataSet.xml");
 	}

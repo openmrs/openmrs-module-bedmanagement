@@ -4,21 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.module.webservices.rest.web.response.ObjectNotFoundException;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class BedResourceTest extends MainResourceControllerTest {
 	
 	private static final String AVAILABLE_BED_UUID = "bb1331bc-d225-11e4-9c67-080027b662ec";
 	
-	@Before
+	@BeforeEach
 	public void init() throws Exception {
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
 	}
@@ -44,11 +46,11 @@ public class BedResourceTest extends MainResourceControllerTest {
 		SimpleObject object = deserialize(handle(request));
 		List results = (ArrayList) object.get("results");
 		
-		Assert.assertEquals(16, results.size());
-		Assert.assertEquals("304-a", PropertyUtils.getProperty(results.get(0), "bedNumber"));
-		Assert.assertEquals(1, PropertyUtils.getProperty(results.get(0), "row"));
-		Assert.assertEquals(1, PropertyUtils.getProperty(results.get(0), "column"));
-		Assert.assertEquals("307-a", "307-a", PropertyUtils.getProperty(results.get(10), "bedNumber"));
+		Assertions.assertEquals(16, results.size());
+		Assertions.assertEquals("304-a", PropertyUtils.getProperty(results.get(0), "bedNumber"));
+		Assertions.assertEquals(1, PropertyUtils.getProperty(results.get(0), "row"));
+		Assertions.assertEquals(1, PropertyUtils.getProperty(results.get(0), "column"));
+		Assertions.assertEquals("307-a", PropertyUtils.getProperty(results.get(10), "bedNumber"), "307-a");
 	}
 	
 	@Test
@@ -56,10 +58,10 @@ public class BedResourceTest extends MainResourceControllerTest {
 		MockHttpServletRequest request = request(RequestMethod.GET, getURI() + "/" + getUuid());
 		SimpleObject bed = deserialize(handle(request));
 		
-		Assert.assertEquals("bb12c454-d225-11e4-9c67-080027b662ec", bed.get("uuid"));
-		Assert.assertEquals("307-a", bed.get("bedNumber"));
-		Assert.assertEquals(Integer.valueOf(1), bed.get("row"));
-		Assert.assertEquals(Integer.valueOf(1), bed.get("column"));
+		Assertions.assertEquals("bb12c454-d225-11e4-9c67-080027b662ec", bed.get("uuid"));
+		Assertions.assertEquals("307-a", bed.get("bedNumber"));
+		Assertions.assertEquals(Integer.valueOf(1), bed.get("row"));
+		Assertions.assertEquals(Integer.valueOf(1), bed.get("column"));
 	}
 	
 	@Test
@@ -71,10 +73,10 @@ public class BedResourceTest extends MainResourceControllerTest {
 		List results = (ArrayList) response1.get("results");
 		Object bedType = PropertyUtils.getProperty(results.get(0), "bedType");
 		
-		Assert.assertEquals(1, results.size());
-		Assert.assertEquals("304-d", PropertyUtils.getProperty(results.get(0), "bedNumber"));
-		Assert.assertEquals("AVAILABLE", PropertyUtils.getProperty(results.get(0), "status"));
-		Assert.assertEquals("deluxe", PropertyUtils.getProperty(bedType, "name"));
+		Assertions.assertEquals(1, results.size());
+		Assertions.assertEquals("304-d", PropertyUtils.getProperty(results.get(0), "bedNumber"));
+		Assertions.assertEquals("AVAILABLE", PropertyUtils.getProperty(results.get(0), "status"));
+		Assertions.assertEquals("deluxe", PropertyUtils.getProperty(bedType, "name"));
 		
 		MockHttpServletRequest request2 = request(RequestMethod.GET, getURI());
 		request2.addParameter("status", "OCCUPIED");
@@ -82,11 +84,11 @@ public class BedResourceTest extends MainResourceControllerTest {
 		SimpleObject response2 = deserialize(handle(request2));
 		List results2 = (ArrayList) response2.get("results");
 		
-		Assert.assertEquals(2, results2.size());
-		Assert.assertEquals("bb02b84b-d225-11e4-9c67-080027b662ec", PropertyUtils.getProperty(results2.get(0), "uuid"));
-		Assert.assertEquals("OCCUPIED", PropertyUtils.getProperty(results2.get(0), "status"));
-		Assert.assertEquals("bb12c454-d225-11e4-9c67-080027b662ec", PropertyUtils.getProperty(results2.get(1), "uuid"));
-		Assert.assertEquals("OCCUPIED", PropertyUtils.getProperty(results2.get(1), "status"));
+		Assertions.assertEquals(2, results2.size());
+		Assertions.assertEquals("bb02b84b-d225-11e4-9c67-080027b662ec", PropertyUtils.getProperty(results2.get(0), "uuid"));
+		Assertions.assertEquals("OCCUPIED", PropertyUtils.getProperty(results2.get(0), "status"));
+		Assertions.assertEquals("bb12c454-d225-11e4-9c67-080027b662ec", PropertyUtils.getProperty(results2.get(1), "uuid"));
+		Assertions.assertEquals("OCCUPIED", PropertyUtils.getProperty(results2.get(1), "status"));
 	}
 	
 	@Test
@@ -97,13 +99,13 @@ public class BedResourceTest extends MainResourceControllerTest {
 		SimpleObject object = deserialize(handle(request));
 		List results = (ArrayList) object.get("results");
 		
-		Assert.assertEquals(9, results.size());
-		Assert.assertEquals("304-b", PropertyUtils.getProperty(results.get(0), "bedNumber"));
-		Assert.assertEquals("AVAILABLE", PropertyUtils.getProperty(results.get(0), "status"));
-		Assert.assertEquals("305-c", PropertyUtils.getProperty(results.get(5), "bedNumber"));
-		Assert.assertEquals("AVAILABLE", PropertyUtils.getProperty(results.get(5), "status"));
-		Assert.assertEquals("306-b", PropertyUtils.getProperty(results.get(8), "bedNumber"));
-		Assert.assertEquals("AVAILABLE", PropertyUtils.getProperty(results.get(8), "status"));
+		Assertions.assertEquals(9, results.size());
+		Assertions.assertEquals("304-b", PropertyUtils.getProperty(results.get(0), "bedNumber"));
+		Assertions.assertEquals("AVAILABLE", PropertyUtils.getProperty(results.get(0), "status"));
+		Assertions.assertEquals("305-c", PropertyUtils.getProperty(results.get(5), "bedNumber"));
+		Assertions.assertEquals("AVAILABLE", PropertyUtils.getProperty(results.get(5), "status"));
+		Assertions.assertEquals("306-b", PropertyUtils.getProperty(results.get(8), "bedNumber"));
+		Assertions.assertEquals("AVAILABLE", PropertyUtils.getProperty(results.get(8), "status"));
 	}
 	
 	@Test
@@ -114,12 +116,12 @@ public class BedResourceTest extends MainResourceControllerTest {
 		SimpleObject object = deserialize(handle(request));
 		List results = (ArrayList) object.get("results");
 		
-		Assert.assertEquals(2, results.size());
-		Assert.assertEquals("bb02b84b-d225-11e4-9c67-080027b662ec", PropertyUtils.getProperty(results.get(0), "uuid"));
+		Assertions.assertEquals(2, results.size());
+		Assertions.assertEquals("bb02b84b-d225-11e4-9c67-080027b662ec", PropertyUtils.getProperty(results.get(0), "uuid"));
 		Object bedType = PropertyUtils.getProperty(results.get(0), "bedType");
-		Assert.assertEquals("deluxe", PropertyUtils.getProperty(bedType, "name"));
-		Assert.assertEquals("bb094d57-d225-11e4-9c67-080027b662ec", PropertyUtils.getProperty(results.get(1), "uuid"));
-		Assert.assertEquals("AVAILABLE", PropertyUtils.getProperty(results.get(1), "status"));
+		Assertions.assertEquals("deluxe", PropertyUtils.getProperty(bedType, "name"));
+		Assertions.assertEquals("bb094d57-d225-11e4-9c67-080027b662ec", PropertyUtils.getProperty(results.get(1), "uuid"));
+		Assertions.assertEquals("AVAILABLE", PropertyUtils.getProperty(results.get(1), "status"));
 	}
 	
 	@Test
@@ -135,11 +137,11 @@ public class BedResourceTest extends MainResourceControllerTest {
 		request.setContent(json.getBytes());
 		SimpleObject bed = deserialize(handle(request));
 		
-		Assert.assertNotNull(bed.get("id"));
-		Assert.assertEquals("110-a", bed.get("bedNumber"));
-		Assert.assertEquals(Integer.valueOf(4), bed.get("row"));
-		Assert.assertEquals(Integer.valueOf(1), bed.get("column"));
-		Assert.assertEquals("luxury", PropertyUtils.getProperty(bed.get("bedType"), "name"));
+		Assertions.assertNotNull(bed.get("id"));
+		Assertions.assertEquals("110-a", bed.get("bedNumber"));
+		Assertions.assertEquals(Integer.valueOf(4), bed.get("row"));
+		Assertions.assertEquals(Integer.valueOf(1), bed.get("column"));
+		Assertions.assertEquals("luxury", PropertyUtils.getProperty(bed.get("bedType"), "name"));
 	}
 	
 	@Test
@@ -155,25 +157,27 @@ public class BedResourceTest extends MainResourceControllerTest {
 		request.setContent(json.getBytes());
 		SimpleObject bed = deserialize(handle(request));
 		
-		Assert.assertNotNull(bed.get("id"));
-		Assert.assertEquals("110-a", bed.get("bedNumber"));
-		Assert.assertEquals(Integer.valueOf(2), bed.get("row"));
-		Assert.assertEquals(Integer.valueOf(3), bed.get("column"));
-		Assert.assertEquals("luxury", PropertyUtils.getProperty(bed.get("bedType"), "name"));
+		Assertions.assertNotNull(bed.get("id"));
+		Assertions.assertEquals("110-a", bed.get("bedNumber"));
+		Assertions.assertEquals(Integer.valueOf(2), bed.get("row"));
+		Assertions.assertEquals(Integer.valueOf(3), bed.get("column"));
+		Assertions.assertEquals("luxury", PropertyUtils.getProperty(bed.get("bedType"), "name"));
 	}
 	
-	@Test(expected = IllegalPropertyException.class)
+	@Test
 	public void shouldThrowExceptionOnAlreadyAssignedBedPosition() throws Exception {
-		MockHttpServletRequest request = request(RequestMethod.POST, getURI());
-		SimpleObject postParameters = new SimpleObject();
-		postParameters.put("bedNumber", "110-a");
-		postParameters.put("bedType", "luxury");
-		postParameters.put("row", 1);
-		postParameters.put("column", 1);
-		postParameters.put("locationUuid", "98bc9b32-9d1a-11e2-8137-0800271c1b75");
-		String json = new ObjectMapper().writeValueAsString(postParameters);
-		request.setContent(json.getBytes());
-		deserialize(handle(request));
+		assertThrows(IllegalPropertyException.class, () -> {
+			MockHttpServletRequest request = request(RequestMethod.POST, getURI());
+			SimpleObject postParameters = new SimpleObject();
+			postParameters.put("bedNumber", "110-a");
+			postParameters.put("bedType", "luxury");
+			postParameters.put("row", 1);
+			postParameters.put("column", 1);
+			postParameters.put("locationUuid", "98bc9b32-9d1a-11e2-8137-0800271c1b75");
+			String json = new ObjectMapper().writeValueAsString(postParameters);
+			request.setContent(json.getBytes());
+			deserialize(handle(request));
+		});
 	}
 	
 	@Test
@@ -189,26 +193,30 @@ public class BedResourceTest extends MainResourceControllerTest {
 		request.setContent(json.getBytes());
 		SimpleObject bed = deserialize(handle(request));
 		
-		Assert.assertEquals("307-ab", bed.get("bedNumber"));
-		Assert.assertEquals(Integer.valueOf(2), bed.get("row"));
-		Assert.assertEquals(Integer.valueOf(3), bed.get("column"));
-		Assert.assertEquals("luxury", PropertyUtils.getProperty(bed.get("bedType"), "name"));
+		Assertions.assertEquals("307-ab", bed.get("bedNumber"));
+		Assertions.assertEquals(Integer.valueOf(2), bed.get("row"));
+		Assertions.assertEquals(Integer.valueOf(3), bed.get("column"));
+		Assertions.assertEquals("luxury", PropertyUtils.getProperty(bed.get("bedType"), "name"));
 	}
 	
-	@Test(expected = IllegalPropertyException.class)
+	@Test
 	public void shouldFailToDeleteOccupiedBed() throws Exception {
-		MockHttpServletRequest deleteRequest = request(RequestMethod.DELETE, getURI() + "/" + getUuid());
-		deleteRequest.setParameter("reason", "not needed");
-		handle(deleteRequest);
+		assertThrows(IllegalPropertyException.class, () -> {
+			MockHttpServletRequest deleteRequest = request(RequestMethod.DELETE, getURI() + "/" + getUuid());
+			deleteRequest.setParameter("reason", "not needed");
+			handle(deleteRequest);
+		});
 	}
 	
-	@Test(expected = ObjectNotFoundException.class)
+	@Test
 	public void shouldDeleteBed() throws Exception {
-		MockHttpServletRequest deleteRequest = request(RequestMethod.DELETE, getURI() + "/" + AVAILABLE_BED_UUID);
-		deleteRequest.setParameter("reason", "not needed");
-		handle(deleteRequest);
-		
-		MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI() + "/" + AVAILABLE_BED_UUID);
-		System.out.println(deserialize(handle(getRequest)));
+		assertThrows(ObjectNotFoundException.class, () -> {
+			MockHttpServletRequest deleteRequest = request(RequestMethod.DELETE, getURI() + "/" + AVAILABLE_BED_UUID);
+			deleteRequest.setParameter("reason", "not needed");
+			handle(deleteRequest);
+			
+			MockHttpServletRequest getRequest = request(RequestMethod.GET, getURI() + "/" + AVAILABLE_BED_UUID);
+			System.out.println(deserialize(handle(getRequest)));
+		});
 	}
 }

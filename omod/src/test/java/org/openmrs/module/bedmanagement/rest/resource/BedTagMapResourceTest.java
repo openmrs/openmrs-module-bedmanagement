@@ -1,21 +1,19 @@
 package org.openmrs.module.bedmanagement.rest.resource;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.webservices.rest.SimpleObject;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BedTagMapResourceTest extends MainResourceControllerTest {
 	
-	@Rule
-	public final ExpectedException exception = ExpectedException.none();
-	
-	@Before
+	@BeforeEach
 	public void init() throws Exception {
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
 	}
@@ -47,14 +45,13 @@ public class BedTagMapResourceTest extends MainResourceControllerTest {
 	
 	@Test
 	public void shouldThrowAnExceptionIfTheTagWeAreTryingToAssociateIsAlreadyPresent() throws Exception {
-		exception.expect(RuntimeException.class);
-		exception.expectMessage("Tag Already Present For Bed");
-		
 		String json = "{\"bed\":{\"id\": \"11\"}, \"bedTag\": {\"id\": \"3\"}}";
 		SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
 		SimpleObject bedTagMap = deserialize(handle(newPostRequest(getURI(), post)));
 		assertNotNull(bedTagMap);
 		assertNotNull(bedTagMap.get("uuid"));
-		deserialize(handle(newPostRequest(getURI(), post)));
+		RuntimeException exception = assertThrows(RuntimeException.class,
+		    () -> deserialize(handle(newPostRequest(getURI(), post))));
+		assertThat(exception.getMessage(), containsString("Tag Already Present For Bed"));
 	}
 }

@@ -16,8 +16,8 @@ import org.openmrs.module.bedmanagement.entity.BedTag;
 import org.openmrs.module.bedmanagement.entity.BedTagMap;
 import org.openmrs.module.bedmanagement.service.impl.BedTagMapServiceImpl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,7 +63,7 @@ public class BedTagMapServiceImplTest {
 	
 	@Test
 	public void shouldThrowExceptionIfGivenBedAlreadyAssignedGivenBedTag() throws Exception {
-		assertThrows("Tag Already Present For Bed", APIException.class, () -> {
+		assertThrows(APIException.class, () -> {
 			Bed bed = new Bed();
 			BedTag bedTag = new BedTag();
 			BedTagMap bedTagMap = new BedTagMap();
@@ -72,7 +72,7 @@ public class BedTagMapServiceImplTest {
 			when(bedTagMapDao.getBedTagMapWithBedAndTag(bed, bedTag)).thenReturn(bedTagMap);
 			bedTagMapService.save(bedTagMap);
 			
-		});
+		}, "Tag Already Present For Bed");
 	}
 	
 	@Test

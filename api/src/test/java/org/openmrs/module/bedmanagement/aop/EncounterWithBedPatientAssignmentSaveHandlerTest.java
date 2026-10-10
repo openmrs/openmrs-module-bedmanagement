@@ -7,8 +7,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Encounter;
 import org.openmrs.Visit;
 import org.openmrs.api.EncounterService;
@@ -16,7 +16,7 @@ import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.entity.BedPatientAssignment;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class EncounterWithBedPatientAssignmentSaveHandlerTest extends BaseModuleContextSensitiveTest {
@@ -24,7 +24,7 @@ public class EncounterWithBedPatientAssignmentSaveHandlerTest extends BaseModule
 	@Autowired
 	private BedManagementService bedManagementService;
 	
-	@Before
+	@BeforeEach
 	public void beforeAllTests() throws Exception {
 		executeDataSet("testPatientsDataset.xml");
 		executeDataSet("bedManagementDAOComponentTestDataset.xml");
