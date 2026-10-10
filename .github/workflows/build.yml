@@ -2,9 +2,9 @@ name: Build with Maven
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, core-3.x ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, core-3.x ]
   workflow_dispatch:
 
 concurrency:
@@ -14,6 +14,8 @@ concurrency:
 jobs:
   build:
     uses: openmrs/openmrs-contrib-gha-workflows/.github/workflows/build-backend-module.yml@main
+    with:
+      deploy_branch: '["master", "core-3.x"]'
     secrets:
       MAVEN_REPO_USERNAME: ${{ secrets.MAVEN_REPO_USERNAME }}
       MAVEN_REPO_API_KEY: ${{ secrets.MAVEN_REPO_API_KEY }}
